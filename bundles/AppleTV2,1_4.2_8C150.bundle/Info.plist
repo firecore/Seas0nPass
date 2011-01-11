@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>FilesystemPatches</key>
+	<dict>
+		<key>Filesystem Jailbreak</key>
+		<array>
+			<dict>
+				<key>Action</key>
+				<string>Patch</string>
+				<key>File</key>
+				<string>etc/fstab</string>
+				<key>Name</key>
+				<string>Filesystem Write Access</string>
+				<key>Patch</key>
+				<string>fstab.patch</string>
+			</dict>
+		</array>
+	</dict>
+	<key>FirmwarePatches</key>
+	<dict>
+		<key>Restore Ramdisk</key>
+		<dict>
+			<key>File</key>
+			<string>018-9940-004.dmg</string>
+			<key>IV</key>
+			<string>bab07889e0d5ba26521e7f141e213178</string>
+			<key>Key</key>
+			<string>3e88b3dfbb432a60d3475ebee8570c83c52612465f4db7686f62415f4b6e1bdd</string>
+			<key>TypeFlag</key>
+			<integer>8</integer>
+		</dict>
+		<key>iBSS</key>
+		<dict>
+			<key>File</key>
+			<string>Firmware/dfu/iBSS.k66ap.RELEASE.dfu</string>
+			<key>IV</key>
+			<string>03baadf8801e8b7cdcee5a9f53609d0c</string>
+			<key>Key</key>
+			<string>c9f8bd4e52530ec8ef3e2b5926777f624061a38d09f07785287de6e88353f752</string>
+			<key>Patch</key>
+			<string>iBSS.k66ap.RELEASE.patch</string>
+			<key>TypeFlag</key>
+			<integer>8</integer>
+		</dict>
+	</dict>
+	<key>RamdiskPatches</key>
+	<dict>
+		<key>asr</key>
+		<dict>
+			<key>File</key>
+			<string>usr/sbin/asr</string>
+			<key>Patch</key>
+			<string>asr.patch</string>
+		</dict>
+	</dict>
+	<key>PreInstalledPackages</key>
+	<array>
+		<string>org.saurik.cydia-atv</string>
+	</array>
+	<key>DeleteBuildManifest</key>
+	<false/>
+	<key>RestoreRamdiskMountVolume</key>
+	<string>ramdisk</string>
+	<key>RootFilesystem</key>
+	<string>018-7744-116.dmg</string>
+	<key>RootFilesystemSize</key>
+	<integer>770</integer>
+	<key>RootFilesystemKey</key>
+	<string>fd73cd898b7e55f9dc24092a4c574f1f284087075520a7d30232b0b6af8871743a0f0b82</string>
+	<key>RootFilesystemMountVolume</key>
+	<string>Jasper8C150.K66OS</string>
+	<key>SHA1</key>
+	<string>58f9ab479783dad3dff3834452abc2917aaef2a5</string>
+	<key>Filename</key>
+	<string>AppleTV2,1_4.2_8C150_Restore.ipsw</string>
+	<key>Name</key>
+	<string>AppleTV2,1_4.2_8C150</string>
+	<key>DownloadUrl</key>
+	<string></string>
+	<key>Platform</key>
+	<integer>3</integer>
+	<key>SubPlatform</key>
+	<integer>10</integer>
+</dict>
+</plist>
