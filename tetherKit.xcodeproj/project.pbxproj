@@ -37,11 +37,11 @@
 		3272119C12CC80DC0054F4B0 /* archives in Resources */ = {isa = PBXBuildFile; fileRef = 3272119912CC80DC0054F4B0 /* archives */; };
 		327211C112CC816D0054F4B0 /* scripts in Resources */ = {isa = PBXBuildFile; fileRef = 327211BE12CC816D0054F4B0 /* scripts */; };
 		32799AA712DBC25B0013860A /* Seas0nPass.icns in Resources */ = {isa = PBXBuildFile; fileRef = 32799AA612DBC25B0013860A /* Seas0nPass.icns */; };
-		32799ABD12DBC5730013860A /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32799ABC12DBC5730013860A /* Sparkle.framework */; };
-		32799AC612DBC5760013860A /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 32799ABC12DBC5730013860A /* Sparkle.framework */; };
 		32799B3C12DBE3490013860A /* restore.png in Resources */ = {isa = PBXBuildFile; fileRef = 32799B3B12DBE3490013860A /* restore.png */; };
 		32799B3E12DBE35F0013860A /* success.png in Resources */ = {isa = PBXBuildFile; fileRef = 32799B3D12DBE35F0013860A /* success.png */; };
 		32DF4A3A12DC2905002916D5 /* tetheredRemote.png in Resources */ = {isa = PBXBuildFile; fileRef = 32DF4A3912DC2905002916D5 /* tetheredRemote.png */; };
+		32DF57BD12DD6E74002916D5 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32DF57BC12DD6E74002916D5 /* Sparkle.framework */; };
+		32DF57C612DD6E86002916D5 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 32DF57BC12DD6E74002916D5 /* Sparkle.framework */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -99,7 +99,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				32799AC612DBC5760013860A /* Sparkle.framework in CopyFiles */,
+				32DF57C612DD6E86002916D5 /* Sparkle.framework in CopyFiles */,
 				3200F1FC12D25228003EA66E /* libusb-1.0.0.dylib in CopyFiles */,
 				3200F1FD12D25228003EA66E /* libz.1.2.5.dylib in CopyFiles */,
 			);
@@ -181,10 +181,10 @@
 		3272119912CC80DC0054F4B0 /* archives */ = {isa = PBXFileReference; lastKnownFileType = folder; path = archives; sourceTree = "<group>"; };
 		327211BE12CC816D0054F4B0 /* scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = scripts; sourceTree = "<group>"; };
 		32799AA612DBC25B0013860A /* Seas0nPass.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Seas0nPass.icns; sourceTree = "<group>"; };
-		32799ABC12DBC5730013860A /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		32799B3B12DBE3490013860A /* restore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = restore.png; sourceTree = "<group>"; };
 		32799B3D12DBE35F0013860A /* success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = success.png; sourceTree = "<group>"; };
 		32DF4A3912DC2905002916D5 /* tetheredRemote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tetheredRemote.png; sourceTree = "<group>"; };
+		32DF57BC12DD6E74002916D5 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* tetherKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "tetherKit-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Seas0nPass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Seas0nPass.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -210,7 +210,7 @@
 				3272106F12CC78000054F4B0 /* SecurityFoundation.framework in Frameworks */,
 				3200F1FA12D25226003EA66E /* libusb-1.0.0.dylib in Frameworks */,
 				3200F1FB12D25226003EA66E /* libz.1.2.5.dylib in Frameworks */,
-				32799ABD12DBC5730013860A /* Sparkle.framework in Frameworks */,
+				32DF57BD12DD6E74002916D5 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,10 +316,10 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				32DF57BC12DD6E74002916D5 /* Sparkle.framework */,
 				32720E9212CC53F70054F4B0 /* SecurityInterface.framework */,
 				32720E9012CC53F70054F4B0 /* SecurityFoundation.framework */,
 				32720E8E12CC53F70054F4B0 /* Security.framework */,
-				32799ABC12DBC5730013860A /* Sparkle.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 				32720A0B12CAD3780054F4B0 /* libstdc++.dylib */,
@@ -726,7 +726,7 @@
 				GCC_PREFIX_HEADER = tetherKit_Prefix.pch;
 				HEADER_SEARCH_PATHS = "includes/**";
 				INFOPLIST_FILE = "tetherKit-Info.plist";
-				INSTALL_PATH = "$(HOME)/Applications";
+				INSTALL_PATH = /Applications;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",

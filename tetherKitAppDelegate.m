@@ -446,6 +446,7 @@ void print_progress(double progress, void* data) {
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(statusChanged:) name:@"statusChanged" object:nil];
 	[self pwnHelperCheckOwner];
 	[self checkScripting];
+	[FM removeFileAtPath:TMP_ROOT handler:nil];
 	
 }
 
