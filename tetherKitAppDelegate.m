@@ -520,7 +520,7 @@ void print_progress(double progress, void* data) {
 	
 	[nitoUtility createIPSWToFile:ipswPath];
 	
-		//[FM removeFileAtPath:TMP_ROOT handler:nil];
+		[FM removeFileAtPath:TMP_ROOT handler:nil];
 	
 	[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:NSLocalizedString(@"Custom IPSW created successfully!" , @"Custom IPSW created successfully!" ) waitUntilDone:NO];
 	
