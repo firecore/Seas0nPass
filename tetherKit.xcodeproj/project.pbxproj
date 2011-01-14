@@ -163,7 +163,6 @@
 		327206A812C9C32A0054F4B0 /* nitoUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nitoUtility.h; sourceTree = "<group>"; };
 		327206A912C9C32A0054F4B0 /* nitoUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = nitoUtility.m; sourceTree = "<group>"; };
 		32720A0B12CAD3780054F4B0 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/gcc/i686-apple-darwin10/4.0.1/libstdc++.dylib"; sourceTree = SDKROOT; };
-		32720BFF12CB39A90054F4B0 /* manual ipsw.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "manual ipsw.rtf"; sourceTree = "<group>"; };
 		32720C1312CB3A6C0054F4B0 /* bin */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bin; sourceTree = "<group>"; };
 		32720E7512CC53770054F4B0 /* dbHelper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dbHelper; sourceTree = BUILT_PRODUCTS_DIR; };
 		32720E8912CC53E20054F4B0 /* pwnHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pwnHelper.m; sourceTree = "<group>"; };
@@ -224,7 +223,6 @@
 				32720F1012CC66E10054F4B0 /* PatchedFile.m */,
 				32720EF012CC63F80054F4B0 /* FWManager.h */,
 				32720EF112CC63F80054F4B0 /* FWManager.m */,
-				32720BFF12CB39A90054F4B0 /* manual ipsw.rtf */,
 				327206A812C9C32A0054F4B0 /* nitoUtility.h */,
 				327206A912C9C32A0054F4B0 /* nitoUtility.m */,
 				256AC3D80F4B6AC300CF3369 /* tetherKitAppDelegate.h */,

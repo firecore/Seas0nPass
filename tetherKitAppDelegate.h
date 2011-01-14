@@ -44,6 +44,8 @@ enum  {
 @property (readwrite, assign) BOOL poisoning;
 @property (readwrite, assign) BOOL enableScripting;
 @property (readwrite, assign) int downloadIndex;
++ (NSString *)applicationSupportFolder;
++ (NSString *)wifiFile;
 - (IBAction)fixScript:(id)sender;
 - (void)killiTunes;
 - (void)checkScripting;

@@ -14,7 +14,6 @@
  */
 
 #import "nitoUtility.h"
-	
 
 #define NULLOUT [NSFileHandle fileHandleWithNullDevice]
 
@@ -504,6 +503,30 @@
 	pwnHelper = nil;
 }
 
++ (NSString *)applicationSupportFolder {
+	
+	NSFileManager *man = [NSFileManager defaultManager];
+    NSArray *paths =
+	NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,
+										NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:
+												0] : NSTemporaryDirectory();
+	basePath = [basePath stringByAppendingPathComponent:@"Seas0nPass"];
+    if (![man fileExistsAtPath:basePath])
+		[man createDirectoryAtPath:basePath withIntermediateDirectories:YES attributes:nil error:nil];
+	return basePath;
+}
+
++ (NSString *)wifiFile 
+{
+	NSString *wf = [[nitoUtility applicationSupportFolder] stringByAppendingPathComponent:@"com.apple.wifi.plist"];
+	
+	if ([FM fileExistsAtPath:wf]) { return wf; }
+	
+	return nil;
+	
+}
+
 - (NSString *)pwnctionaryFromPath:(NSString *)mountedPath original:(NSString *)original withBundle:(NSDictionary *)theBundle
 {
 	NSString *es = [NSString stringWithFormat:@"%i", (int)[self enableScripting]];
@@ -516,7 +539,10 @@
 	[fstabDict setObject:[[NSBundle mainBundle] pathForResource:@"fstab" ofType:@"patch" inDirectory:@"patches"] forKey:@"patchFile"];
 	[fstabDict setObject:@"e34d097a1c6dc7fd95db41879129327b" forKey:@"md5"];
 	[bundleDict setObject:[fstabDict autorelease] forKey:@"fstabPatch"];
-
+	if ([nitoUtility wifiFile] != nil)
+	{
+		[bundleDict setObject:[nitoUtility wifiFile] forKey:@"wifi"];
+	}
 	[bundleDict setObject:CYDIA_TAR forKey:@"cydia"];
 	[bundleDict setObject:SPACE_SCRIPT forKey:@"stash"];
 		//TODO: custom bundles

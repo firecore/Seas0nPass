@@ -137,6 +137,11 @@
 	return [nitoUtility extractGZip:cydiaPackage toRoot:mountedPath];
 }
 
+- (void)installWifi:(NSString *)wifiFile withRoot:(NSString *)mountedPath
+{
+	[FM copyItemAtPath:wifiFile toPath:[mountedPath stringByAppendingPathComponent:@"/Library/Preferences/SystemConfiguration/com.apple.wifi.plist"] error:nil];
+}
+
 - (int)stash:(NSString *)scriptFile withRoot:(NSString *)mountedPath
 {
 	return [nitoUtility runScript:scriptFile withInput:mountedPath];
@@ -174,6 +179,13 @@
 	[self changeStatus:@"Installing Software..."];
 	NSLog(@"installing Software...");
 	[self installCydia:[[self processDict] valueForKey:@"cydia"] withRoot:mountImage];
+
+	if ([[self processDict] valueForKey:@"wifi"] != nil)
+	{
+		[self changeStatus:@"Installing wifi.plist..."];
+		NSLog(@"installing wifi.plist...");
+		[self installWifi:[[self processDict] valueForKey:@"wifi"] withRoot:mountImage];
+	}
 		//[self changeStatus:@"Stash it away man!..."];
 	NSLog(@"Stash it away man!...");
 	[self stash:[[self processDict] valueForKey:@"stash"] withRoot:mountImage];

@@ -132,6 +132,59 @@ void print_progress(double progress, void* data) {
 	return theImage;
 }
 
+- (void)startupAlert
+{
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	BOOL warningShown = [defaults boolForKey:@"SPWarningShown"];
+	if (warningShown == TRUE)
+		return;
+	
+	NSAlert *startupAlert = [NSAlert alertWithMessageText:@"Warning! Please read carefully." defaultButton:@"OK" alternateButton:@"More Info" otherButton:@"Cancel" informativeTextWithFormat:@"Currently the jailbreak for the 4.1.1 (iOS 4.2.1) software is 'tethered'. A tethered jailbreak requires the AppleTV to be connected to a computer for a brief moment during startup.\n\nSeas0nPass makes this as easy as possible, but please do not proceed unless you are comfortable with this process."];
+	int button = [startupAlert runModal];
+
+	switch (button) {
+		case 0: //more info
+			
+			[self userGuides:nil];
+			break;
+			
+		case 1: //okay
+
+			break;
+			
+		case -1: //cancel and quit!!
+				[[NSApplication sharedApplication] terminate:self];
+			break;
+			
+	}
+	
+	[defaults setBool:YES forKey:@"SPWarningShown"];
+	
+}
+
++ (NSString *)applicationSupportFolder {
+	
+	NSFileManager *man = [NSFileManager defaultManager];
+    NSArray *paths =
+	NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,
+										NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:
+												0] : NSTemporaryDirectory();
+	basePath = [basePath stringByAppendingPathComponent:@"Seas0nPass"];
+    if (![man fileExistsAtPath:basePath])
+		[man createDirectoryAtPath:basePath withIntermediateDirectories:YES attributes:nil error:nil];
+	return basePath;
+}
+
++ (NSString *)wifiFile 
+{
+	NSString *wf = [[tetherKitAppDelegate applicationSupportFolder] stringByAppendingPathComponent:@"com.apple.wifi.plist"];
+	
+	if ([FM fileExistsAtPath:wf]) { return wf; }
+	
+	return nil;
+	
+}
 
 + (NSString *)ipswFile
 {
@@ -444,9 +497,12 @@ void print_progress(double progress, void* data) {
 	self.poisoning = FALSE;
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(pwnFinished:) name:@"pwnFinished" object:nil];
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(statusChanged:) name:@"statusChanged" object:nil];
+	[self startupAlert];
 	[self pwnHelperCheckOwner];
 	[self checkScripting];
-	[FM removeFileAtPath:TMP_ROOT handler:nil];
+	[FM removeItemAtPath:TMP_ROOT error:nil];
+	
+		//NSLog(@"appS: %@", [tetherKitAppDelegate wifiFile]);
 	
 }
 
