@@ -34,6 +34,7 @@
 #define CUSTOM_RESTORE @"AppleTV_SeasonPass.ipsw"
 #define BUNDLE_LOCATION [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"bundles"]
 #define BUNDLES [FM contentsOfDirectoryAtPath:BUNDLE_LOCATION error:nil]
+#define LAST_BUNDLE [[NSUserDefaults standardUserDefaults] valueForKey:@"lastUsedBundle"]
 
 int received_cb(irecv_client_t client, const irecv_event_t* event);
 int progress_cb(irecv_client_t client, const irecv_event_t* event);
@@ -378,7 +379,7 @@ void print_progress_bar(double progress) {
 		[self setDownloadText:NSLocalizedString(@"Your device is not compatible with this exploit!", @"Your device is not compatible with this exploit!")];
 		return result;
 	}
-	
+	[self setDownloadText:NSLocalizedString(@"Injecting Pois0n", @"Injecting Pois0n")];
 	result = pois0n_inject();
 	if (result < 0) {
 		[self setDownloadText:NSLocalizedString(@"Exploit injection failed!", @"Exploit injection failed!")];
@@ -388,10 +389,13 @@ void print_progress_bar(double progress) {
 		[pool release];
 		return result;
 	}
+	[self setDownloadText:@"Keydump preparation complete"];
 	NSString *command = [commandTextField stringValue];
 	irecv_send_command(client, [command UTF8String]);
 	[self hideProgress];
-		pois0n_exit();
+	[cancelButton setTitle:@"Done"];
+	[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
+	pois0n_exit();
 	self.poisoning = FALSE;
 	[pool release];
 	return 0;
@@ -561,47 +565,13 @@ NSLog(@"postcommand_cb");
 	return 0;
 }
 
-- (void)actuallySendCommand:(NSString *)command
-{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	quit = 0;
-
-	irecv_error_t error = 0;
-	irecv_init();
-	irecv_client_t client = NULL;
-	if (irecv_open(&client) != IRECV_E_SUCCESS)
-	{
-		NSLog(@"fail!");
-		return;
-		
-	}
-	irecv_set_debug_level(1);
-	
-	
-		//irecv_event_subscribe(client, IRECV_RECEIVED, &received_cb, NULL);
-		//irecv_event_subscribe(client, IRECV_PRECOMMAND, &precommand_cb, NULL);
-		//irecv_event_subscribe(client, IRECV_POSTCOMMAND, &postcommand_cb, NULL);
-	while (!quit) {
-		
-		error = irecv_receive(client);
-		error = irecv_send_command(client, [command UTF8String]);
-		error = irecv_receive(client);
-			//debug("%s\n", irecv_strerror(error));
-		quit = 1;
-	}
-		irecv_close(client);
-		irecv_exit();
-	[pool release];
-}
-
 
 - (IBAction)sendCommand:(id)sender
 {
 		NSString *command = [commandTextField stringValue];
-	[NSThread detachNewThreadSelector:@selector(actuallySendCommand:) toTarget:self withObject:command];
-	return;
+	
 	quit = 0;
-		//NSString *command = [commandTextField stringValue];
+
 	irecv_error_t error = 0;
 	irecv_init();
 	irecv_client_t client = NULL;
@@ -628,12 +598,10 @@ NSLog(@"postcommand_cb");
 	irecv_exit();
 }
 
-- (IBAction)doStuff:(id)sender
+- (IBAction)keydumpPrep:(id)sender //prepare for key dump
 {	
-		//[NSThread detachNewThreadSelector:@selector(enterDFU) toTarget:self withObject:nil];
 		
-	NSString *lastUsedbundle = [[NSUserDefaults standardUserDefaults] valueForKey:@"lastUsedBundle"];
-		//NSLog(@"lastUsedBundle: %@", lastUsedbundle);
+	NSString *lastUsedbundle = LAST_BUNDLE;
 	self.currentBundle = [FWBundle bundleWithName:lastUsedbundle];
 	[window setContentView:self.secondView];
 	[window display];
@@ -867,7 +835,7 @@ NSLog(@"postcommand_cb");
 	[self startupAlert];
 	[self pwnHelperCheckOwner];
 	[self checkScripting];
-	NSString *lastUsedbundle = [[NSUserDefaults standardUserDefaults] valueForKey:@"lastUsedBundle"];
+	NSString *lastUsedbundle = LAST_BUNDLE;
 		//NSLog(@"lastUsedbundle: %@", lastUsedbundle);
 	if ([lastUsedbundle length] < 1)
 	{
@@ -1053,7 +1021,7 @@ NSLog(@"postcommand_cb");
 
 - (IBAction)itunesRestore:(id)sender
 {
-	NSString *lastUsedbundle = [[NSUserDefaults standardUserDefaults] valueForKey:@"lastUsedBundle"];
+	NSString *lastUsedbundle = LAST_BUNDLE;
 		//NSLog(@"lastUsedBundle: %@", lastUsedbundle);
 	self.currentBundle = [FWBundle bundleWithName:lastUsedbundle];
 	[window setContentView:self.secondView];
@@ -1220,7 +1188,7 @@ NSLog(@"postcommand_cb");
 
 - (IBAction)bootTethered:(id)sender
 {
-	NSString *lastUsedbundle = [[NSUserDefaults standardUserDefaults] valueForKey:@"lastUsedBundle"];
+	NSString *lastUsedbundle = LAST_BUNDLE;
 	self.currentBundle = [FWBundle bundleWithName:lastUsedbundle];
 	if (![FM fileExistsAtPath:[self iBSSString]])
 	{

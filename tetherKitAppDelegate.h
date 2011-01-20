@@ -79,7 +79,7 @@ enum  {
 - (NSImage *)imageForMode:(int)inputMode;
 - (NSString *)ipswOutputPath;
 
-- (IBAction)doStuff:(id)sender;
+- (IBAction)keydumpPrep:(id)sender;
 - (IBAction)sendCommand:(id)sender;
 
 
