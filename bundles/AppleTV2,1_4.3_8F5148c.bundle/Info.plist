@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>FilesystemPatches</key>
+	<dict>
+		<key>Core Files Installation</key>
+		<array/>
+		<key>Filesystem Jailbreak</key>
+		<array>
+			<dict>
+				<key>Action</key>
+				<string>Patch</string>
+				<key>File</key>
+				<string>etc/fstab</string>
+				<key>Name</key>
+				<string>Filesystem Write Access</string>
+				<key>Patch</key>
+				<string>fstab.patch</string>
+			</dict>
+			<dict>
+				<key>Action</key>
+				<string>Patch</string>
+				<key>File</key>
+				<string>Applications/AppleTV.app/AppleTV</string>
+				<key>Name</key>
+				<string>Seatbelt</string>
+				<key>Patch</key>
+				<string>AppleTV.patch</string>
+			</dict>
+		</array>
+	</dict>
+	<key>FirmwarePatches</key>
+	<dict>
+		<key>Restore Ramdisk</key>
+		<dict>
+			<key>File</key>
+			<string>038-0408-003.dmg</string>
+			<key>IV</key>
+			<string>25e638a9d572cc37e131547abc8155fb</string>
+			<key>Key</key>
+			<string>d671cec0ae62bf928f85dbb893c6e9fc90643a3f4bdb79a66ba7356301d67f82</string>
+			<key>TypeFlag</key>
+			<integer>8</integer>
+		</dict>
+		<key>Update Ramdisk</key>
+		<dict>
+			<key>File</key>
+			<string>038-0402-003.dmg</string>
+			<key>TypeFlag</key>
+			<integer>8</integer>
+		</dict>
+		<key>iBSS</key>
+		<dict>
+			<key>File</key>
+			<string>Firmware/dfu/iBSS.k66ap.RELEASE.dfu</string>
+			<key>IV</key>
+			<string>e18e4360159e669c24d0d94555746016</string>
+			<key>Key</key>
+			<string>83a9fee07856571a428632fb2d0227f1d9ce083305dd9b5cab6ed4f868da6839</string>
+			<key>Patch</key>
+			<string>iBSS.k66ap.RELEASE.patch</string>
+			<key>TypeFlag</key>
+			<integer>8</integer>
+		</dict>
+	</dict>
+	<key>RamdiskPatches</key>
+	<dict>
+		<key>asr</key>
+		<dict>
+			<key>File</key>
+			<string>usr/sbin/asr</string>
+			<key>Patch</key>
+			<string>asr.patch</string>
+		</dict>
+	</dict>
+	<key>PreInstalledPackages</key>
+	<array>
+		<string>org.saurik.cydia-atv</string>
+	</array>
+	<key>DeleteBuildManifest</key>
+	<false/>
+	<key>RestoreRamdiskMountVolume</key>
+	<string>ramdisk</string>
+	<key>RootFilesystem</key>
+	<string>038-0438-003.dmg</string>
+	<key>RootFilesystemSize</key>
+	<integer>770</integer>
+	<key>RootFilesystemKey</key>
+	<string>cc3e4b2e78940fb3cffce2f3d4a9a5e6a8a45bce77afa71c6445991203d01fa0bb5c6ab0</string>
+	<key>RootFilesystemMountVolume</key>
+	<string>DurangoVail8F5148c.K66DeveloperOS</string>
+	<key>SHA1</key>
+	<string>1b27d04a199210ab85489728599a7005592e3163</string>
+	<key>Filename</key>
+	<string>AppleTV2,1_4.3_8F5148c_Restore.ipsw</string>
+	<key>Name</key>
+	<string>AppleTV2,1_4.3_8F5148c</string>
+	<key>DownloadUrl</key>
+	<string></string>
+	<key>Platform</key>
+	<integer>3</integer>
+	<key>SubPlatform</key>
+	<integer>10</integer>
+</dict>
+</plist>
