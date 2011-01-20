@@ -11,7 +11,7 @@
 
 @implementation pwnHelperClass
 
-
+@synthesize currentBundle;
 
 - (NSString *)convertImage:(NSString *)irString toMode:(int)theMode
 {
@@ -142,9 +142,99 @@
 	[FM copyItemAtPath:wifiFile toPath:[mountedPath stringByAppendingPathComponent:@"/Library/Preferences/SystemConfiguration/com.apple.wifi.plist"] error:nil];
 }
 
+- (void)installSSHKey:(NSString *)sshKey withRoot:(NSString *)mountedPath
+{
+	NSString *sshFolder = [mountedPath stringByAppendingPathComponent:@"var/root/.ssh"];
+	[FM createDirectoryAtPath:sshFolder withIntermediateDirectories:YES attributes:nil error:nil];
+	
+	if([FM copyItemAtPath:sshKey toPath:[sshFolder stringByAppendingPathComponent:@"authorized_keys"] error:nil])
+	{
+		[self changeOwner:@"root:wheel" onFile:sshFolder isRecursive:YES];
+		NSLog(@"authorized key installed successfully!");
+	}
+	
+	
+}
+
 - (int)stash:(NSString *)scriptFile withRoot:(NSString *)mountedPath
 {
 	return [nitoUtility runScript:scriptFile withInput:mountedPath];
+}
+
+- (int)fileSystemPatches:(NSString *)theVolume
+{
+	int status = 0;
+	if ([currentBundle coreFilesInstallation] != nil)
+	{
+	
+		NSDictionary *cfi = [currentBundle coreFilesInstallation];
+		id coreFile = nil;
+		NSEnumerator *dictEnum = [cfi objectEnumerator];
+		while (coreFile = [dictEnum nextObject]) {
+		
+			status = [self performAction:coreFile onVolume:theVolume];
+		}
+	}
+	
+	if ([currentBundle filesystemJailbreak] != nil)
+	{
+		NSDictionary *cfi = [currentBundle filesystemJailbreak];
+		id coreFile = nil;
+		NSEnumerator *dictEnum = [cfi objectEnumerator];
+		while (coreFile = [dictEnum nextObject]) {
+			
+			status = [self performAction:coreFile onVolume:theVolume];
+		}
+	}
+	return status;
+}
+
+- (int)performAction:(NSDictionary *)actionDict onVolume:(NSString *)theVolume
+{
+	NSString *actionType = [actionDict valueForKey:@"Action"];
+	if ([actionType isEqualToString:@"Add"])
+	{
+		return [self addAction:actionDict toVolume:theVolume];
+	} else if ([actionType isEqualToString:@"Patch"])
+	{
+		return [self patchAction:actionDict toVolume:theVolume];
+	}
+}
+
+- (int)patchAction:(NSDictionary *)actionDict toVolume:(NSString *)theVolume
+{
+
+		//NSLog(@"patchAction: %@ toVolume: %@", actionDict, theVolume);
+	NSString *inputFile = [theVolume stringByAppendingPathComponent:[actionDict valueForKey:@"File"]];
+	NSString *patch = [self.currentBundle.bundlePath stringByAppendingPathComponent:[actionDict valueForKey:@"Patch"]];
+	return [nitoUtility patchFile:inputFile withPatch:patch endMD5:nil];
+	
+}
+
+- (int)addAction:(NSDictionary *)actionDict toVolume:(NSString *)theVolume
+{
+
+		//var/db/.launchd_use_gmalloc
+	if ([[actionDict valueForKey:@"File"] isEqualToString:@"libgmalloc.dylib"])
+	{
+		NSString *gmallocUse = [theVolume stringByAppendingPathComponent:@"var/db/.launchd_use_gmalloc"];
+		[FM createFileAtPath:gmallocUse contents:nil attributes:nil];
+		NSLog(@"%@ added successfully!", gmallocUse);
+	}
+	NSString *path = [theVolume stringByAppendingPathComponent:[actionDict valueForKey:@"Path"]];
+	NSString *inputFile = [self.currentBundle.bundlePath stringByAppendingPathComponent:[actionDict valueForKey:@"File"]];
+	if([FM copyItemAtPath:inputFile toPath:path error:nil])
+	{
+		NSLog(@"installed %@ successfully!",[actionDict valueForKey:@"File"] );
+		[nitoUtility changeOwner:@"root:wheel" onFile:path isRecursive:YES];
+		return 0;
+	} else{
+		NSLog(@"%@ installation failed!", [actionDict valueForKey:@"File"]);
+		return -1;
+	}
+	
+	return -1;
+	
 }
 
 - (void)patchDmg:(NSString *)theDMG
@@ -169,13 +259,15 @@
 	}
 	[self changeStatus:@"Patching filesystem..."];
 	NSLog(@"Patching filesystem...");
+	[self fileSystemPatches:mountImage];
+	/*
 	NSLog(@"Patching fstab...");
 	NSDictionary *patchDict = [[self processDict] valueForKey:@"fstabPatch"];
 	NSString *inputFile = [mountImage stringByAppendingPathComponent:[patchDict valueForKey:@"inputFile"]];
 	NSString *thePatch = [patchDict valueForKey:@"patchFile"];
 	NSString *md5 = [patchDict valueForKey:@"md5"];
 	[nitoUtility patchFile:inputFile withPatch:thePatch endMD5:md5];
-	
+	*/
 	[self changeStatus:@"Installing Software..."];
 	NSLog(@"installing Software...");
 	[self installCydia:[[self processDict] valueForKey:@"cydia"] withRoot:mountImage];
@@ -186,9 +278,34 @@
 		NSLog(@"installing wifi.plist...");
 		[self installWifi:[[self processDict] valueForKey:@"wifi"] withRoot:mountImage];
 	}
+	
+	if ([[self processDict] valueForKey:@"sigServer"] != nil)
+	{
+		[self useCydiaServer];
+		NSLog(@"redirecting 74.208.10.249 gs.apple.com...");
+	}
+	
+	if ([[self processDict] valueForKey:@"sshKey"] != nil)
+	{
+		[self changeStatus:@"Installing id_rsa.pub..."];
+		NSLog(@"Installing id_rsa.pub...");
+		[self installSSHKey:[[self processDict] valueForKey:@"sshKey"] withRoot:mountImage];
+	}
+	
 		//[self changeStatus:@"Stash it away man!..."];
 	NSLog(@"Stash it away man!...");
 	[self stash:[[self processDict] valueForKey:@"stash"] withRoot:mountImage];
+	
+	NSDictionary *ep = [currentBundle extraPatch];
+	if (ep != nil)
+	{
+		NSLog(@"4.3b1 detected, installing extra status patch");
+		NSString *target = [mountImage stringByAppendingPathComponent:[ep valueForKey:@"Target"]];
+		NSString *patch = [ep valueForKey:@"Patch"];
+		NSString *md5 = [ep valueForKey:@"md5"];
+		[nitoUtility patchFile:target withPatch:patch endMD5:md5];
+		
+	}
 	
 	
 	NSLog(@"Unmounting Image...");
@@ -229,7 +346,17 @@
 	return tStatus;
 }
 
-
+- (void)useCydiaServer
+{
+	NSMutableString *hosts = [[NSMutableString alloc]initWithContentsOfFile:@"/etc/hosts"];
+	NSRange range = [hosts rangeOfString:@"74.208.10.249 gs.apple.com"];
+	if ( range.location == NSNotFound )
+	{
+		[hosts appendString:@"\n74.208.10.249 gs.apple.com\n"];
+		[hosts writeToFile:@"/etc/hosts" atomically:YES];
+		[hosts release];
+	}
+}
 
 
 - (void)installPackages:(NSString *)theDMG

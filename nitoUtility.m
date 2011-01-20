@@ -14,12 +14,13 @@
  */
 
 #import "nitoUtility.h"
+#import "FWBundle.h"
 
 #define NULLOUT [NSFileHandle fileHandleWithNullDevice]
 
 @implementation nitoUtility
 
-@synthesize delegate, enableScripting;
+@synthesize delegate, enableScripting, currentBundle, sshKey, sigServer;
 
 - (id)init
 {
@@ -31,6 +32,7 @@
 
 - (void)dealloc {
 	
+	[sshKey release];
 	[super dealloc];
 }
 
@@ -344,6 +346,95 @@
 	
 }
 
+- (int)performPatchesFromBundle:(FWBundle *)theBundle onRamdisk:(NSDictionary *)ramdiskDict
+{
+		//NSString *ramdiskSize = @"16541920";
+	NSString *ramdiskSize = [currentBundle ramdiskSize];
+		//NSLog(@"ramdisk size: %@", ramdiskSize);
+	NSString *ramdiskIV = [ramdiskDict valueForKey:@"IV"];
+	NSString *ramdiskKey = [ramdiskDict valueForKey:@"Key"];
+	NSDictionary *ramdiskPatches = [theBundle ramdiskPatches];
+	NSString *theRamdisk = [TMP_ROOT stringByAppendingPathComponent:[ramdiskDict valueForKey:@"File"]];
+	int status = 0;
+	NSString *finalRam = [IPSW_TMP stringByAppendingPathComponent:[theRamdisk lastPathComponent]];
+	NSString *decryptRam = [IPSW_TMP stringByAppendingPathComponent:@"decrypt.dmg"];
+	status = [nitoUtility decryptRamdisk:theRamdisk toPath:decryptRam withIV:ramdiskIV key:ramdiskKey]; //1
+	if (status == 0)
+	{
+		NSLog(@"decrypted %@ successfully!", theRamdisk);
+		status = [nitoUtility resizeVolume:decryptRam toSize:ramdiskSize]; //2
+		
+		if (status == 0)
+		{
+			NSLog(@"resized %@ successfully!", decryptRam);
+			NSString *mountedImage = [nitoUtility mountImageWithoutOwners:decryptRam]; //3
+			
+			if (mountedImage != nil)
+			{
+				NSLog(@"mountedImage %@ successfully!", decryptRam);
+					/*
+					 
+					 patches here
+					 
+					 */
+				
+				NSEnumerator *patchEnum = [ramdiskPatches objectEnumerator];
+				id thePatch = nil;
+				while (thePatch = [patchEnum nextObject])
+				{
+						//NSLog(@"thePAtch: %@", thePatch);
+					NSString *file = [thePatch valueForKey:@"File"];
+					NSString *patchFile = [thePatch valueForKey:@"Patch"];
+					NSString *md5 = [thePatch valueForKey:@"MD5"];
+					NSString *patchPath = [[theBundle bundlePath] stringByAppendingPathComponent:patchFile];
+						//NSLog(@"patching: %@ withPatch: %@", file, patchFile);
+					status = [nitoUtility patchFile:[mountedImage stringByAppendingPathComponent:file] withPatch:patchPath endMD5:md5];
+					if (status == 0)
+					{
+						NSLog(@"patched %@ successfully!", file);
+						[nitoUtility changePermissions:@"+x" onFile:[mountedImage stringByAppendingPathComponent:file] isRecursive:YES];
+					} else {
+						NSLog(@"patch %@ failure!!, bail!");
+						return -1;
+					}
+					
+				}
+				
+				/*
+				 
+				
+				status = [nitoUtility patchFile:[mountedImage stringByAppendingPathComponent:@"usr/sbin/asr"] withPatch:asrPath endMD5:@"072c70c08790a4d80f1683e60f4edb71"]; //4 5 6
+				[nitoUtility changePermissions:@"+x" onFile:[mountedImage stringByAppendingPathComponent:@"usr/sbin/asr"] isRecursive:YES]; //7
+				*/
+				
+				if (status == 0)
+				{
+					NSLog(@"performed patches successfully!");
+					
+					[nitoUtility unmountVolume:mountedImage]; //8
+					
+					status = [nitoUtility repackRamdisk:decryptRam toPath:finalRam withIV:ramdiskIV key:ramdiskKey originalPath:theRamdisk]; //9
+					
+						[FM removeItemAtPath:decryptRam error:nil]; //10 no need for 11?
+					
+					if (status == 0)
+					{
+					
+						NSLog(@"patched ramdisk successfully!");
+						return 0;
+					} 
+				} 
+			} 
+		} 
+		
+	}
+	
+	NSLog(@"patch ramdisk failed!");
+	return -1;
+	
+	
+	
+}
 
 - (int)patchRamdisk:(NSString *)theRamdisk
 {
@@ -427,6 +518,63 @@
 - (void)patchFilesystem:(NSString *)inputFilesystem
 {
 	
+	NSString *fsKey = [self.currentBundle filesystemKey];
+		//	NSString *fstabPatch = [[NSBundle mainBundle] pathForResource:@"fstab" ofType:@"patch" inDirectory:@"patches"];
+	/*
+	 
+	 1. vfdecrypt -i 038-0316-001.dmg -k 5407d28e075f5a2e06fddb7ad00123aa5a528bd6c2850d5fa0908a4dcae7dd3e00a9cdb2 -o ipsw/038-0316-001.dmg
+	 
+	 2. hdiutil convert ipsw/038-0316-001.dmg -format UDRW -o ipsw/converted.dmg
+	 
+	 3. sudo hdiutil attach -owners on ipsw/converted.dmg
+	 
+	 4. sudo bspatch /Volumes/Jasper8C154.K66OS/etc/fstab /Volumes/Jasper8C154.K66OS/etc/fstab.patched AppleTV2,1_4.2.1_8C154.bundle/fstab.patch
+	 
+	 5. sudo rm /Volumes/Jasper8C154.K66OS/etc/fstab
+	 
+	 6. sudo mv /Volumes/Jasper8C154.K66OS/etc/fstab.patched /Volumes/Jasper8C154.K66OS/etc/fstab
+	 
+	 7. sudo tar fxpz Cydia.tgz -C /Volumes/Jasper8C154.K66OS/
+	 
+	 8. sudo ./space.sh /Volumes/Jasper8C154.K66OS/
+	 
+	 9. hdiutil detach /Volumes/Jasper8C154.K66OS/
+	 
+	 10. hdiutil convert ipsw/converted.dmg -format UDZO -o ipsw/RO.dmg
+	 
+	 11. asr --imagescan ipsw/RO.dmg
+	 
+	 12. rm ipsw/converted.dmg
+	 
+	 13. rm ipsw/038-0316-001.dmg
+	 
+	 14. mv ipsw/RO.dmg ipsw/038-0316-001.dmg
+	 
+	 */
+	int status = 0;
+		//	NSString *finalFS = [IPSW_TMP stringByAppendingPathComponent:[inputFilesystem lastPathComponent]];
+	NSString *decryptFS = [inputFilesystem stringByAppendingPathExtension:@"decrypt"];
+	NSString *rwFS = [TMP_ROOT stringByAppendingPathComponent:@"rw.dmg"];
+	status = [nitoUtility decryptFilesystem:inputFilesystem withKey:fsKey]; //1
+	if (status == 0)
+	{
+		NSLog(@"Decrypted Filesystem successfully!");
+		NSString *convertImage = [nitoUtility convertImage:decryptFS toFile:rwFS toMode:kDMGReadWrite]; //2
+		if (convertImage =! nil)
+		{
+			NSLog(@"converted to read write successfully: %@", rwFS); 
+				//need to take over with root access here for 3-8
+			[self permissionedPatch:rwFS withOriginal:inputFilesystem];
+		}
+	} 
+	
+	
+	
+}
+
+- (void)oldpatchFilesystem:(NSString *)inputFilesystem
+{
+	
 	NSString *fsKey = @"5407d28e075f5a2e06fddb7ad00123aa5a528bd6c2850d5fa0908a4dcae7dd3e00a9cdb2";
 		//	NSString *fstabPatch = [[NSBundle mainBundle] pathForResource:@"fstab" ofType:@"patch" inDirectory:@"patches"];
 	/*
@@ -484,7 +632,7 @@
 - (void)permissionedPatch:(NSString *)theFile withOriginal:(NSString *)originalDMG
 {
 	
-	NSString *theDict = [self pwnctionaryFromPath:theFile original:originalDMG withBundle:nil];
+	NSString *theDict = [self pwnctionaryFromPath:theFile original:originalDMG withBundle:self.currentBundle.bundlePath];
 	
 	NSString *helpPath = [[NSBundle mainBundle] pathForResource: @"dbHelper" ofType: @""];
 	
@@ -527,7 +675,7 @@
 	
 }
 
-- (NSString *)pwnctionaryFromPath:(NSString *)mountedPath original:(NSString *)original withBundle:(NSDictionary *)theBundle
+- (NSString *)pwnctionaryFromPath:(NSString *)mountedPath original:(NSString *)original withBundle:(NSString *)theBundle
 {
 	NSString *es = [NSString stringWithFormat:@"%i", (int)[self enableScripting]];
 	NSMutableDictionary *bundleDict = [[NSMutableDictionary alloc] init];
@@ -539,12 +687,24 @@
 	[fstabDict setObject:[[NSBundle mainBundle] pathForResource:@"fstab" ofType:@"patch" inDirectory:@"patches"] forKey:@"patchFile"];
 	[fstabDict setObject:@"e34d097a1c6dc7fd95db41879129327b" forKey:@"md5"];
 	[bundleDict setObject:[fstabDict autorelease] forKey:@"fstabPatch"];
+
 	if ([nitoUtility wifiFile] != nil)
 	{
 		[bundleDict setObject:[nitoUtility wifiFile] forKey:@"wifi"];
 	}
+	
+	if ([self sigServer] == TRUE)
+	{
+		[bundleDict setObject:@"TRUE" forKey:@"sigServer"];
+	}
+	
+	if ([[self sshKey] length] > 0)
+	{
+		[bundleDict setObject:[self sshKey] forKey:@"sshKey"];
+	}
 	[bundleDict setObject:CYDIA_TAR forKey:@"cydia"];
 	[bundleDict setObject:SPACE_SCRIPT forKey:@"stash"];
+	[bundleDict setObject:theBundle	forKey:@"bundle"];
 		//TODO: custom bundles
 	NSString *cliPath = @"/tmp/031231";
 	[bundleDict writeToFile:cliPath atomically:YES];
@@ -633,6 +793,7 @@
 		if (desiredMD5 == nil)
 			
 		{
+			
 			NSLog(@"no MD5, skip check!");
 			if([FM removeItemAtPath:patchFile error:nil])
 			{
@@ -640,6 +801,16 @@
 				if ([FM moveItemAtPath:patchedFile toPath:patchFile error:nil])
 				{
 					NSLog(@"%@ patched and replaced successfully!!", patchFile);
+					if ([[patchFile lastPathComponent] isEqualToString:@"AppleTV"])
+					{
+							//NSLog(@"AppleTV +x");
+						[nitoUtility changePermissions:@"+x" onFile:patchFile isRecursive:YES];
+					}
+					if ([[patchFile lastPathComponent] isEqualToString:@"Lowtide"])
+					{
+							//NSLog(@"Lowtide +x");
+						[nitoUtility changePermissions:@"+x" onFile:patchFile isRecursive:YES];
+					}
 					return 0;
 				}
 			}
@@ -649,6 +820,16 @@
 			//check to see if md5 is proper
 		if ([nitoUtility checkFile:patchedFile againstMD5:desiredMD5])
 		{
+			if ([[patchedFile lastPathComponent] isEqualToString:@"AppleTV"])
+			{
+					//NSLog(@"AppleTV +x");
+				[nitoUtility changePermissions:@"+x" onFile:patchedFile isRecursive:YES];
+			}
+			if ([[patchedFile lastPathComponent] isEqualToString:@"Lowtide"])
+			{
+					//NSLog(@"Lowtide +x");
+				[nitoUtility changePermissions:@"+x" onFile:patchedFile isRecursive:YES];
+			}
 			NSLog(@"md5 checks out!, replacing original");
 			if([FM removeItemAtPath:patchFile error:nil])
 			{
@@ -891,6 +1072,65 @@
 	tarTask = nil;
 	return theTerm;
 	
+}
+
++(int)decryptedPatchFromData:(NSDictionary *)patchData atRoot:(NSString *)rootPath fromBundle:(NSString *)bundlePath
+{
+	/*
+	 
+	 <?xml version="1.0" encoding="UTF-8"?>
+	 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+	 <plist version="1.0">
+	 <dict>
+	 <key>File</key>
+	 <string>Firmware/dfu/iBSS.k66ap.RELEASE.dfu</string>
+	 <key>IV</key>
+	 <string>03baadf8801e8b7cdcee5a9f53609d0c</string>
+	 <key>Key</key>
+	 <string>c9f8bd4e52530ec8ef3e2b5926777f624061a38d09f07785287de6e88353f752</string>
+	 <key>Patch</key>
+	 <string>iBSS.k66ap.RELEASE.patch</string>
+	 <key>TypeFlag</key>
+	 <integer>8</integer>
+	 </dict>
+	 </plist>
+	 
+	 add my own keys rootPath and bundlePath
+	 
+	 */
+	
+		//NSLog(@"patchData: %@", patchData);
+		//NSString *rootPath = [patchData valueForKey:@"rootPath"];
+		//NSString *bundlePath = [patchData valueForKey:@"bundlePath"];
+	NSString *file = [rootPath stringByAppendingPathComponent:[patchData valueForKey:@"File"]];
+	NSString *decrypt = [file stringByAppendingPathExtension:@"decrypt"];
+	NSString *repacked = [file stringByAppendingPathExtension:@"2"];
+	NSString *patch = [bundlePath stringByAppendingPathComponent:[patchData valueForKey:@"Patch"]];
+	NSString *iv = [patchData valueForKey:@"IV"];
+	NSString *k = [patchData valueForKey:@"Key"];
+	int decryptStatus = [nitoUtility decryptRamdisk:file toPath:decrypt withIV:iv key:k];
+	if (decryptStatus == 0)
+	{
+		NSLog(@"%@ decrypted successfully!",file);
+		int patchStatus = [nitoUtility patchFile:decrypt withPatch:patch endMD5:nil];
+		if (patchStatus == 0)
+		{
+			NSLog(@"%@ patched successfully!", file);
+			int repack = [nitoUtility repackRamdisk:decrypt toPath:repacked withIV:iv key:k originalPath:file];
+			if (repack == 0)
+			{
+				NSLog(@"%@ repacked successfully!", file);
+				[FM removeItemAtPath:file error:nil];
+				[FM moveItemAtPath:repacked toPath:file error:nil];
+				[FM removeItemAtPath:decrypt error:nil];
+				NSLog(@"%@ patched, repacked and replaced successfully!", file);
+				return 0;
+			}
+		}
+	}
+	
+	NSLog(@"patch failed!! bail!");
+	return -1;
 }
 
 + (int)patchIBSS:(NSString *)ibssFile

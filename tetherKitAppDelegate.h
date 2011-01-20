@@ -8,6 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 #import "ripURL.h"
+#import "FWBundle.h"
+#import <Carbon/Carbon.h>
+#import "SPButton.h"
+#import "SPMenuItem.h"
 
 enum  {
 	kSPATVRestoreImage,
@@ -25,7 +29,7 @@ enum  {
 	IBOutlet NSImageView *instructionImage;
 	IBOutlet NSButton *buttonOne;
 	IBOutlet NSButton *cancelButton;
-	IBOutlet NSButton *bootButton;
+	IBOutlet SPButton *bootButton;
 	NSMutableArray *downloadFiles;
 	int downloadIndex;
 	BOOL processing;
@@ -34,9 +38,13 @@ enum  {
 	IBOutlet NSView *secondView;
 	ripURL *downloadFile;
 	BOOL poisoning;
+	FWBundle *currentBundle;
+	IBOutlet NSArrayController *bundleController;
 	
 	
 }
+@property (assign) IBOutlet NSArrayController *bundleController;
+@property (assign) FWBundle *currentBundle;
 @property (assign) IBOutlet NSWindow *window;
 @property (assign) IBOutlet NSView	*firstView;
 @property (assign) IBOutlet NSView	*secondView;
@@ -44,6 +52,8 @@ enum  {
 @property (readwrite, assign) BOOL poisoning;
 @property (readwrite, assign) BOOL enableScripting;
 @property (readwrite, assign) int downloadIndex;
+
+- (BOOL) optionKeyIsDown;
 + (NSString *)applicationSupportFolder;
 + (NSString *)wifiFile;
 - (IBAction)fixScript:(id)sender;
@@ -66,4 +76,5 @@ enum  {
 - (IBAction)itunesRestore:(id)sender;
 - (void)setInstructionText:(NSString *)instructions;
 - (NSImage *)imageForMode:(int)inputMode;
+- (NSString *)ipswOutputPath;
 @end

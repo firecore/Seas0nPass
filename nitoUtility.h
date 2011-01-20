@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "PatchedFile.h"
+#import "FWBundle.h"
 
 #define XPWN [[NSBundle mainBundle] pathForResource:@"xpwntool" ofType:@"" inDirectory:@"bin"]
 #define VFDECRYPT [[NSBundle mainBundle] pathForResource:@"vfdecrypt" ofType:@"" inDirectory:@"bin"]
@@ -31,10 +32,17 @@ enum{
 	
 	id delegate;
 	BOOL enableScripting;
+	BOOL sigServer;
+	NSString *sshKey;
+	FWBundle *currentBundle;
+	
 
 }
-	@property (readwrite, assign) BOOL enableScripting;
+@property (readwrite, assign) BOOL enableScripting;
+@property (readwrite, assign) BOOL sigServer;
 @property (nonatomic, assign) id delegate;
+@property (nonatomic, retain) NSString *sshKey;
+@property (nonatomic, assign) FWBundle *currentBundle;
 
 + (int)bunZip:(NSString *)inputTar toRoot:(NSString *)toLocation excluding:(NSString *)excludeFile;
 + (int)extractGZip:(NSString *)inputTar toRoot:(NSString *)toLocation;
@@ -60,11 +68,13 @@ enum{
 + (NSString *)convertImage:(NSString *)irString toFile:(NSString *)outputFile toMode:(int)theMode;
 + (int)patchIBSS:(NSString *)ibssFile;
 - (void)patchFilesystem:(NSString *)inputFilesystem;
-- (NSString *)pwnctionaryFromPath:(NSString *)mountedPath original:(NSString *)original withBundle:(NSDictionary *)theBundle;
+- (NSString *)pwnctionaryFromPath:(NSString *)mountedPath original:(NSString *)original withBundle:(NSString *)theBundle;
 - (void)permissionedPatch:(NSString *)theFile withOriginal:(NSString *)originalDMG;
 + (int)migrateFiles:(NSArray *)migration toPath:(NSString *)finalPath;
 + (void)createTempSetup;
 - (int)patchRamdisk:(NSString *)theRamdisk;
 + (int)runScript:(NSString *)theScript withInput:(NSString *)theInput;
 + (void)createIPSWToFile:(NSString *)theName;
++(int)decryptedPatchFromData:(NSDictionary *)patchData atRoot:(NSString *)rootPath fromBundle:(NSString *)bundlePath;
+- (int)performPatchesFromBundle:(FWBundle *)theBundle onRamdisk:(NSDictionary *)ramdiskDict;
 @end

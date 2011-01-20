@@ -13,7 +13,8 @@
 // xpwntool by planetbeing
 // limera1n exploit by George Hotz
 
-
+	//4.3b1 md5 for iBSS 0b03c11af9bd013a6cf98be65eb0e146
+    //4.3b1 patched md5 for iBSS 
 
 #import <Security/Authorization.h>
 #include <Security/AuthorizationTags.h>
@@ -21,9 +22,7 @@
 #import "tetherKitAppDelegate.h"
 #import "nitoUtility.h"
 #import "include/libpois0n.h"
-#define kPTName @"PwnageTool_4.1.2.dmg"
 #define kIPSWName @"AppleTV2,1_4.2.1_8C154_Restore.ipsw"
-#define kPTDownloadLocation @"http://iphoneroot.com/download/PwnageTool_4.1.2.dmg"
 #define kIPSWDownloadLocation @"http://appldnld.apple.com/AppleTV/061-9978.20101214.gmabr/AppleTV2,1_4.2.1_8C154_Restore.ipsw"
 #define DL [tetherKitAppDelegate downloadLocation]
 #define PTMD5 @"e8f4d590c8fe62386844d6a2248ae609"
@@ -31,10 +30,13 @@
 #define KCACHE @"kernelcache.release.k66"
 #define iBSSDFU @"iBSS.k66ap.RELEASE.dfu"
 #define HCIPSW [DL stringByAppendingPathComponent:@"AppleTV2,1_4.2.1_8C154_Restore.ipsw"]
-#define CUSTOM_RESTORE @"AppleTV2,1_4.2.1_8C154_Custom_Restore.ipsw"
+#define CUSTOM_RESTORED @"AppleTV2,1_4.2.1_8C154_Custom_Restore.ipsw"
+#define CUSTOM_RESTORE @"AppleTV_SeasonPass.ipsw"
+#define BUNDLE_LOCATION [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"bundles"]
+#define BUNDLES [FM contentsOfDirectoryAtPath:BUNDLE_LOCATION error:nil]
 @implementation tetherKitAppDelegate
 
-@synthesize window, downloadIndex, processing, enableScripting, firstView, secondView, poisoning;
+@synthesize window, downloadIndex, processing, enableScripting, firstView, secondView, poisoning, currentBundle, bundleController;
 
 /*
  
@@ -74,13 +76,35 @@ void print_progress(double progress, void* data) {
 	}
 }
 
+
+	//if ([theEvent modifierFlags] == 262401){
+- (BOOL) optionKeyIsDown
+{
+	return (GetCurrentKeyModifiers() & optionKey) != 0;
+}
+
 - (char *)iBSS
+{
+	NSString *iBSS = [[self currentBundle] localiBSS];
+		//NSLog(@"self current bundle: %@", self.currentBundle);
+		//NSLog(@"iBSS: %@", iBSS);
+	return [iBSS UTF8String];
+}
+
+- (char *)oldiBSS
 {
 	NSString *iBSS = [DL stringByAppendingPathComponent:iBSSDFU];
 	return [iBSS UTF8String];
 }
 
+
 - (char *)kernelcache
+{
+	NSString *kc = [[self currentBundle] localKernel];
+	return [kc UTF8String];
+}
+
+- (char *)oldkernelcache
 {
 	NSString *kc = [DL stringByAppendingPathComponent:KCACHE];
 	return [kc UTF8String];
@@ -132,10 +156,17 @@ void print_progress(double progress, void* data) {
 	return theImage;
 }
 
+- (void)dealloc
+{
+
+	[super dealloc];
+}
+
 - (void)startupAlert
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	BOOL warningShown = [defaults boolForKey:@"SPWarningShown"];
+
 	if (warningShown == TRUE)
 		return;
 	
@@ -159,6 +190,13 @@ void print_progress(double progress, void* data) {
 	}
 	
 	[defaults setBool:YES forKey:@"SPWarningShown"];
+	
+}
+
+- (NSString *)ipswOutputPath
+{
+		//NSString *appSupport = [tetherKitAppDelegate applicationSupportFolder];
+	return [NSHomeDirectory() stringByAppendingPathComponent:self.currentBundle.outputName];
 	
 }
 
@@ -277,6 +315,7 @@ void print_progress(double progress, void* data) {
 - (int)enterDFU
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	[self killiTunes];
 	self.poisoning = TRUE;
 	[self showProgress];
 		//[cancelButton setEnabled:TRUE];
@@ -343,9 +382,9 @@ void print_progress(double progress, void* data) {
 - (int)tetheredBoot
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	[self killiTunes];
 	self.poisoning = TRUE;
 	[self showProgress];
-	[self killiTunes];
 	int result = 0;
 	irecv_error_t ir_error = IRECV_E_SUCCESS;
 	
@@ -487,8 +526,53 @@ void print_progress(double progress, void* data) {
 	
 }
 
++ (NSArray *)appSupportBundles
+{
+	NSString *appSupport = [tetherKitAppDelegate applicationSupportFolder];
+	NSArray *files = [FM contentsOfDirectoryAtPath:appSupport error:nil];
+	NSMutableArray *newFiles = [[NSMutableArray alloc] init];
+	NSEnumerator *fileEnum = [files objectEnumerator];
+	id currentObject = nil;
+	while (currentObject = [fileEnum nextObject]) {
+		
+		if ([[currentObject pathExtension] isEqualToString:@"bundle"])
+		{
+			[newFiles addObject:[currentObject stringByDeletingPathExtension]];
+		}
+		
+	}
+	return [newFiles autorelease];
+}
+
++ (BOOL)sshKey
+{
+	return [[NSUserDefaults standardUserDefaults] boolForKey:@"sshKey"];
+}
+
++ (BOOL)sigServer
+{
+	return [[NSUserDefaults standardUserDefaults] boolForKey:@"sigServer"];
+}
+
+- (void)setBundleControllerContent
+{
+
+	NSArray *appSBundles = [tetherKitAppDelegate appSupportBundles];
+	NSMutableArray *outputArray = [[NSMutableArray alloc] init];
+	NSEnumerator *bundleEnum = [appSBundles objectEnumerator];
+	id theObject = nil;
+	while(theObject = [bundleEnum nextObject])
+	{
+		NSDictionary *theDict = [NSDictionary dictionaryWithObject:theObject forKey:@"name"];
+		[outputArray addObject:theDict];
+	}
+	
+	[self.bundleController setContent:[outputArray autorelease]];
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	// Insert code here to initialize your application 
+	
 	
 	[window setContentView:self.firstView];
 	downloadIndex = 0;
@@ -500,9 +584,17 @@ void print_progress(double progress, void* data) {
 	[self startupAlert];
 	[self pwnHelperCheckOwner];
 	[self checkScripting];
+	NSString *lastUsedbundle = [[NSUserDefaults standardUserDefaults] valueForKey:@"lastUsedBundle"];
+		//NSLog(@"lastUsedbundle: %@", lastUsedbundle);
+	if ([lastUsedbundle length] < 1)
+	{
+		lastUsedbundle = @"AppleTV2,1_4.2.1_8C154";
+	}
+	self.currentBundle = [FWBundle bundleWithName:lastUsedbundle];
+		//NSLog(@"lastUsedbundle: %@", lastUsedbundle);
+		//[self.currentBundle logDescription];
 	[FM removeItemAtPath:TMP_ROOT error:nil];
-	
-		//NSLog(@"appS: %@", [tetherKitAppDelegate wifiFile]);
+	[self setBundleControllerContent];
 	
 }
 
@@ -537,10 +629,36 @@ void print_progress(double progress, void* data) {
 {
 	NSMutableArray *ipswFiles = [[NSMutableArray alloc] init];
 	[ipswFiles addObject:[TMP_ROOT stringByAppendingPathComponent:@"Firmware"]];
-	[ipswFiles addObject:[TMP_ROOT stringByAppendingPathComponent:KCACHE]];
+	[ipswFiles addObject:[TMP_ROOT stringByAppendingPathComponent:[[self currentBundle] kernelCacheName]]];
 	[ipswFiles addObject:[TMP_ROOT stringByAppendingPathComponent:@"BuildManifest.plist"]];
 	[ipswFiles addObject:[TMP_ROOT stringByAppendingPathComponent:@"Restore.plist"]];
 	return [ipswFiles autorelease];
+}
+
+- (NSDictionary *)bundleData
+{
+	NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"AppleTV2,1_4.2.1_8C154" ofType:@"bundle" inDirectory:@"bundles"];
+	NSDictionary *bundleD = [[NSBundle bundleWithPath:bundlePath] infoDictionary];
+	NSMutableDictionary *bundleDict = [[NSMutableDictionary alloc] initWithDictionary:bundleD];
+	
+	[bundleDict setObject:bundlePath forKey:@"bundlePath"];
+	[bundleDict setObject:TMP_ROOT forKey:@"rootPath"];
+		//NSLog(@"bundleData: %@", bundleDict);
+	return [bundleDict autorelease];
+	
+}
+
+- (void)createSupportBundleWithCache:(NSString *)theCache iBSS:(NSString *)iBSS
+{
+	NSString *bundleOut = self.currentBundle.localBundlePath;
+	[FM createDirectoryAtPath:bundleOut withIntermediateDirectories:YES attributes:nil error:nil];
+	NSDictionary *buildManifest = [NSDictionary dictionaryWithObjectsAndKeys:[theCache lastPathComponent], @"KernelCache", [iBSS lastPathComponent], @"iBSS", nil];
+	[buildManifest writeToFile:[bundleOut stringByAppendingPathComponent:@"BuildManifest.plist"] atomically:YES];
+		//NSLog(@"copy: %@ to %@", theCache, [self.currentBundle localKernel]);
+	 [FM copyItemAtPath:theCache toPath:self.currentBundle.localKernel error:nil];
+		//NSLog(@"copy: %@ to %@", iBSS, self.currentBundle.localiBSS);
+	 [FM copyItemAtPath:iBSS toPath:self.currentBundle.localiBSS error:nil];
+	
 }
 
 - (void)wrapItUp:(NSDictionary *)theDict
@@ -560,29 +678,46 @@ void print_progress(double progress, void* data) {
 	
 	[nitoUtility scanForRestore:finalPath];
 	
-	NSString *kcache = [TMP_ROOT stringByAppendingPathComponent:KCACHE];
-	NSString *ibss = [TMP_ROOT stringByAppendingPathComponent:@"Firmware/dfu/iBSS.k66ap.RELEASE.dfu"];
+	NSString *kcache = [TMP_ROOT stringByAppendingPathComponent:[[self currentBundle] kernelCacheName]];
+	NSString *ibss = [TMP_ROOT stringByAppendingPathComponent:[[self currentBundle] iBSSName]];
+	[self createSupportBundleWithCache:kcache iBSS:ibss];
+
+	/*
+	if ([FM fileExistsAtPath:[self kcacheString]])
+	{
+		[FM removeItemAtPath:[self kcacheString] error:nil];
+	}
 	[FM copyItemAtPath:kcache toPath:[self kcacheString] error:nil];
 	
-	
-	[nitoUtility patchIBSS:ibss];
-	
+	if ([FM fileExistsAtPath:[self iBSSString]])
+	{
+		[FM removeItemAtPath:[self iBSSString] error:nil];
+	}
 	[FM copyItemAtPath:ibss toPath:[self iBSSString] error:nil];
+	*/
+	
 	
 	[nitoUtility migrateFiles:[self ipswContents] toPath:IPSW_TMP];
 	
-	NSString *ipswPath = [NSHomeDirectory() stringByAppendingPathComponent:CUSTOM_RESTORE];
+		//NSString *ipswPath = [NSHomeDirectory() stringByAppendingPathComponent:CUSTOM_RESTORE];
+	
+	NSString *ipswPath = [self ipswOutputPath];
+	
+		//NSLog(@"ipsw: %@", ipswPath);
+	
 	
 	[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:NSLocalizedString(@"Creating IPSW...", @"Creating IPSW...") waitUntilDone:NO];
 	
 	[nitoUtility createIPSWToFile:ipswPath];
 	
-		[FM removeFileAtPath:TMP_ROOT handler:nil];
+		//[FM removeFileAtPath:TMP_ROOT handler:nil];
 	
 	[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:NSLocalizedString(@"Custom IPSW created successfully!" , @"Custom IPSW created successfully!" ) waitUntilDone:NO];
 	
 	[self hideProgress];
+	[self killiTunes];
 	[self enterDFU];
+	
 	if ([self scriptingEnabled])
 	{
 		[self setDownloadText:NSLocalizedString(@"Restoring in iTunes...",@"Restoring in iTunes...") ];
@@ -601,7 +736,7 @@ void print_progress(double progress, void* data) {
 		[cancelButton setTitle:@"Done"];
 	}
 	[cancelButton setTitle:@"Done"];
-	
+	[[NSUserDefaults standardUserDefaults] setObject:self.currentBundle.bundleName forKey:@"lastUsedBundle"];
 	[pool release];
 }
 
@@ -610,7 +745,8 @@ void print_progress(double progress, void* data) {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	[self killiTunes];
 	[self enterDFU];
-	NSString *ipswPath = [NSHomeDirectory() stringByAppendingPathComponent:CUSTOM_RESTORE];
+		//NSString *ipswPath = [NSHomeDirectory() stringByAppendingPathComponent:CUSTOM_RESTORE];
+	NSString *ipswPath = [self ipswOutputPath];
 	if(![FM fileExistsAtPath:ipswPath])
 	{
 		[self setDownloadText:NSLocalizedString(@"No IPSW to restore!", @"No IPSW to restore!")];
@@ -633,6 +769,9 @@ void print_progress(double progress, void* data) {
 
 - (IBAction)itunesRestore:(id)sender
 {
+	NSString *lastUsedbundle = [[NSUserDefaults standardUserDefaults] valueForKey:@"lastUsedBundle"];
+	NSLog(@"lastUsedBundle: %@", lastUsedbundle);
+	self.currentBundle = [FWBundle bundleWithName:lastUsedbundle];
 	[window setContentView:self.secondView];
 	[window display];
 [	NSThread detachNewThreadSelector:@selector(threadedDFURestore) toTarget:self withObject:nil];
@@ -677,6 +816,14 @@ void print_progress(double progress, void* data) {
 	[as release];
 }
 
+- (void)activateiTunes
+{
+	NSAppleScript *as = [[NSAppleScript alloc] initWithSource:@"activate application \"iTunes\"\n"];
+	[as executeAndReturnError:nil];
+	[as release];
+	
+}
+
 - (BOOL)loadItunesWithIPSW:(NSString *)ipsw
 {
 	NSDictionary *theError = nil;
@@ -687,9 +834,21 @@ void print_progress(double progress, void* data) {
 	 activate application "iTunes"
 	 tell application "System Events"
 	 tell process "iTunes"
+	 repeat until window 1 is not equal to null
+	 end repeat
+	 end tell
+	 end tell
+	 activate application "iTunes"
+	 tell application "System Events"
+	 tell process "iTunes"
 	 key down option
 	 click button "Restore" of scroll area 1 of tab group 1 of window "iTunes"
 	 key up option
+	 end tell
+	 end tell
+	 activate application "iTunes"
+	 tell application "System Events"
+	 tell process "iTunes"
 	 key code 5 using {command down, shift down} -- g key
 	 set value of text field 1 of sheet 1 of window 1 to "~/AppleTV2,1_4.2.1_8C154_Custom_Restore.ipsw"
 	 click button 1 of sheet 1 of window 1
@@ -706,23 +865,39 @@ void print_progress(double progress, void* data) {
 	NSMutableString *asString = [[NSMutableString alloc] init];
 	[asString appendString:@"activate application \"iTunes\"\n"];
 	[asString appendString:@"tell application \"System Events\"\n"];
-
 	[asString appendString:@"tell Process \"iTunes\"\n"];
 	[asString appendString:@"repeat until window 1 is not equal to null\n"];
 	[asString appendString:@"end repeat\n"];
-		[asString appendString:@"delay 2\n"];
-		//[asString appendString:@"try\n"];
+	[asString appendString:@"end tell\n"];
+	[asString appendString:@"end tell\n"];
+	
+	/*
+	 
+	 we separate these instances out in an attempt to minimize pebkac errors. that is why there is multiple activate application "iTunes"\n lines, that will bring it to the 
+	 front
+	 
+	 */
+	
+	[asString appendString:@"activate application \"iTunes\"\n"];
+	[asString appendString:@"tell application \"System Events\"\n"];
+	[asString appendString:@"tell Process \"iTunes\"\n"];
 	[asString appendString:@"key down option\n"];
 	[asString appendString:@"click button \"Restore\" of scroll area 1 of tab group 1 of window 1\n"];
 	[asString appendString:@"key up option\n"];
+	[asString appendString:@"end tell\n"];
+	[asString appendString:@"end tell\n"];
+	
+	[asString appendString:@"activate application \"iTunes\"\n"];
+	[asString appendString:@"tell application \"System Events\"\n"];
+		[asString appendString:@"tell Process \"iTunes\"\n"];
 	[asString appendString:@"key code 5 using {command down, shift down}\n"];
 	[asString appendString:ipswString];
 	[asString appendString:@"click button 1 of sheet 1 of window 1\n"];
 	[asString appendString:@"click button 4 of window 1\n"];
 	[asString appendString:@"click button 2 of window 1\n"];
-		//[asString appendString:@"end try\n"];
 	[asString appendString:@"end tell\n"];
 	[asString appendString:@"end tell\n"];
+	
 	NSAppleScript *as = [[NSAppleScript alloc] initWithSource:asString];
 		//NSLog(@"applescript: %@", asString);
 	[as executeAndReturnError:&theError];
@@ -740,6 +915,13 @@ void print_progress(double progress, void* data) {
 }
 
 
+
++ (NSArray *)bundleNames
+{
+	
+	return BUNDLES;
+}
+
 + (NSString *)downloadLocation
 {
 	NSFileManager *man = [NSFileManager defaultManager];
@@ -754,6 +936,8 @@ void print_progress(double progress, void* data) {
 
 - (IBAction)bootTethered:(id)sender
 {
+	NSString *lastUsedbundle = [[NSUserDefaults standardUserDefaults] valueForKey:@"lastUsedBundle"];
+	self.currentBundle = [FWBundle bundleWithName:lastUsedbundle];
 	[window setContentView:self.secondView];
 	[window display];
 	[NSThread detachNewThreadSelector:@selector(tetheredBoot) toTarget:self withObject:nil];
@@ -768,9 +952,43 @@ void print_progress(double progress, void* data) {
 	
 }
 
+
+
 - (IBAction)processOne:(id)sender //download and modify ipsw
 {
-	[self killiTunes];
+		//current bundle may be set by default, but we never want to assume the default processOne ipsw to be anything but the latest- which is still hardcoded to 4.2.1.
+	self.currentBundle = [FWBundle bundleWithName:@"AppleTV2,1_4.2.1_8C154"];
+	if ([self optionKeyIsDown])
+	{
+		NSOpenPanel *op = [NSOpenPanel openPanel];
+		[op setTitle:@"Please select an AppleTV firmware image"];
+		[op setCanChooseFiles:YES];
+		[op setCanCreateDirectories:NO];
+		int buttonPressed = [op runModalForTypes:[NSArray arrayWithObject:@"ipsw"]];
+		if (buttonPressed != NSOKButton)
+		{
+			return;
+		}
+		NSString *ipsw = [op filename];
+		FWBundle *ourBundle = [FWBundle bundleForFile:ipsw];
+		if (ourBundle == nil)
+		{
+			NSAlert *errorAlert = [NSAlert alertWithMessageText:@"Unsupported Firmware!" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"The firmware %@ is not compatible with this version of Seas0nPass.", [ipsw lastPathComponent]];
+			[errorAlert runModal];
+			return;
+		}
+		self.currentBundle = ourBundle;
+		[window setContentView:self.secondView];
+		[window display];
+		
+		self.processing = TRUE;
+		[buttonOne setEnabled:FALSE];
+		[bootButton setEnabled:FALSE];
+		[instructionImage setImage:[self imageForMode:kSPIPSWImage]];
+		[NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:ipsw];
+		return;
+	}
+	
 	[window setContentView:self.secondView];
 	[window display];
 
@@ -784,7 +1002,7 @@ void print_progress(double progress, void* data) {
 		[self downloadFiles];
 	} else {
 	
-		[NSThread detachNewThreadSelector:@selector(pwnIPSW:) toTarget:self withObject:HCIPSW];
+		[NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:HCIPSW];
 	}
 
 }
@@ -881,7 +1099,7 @@ void print_progress(double progress, void* data) {
 		[self setDownloadText:NSLocalizedString(@"Downloads complete", @"Downloads complete")];
 		 NSLog(@"downloads complete!!");
 		[self setDownloadProgress:0];
-		[NSThread detachNewThreadSelector:@selector(pwnIPSW:) toTarget:self withObject:HCIPSW];
+		[NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:HCIPSW];
 		
 		
 	}
@@ -902,14 +1120,83 @@ void print_progress(double progress, void* data) {
 	[downloadProgressField setNeedsDisplay:YES];
 }
 
+	/*
+	 
+	 1. perform firmware patches - generally just unpacking, patching, repacking
+	 
+	 
+	 
+	 */
+
+- (void)customFW:(NSString *)inputIPSW
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	FWBundle *theBundle = self.currentBundle;
+	NSString *fileSystemFile = [self.currentBundle rootFilesystem];
+	int status = 0;
+	nitoUtility *nu = [[nitoUtility alloc] init];
+	[nitoUtility createTempSetup];
+	if ([tetherKitAppDelegate sshKey])
+	{
+		NSString *sshKey = [NSHomeDirectory() stringByAppendingPathComponent:@".ssh/id_rsa.pub"];
+		if ([FM fileExistsAtPath:sshKey])
+			[nu setSshKey:sshKey];
+	}
+	
+	[nu setSigServer:[tetherKitAppDelegate sigServer]];
+	
+	[nu setEnableScripting:self.enableScripting];
+	[nu setCurrentBundle:theBundle];
+	[self showProgress];
+	[self setDownloadText:NSLocalizedString(@"Unzipping IPSW...",@"Unzipping IPSW..." )];
+	if ([nitoUtility unzipFile:inputIPSW toPath:TMP_ROOT])
+	{
+		[self setDownloadText:NSLocalizedString(@"Patching ramdisk...", @"Patching ramdisk...")];
+		status = [self performFirmwarePatches:theBundle withUtility:nu];
+		if (status == 0)
+		{
+			NSLog(@"firmware patches successful!");
+			[self setDownloadText:NSLocalizedString(@"Patching filesystem...", @"Patching filesystem...")];
+			[nu patchFilesystem:[TMP_ROOT stringByAppendingPathComponent:fileSystemFile]];
+		}
+		
+	}
+		//[self hideProgress];
+	[pool release];
+}
+
+- (int)performFirmwarePatches:(FWBundle *)theBundle withUtility:(nitoUtility *)nitoUtil
+{
+	int status = 0;
+	if ([theBundle iBSS] != nil)
+	{
+		status = [nitoUtility decryptedPatchFromData:[theBundle iBSS] atRoot:[theBundle fwRoot] fromBundle:[theBundle bundlePath]];
+		if (status == 0)
+		{
+			NSLog(@"patched iBSS successfully!");
+		} else {
+			NSLog(@"iBSS patch failed!");
+			return -1;
+		}
+	}
+	if ([theBundle restoreRamdisk] != nil)
+	{
+		[nitoUtil performPatchesFromBundle:theBundle onRamdisk:[theBundle restoreRamdisk]];
+
+		
+	}
+}
+
 - (void)pwnIPSW:(NSString *)inputIPSW
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
 	NSString *ramdiskFile = @"038-0318-001.dmg";
 	NSString *fileSystemFile = @"038-0316-001.dmg";
 	int status = 0;
 	nitoUtility *nu = [[nitoUtility alloc] init];
 	[nu setEnableScripting:self.enableScripting];
+	[nu setCurrentBundle:self.currentBundle];
 	[nitoUtility createTempSetup];
 	[self showProgress];
 	[self setDownloadText:NSLocalizedString(@"Unzipping IPSW...",@"Unzipping IPSW..." )];

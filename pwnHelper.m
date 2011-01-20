@@ -7,6 +7,7 @@
 //
 #import <Cocoa/Cocoa.h>
 #import "pwnHelperClass.h"
+#import "FWBundle.h"
 #include <Security/Authorization.h>
 #include <Security/AuthorizationTags.h>
 
@@ -30,6 +31,8 @@ int main (int argc, const char * argv[]) {
 		NSString *value = [NSString stringWithUTF8String:argv[i+1]]; //plist location
 		pwnHelperClass *phc = [[pwnHelperClass alloc] init];
 		NSDictionary *pDict = [NSDictionary dictionaryWithContentsOfFile:value];
+		FWBundle *cBundle = [FWBundle bundleWithPath:[pDict valueForKey:@"bundle"]];
+		[phc setCurrentBundle:cBundle];
 		[phc setProcessDict:pDict];
 		[phc setRunPath:path];
 		[phc patchDmg:[pDict valueForKey:@"patch"]];

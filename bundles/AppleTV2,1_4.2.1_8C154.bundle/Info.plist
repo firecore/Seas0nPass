@@ -16,6 +16,26 @@
 				<key>Patch</key>
 				<string>fstab.patch</string>
 			</dict>
+			<dict>
+				<key>Action</key>
+				<string>Patch</string>
+				<key>File</key>
+				<string>System/Library/Lockdown/Services.plist</string>
+				<key>Name</key>
+				<string>Apple File Connection v2</string>
+				<key>Patch</key>
+				<string>Services.patch</string>
+			</dict>
+			<dict>
+				<key>Action</key>
+				<string>Patch</string>
+				<key>File</key>
+				<string>Applications/AppleTV.app/AppleTV</string>
+				<key>Name</key>
+				<string>Seatbelt</string>
+				<key>Patch</key>
+				<string>AppleTV.patch</string>
+			</dict>
 		</array>
 	</dict>
 	<key>FirmwarePatches</key>
@@ -53,6 +73,8 @@
 			<string>usr/sbin/asr</string>
 			<key>Patch</key>
 			<string>asr.patch</string>
+			<key>MD5</key>
+			<string>072c70c08790a4d80f1683e60f4edb71</string>
 		</dict>
 	</dict>
 	<key>PreInstalledPackages</key>
@@ -78,7 +100,7 @@
 	<key>Name</key>
 	<string>AppleTV2,1_4.2.1_8C154</string>
 	<key>DownloadUrl</key>
-	<string></string>
+	<string>http://appldnld.apple.com/AppleTV/061-9978.20101214.gmabr/AppleTV2,1_4.2.1_8C154_Restore.ipsw</string>
 	<key>Platform</key>
 	<integer>3</integer>
 	<key>SubPlatform</key>
