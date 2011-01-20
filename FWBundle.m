@@ -125,9 +125,10 @@
 	if ([[self bundleName] isEqualToString:@"AppleTV2,1_4.3_8F5148c"])
 	{
 		return @"24676576";
+	} else if ([[self bundleName] isEqualToString:@"AppleTV2,1_4.3_8F5153d"]){
+		return @"24676576";
 	} else {
-		return @"16541920";
-	}
+		return @"16541920";	}
 }
 
 - (NSDictionary *)extraPatch
@@ -138,6 +139,14 @@
 		NSLog(@"extraPatch: %@", thePatch);
 		return thePatch;					  
 	}
+	
+	if ([[self bundleName] isEqualToString:@"AppleTV2,1_4.3_8F5153d"])
+	{
+		NSDictionary *thePatch = [NSDictionary dictionaryWithObjectsAndKeys:[[NSBundle mainBundle] pathForResource:@"status" ofType:@"patch" inDirectory:@"patches"], @"Patch", @"private/var/lib/dpkg/status", @"Target", @"7945d79f0dad7c3397b930877ba92ec4", @"md5", nil];
+		NSLog(@"extraPatch: %@", thePatch);
+		return thePatch;					  
+	}
+	
 	return nil;
 }
 

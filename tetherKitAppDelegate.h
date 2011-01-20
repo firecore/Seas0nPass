@@ -40,9 +40,10 @@ enum  {
 	BOOL poisoning;
 	FWBundle *currentBundle;
 	IBOutlet NSArrayController *bundleController;
-	
+	IBOutlet NSTextField *commandTextField;
 	
 }
+@property (assign) IBOutlet NSTextField *commandTextField;
 @property (assign) IBOutlet NSArrayController *bundleController;
 @property (assign) FWBundle *currentBundle;
 @property (assign) IBOutlet NSWindow *window;
@@ -77,4 +78,9 @@ enum  {
 - (void)setInstructionText:(NSString *)instructions;
 - (NSImage *)imageForMode:(int)inputMode;
 - (NSString *)ipswOutputPath;
+
+- (IBAction)doStuff:(id)sender;
+- (IBAction)sendCommand:(id)sender;
+
+
 @end

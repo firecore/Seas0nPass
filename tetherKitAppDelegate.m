@@ -34,6 +34,14 @@
 #define CUSTOM_RESTORE @"AppleTV_SeasonPass.ipsw"
 #define BUNDLE_LOCATION [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"bundles"]
 #define BUNDLES [FM contentsOfDirectoryAtPath:BUNDLE_LOCATION error:nil]
+
+int received_cb(irecv_client_t client, const irecv_event_t* event);
+int progress_cb(irecv_client_t client, const irecv_event_t* event);
+int precommand_cb(irecv_client_t client, const irecv_event_t* event);
+int postcommand_cb(irecv_client_t client, const irecv_event_t* event);
+static unsigned int quit = 0;
+static unsigned int verbose = 0;
+
 @implementation tetherKitAppDelegate
 
 @synthesize window, downloadIndex, processing, enableScripting, firstView, secondView, poisoning, currentBundle, bundleController;
@@ -112,12 +120,12 @@ void print_progress(double progress, void* data) {
 
 - (NSString *)kcacheString
 {
-	return [DL stringByAppendingPathComponent:KCACHE];
+	return [[self currentBundle] localKernel];
 }
 
 - (NSString *)iBSSString
 {
-	return [DL stringByAppendingPathComponent:iBSSDFU];
+	return [[self currentBundle] localiBSS];
 }
 
 - (NSImage *)imageForMode:(int)inputMode
@@ -310,6 +318,85 @@ void print_progress(double progress, void* data) {
 	
 }
 
+int progress_cb(irecv_client_t client, const irecv_event_t* event) {
+	NSLog(@"progress");
+	if (event->type == IRECV_PROGRESS) {
+		print_progress_bar(event->progress);
+	}
+	return 0;
+}
+
+void print_progress_bar(double progress) {
+	int i = 0;
+	if(progress < 0) {
+		return;
+	}
+	
+	if(progress > 100) {
+		progress = 100;
+	}
+	
+	printf("\r[");
+	for(i = 0; i < 50; i++) {
+		if(i < progress / 2) {
+			printf("=");
+		} else {
+			printf(" ");
+		}
+	}
+	
+	printf("] %3.1f%%", progress);
+	fflush(stdout);
+	if(progress == 100) {
+		printf("\n");
+	}
+}
+
+- (int)inject
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	[self killiTunes];
+	self.poisoning = TRUE;
+	[self showProgress];
+	int result = 0;
+	irecv_error_t ir_error = IRECV_E_SUCCESS;
+	
+	pois0n_init();
+	pois0n_set_callback(&print_progress, self);
+	[self setDownloadText:NSLocalizedString(@"Waiting for device to enter DFU mode...", @"Waiting for device to enter DFU mode...")];
+	[self setInstructionText:NSLocalizedString(@"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.", @"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.")];
+	[instructionImage setImage:[self imageForMode:kSPATVRestoreImage]];
+	while(pois0n_is_ready()) {
+		sleep(1);
+	}
+	irecv_event_subscribe(client, IRECV_RECEIVED, &print_progress, NULL);
+	[self setDownloadText:NSLocalizedString(@"Found device in DFU mode", @"Found device in DFU mode")];
+	[self setInstructionText:@""];
+	
+	result = pois0n_is_compatible();
+	if (result < 0) {
+		[self setDownloadText:NSLocalizedString(@"Your device is not compatible with this exploit!", @"Your device is not compatible with this exploit!")];
+		return result;
+	}
+	
+	result = pois0n_inject();
+	if (result < 0) {
+		[self setDownloadText:NSLocalizedString(@"Exploit injection failed!", @"Exploit injection failed!")];
+		[self hideProgress];
+		pois0n_exit();
+		self.poisoning = FALSE;
+		[pool release];
+		return result;
+	}
+	NSString *command = [commandTextField stringValue];
+	irecv_send_command(client, [command UTF8String]);
+	[self hideProgress];
+		pois0n_exit();
+	self.poisoning = FALSE;
+	[pool release];
+	return 0;
+}
+
 	//this code is almost identical to the tetheredboot code
 
 - (int)enterDFU
@@ -376,6 +463,202 @@ void print_progress(double progress, void* data) {
 	return 0;
 	
 }
+
+int received_cb(irecv_client_t client, const irecv_event_t* event) {
+		NSLog(@"received_cb");
+	if (event->type == IRECV_RECEIVED) {
+		int i = 0;
+		int size = event->size;
+		char* data = event->data;
+		for (i = 0; i < size; i++) {
+			printf("%c", data[i]);
+		}
+	}
+	return 0;
+}
+
+void parse_command(irecv_client_t client, unsigned char* command, unsigned int size) {
+		NSLog(@"parse command");
+	char* cmd = strdup(command);
+	char* action = strtok(cmd, " ");
+	debug("Executing %s\n", action);
+	if (!strcmp(cmd, "/exit")) {
+
+	} else
+		
+		if (!strcmp(cmd, "/help")) {
+
+		} else
+			
+			if (!strcmp(cmd, "/upload")) {
+				char* filename = strtok(NULL, " ");
+				debug("Uploading files %s\n", filename);
+				if (filename != NULL) {
+					irecv_send_file(client, filename, 0);
+				}
+			} else
+				
+				if (!strcmp(cmd, "/exploit")) {
+					char* filename = strtok(NULL, " ");
+					debug("Sending exploit %s\n", filename);
+					if (filename != NULL) {
+						irecv_send_file(client, filename, 0);
+					}
+					irecv_send_exploit(client);
+				} else
+					
+					if (!strcmp(cmd, "/execute")) {
+						char* filename = strtok(NULL, " ");
+						debug("Executing script %s\n", filename);
+						if (filename != NULL) {
+							irecv_execute_script(client, filename);
+						}
+					}
+	
+	
+	free(action);
+}
+
+int precommand_cb(irecv_client_t client, const irecv_event_t* event) {
+	NSLog(@"precommand_cb");
+	if (event->type == IRECV_PRECOMMAND) {
+		irecv_error_t error = 0;
+		if (event->data[0] == '/') {
+			parse_command(client, event->data, event->size);
+			return -1;
+		}
+	}
+	return 0;
+}
+
+int postcommand_cb(irecv_client_t client, const irecv_event_t* event) {
+NSLog(@"postcommand_cb");
+	char* value = NULL;
+	char* action = NULL;
+	char* command = NULL;
+	char* argument = NULL;
+	irecv_error_t error = IRECV_E_SUCCESS;
+
+	if (event->type == IRECV_POSTCOMMAND) {
+		command = strdup(event->data);
+		action = strtok(command, " ");
+		if (!strcmp(action, "getenv")) {
+			argument = strtok(NULL, " ");
+			error = irecv_getenv(client, argument, &value);
+			if (error != IRECV_E_SUCCESS) {
+				debug("%s\n", irecv_strerror(error));
+				free(command);
+				return error;
+			}
+			printf("%s\n", value);
+			free(value);
+		}
+		
+		
+	}
+
+	if (command) free(command);
+	return 0;
+}
+
+- (void)actuallySendCommand:(NSString *)command
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	quit = 0;
+
+	irecv_error_t error = 0;
+	irecv_init();
+	irecv_client_t client = NULL;
+	if (irecv_open(&client) != IRECV_E_SUCCESS)
+	{
+		NSLog(@"fail!");
+		return;
+		
+	}
+	irecv_set_debug_level(1);
+	
+	
+		//irecv_event_subscribe(client, IRECV_RECEIVED, &received_cb, NULL);
+		//irecv_event_subscribe(client, IRECV_PRECOMMAND, &precommand_cb, NULL);
+		//irecv_event_subscribe(client, IRECV_POSTCOMMAND, &postcommand_cb, NULL);
+	while (!quit) {
+		
+		error = irecv_receive(client);
+		error = irecv_send_command(client, [command UTF8String]);
+		error = irecv_receive(client);
+			//debug("%s\n", irecv_strerror(error));
+		quit = 1;
+	}
+		irecv_close(client);
+		irecv_exit();
+	[pool release];
+}
+
+
+- (IBAction)sendCommand:(id)sender
+{
+		NSString *command = [commandTextField stringValue];
+	[NSThread detachNewThreadSelector:@selector(actuallySendCommand:) toTarget:self withObject:command];
+	return;
+	quit = 0;
+		//NSString *command = [commandTextField stringValue];
+	irecv_error_t error = 0;
+	irecv_init();
+	irecv_client_t client = NULL;
+	if (irecv_open(&client) != IRECV_E_SUCCESS)
+	{
+		NSLog(@"fail!");
+		return;
+		
+	}
+	irecv_set_debug_level(1);
+
+		irecv_event_subscribe(client, IRECV_PROGRESS, &progress_cb, NULL);
+		irecv_event_subscribe(client, IRECV_RECEIVED, &received_cb, NULL);
+		irecv_event_subscribe(client, IRECV_PRECOMMAND, &precommand_cb, NULL);
+		irecv_event_subscribe(client, IRECV_POSTCOMMAND, &postcommand_cb, NULL);
+	while (!quit) {
+		error = irecv_receive(client);
+		
+	error = irecv_send_command(client, [command UTF8String]);
+			//debug("%s\n", irecv_strerror(error));
+		quit = 1;
+	}
+	irecv_close(client);
+	irecv_exit();
+}
+
+- (IBAction)doStuff:(id)sender
+{	
+		//[NSThread detachNewThreadSelector:@selector(enterDFU) toTarget:self withObject:nil];
+		
+	NSString *lastUsedbundle = [[NSUserDefaults standardUserDefaults] valueForKey:@"lastUsedBundle"];
+		//NSLog(@"lastUsedBundle: %@", lastUsedbundle);
+	self.currentBundle = [FWBundle bundleWithName:lastUsedbundle];
+	[window setContentView:self.secondView];
+	[window display];
+	
+		 irecv_error_t error = 0;
+		 irecv_init();
+		 irecv_client_t client = NULL;
+		 if (irecv_open(&client) != IRECV_E_SUCCESS)
+		 {
+			 NSLog(@"fail!");
+			 return;
+			 
+		 }
+		 
+		 error = irecv_send_command(client, "setenv boot-args 2");
+		 debug("%s\n", irecv_strerror(error));
+	
+		error = irecv_send_command(client, "saveenv");
+		debug("%s\n", irecv_strerror(error));
+	irecv_close(client);
+	irecv_exit();
+	[NSThread detachNewThreadSelector:@selector(inject) toTarget:self withObject:nil];
+		 
+}
+
 
 	//this code is pretty much verbatim adapted and slightly modified from tetheredboot.c
 
@@ -750,6 +1033,7 @@ void print_progress(double progress, void* data) {
 	if(![FM fileExistsAtPath:ipswPath])
 	{
 		[self setDownloadText:NSLocalizedString(@"No IPSW to restore!", @"No IPSW to restore!")];
+		[self hideProgress];
 		return;
 	}
 	[self setDownloadText:NSLocalizedString(@"Restoring in iTunes...",@"Restoring in iTunes...") ];
@@ -770,7 +1054,7 @@ void print_progress(double progress, void* data) {
 - (IBAction)itunesRestore:(id)sender
 {
 	NSString *lastUsedbundle = [[NSUserDefaults standardUserDefaults] valueForKey:@"lastUsedBundle"];
-	NSLog(@"lastUsedBundle: %@", lastUsedbundle);
+		//NSLog(@"lastUsedBundle: %@", lastUsedbundle);
 	self.currentBundle = [FWBundle bundleWithName:lastUsedbundle];
 	[window setContentView:self.secondView];
 	[window display];
@@ -938,6 +1222,12 @@ void print_progress(double progress, void* data) {
 {
 	NSString *lastUsedbundle = [[NSUserDefaults standardUserDefaults] valueForKey:@"lastUsedBundle"];
 	self.currentBundle = [FWBundle bundleWithName:lastUsedbundle];
+	if (![FM fileExistsAtPath:[self iBSSString]])
+	{
+		NSLog(@"create ipsw first, update causality");
+		return;
+	}
+		 
 	[window setContentView:self.secondView];
 	[window display];
 	[NSThread detachNewThreadSelector:@selector(tetheredBoot) toTarget:self withObject:nil];
