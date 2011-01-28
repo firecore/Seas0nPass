@@ -682,12 +682,13 @@
 	[bundleDict setObject:es forKey:@"enableScripting"];
 	[bundleDict setObject:mountedPath forKey:@"patch"];
 	[bundleDict setObject:original forKey:@"os"];
+		//[bundleDict setObject:[[NSBundle mainBundle] pathForResource:@"CydiaInstallerATV" ofType:@"bundle"] forKey:@"CydiaBundle"];
 	NSMutableDictionary *fstabDict = [[NSMutableDictionary alloc] init];
 	[fstabDict setObject:@"/etc/fstab" forKey:@"inputFile"];
 	[fstabDict setObject:[[NSBundle mainBundle] pathForResource:@"fstab" ofType:@"patch" inDirectory:@"patches"] forKey:@"patchFile"];
 	[fstabDict setObject:@"e34d097a1c6dc7fd95db41879129327b" forKey:@"md5"];
 	[bundleDict setObject:[fstabDict autorelease] forKey:@"fstabPatch"];
-
+	
 	if ([nitoUtility wifiFile] != nil)
 	{
 		[bundleDict setObject:[nitoUtility wifiFile] forKey:@"wifi"];
@@ -1072,6 +1073,100 @@
 	tarTask = nil;
 	return theTerm;
 	
+}
+
++(int)repackImage:(NSString *)theImage toPath:(NSString *)outputPath withIV:(NSString *)iv key:(NSString *)key originalPath:(NSString *)original
+{
+	
+	NSTask *decryptTask = [[NSTask alloc] init];
+	[decryptTask setLaunchPath:IMAGE_TOOL];
+	[decryptTask setArguments:[NSArray arrayWithObjects:@"inject", theImage, outputPath, original, iv, key, nil]];
+	[decryptTask setStandardError:NULLOUT];
+	[decryptTask setStandardOutput:NULLOUT];
+	[decryptTask launch];
+	[decryptTask waitUntilExit];
+	
+	int returnStatus = [decryptTask terminationStatus];
+	[decryptTask release];
+	decryptTask = nil;
+	
+	return returnStatus;
+	
+}
+
++(int)decryptImage:(NSString *)theImage toPath:(NSString *)decPath withIV:(NSString *)iv key:(NSString *)key
+{
+	
+		NSTask *decryptTask = [[NSTask alloc] init];
+		[decryptTask setLaunchPath:IMAGE_TOOL];
+		[decryptTask setArguments:[NSArray arrayWithObjects:@"extract", theImage, decPath, iv,  key, nil]];
+		[decryptTask setStandardError:NULLOUT];
+		[decryptTask setStandardOutput:NULLOUT];
+		[decryptTask launch];
+		[decryptTask waitUntilExit];
+		
+		int returnStatus = [decryptTask terminationStatus];
+		[decryptTask release];
+		decryptTask = nil;
+		
+		return returnStatus;
+	
+}
+
++(int)decryptedImageFromData:(NSDictionary *)patchData atRoot:(NSString *)rootPath fromBundle:(NSString *)bundlePath
+{
+	/*
+	 
+	 <?xml version="1.0" encoding="UTF-8"?>
+	 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+	 <plist version="1.0">
+	 <dict>
+	 <key>File</key>
+	 <string>Firmware/dfu/iBSS.k66ap.RELEASE.dfu</string>
+	 <key>IV</key>
+	 <string>03baadf8801e8b7cdcee5a9f53609d0c</string>
+	 <key>Key</key>
+	 <string>c9f8bd4e52530ec8ef3e2b5926777f624061a38d09f07785287de6e88353f752</string>
+	 <key>Patch</key>
+	 <string>iBSS.k66ap.RELEASE.patch</string>
+	 <key>TypeFlag</key>
+	 <integer>8</integer>
+	 </dict>
+	 </plist>
+	 
+	 add my own keys rootPath and bundlePath
+	 
+	 */
+	
+	NSString *file = [rootPath stringByAppendingPathComponent:[patchData valueForKey:@"File"]];
+	NSString *decrypt = [file stringByAppendingPathExtension:@"decrypt"];
+	NSString *repacked = [file stringByAppendingPathExtension:@"2"];
+	NSString *patch = [bundlePath stringByAppendingPathComponent:[patchData valueForKey:@"Patch"]];
+	NSString *iv = [patchData valueForKey:@"IV"];
+	NSString *k = [patchData valueForKey:@"Key"];
+	int decryptStatus = [nitoUtility decryptImage:file toPath:decrypt withIV:iv key:k];
+	if (decryptStatus == 0)
+	{
+		NSLog(@"%@ decrypted successfully!",file);
+		int patchStatus = [nitoUtility patchFile:decrypt withPatch:patch endMD5:nil];
+		if (patchStatus == 0)
+		{
+			NSLog(@"%@ patched successfully!", file);
+			int repack = [nitoUtility repackImage:decrypt toPath:repacked withIV:iv key:k originalPath:file];
+			if (repack == 0)
+			{
+				NSLog(@"%@ repacked successfully!", file);
+				[FM removeItemAtPath:file error:nil];
+				[FM moveItemAtPath:repacked toPath:file error:nil];
+				[FM removeItemAtPath:decrypt error:nil];
+				NSLog(@"%@ patched, repacked and replaced successfully!", file);
+				return 0;
+			}
+		}
+	}
+	
+	NSLog(@"patch failed!! bail!");
+	return -1;
 }
 
 +(int)decryptedPatchFromData:(NSDictionary *)patchData atRoot:(NSString *)rootPath fromBundle:(NSString *)bundlePath

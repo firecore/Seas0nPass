@@ -22,14 +22,14 @@ int main(int argc, char *argv[])
 	
 	 
 	//FIXME: COMMENT BACK IN BEFORE RELEASE!!!!
-	/*
+	
 	 id pool = [NSAutoreleasePool new];
 	
 	 NSString *logPath = [NSHomeDirectory() stringByAppendingPathComponent:LOG_PATH];
 	 freopen([logPath fileSystemRepresentation], "a", stderr);
 	 [pool release];
 
-	*/
+	
 	return NSApplicationMain(argc,  (const char **) argv);
 }
 

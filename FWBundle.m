@@ -173,6 +173,7 @@
 	NSLog(@"bundleName: %@", [self bundleName]);
 	NSLog(@"kernelCache: %@", [self kernelCacheName]);
 	NSLog(@"iBSS: %@", [self iBSSName]);
+	NSLog(@"AppleLogo: %@", [self appleLogo]);
 }
 
 - (NSString *)bundleName
@@ -205,6 +206,12 @@
 {
 	return [[self firmwarePatches] valueForKey:@"iBSS"];
 }
+
+- (NSDictionary *)appleLogo
+{
+	return [[self firmwarePatches] valueForKey:@"AppleLogo"];
+}
+
 
 - (NSString *)rootFilesystem
 {

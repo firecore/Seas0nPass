@@ -11,6 +11,7 @@
 #import "FWBundle.h"
 
 #define XPWN [[NSBundle mainBundle] pathForResource:@"xpwntool" ofType:@"" inDirectory:@"bin"]
+#define IMAGE_TOOL [[NSBundle mainBundle] pathForResource:@"imagetool" ofType:@"" inDirectory:@"bin"]
 #define VFDECRYPT [[NSBundle mainBundle] pathForResource:@"vfdecrypt" ofType:@"" inDirectory:@"bin"]
 #define CYDIA_TAR [[NSBundle mainBundle] pathForResource:@"Cydia" ofType:@"tgz" inDirectory:@"archives"]
 #define SPACE_SCRIPT [[NSBundle mainBundle] pathForResource:@"space" ofType:@"sh" inDirectory:@"scripts"]
@@ -77,4 +78,5 @@ enum{
 + (void)createIPSWToFile:(NSString *)theName;
 +(int)decryptedPatchFromData:(NSDictionary *)patchData atRoot:(NSString *)rootPath fromBundle:(NSString *)bundlePath;
 - (int)performPatchesFromBundle:(FWBundle *)theBundle onRamdisk:(NSDictionary *)ramdiskDict;
++(int)decryptImage:(NSString *)theImage toPath:(NSString *)finalPath withIV:(NSString *)iv key:(NSString *)key;
 @end

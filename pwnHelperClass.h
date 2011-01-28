@@ -32,4 +32,6 @@
 - (int)performAction:(NSDictionary *)actionDict onVolume:(NSString *)theVolume;
 - (int)patchAction:(NSDictionary *)actionDict toVolume:(NSString *)theVolume;
 - (int)addAction:(NSDictionary *)actionDict toVolume:(NSString *)theVolume;
+- (int)ownerAction:(NSDictionary *)actionDict toVolume:(NSString *)theVolume;
+- (int)permissionAction:(NSDictionary *)actionDict toVolume:(NSString *)theVolume;
 @end

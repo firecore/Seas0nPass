@@ -667,7 +667,7 @@ NSLog(@"postcommand_cb");
 		[pool release];
 		return result;
 	}
-	
+		//irecv_send_command(client, "go kernel bootargs -v");
 	result = pois0n_injectonly();
 	if (result < 0) {
 		[self setDownloadText:NSLocalizedString(@"Exploit injection failed!",@"Exploit injection failed!" )];
@@ -833,7 +833,11 @@ NSLog(@"postcommand_cb");
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(pwnFinished:) name:@"pwnFinished" object:nil];
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(statusChanged:) name:@"statusChanged" object:nil];
 	[self startupAlert];
-	[self pwnHelperCheckOwner];
+	BOOL theStuff = [self pwnHelperCheckOwner];
+	if (theStuff == FALSE)
+	{
+		[[NSApplication sharedApplication] terminate:self];
+	}
 	[self checkScripting];
 	NSString *lastUsedbundle = LAST_BUNDLE;
 		//NSLog(@"lastUsedbundle: %@", lastUsedbundle);
@@ -1019,6 +1023,18 @@ NSLog(@"postcommand_cb");
 	[pool release];
 }
 
+- (void)versionMigrate
+{
+	NSString *documents = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/Tether"];
+	if ([FM fileExistsAtPath:documents])
+	{
+			//AppleTV2,1_4.2.1_8C154
+		NSString *iBSS = [documents stringByAppendingPathComponent:iBSSDFU];
+		NSString *kcache = [documents stringByAppendingPathComponent:KCACHE];
+		[self createSupportBundleWithCache:kcache iBSS:iBSS];
+	}
+}
+
 - (IBAction)itunesRestore:(id)sender
 {
 	NSString *lastUsedbundle = LAST_BUNDLE;
@@ -1192,8 +1208,8 @@ NSLog(@"postcommand_cb");
 	self.currentBundle = [FWBundle bundleWithName:lastUsedbundle];
 	if (![FM fileExistsAtPath:[self iBSSString]])
 	{
-		NSLog(@"create ipsw first, update causality");
-		return;
+		NSLog(@"attempting version migrate");
+		[self versionMigrate];
 	}
 		 
 	[window setContentView:self.secondView];
@@ -1425,6 +1441,7 @@ NSLog(@"postcommand_cb");
 
 - (int)performFirmwarePatches:(FWBundle *)theBundle withUtility:(nitoUtility *)nitoUtil
 {
+	[theBundle logDescription];
 	int status = 0;
 	if ([theBundle iBSS] != nil)
 	{
@@ -1434,6 +1451,17 @@ NSLog(@"postcommand_cb");
 			NSLog(@"patched iBSS successfully!");
 		} else {
 			NSLog(@"iBSS patch failed!");
+			return -1;
+		}
+	}
+	if ([theBundle appleLogo] != nil)
+	{
+		status = [nitoUtility decryptedImageFromData:[theBundle appleLogo] atRoot:[theBundle fwRoot] fromBundle:[theBundle bundlePath]];
+		if (status == 0)
+		{
+			NSLog(@"patched appleLogo successfully!");
+		} else {
+			NSLog(@"appleLogo patch failed!");
 			return -1;
 		}
 	}

@@ -19,15 +19,13 @@ int main (int argc, const char * argv[]) {
 	
 	NSRunLoop *rl = [NSRunLoop currentRunLoop];
 	
-		//	[rl configureAsServer];
 	if (argc < 2){
-		//printf("\nUsage: nitoFlowHelper: --dictPath dictPath\n");
-		//printf("\n");
+	
 	}
 	int i;
 	for (i = 1; i < (argc - 1); i+= 2){
 		NSString *path = [NSString stringWithUTF8String:argv[0]];
-			//NSString *option = [NSString stringWithUTF8String:argv[i]]; //uuencode string later
+		NSString *option = [NSString stringWithUTF8String:argv[i]];
 		NSString *value = [NSString stringWithUTF8String:argv[i+1]]; //plist location
 		pwnHelperClass *phc = [[pwnHelperClass alloc] init];
 		NSDictionary *pDict = [NSDictionary dictionaryWithContentsOfFile:value];

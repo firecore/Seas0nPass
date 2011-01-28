@@ -54,6 +54,7 @@
 - (NSDictionary *)extraPatch;
 - (NSString *)ramdiskSize;
 - (NSString *)outputName;
+- (NSDictionary *)appleLogo;
 
 	//really lazy convenience classes
 - (NSDictionary *)buildManifest;
@@ -63,6 +64,8 @@
 - (NSString *)iBSSName;
 - (NSDictionary *)fwDictionary;
 - (NSString *)localBundlePath;
+
+
 @end
 
 /*

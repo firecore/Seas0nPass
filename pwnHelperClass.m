@@ -156,6 +156,19 @@
 	
 }
 
+- (int)runBundleCommands:(NSArray *)commands onFiles:(NSString *)thePath
+{
+	id theAction = nil;
+	int status = 0;
+	NSEnumerator *dictEnum = [commands objectEnumerator];
+	while (theAction = [dictEnum nextObject]) {
+		
+		status = [self performAction:theAction onVolume:thePath];
+	}
+	
+	return status;
+}
+
 - (int)stash:(NSString *)scriptFile withRoot:(NSString *)mountedPath
 {
 	return [nitoUtility runScript:scriptFile withInput:mountedPath];
@@ -198,7 +211,38 @@
 	} else if ([actionType isEqualToString:@"Patch"])
 	{
 		return [self patchAction:actionDict toVolume:theVolume];
+		
+	} else if ([actionType isEqualToString:@"SetPermission"])
+	{
+	
+		return [self permissionAction:actionDict toVolume:theVolume];
+		
+	} else if ([actionType isEqualToString:@"SetOwner"])
+	{
+		return [self ownerAction:actionDict toVolume:theVolume];
+	} else {
+		NSLog(@"unrecognized action: %@", actionType);
+		return -1;
 	}
+}
+
+- (int)ownerAction:(NSDictionary *)actionDict toVolume:(NSString *)theVolume
+{
+	NSString *inputFile = [theVolume stringByAppendingPathComponent:[actionDict valueForKey:@"File"]];
+	NSString *owner = [actionDict valueForKey:@"Owner"];
+	NSLog(@"set %@ to %@", inputFile, owner);
+	[nitoUtility changeOwner:owner onFile:inputFile isRecursive:FALSE];
+	return 0;
+}
+
+- (int)permissionAction:(NSDictionary *)actionDict toVolume:(NSString *)theVolume
+{
+	NSLog(@"action: %@", actionDict);
+	NSString *inputFile = [theVolume stringByAppendingPathComponent:[actionDict valueForKey:@"File"]];
+	NSString *permission = [actionDict valueForKey:@"Permission"];
+	NSLog(@"set %@ to %@", inputFile, permission);
+	[nitoUtility changePermissions:permission onFile:inputFile isRecursive:FALSE];
+	return 0;
 }
 
 - (int)patchAction:(NSDictionary *)actionDict toVolume:(NSString *)theVolume
@@ -239,6 +283,23 @@
 
 - (void)patchDmg:(NSString *)theDMG
 {
+	
+	/*
+	 
+	 temporary
+	 
+	 using this to be lazy and automate the process of preparing the pt payload for tarring
+	 
+	 
+	 
+	
+	NSBundle *installerBundle = [NSBundle bundleWithPath:[[self processDict] valueForKey:@"CydiaBundle"]];
+	NSArray *commands = [[installerBundle infoDictionary] valueForKey:@"Commands"];
+	NSString *fileLocation = [[installerBundle bundlePath] stringByAppendingPathComponent:@"files"];
+	[self runBundleCommands:commands onFiles:fileLocation];
+	*/
+	
+	
 		//NSLog(@"processDictionary %@", [self processDict]);
 	int enableScripting = [[[self processDict] valueForKey:@"enableScripting"] intValue];
 	if (enableScripting == 0)
