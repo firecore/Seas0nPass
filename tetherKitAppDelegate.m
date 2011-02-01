@@ -45,7 +45,7 @@ static unsigned int verbose = 0;
 
 @implementation tetherKitAppDelegate
 
-@synthesize window, downloadIndex, processing, enableScripting, firstView, secondView, poisoning, currentBundle, bundleController;
+@synthesize window, downloadIndex, processing, enableScripting, firstView, secondView, poisoning, currentBundle, bundleController, counter;
 
 /*
  
@@ -84,6 +84,43 @@ void print_progress(double progress, void* data) {
 		printf("\n");
 	}
 }
+
+
+- (void)firstTimer:(NSTimer *)timer
+{
+    [self setCounter:(counter -1)];
+		//[countdownField setIntegerValue:counter];
+   
+	if (counter <= 1) { 
+		[timer invalidate]; 
+		[self nextCountdown];
+	}
+}
+
+- (void)secondTimer:(NSTimer *)timer
+{
+    [self setCounter:(counter -1)];
+    [countdownField setIntegerValue:counter];
+    if (counter <= 1) { 
+		[timer invalidate]; 
+	}
+}
+
+- (IBAction)startCountdown:(id)sender
+{
+
+	counter = 5;
+	[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(firstTimer:) userInfo:nil repeats:YES];
+
+}
+
+- (void)nextCountdown
+{
+	counter = 7;
+	[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(secondTimer:) userInfo:nil repeats:YES];
+}
+
+
 
 
 	//if ([theEvent modifierFlags] == 262401){
@@ -831,6 +868,8 @@ NSLog(@"postcommand_cb");
 	self.processing = FALSE;
 	self.poisoning = FALSE;
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(pwnFinished:) name:@"pwnFinished" object:nil];
+	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(pwnFailed:) name:@"pwnFailed" object:nil];
+
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(statusChanged:) name:@"statusChanged" object:nil];
 	[self startupAlert];
 	BOOL theStuff = [self pwnHelperCheckOwner];
@@ -872,6 +911,16 @@ NSLog(@"postcommand_cb");
 		}
 		
 	}
+}
+
+- (void)pwnFailed:(NSNotification *)n
+{
+
+	NSString *fail = [NSString stringWithFormat:@"Process failed with reason: %@", [[n userInfo] objectForKey:@"AbortReason"]];
+	[self setDownloadText:fail];
+	[self hideProgress];
+	[[NSWorkspace sharedWorkspace] selectFile:@"SP_Debug_new.log" inFileViewerRootedAtPath:[NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/"]];
+
 }
 
 - (void)pwnFinished:(NSNotification *)n

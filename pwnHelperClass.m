@@ -186,17 +186,30 @@
 		while (coreFile = [dictEnum nextObject]) {
 		
 			status = [self performAction:coreFile onVolume:theVolume];
+			if (status != 0)
+			{
+				NSLog(@"coreFileInstallation failed!! bail!");
+				return -1;
+			}
 		}
 	}
+
+	
+	
 	
 	if ([currentBundle filesystemJailbreak] != nil)
 	{
-		NSDictionary *cfi = [currentBundle filesystemJailbreak];
+		NSArray *cfi = [currentBundle filesystemJailbreak];
 		id coreFile = nil;
 		NSEnumerator *dictEnum = [cfi objectEnumerator];
 		while (coreFile = [dictEnum nextObject]) {
 			
 			status = [self performAction:coreFile onVolume:theVolume];
+			if (status != 0)
+			{
+				NSLog(@"filesystemJailbreak failed!! bail!");
+				return -1;
+			}
 		}
 	}
 	return status;
@@ -281,7 +294,7 @@
 	
 }
 
-- (void)patchDmg:(NSString *)theDMG
+- (int)patchDmg:(NSString *)theDMG
 {
 	
 	/*
@@ -298,7 +311,7 @@
 	NSString *fileLocation = [[installerBundle bundlePath] stringByAppendingPathComponent:@"files"];
 	[self runBundleCommands:commands onFiles:fileLocation];
 	*/
-	
+	int status = 0;
 	
 		//NSLog(@"processDictionary %@", [self processDict]);
 	int enableScripting = [[[self processDict] valueForKey:@"enableScripting"] intValue];
@@ -316,11 +329,29 @@
 	
 	if (mountImage == nil)
 	{
-		return;
+		
+		NSLog(@"FAIL!! ABORT!");
+		NSString *failed = @"Filesystem mount failed!!";
+		NSDictionary *failDict = [NSDictionary dictionaryWithObject:failed forKey:@"AbortReason"];
+		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"pwnFailed" object:nil userInfo:failDict deliverImmediately:YES];
+		return -1;
 	}
 	[self changeStatus:@"Patching filesystem..."];
 	NSLog(@"Patching filesystem...");
-	[self fileSystemPatches:mountImage];
+	status = [self fileSystemPatches:mountImage];
+		//NSLog(@"status %i", status);
+	
+	if (status != 0)
+	{
+		[nitoUtility unmountVolume:mountImage];
+		NSLog(@"FAIL!! ABORT!");
+		NSString *failed = @"Filesystem patches failed!!";
+		NSDictionary *failDict = [NSDictionary dictionaryWithObject:failed forKey:@"AbortReason"];
+		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"pwnFailed" object:nil userInfo:failDict deliverImmediately:YES];
+		return -1;
+	}
+	 
+	
 	/*
 	NSLog(@"Patching fstab...");
 	NSDictionary *patchDict = [[self processDict] valueForKey:@"fstabPatch"];
@@ -354,13 +385,13 @@
 	}
 	
 		//[self changeStatus:@"Stash it away man!..."];
-	NSLog(@"Stash it away man!...");
-	[self stash:[[self processDict] valueForKey:@"stash"] withRoot:mountImage];
+		NSLog(@"Stash it away man!...");
+		[self stash:[[self processDict] valueForKey:@"stash"] withRoot:mountImage];
 	
 	NSDictionary *ep = [currentBundle extraPatch];
 	if (ep != nil)
 	{
-		NSLog(@"4.3b1 detected, installing extra status patch");
+		NSLog(@"4.3 detected, installing extra status patch");
 		NSString *target = [mountImage stringByAppendingPathComponent:[ep valueForKey:@"Target"]];
 		NSString *patch = [ep valueForKey:@"Patch"];
 		NSString *md5 = [ep valueForKey:@"md5"];
@@ -380,7 +411,7 @@
 	NSDictionary * userInfo = [NSDictionary dictionaryWithObjectsAndKeys: theDMG, @"Path", ogDMG, @"os", nil];
 	
 	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"pwnFinished" object:nil userInfo:userInfo deliverImmediately:YES];
-	
+	return -1;
 }
 
 - (void)changeStatus:(NSString *)theStatus

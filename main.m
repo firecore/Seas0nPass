@@ -9,7 +9,7 @@
 #ifdef DEBUG
 #define LOG_PATH @"Library/Logs/SP_Debug_db.log"
 #else
-#define LOG_PATH @"Library/Logs/SP_Debug.log"
+#define LOG_PATH @"Library/Logs/SP_Debug_new.log"
 #endif
 
 #import <Cocoa/Cocoa.h>

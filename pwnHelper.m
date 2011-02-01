@@ -33,9 +33,9 @@ int main (int argc, const char * argv[]) {
 		[phc setCurrentBundle:cBundle];
 		[phc setProcessDict:pDict];
 		[phc setRunPath:path];
-		[phc patchDmg:[pDict valueForKey:@"patch"]];
+		int returnStatus = [phc patchDmg:[pDict valueForKey:@"patch"]];
 		[pool release];
-		return 0;
+		return returnStatus;
 	}
 		
 	[rl run];

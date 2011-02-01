@@ -41,9 +41,12 @@ enum  {
 	FWBundle *currentBundle;
 	IBOutlet NSArrayController *bundleController;
 	IBOutlet NSTextField *commandTextField;
+	IBOutlet NSTextField *countdownField;
+	int counter;
 	
 }
 @property (assign) IBOutlet NSTextField *commandTextField;
+@property (assign) IBOutlet NSTextField *countdownField;
 @property (assign) IBOutlet NSArrayController *bundleController;
 @property (assign) FWBundle *currentBundle;
 @property (assign) IBOutlet NSWindow *window;
@@ -53,7 +56,10 @@ enum  {
 @property (readwrite, assign) BOOL poisoning;
 @property (readwrite, assign) BOOL enableScripting;
 @property (readwrite, assign) int downloadIndex;
+@property (readwrite, assign) int counter;
 
+- (IBAction)startCountdown:(id)sender;
+- (void)firstTimer:(NSTimer *)timer;
 - (BOOL) optionKeyIsDown;
 + (NSString *)applicationSupportFolder;
 + (NSString *)wifiFile;
