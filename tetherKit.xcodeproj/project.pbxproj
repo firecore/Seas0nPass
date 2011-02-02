@@ -17,6 +17,7 @@
 		3200F4FA12D4DDEB003EA66E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3200F4F812D4DDEB003EA66E /* Localizable.strings */; };
 		3200F54712D4E1FF003EA66E /* tether.png in Resources */ = {isa = PBXBuildFile; fileRef = 3200F54612D4E1FF003EA66E /* tether.png */; };
 		3200F54B12D4E2B7003EA66E /* ipsw.png in Resources */ = {isa = PBXBuildFile; fileRef = 3200F54A12D4E2B7003EA66E /* ipsw.png */; };
+		324FF2EC12F8CC690039310E /* NSApplication+SystemVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 324FF2EB12F8CC690039310E /* NSApplication+SystemVersion.m */; };
 		3272047F12C9AD320054F4B0 /* libsyringe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3272047E12C9AD320054F4B0 /* libsyringe.a */; };
 		327205DE12C9B5110054F4B0 /* ripURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 327205DD12C9B5110054F4B0 /* ripURL.m */; };
 		327206AA12C9C32A0054F4B0 /* nitoUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */; };
@@ -130,6 +131,8 @@
 		3200F4F912D4DDEB003EA66E /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3200F54612D4E1FF003EA66E /* tether.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tether.png; sourceTree = "<group>"; };
 		3200F54A12D4E2B7003EA66E /* ipsw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ipsw.png; sourceTree = "<group>"; };
+		324FF2EA12F8CC690039310E /* NSApplication+SystemVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSApplication+SystemVersion.h"; sourceTree = "<group>"; };
+		324FF2EB12F8CC690039310E /* NSApplication+SystemVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSApplication+SystemVersion.m"; sourceTree = "<group>"; };
 		3272047E12C9AD320054F4B0 /* libsyringe.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsyringe.a; sourceTree = "<group>"; };
 		327204A612C9AEAD0054F4B0 /* syringe.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = syringe.xcodeproj; path = "../Chronic-Dev-syringe/_ide/syringe.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		327204C512C9AFBB0054F4B0 /* utilities.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = utilities.xcodeproj; path = "../Chronic-Dev-syringe/_ide/utilities.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -234,6 +237,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				324FF2EA12F8CC690039310E /* NSApplication+SystemVersion.h */,
+				324FF2EB12F8CC690039310E /* NSApplication+SystemVersion.m */,
 				32720F0F12CC66E10054F4B0 /* PatchedFile.h */,
 				32720F1012CC66E10054F4B0 /* PatchedFile.m */,
 				32720EF012CC63F80054F4B0 /* FWManager.h */,
@@ -622,6 +627,7 @@
 				32DF741912E17498002916D5 /* FWBundle.m in Sources */,
 				32DF825512E65280002916D5 /* SPButton.m in Sources */,
 				32DF84CE12E6E426002916D5 /* SPMenuItem.m in Sources */,
+				324FF2EC12F8CC690039310E /* NSApplication+SystemVersion.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -763,10 +769,13 @@
 					"\"$(SDKROOT)/usr/lib/gcc/i686-apple-darwin10/4.0.1\"",
 					"\"$(SRCROOT)/../xpwn/idevice/QuicktimeSDK/Libraries\"",
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lcurl",
 					"-lstdc++",
 					"-lz",
+					"-undefined",
+					dynamic_lookup,
 				);
 				PRODUCT_NAME = Seas0nPass;
 				SDKROOT = macosx10.6;

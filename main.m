@@ -9,7 +9,7 @@
 #ifdef DEBUG
 #define LOG_PATH @"Library/Logs/SP_Debug_db.log"
 #else
-#define LOG_PATH @"Library/Logs/SP_Debug_new.log"
+#define LOG_PATH @"Library/Logs/SP_Debug.log"
 #endif
 
 #import <Cocoa/Cocoa.h>
@@ -24,9 +24,11 @@ int main(int argc, char *argv[])
 	//FIXME: COMMENT BACK IN BEFORE RELEASE!!!!
 	
 	 id pool = [NSAutoreleasePool new];
+
 	
 	 NSString *logPath = [NSHomeDirectory() stringByAppendingPathComponent:LOG_PATH];
 	 freopen([logPath fileSystemRepresentation], "a", stderr);
+
 	 [pool release];
 
 	

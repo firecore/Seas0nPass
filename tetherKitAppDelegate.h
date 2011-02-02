@@ -30,6 +30,7 @@ enum  {
 	IBOutlet NSButton *buttonOne;
 	IBOutlet NSButton *cancelButton;
 	IBOutlet SPButton *bootButton;
+	IBOutlet NSWindow *otherWindow;
 	NSMutableArray *downloadFiles;
 	int downloadIndex;
 	BOOL processing;
@@ -50,6 +51,7 @@ enum  {
 @property (assign) IBOutlet NSArrayController *bundleController;
 @property (assign) FWBundle *currentBundle;
 @property (assign) IBOutlet NSWindow *window;
+@property (assign) IBOutlet NSWindow *otherWindow;
 @property (assign) IBOutlet NSView	*firstView;
 @property (assign) IBOutlet NSView	*secondView;
 @property (readwrite, assign) BOOL processing;
@@ -58,6 +60,7 @@ enum  {
 @property (readwrite, assign) int downloadIndex;
 @property (readwrite, assign) int counter;
 
+- (IBAction)poison:(id)sender;
 - (IBAction)startCountdown:(id)sender;
 - (void)firstTimer:(NSTimer *)timer;
 - (BOOL) optionKeyIsDown;

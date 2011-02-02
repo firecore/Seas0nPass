@@ -65,7 +65,7 @@
 - (NSDictionary *)fwDictionary;
 - (NSString *)localBundlePath;
 
-
+- (BOOL)is4point3;
 @end
 
 /*

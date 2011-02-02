@@ -45,7 +45,7 @@ static unsigned int verbose = 0;
 
 @implementation tetherKitAppDelegate
 
-@synthesize window, downloadIndex, processing, enableScripting, firstView, secondView, poisoning, currentBundle, bundleController, counter;
+@synthesize window, downloadIndex, processing, enableScripting, firstView, secondView, poisoning, currentBundle, bundleController, counter, otherWindow;
 
 /*
  
@@ -246,6 +246,158 @@ void print_progress(double progress, void* data) {
 	
 }
 
+
+void LogIt (NSString *format, ...)
+{
+    va_list args;
+	
+    va_start (args, format);
+	
+    NSString *string;
+	
+    string = [[NSString alloc] initWithFormat: format  arguments: args];
+	
+    va_end (args);
+	
+    printf ("%s", [string cString]);
+	
+    [string release];
+	
+} // LogIt
+
+- (void)printEnvironment
+{
+	/*
+	 
+	 Process:         Chicken of the VNC [5926]
+	 Path:            /Applications/Chicken of the VNC.app/Contents/MacOS/Chicken of the VNC
+	 Identifier:      com.geekspiff.chickenofthevnc
+	 Version:         2.0b4 (2.0b4)
+	 Code Type:       X86 (Native)
+	 Parent Process:  launchd [175]
+	 
+	 Date/Time:       2011-01-24 18:02:48.227 -0700
+	 OS Version:      Mac OS X 10.6.5 (10H574)
+	 Report Version:  6
+	 
+	 */
+	
+	/*
+	 
+	 CFBundleDevelopmentRegion = English;
+	 CFBundleExecutable = Seas0nPass;
+	 CFBundleExecutablePath = "/Users/kevinbradley/Projects/Seas0nPass/build/Release/Seas0nPass.app/Contents/MacOS/Seas0nPass";
+	 CFBundleIconFile = Seas0nPass;
+	 CFBundleIdentifier = "com.firecore.Seas0nPass";
+	 CFBundleInfoDictionaryVersion = "6.0";
+	 CFBundleInfoPlistURL = "Contents/Info.plist -- file://localhost/Users/kevinbradley/Projects/Seas0nPass/build/Release/Seas0nPass.app/";
+	 CFBundleName = Seas0nPass;
+	 CFBundleNumericVersion = 838893568;
+	 CFBundlePackageType = APPL;
+	 CFBundleShortVersionString = "0.6.9";
+	 CFBundleSignature = "????";
+	 CFBundleVersion = 32;
+	 LSMinimumSystemVersion = "10.6";
+	 NSBundleInitialPath = "/Users/kevinbradley/Projects/Seas0nPass/build/Release/Seas0nPass.app";
+	 NSBundleResolvedPath = "/Users/kevinbradley/Projects/Seas0nPass/build/Release/Seas0nPass.app";
+	 NSHumanReadableCopyright = "Copyright \U00a9 2011 FireCore, LLC";
+	 NSMainNibFile = MainMenu;
+	 NSPrincipalClass = NSApplication;
+	 SUFeedURL = "http://files.firecore.com/SP/Seas0nPass.xml";
+	 
+	 */
+	unsigned major, minor, bugFix;
+    [[NSApplication sharedApplication] getSystemVersionMajor:&major minor:&minor bugFix:&bugFix];
+	NSDictionary *bundle = [[NSBundle mainBundle] infoDictionary];
+	
+		//NSLog(@"info: %@", [[NSBundle mainBundle] infoDictionary]);
+	NSString *process = [NSString stringWithFormat:@"Process:\t\t%@\n", [bundle valueForKey:@"CFBundleExecutable"] ];
+	NSString *path	  = [NSString stringWithFormat:@"Path:\t\t%@\n", [bundle valueForKey:@"CFBundleExecutablePath"] ];
+	NSString *ident   = [NSString stringWithFormat:@"Identifier:\t\t%@\n", [bundle valueForKey:@"CFBundleIdentifier"] ];
+	NSString *vers    = [NSString stringWithFormat:@"Version:\t\t%@ (%@)\n", [bundle valueForKey:@"CFBundleShortVersionString"], [bundle valueForKey:@"CFBundleVersion"]];
+	NSString *ct	  = [NSString stringWithFormat:@"Code Type:\t\t%@\n", @"idontknow"];
+	NSString *pp      = [NSString stringWithFormat:@"Parent Process:\t\t%@\n\n", [bundle valueForKey:@"CFBundleIdentifier"] ];
+	NSString *date    = [NSString stringWithFormat:@"Date/Time:\t\t%@\n", [[NSDate date] description]];
+	NSString *osvers  = [NSString stringWithFormat:@"OS Version:\t\t%u.%u.%u\n\n\n", major, minor, bugFix];
+	NSLog(@"\n");
+	NSLog(@"BEGIN NEW SESSION\n");
+	NSLog(@"************************\n");
+	NSLog(@"%@", process);
+	NSLog(@"%@", path);
+	NSLog(@"%@", ident);
+	NSLog(@"%@", vers);
+	NSLog(@"%@", date);
+	NSLog(@"%@", osvers);
+		//[self gestaltFun];
+
+	
+}
+
+- (void)gestaltFun
+{
+	OSType		returnType;
+	long		gestaltReturnValue,
+	swappedReturnValue;
+	
+	NSLog(@"Gestalt fun...");
+	
+	returnType=Gestalt(gestaltPhysicalRAMSize, &gestaltReturnValue);
+	if (!returnType)
+	{
+		NSLog(@"RAM: %d MB",(gestaltReturnValue/1048576));
+	} else {
+		NSLog(@"error calling Gestalt: %d", returnType);
+	}
+		//gestaltSysArchitecture
+	returnType=Gestalt(gestaltNativeCPUtype, &gestaltReturnValue);
+	if (!returnType)
+	{
+		char		type[5] = { 0 };
+		swappedReturnValue = EndianU32_BtoN(gestaltReturnValue);
+		memmove( type, &swappedReturnValue, 4 );
+		NSLog(@"NativeCPUType: '%s' (%d)",type,gestaltReturnValue);
+		
+		switch(gestaltReturnValue) {
+			case gestaltCPU601:        NSLog(@"PowerPC 601"); break;
+			case gestaltCPU603:        NSLog(@"PowerPC 603"); break;
+			case gestaltCPU603e:       NSLog(@"PowerPC 603e"); break;
+			case gestaltCPU603ev:      NSLog(@"PowerPC 603ev"); break;
+			case gestaltCPU604:        NSLog(@"PowerPC 604"); break;
+			case gestaltCPU604e:       NSLog(@"PowerPC 604e"); break;
+			case gestaltCPU604ev:      NSLog(@"PowerPC 604ev"); break;
+			case gestaltCPU750:        NSLog(@"G3"); break;
+			case gestaltCPUG4:         NSLog(@"G4"); break;
+			case gestaltCPU970:        NSLog(@"G5 (970)"); break;
+			case gestaltCPU970FX:      NSLog(@"G5 (970 FX)"); break;
+			case gestaltCPU486 :       NSLog(@"Intel 486"); break;
+			case gestaltCPUPentium:    NSLog(@"Intel Pentium"); break;
+			case gestaltCPUPentiumPro: NSLog(@"Intel Pentium Pro"); break;
+			case gestaltCPUPentiumII:  NSLog(@"Intel Pentium II"); break;
+			case gestaltCPUX86:        NSLog(@"Intel x86"); break;
+			case gestaltCPUPentium4:   NSLog(@"Intel Pentium 4"); break;
+			default: NSLog(@"error calling Gestalt: %d", returnType);
+		}
+	}
+	
+	returnType=Gestalt(gestaltProcClkSpeed, &gestaltReturnValue);
+	if (!returnType)
+	{
+		NSLog(@"procSpeed: %d MHz",(gestaltReturnValue/1000000));
+	} else {
+		NSLog(@"error calling Gestalt: %d", returnType);
+	}
+	
+	returnType=Gestalt( gestaltPowerPCProcessorFeatures, &gestaltReturnValue);
+	if (!returnType)
+	{
+		NSLog(@"PowerPC ProcFeatures: %d",(gestaltReturnValue));
+		if (gestaltPowerPCHasDCBAInstruction==gestaltReturnValue) {
+		}
+	} else {
+		NSLog(@"error calling Gestalt: %d", returnType);
+	}
+}
+
 + (NSString *)applicationSupportFolder {
 	
 	NSFileManager *man = [NSFileManager defaultManager];
@@ -417,7 +569,7 @@ void print_progress_bar(double progress) {
 		return result;
 	}
 	[self setDownloadText:NSLocalizedString(@"Injecting Pois0n", @"Injecting Pois0n")];
-	result = pois0n_inject();
+		result = pois0n_inject();
 	if (result < 0) {
 		[self setDownloadText:NSLocalizedString(@"Exploit injection failed!", @"Exploit injection failed!")];
 		[self hideProgress];
@@ -426,7 +578,7 @@ void print_progress_bar(double progress) {
 		[pool release];
 		return result;
 	}
-	[self setDownloadText:@"Keydump preparation complete"];
+	[self setDownloadText:@"pois0n successfully administered"];
 	NSString *command = [commandTextField stringValue];
 	irecv_send_command(client, [command UTF8String]);
 	[self hideProgress];
@@ -602,6 +754,14 @@ NSLog(@"postcommand_cb");
 	return 0;
 }
 
+- (IBAction)poison:(id)sender
+{
+	NSString *lastUsedbundle = LAST_BUNDLE;
+	self.currentBundle = [FWBundle bundleWithName:lastUsedbundle];
+	[window setContentView:self.secondView];
+	[window display];
+	[NSThread detachNewThreadSelector:@selector(inject) toTarget:self withObject:nil];
+}
 
 - (IBAction)sendCommand:(id)sender
 {
@@ -860,8 +1020,13 @@ NSLog(@"postcommand_cb");
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	// Insert code here to initialize your application 
-	
-	
+	/*
+	if ([self optionKeyIsDown])
+	{
+		[otherWindow makeKeyAndOrderFront:nil];
+	}
+	*/
+	[self printEnvironment];
 	[window setContentView:self.firstView];
 	downloadIndex = 0;
 	downloadFiles = [[NSMutableArray alloc] init];
@@ -1271,6 +1436,8 @@ NSLog(@"postcommand_cb");
 - (IBAction)dfuMode:(id)sender
 {
 	[self killiTunes];
+	[window setContentView:self.secondView];
+	[window display];
 	[NSThread detachNewThreadSelector:@selector(enterDFU) toTarget:self withObject:nil];
 	
 }
@@ -1279,6 +1446,11 @@ NSLog(@"postcommand_cb");
 
 - (IBAction)processOne:(id)sender //download and modify ipsw
 {
+	
+		//[NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/SP_Debug.log"]
+
+	NSString *logPath2 = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/SP_Debug_new.log"];
+	[FM removeFileAtPath:logPath2 handler:nil];
 		//current bundle may be set by default, but we never want to assume the default processOne ipsw to be anything but the latest- which is still hardcoded to 4.2.1.
 	self.currentBundle = [FWBundle bundleWithName:@"AppleTV2,1_4.2.1_8C154"];
 	if ([self optionKeyIsDown])
@@ -1490,7 +1662,7 @@ NSLog(@"postcommand_cb");
 
 - (int)performFirmwarePatches:(FWBundle *)theBundle withUtility:(nitoUtility *)nitoUtil
 {
-	[theBundle logDescription];
+		//[theBundle logDescription];
 	int status = 0;
 	if ([theBundle iBSS] != nil)
 	{

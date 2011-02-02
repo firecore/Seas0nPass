@@ -21,7 +21,7 @@
 - (int)permissionedCopy:(NSString *)inputFile toPath:(NSString *)outputFile;
 - (NSDictionary *)processDict;
 - (void)setProcessDict:(NSDictionary *)value;
-- (void)patchDmg:(NSString *)theDMG;
+- (int)patchDmg:(NSString *)theDMG;
 - (void)changeStatus:(NSString *)theStatus;
 - (NSString *)runPath;
 - (void)setRunPath:(NSString *)value;

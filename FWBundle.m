@@ -120,30 +120,76 @@
 	return [[self bundleName] stringByAppendingString:@"_SP_Restore.ipsw"];
 }
 
-- (NSString *)ramdiskSize
+- (NSString *)oldramdiskSize
 {
 	if ([[self bundleName] isEqualToString:@"AppleTV2,1_4.3_8F5148c"])
 	{
 		return @"24676576";
 	} else if ([[self bundleName] isEqualToString:@"AppleTV2,1_4.3_8F5153d"]){
 		return @"24676576";
+	} else if ([[self bundleName] isEqualToString:@"AppleTV2,1_4.3_8F5166b"]) {
+		return @"24676576";
 	} else {
-		return @"16541920";	}
+		return @"16541920";	
+	}
+}
+
+- (NSString *)ramdiskSize
+{
+	if ([self is4point3])
+	{
+		return @"24676576";
+	} else {
+		return @"16541920";	
+	}
+}
+
+- (BOOL)is4point3
+{
+	NSString *clippedPath = [[self bundleName] substringToIndex:14];
+	if ([clippedPath isEqualToString:@"AppleTV2,1_4.3"])
+	{
+		return YES;
+	} else {
+		return NO;
+	}
+	return NO;
 }
 
 - (NSDictionary *)extraPatch
 {
+	if ([self is4point3])
+	{
+		NSDictionary *thePatch = [NSDictionary dictionaryWithObjectsAndKeys:[[NSBundle mainBundle] pathForResource:@"status" ofType:@"patch" inDirectory:@"patches"], @"Patch", @"private/var/lib/dpkg/status", @"Target", @"7945d79f0dad7c3397b930877ba92ec4", @"md5", nil];
+			NSLog(@"extraPatch: %@", thePatch);
+		return thePatch;					  
+	}
+}
+
+- (NSDictionary *)oldextraPatch
+{
+	
+	NSString *clippedPath = [[self bundleName] substringToIndex:14];
+	NSLog(@"clippedPath: %@", clippedPath);
+	
+	if ([[self bundleName] isEqualToString:@"AppleTV2,1_4.3_8F5166b"])
+	{
+		NSDictionary *thePatch = [NSDictionary dictionaryWithObjectsAndKeys:[[NSBundle mainBundle] pathForResource:@"status" ofType:@"patch" inDirectory:@"patches"], @"Patch", @"private/var/lib/dpkg/status", @"Target", @"7945d79f0dad7c3397b930877ba92ec4", @"md5", nil];
+			//NSLog(@"extraPatch: %@", thePatch);
+		return thePatch;					  
+	}
+	
 	if ([[self bundleName] isEqualToString:@"AppleTV2,1_4.3_8F5148c"])
 	{
 		NSDictionary *thePatch = [NSDictionary dictionaryWithObjectsAndKeys:[[NSBundle mainBundle] pathForResource:@"status" ofType:@"patch" inDirectory:@"patches"], @"Patch", @"private/var/lib/dpkg/status", @"Target", @"7945d79f0dad7c3397b930877ba92ec4", @"md5", nil];
-		NSLog(@"extraPatch: %@", thePatch);
+			//NSLog(@"extraPatch: %@", thePatch);
 		return thePatch;					  
 	}
 	
 	if ([[self bundleName] isEqualToString:@"AppleTV2,1_4.3_8F5153d"])
 	{
 		NSDictionary *thePatch = [NSDictionary dictionaryWithObjectsAndKeys:[[NSBundle mainBundle] pathForResource:@"status" ofType:@"patch" inDirectory:@"patches"], @"Patch", @"private/var/lib/dpkg/status", @"Target", @"7945d79f0dad7c3397b930877ba92ec4", @"md5", nil];
-		NSLog(@"extraPatch: %@", thePatch);
+			//NSLog(@"extraPatch: %@", thePatch);
 		return thePatch;					  
 	}
 	

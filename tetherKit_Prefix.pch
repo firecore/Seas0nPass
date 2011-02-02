@@ -5,4 +5,5 @@
 #ifdef __OBJC__
     #import <Cocoa/Cocoa.h>
 	#import "PatchedFile.h"
+	#import "NSApplication+SystemVersion.h"
 #endif
