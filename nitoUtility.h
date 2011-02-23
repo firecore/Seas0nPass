@@ -15,6 +15,7 @@
 #define VFDECRYPT [[NSBundle mainBundle] pathForResource:@"vfdecrypt" ofType:@"" inDirectory:@"bin"]
 #define CYDIA_TAR [[NSBundle mainBundle] pathForResource:@"Cydia" ofType:@"tgz" inDirectory:@"archives"]
 #define SPACE_SCRIPT [[NSBundle mainBundle] pathForResource:@"space" ofType:@"sh" inDirectory:@"scripts"]
+#define DEB_PATH [[NSBundle mainBundle] pathForResource:@"debs" ofType:@""]
 
 #define HDIUTIL @"/usr/bin/hdiutil"
 #define ASR @"/usr/sbin/asr"

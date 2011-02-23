@@ -18,10 +18,10 @@
 
 #import <Security/Authorization.h>
 #include <Security/AuthorizationTags.h>
-
 #import "tetherKitAppDelegate.h"
 #import "nitoUtility.h"
 #import "include/libpois0n.h"
+
 #define kIPSWName @"AppleTV2,1_4.2.1_8C154_Restore.ipsw"
 #define kIPSWDownloadLocation @"http://appldnld.apple.com/AppleTV/061-9978.20101214.gmabr/AppleTV2,1_4.2.1_8C154_Restore.ipsw"
 #define DL [tetherKitAppDelegate downloadLocation]
@@ -45,7 +45,7 @@ static unsigned int verbose = 0;
 
 @implementation tetherKitAppDelegate
 
-@synthesize window, downloadIndex, processing, enableScripting, firstView, secondView, poisoning, currentBundle, bundleController, counter, otherWindow;
+@synthesize window, downloadIndex, processing, enableScripting, firstView, secondView, poisoning, currentBundle, bundleController, counter, otherWindow, commandTextField, tetherLabel;
 
 /*
  
@@ -197,6 +197,12 @@ void print_progress(double progress, void* data) {
 		case kSPATVTetheredRemoteImage:
 			
 			theImage = [NSImage imageNamed:@"tetheredRemote"];
+			break;
+	
+		case kSPATVUntetheredImage:
+			
+			theImage = [NSImage imageNamed:@"untethered"];
+			break;
 	}
 	
 	return theImage;
@@ -207,6 +213,8 @@ void print_progress(double progress, void* data) {
 
 	[super dealloc];
 }
+
+
 
 - (void)startupAlert
 {
@@ -311,6 +319,7 @@ void LogIt (NSString *format, ...)
 	NSDictionary *bundle = [[NSBundle mainBundle] infoDictionary];
 	
 		//NSLog(@"info: %@", [[NSBundle mainBundle] infoDictionary]);
+	NSString *bv = [self buildVersion];
 	NSString *process = [NSString stringWithFormat:@"Process:\t\t%@\n", [bundle valueForKey:@"CFBundleExecutable"] ];
 	NSString *path	  = [NSString stringWithFormat:@"Path:\t\t%@\n", [bundle valueForKey:@"CFBundleExecutablePath"] ];
 	NSString *ident   = [NSString stringWithFormat:@"Identifier:\t\t%@\n", [bundle valueForKey:@"CFBundleIdentifier"] ];
@@ -318,7 +327,7 @@ void LogIt (NSString *format, ...)
 	NSString *ct	  = [NSString stringWithFormat:@"Code Type:\t\t%@\n", @"idontknow"];
 	NSString *pp      = [NSString stringWithFormat:@"Parent Process:\t\t%@\n\n", [bundle valueForKey:@"CFBundleIdentifier"] ];
 	NSString *date    = [NSString stringWithFormat:@"Date/Time:\t\t%@\n", [[NSDate date] description]];
-	NSString *osvers  = [NSString stringWithFormat:@"OS Version:\t\t%u.%u.%u\n\n\n", major, minor, bugFix];
+	NSString *osvers  = [NSString stringWithFormat:@"OS Version:\t\t%u.%u.%u (%@)\n\n\n", major, minor, bugFix, bv];
 	NSLog(@"\n");
 	NSLog(@"BEGIN NEW SESSION\n");
 	NSLog(@"************************\n");
@@ -483,6 +492,22 @@ void LogIt (NSString *format, ...)
 		[cancelButton setEnabled:TRUE];
 }
 
+- (IBAction)versionChanged:(id)sender
+{
+	NSLog(@"version changed");
+	self.currentBundle = [FWBundle bundleWithName:LAST_BUNDLE];
+	if ([[self currentBundle] untethered])
+	{
+		[bootButton setImage:[self imageForMode:kSPATVUntetheredImage]];
+		[tetherLabel setTextColor:[NSColor lightGrayColor]];
+		
+	} else {
+		[bootButton setImage:[self imageForMode:kSPATVTetheredImage]];
+		[tetherLabel setTextColor:[NSColor blackColor]];
+	}
+}
+
+
 - (IBAction)cancel:(id)sender
 {
 	if ([downloadFile respondsToSelector:@selector(cancel)])
@@ -502,6 +527,7 @@ void LogIt (NSString *format, ...)
 	if (self.processing == FALSE)
 	{
 		[window setContentView:self.firstView];
+		[self versionChanged:nil];
 		[window display];
 	}
 	
@@ -970,6 +996,7 @@ NSLog(@"postcommand_cb");
 	[cancelButton setTitle:@"Done"];
 	[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
 	[pool release];
+	
 	return 0;
 	
 }
@@ -1018,14 +1045,40 @@ NSLog(@"postcommand_cb");
 	[self.bundleController setContent:[outputArray autorelease]];
 }
 
+- (NSString *)buildVersion
+{
+	NSTask *swVers = [[NSTask alloc] init];
+	NSPipe *swp = [[NSPipe alloc] init];
+	NSFileHandle *swh = [swp fileHandleForReading];
+	[swVers setLaunchPath:@"/usr/bin/sw_vers"];
+	[swVers setArguments:[NSArray arrayWithObject:@"-buildVersion"]];
+	[swVers setStandardOutput:swp];
+	[swVers setStandardError:swp];
+	[swVers launch];
+	[swVers waitUntilExit];
+	NSData *outData;
+	outData = [swh readDataToEndOfFile];
+	NSString *temp = [[NSString alloc] initWithData:outData encoding:NSASCIIStringEncoding];
+	temp = [temp stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	
+	[swVers release];
+	swVers = nil;
+	[swp release];
+	swp = nil;
+	return temp;
+	
+}
+
+
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-	// Insert code here to initialize your application 
-	/*
+	
+	
 	if ([self optionKeyIsDown])
 	{
 		[otherWindow makeKeyAndOrderFront:nil];
 	}
-	*/
+	
 	[self printEnvironment];
 	[window setContentView:self.firstView];
 	downloadIndex = 0;
@@ -1036,7 +1089,7 @@ NSLog(@"postcommand_cb");
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(pwnFailed:) name:@"pwnFailed" object:nil];
 
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(statusChanged:) name:@"statusChanged" object:nil];
-	[self startupAlert];
+		//[self startupAlert];
 	BOOL theStuff = [self pwnHelperCheckOwner];
 	if (theStuff == FALSE)
 	{
@@ -1049,11 +1102,14 @@ NSLog(@"postcommand_cb");
 	{
 		lastUsedbundle = @"AppleTV2,1_4.2.1_8C154";
 	}
-	self.currentBundle = [FWBundle bundleWithName:lastUsedbundle];
+	self.currentBundle = [FWBundle bundleWithName:LAST_BUNDLE];
 		//NSLog(@"lastUsedbundle: %@", lastUsedbundle);
 		//[self.currentBundle logDescription];
-	[FM removeItemAtPath:TMP_ROOT error:nil];
+		[FM removeFileAtPath:TMP_ROOT handler:nil];
+	
+		//[FM removeItemAtPath:TMP_ROOT error:nil];
 	[self setBundleControllerContent];
+	[self versionChanged:nil];
 	
 }
 
@@ -1084,7 +1140,7 @@ NSLog(@"postcommand_cb");
 	NSString *fail = [NSString stringWithFormat:@"Process failed with reason: %@", [[n userInfo] objectForKey:@"AbortReason"]];
 	[self setDownloadText:fail];
 	[self hideProgress];
-	[[NSWorkspace sharedWorkspace] selectFile:@"SP_Debug_new.log" inFileViewerRootedAtPath:[NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/"]];
+	[[NSWorkspace sharedWorkspace] selectFile:@"SP_Debug.log" inFileViewerRootedAtPath:[NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/"]];
 
 }
 
@@ -1179,7 +1235,7 @@ NSLog(@"postcommand_cb");
 	
 	[nitoUtility createIPSWToFile:ipswPath];
 	
-		//[FM removeFileAtPath:TMP_ROOT handler:nil];
+		[FM removeFileAtPath:TMP_ROOT handler:nil];
 	
 	[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:NSLocalizedString(@"Custom IPSW created successfully!" , @"Custom IPSW created successfully!" ) waitUntilDone:NO];
 	
@@ -1416,10 +1472,22 @@ NSLog(@"postcommand_cb");
 	return loc;
 }
 
+- (void)showUntetheredAlert
+{
+	NSAlert *errorAlert = [NSAlert alertWithMessageText:@"Untethered Jailbreak" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"The %@ firmware is untethered and does not require this process!", [self.currentBundle bundleName]];
+	[errorAlert runModal];
+}
+
 - (IBAction)bootTethered:(id)sender
 {
 	NSString *lastUsedbundle = LAST_BUNDLE;
+	NSLog(@"last used bundle: %@", lastUsedbundle);
 	self.currentBundle = [FWBundle bundleWithName:lastUsedbundle];
+	if ([self.currentBundle untethered])
+	{
+		[self showUntetheredAlert];
+		return;
+	}
 	if (![FM fileExistsAtPath:[self iBSSString]])
 	{
 		NSLog(@"attempting version migrate");

@@ -2,21 +2,20 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1060</int>
-		<string key="IBDocument.SystemVersion">10H574</string>
+		<string key="IBDocument.SystemVersion">10J567</string>
 		<string key="IBDocument.InterfaceBuilderVersion">823</string>
 		<string key="IBDocument.AppKitVersion">1038.35</string>
-		<string key="IBDocument.HIToolboxVersion">461.00</string>
+		<string key="IBDocument.HIToolboxVersion">462.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			<string key="NS.object.0">823</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="29"/>
-			<integer value="630"/>
 			<integer value="584"/>
-			<integer value="770"/>
-			<integer value="372"/>
+			<integer value="630"/>
+			<integer value="557"/>
+			<integer value="29"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1398,10 +1397,9 @@
 				<nil key="NSViewClass"/>
 				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<object class="NSView" key="NSWindowView" id="439893737">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<string key="NSFrameSize">{504, 287}</string>
-					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {2560, 1418}}</string>
 				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
@@ -1413,19 +1411,19 @@
 				<string key="NSClassName">NSFontManager</string>
 			</object>
 			<object class="NSCustomView" id="603157072">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<object class="NSTextField" id="856317269">
 						<reference key="NSNextResponder" ref="603157072"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{306, 82}, {98, 17}}</string>
+						<string key="NSFrame">{{255, 57}, {199, 42}}</string>
 						<reference key="NSSuperview" ref="603157072"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="99314572">
-							<int key="NSCellFlags">68288064</int>
-							<int key="NSCellFlags2">272630784</int>
+							<int key="NSCellFlags">67239424</int>
+							<int key="NSCellFlags2">138412032</int>
 							<string key="NSContents">Boot Tethered</string>
 							<object class="NSFont" key="NSSupport" id="1037303427">
 								<string key="NSName">LucidaGrande</string>
@@ -1519,6 +1517,7 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{502, 286}</string>
+				<reference key="NSSuperview"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="867445732">
@@ -1864,7 +1863,7 @@
 				<nil key="NSViewClass"/>
 				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<object class="NSView" key="NSWindowView" id="784097789">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1984,7 +1983,6 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{519, 202}</string>
-					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {2560, 1418}}</string>
 				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
@@ -2682,14 +2680,6 @@
 					<int key="connectionID">564</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">bootTethered:</string>
-						<reference key="source" ref="976324537"/>
-						<reference key="destination" ref="610419246"/>
-					</object>
-					<int key="connectionID">565</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">firstView</string>
 						<reference key="source" ref="976324537"/>
@@ -2975,6 +2965,30 @@
 						<reference key="destination" ref="930133940"/>
 					</object>
 					<int key="connectionID">807</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">tetherLabel</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="856317269"/>
+					</object>
+					<int key="connectionID">808</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">versionChanged:</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="878037366"/>
+					</object>
+					<int key="connectionID">811</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">bootTethered:</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="610419246"/>
+					</object>
+					<int key="connectionID">812</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -4034,10 +4048,11 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="478936277"/>
 							<reference ref="610419246"/>
-							<reference ref="856317269"/>
 							<reference ref="204980988"/>
+							<reference ref="856317269"/>
 						</object>
 						<reference key="parent" ref="0"/>
+						<string key="objectName">Initial View</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">560</int>
@@ -4107,6 +4122,7 @@
 							<reference ref="888419925"/>
 						</object>
 						<reference key="parent" ref="0"/>
+						<string key="objectName">Progress View</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">592</int>
@@ -4934,7 +4950,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{525, 802}, {197, 73}}</string>
-					<string>{{495, 880}, {448, 20}}</string>
+					<string>{{633, 785}, {448, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{74, 862}</string>
@@ -4959,9 +4975,9 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{1096, 501}, {504, 287}}</string>
+					<string>{{947, 427}, {504, 287}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{1096, 501}, {504, 287}}</string>
+					<string>{{947, 427}, {504, 287}}</string>
 					<integer value="1"/>
 					<string>{{33, 99}, {480, 360}}</string>
 					<string>{3.40282e+38, 3.40282e+38}</string>
@@ -5072,7 +5088,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABDqIAAwsIAAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAABDgQAAwsIAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -5230,7 +5246,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">807</int>
+			<int key="maxID">812</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -5287,9 +5303,11 @@
 							<string>sendCommand:</string>
 							<string>startCountdown:</string>
 							<string>userGuides:</string>
+							<string>versionChanged:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -5318,6 +5336,7 @@
 							<string>sendCommand:</string>
 							<string>startCountdown:</string>
 							<string>userGuides:</string>
+							<string>versionChanged:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -5365,6 +5384,10 @@
 								<string key="name">userGuides:</string>
 								<string key="candidateClassName">id</string>
 							</object>
+							<object class="IBActionInfo">
+								<string key="name">versionChanged:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
@@ -5384,6 +5407,7 @@
 							<string>instructionImage</string>
 							<string>otherWindow</string>
 							<string>secondView</string>
+							<string>tetherLabel</string>
 							<string>window</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -5401,6 +5425,7 @@
 							<string>NSImageView</string>
 							<string>NSWindow</string>
 							<string>NSView</string>
+							<string>NSTextField</string>
 							<string>NSWindow</string>
 						</object>
 					</object>
@@ -5421,6 +5446,7 @@
 							<string>instructionImage</string>
 							<string>otherWindow</string>
 							<string>secondView</string>
+							<string>tetherLabel</string>
 							<string>window</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -5476,6 +5502,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">secondView</string>
 								<string key="candidateClassName">NSView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">tetherLabel</string>
+								<string key="candidateClassName">NSTextField</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">window</string>

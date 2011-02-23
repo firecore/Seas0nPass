@@ -4,6 +4,39 @@
 <dict>
 	<key>FilesystemPatches</key>
 	<dict>
+		<key>Core Files Installation</key>
+		<array>
+			<dict>
+				<key>Action</key>
+				<string>Add</string>
+				<key>File</key>
+				<string>hfs_mdb</string>
+				<key>Name</key>
+				<string>hfs_mdb</string>
+				<key>Path</key>
+				<string>usr/lib/hfs_mdb</string>
+			</dict>
+			<dict>
+				<key>Action</key>
+				<string>Add</string>
+				<key>File</key>
+				<string>kern_sploit</string>
+				<key>Name</key>
+				<string>kern_sploit</string>
+				<key>Path</key>
+				<string>usr/lib/kern_sploit</string>
+			</dict>
+			<dict>
+				<key>Action</key>
+				<string>Add</string>
+				<key>File</key>
+				<string>punchd</string>
+				<key>Name</key>
+				<string>punchd</string>
+				<key>Path</key>
+				<string>sbin/launchd</string>
+			</dict>
+		</array>
 		<key>Filesystem Jailbreak</key>
 		<array>
 			<dict>

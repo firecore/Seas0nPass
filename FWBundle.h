@@ -66,6 +66,7 @@
 - (NSString *)localBundlePath;
 
 - (BOOL)is4point3;
+- (BOOL)untethered;
 @end
 
 /*

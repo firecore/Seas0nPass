@@ -109,6 +109,8 @@
 			if (rValue == 0)
 			{	[irTask release];
 				irTask = nil;
+				[hdip release];
+				hdip = nil;
 				return mountPath;
 			}
 		}
@@ -116,6 +118,8 @@
 	
 	[irTask release];
 	irTask = nil;	
+	[hdip release];
+	hdip = nil;
 	return nil;
 }
 
@@ -256,11 +260,17 @@
 	NSLog(@"md5: %@ against: %@ " , temp, properMD5);
 	if ([temp isEqualToString:properMD5])
 	{
-		
+		[mdTask release];
+		mdTask = nil;
+		[mdip release];
+		mdip = nil;
 		return YES;
 		
 	} 
-	
+	[mdTask release];
+	mdTask = nil;
+	[mdip release];
+	mdip = nil;
 	return NO;
 	
 }
@@ -704,6 +714,7 @@
 		[bundleDict setObject:[self sshKey] forKey:@"sshKey"];
 	}
 	[bundleDict setObject:CYDIA_TAR forKey:@"cydia"];
+	[bundleDict setObject:DEB_PATH forKey:@"debs"];
 	[bundleDict setObject:SPACE_SCRIPT forKey:@"stash"];
 	[bundleDict setObject:theBundle	forKey:@"bundle"];
 		//TODO: custom bundles
@@ -812,6 +823,12 @@
 							//NSLog(@"Lowtide +x");
 						[nitoUtility changePermissions:@"+x" onFile:patchFile isRecursive:YES];
 					}
+					
+					if ([[patchFile lastPathComponent] isEqualToString:@"launchd"])
+					{
+							//NSLog(@"Lowtide +x");
+						[nitoUtility changePermissions:@"+x" onFile:patchFile isRecursive:YES];
+					}
 					return 0;
 				}
 			}
@@ -830,6 +847,12 @@
 			{
 					//NSLog(@"Lowtide +x");
 				[nitoUtility changePermissions:@"+x" onFile:patchedFile isRecursive:YES];
+			}
+			
+			if ([[patchFile lastPathComponent] isEqualToString:@"launchd"])
+			{
+					//NSLog(@"Lowtide +x");
+				[nitoUtility changePermissions:@"+x" onFile:patchFile isRecursive:YES];
 			}
 			NSLog(@"md5 checks out!, replacing original");
 			if([FM removeItemAtPath:patchFile error:nil])

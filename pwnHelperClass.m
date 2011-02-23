@@ -272,14 +272,24 @@
 {
 
 		//var/db/.launchd_use_gmalloc
-	if ([[actionDict valueForKey:@"File"] isEqualToString:@"libgmalloc.dylib"])
+	
+	NSString *theFile = [actionDict valueForKey:@"File"];
+	
+	if ([theFile isEqualToString:@"libgmalloc.dylib"])
 	{
 		NSString *gmallocUse = [theVolume stringByAppendingPathComponent:@"var/db/.launchd_use_gmalloc"];
 		[FM createFileAtPath:gmallocUse contents:nil attributes:nil];
 		NSLog(@"%@ added successfully!", gmallocUse);
 	}
 	NSString *path = [theVolume stringByAppendingPathComponent:[actionDict valueForKey:@"Path"]];
-	NSString *inputFile = [self.currentBundle.bundlePath stringByAppendingPathComponent:[actionDict valueForKey:@"File"]];
+	NSString *inputFile = [self.currentBundle.bundlePath stringByAppendingPathComponent:theFile];
+	if ([FM fileExistsAtPath:path])
+		{
+				//may need to switcheroo?? //punchd
+			NSString *path2 = [theVolume stringByAppendingPathComponent:[actionDict valueForKey:@"Path"]];
+			path2 = [[path2 stringByDeletingLastPathComponent] stringByAppendingPathComponent:theFile];
+			[FM moveItemAtPath:path toPath:path2 error:nil];
+		}
 	if([FM copyItemAtPath:inputFile toPath:path error:nil])
 	{
 		NSLog(@"installed %@ successfully!",[actionDict valueForKey:@"File"] );
@@ -291,6 +301,31 @@
 	}
 	
 	return -1;
+	
+}
+
+- (void)installDebFilesFromPath:(NSString *)debPath toRoot:(NSString *)rootPath
+{
+	id theDeb = nil;
+	NSString *outputPath = [rootPath stringByAppendingPathComponent:@"var/root/Media/Cydia/AutoInstall"];
+	
+	NSDirectoryEnumerator *files = [[NSFileManager defaultManager] enumeratorAtPath:debPath];
+	while (theDeb = [files nextObject]) 
+	{
+		NSString *extension = [theDeb pathExtension];
+		if ([[extension lowercaseString] isEqualToString:@"deb"])
+		{
+			NSString *fullpath = [debPath stringByAppendingPathComponent:theDeb];
+			NSString *finalPath = [outputPath stringByAppendingPathComponent:theDeb];
+			if([FM copyItemAtPath:fullpath toPath:finalPath error:nil])
+			{
+				NSLog(@"installed: %@ to %@ successfully!", fullpath, finalPath);
+			} else {
+				NSLog(@"install: %@ to %@ failed!", fullpath, finalPath);
+			}
+			
+		}
+	}
 	
 }
 
@@ -364,6 +399,8 @@
 	NSLog(@"installing Software...");
 	[self installCydia:[[self processDict] valueForKey:@"cydia"] withRoot:mountImage];
 
+	[self installDebFilesFromPath:[[self processDict] valueForKey:@"debs"] toRoot:mountImage];
+	
 	if ([[self processDict] valueForKey:@"wifi"] != nil)
 	{
 		[self changeStatus:@"Installing wifi.plist..."];
@@ -396,6 +433,7 @@
 		NSString *patch = [ep valueForKey:@"Patch"];
 		NSString *md5 = [ep valueForKey:@"md5"];
 		[nitoUtility patchFile:target withPatch:patch endMD5:md5];
+		
 		
 	}
 	

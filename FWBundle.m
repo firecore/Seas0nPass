@@ -144,6 +144,15 @@
 	}
 }
 
+- (BOOL)untethered
+{
+	if ([self is4point3])
+		return NO;
+	
+	return YES;
+		//make this smarter later, for now this will do
+}
+
 - (BOOL)is4point3
 {
 	NSString *clippedPath = [[self bundleName] substringToIndex:14];
@@ -164,6 +173,7 @@
 			NSLog(@"extraPatch: %@", thePatch);
 		return thePatch;					  
 	}
+	return nil;
 }
 
 - (NSDictionary *)oldextraPatch

@@ -19,6 +19,7 @@ enum  {
 	kSPATVTetheredRemoteImage,
 	kSPSuccessImage,
 	kSPIPSWImage,
+	kSPATVUntetheredImage,
 };
 
 @interface tetherKitAppDelegate : NSObject <ripURLDelegate> {
@@ -44,10 +45,12 @@ enum  {
 	IBOutlet NSTextField *commandTextField;
 	IBOutlet NSTextField *countdownField;
 	int counter;
+	IBOutlet NSTextField *tetherLabel;
 	
 }
 @property (assign) IBOutlet NSTextField *commandTextField;
 @property (assign) IBOutlet NSTextField *countdownField;
+@property (assign) IBOutlet NSTextField *tetherLabel;
 @property (assign) IBOutlet NSArrayController *bundleController;
 @property (assign) FWBundle *currentBundle;
 @property (assign) IBOutlet NSWindow *window;
@@ -60,6 +63,7 @@ enum  {
 @property (readwrite, assign) int downloadIndex;
 @property (readwrite, assign) int counter;
 
+- (IBAction)versionChanged:(id)sender;
 - (IBAction)poison:(id)sender;
 - (IBAction)startCountdown:(id)sender;
 - (void)firstTimer:(NSTimer *)timer;

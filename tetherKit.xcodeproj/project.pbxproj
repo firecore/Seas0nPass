@@ -17,6 +17,7 @@
 		3200F4FA12D4DDEB003EA66E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3200F4F812D4DDEB003EA66E /* Localizable.strings */; };
 		3200F54712D4E1FF003EA66E /* tether.png in Resources */ = {isa = PBXBuildFile; fileRef = 3200F54612D4E1FF003EA66E /* tether.png */; };
 		3200F54B12D4E2B7003EA66E /* ipsw.png in Resources */ = {isa = PBXBuildFile; fileRef = 3200F54A12D4E2B7003EA66E /* ipsw.png */; };
+		3204513C130DE20E0057C8B0 /* debs in Resources */ = {isa = PBXBuildFile; fileRef = 32045133130DE20E0057C8B0 /* debs */; };
 		324FF2EC12F8CC690039310E /* NSApplication+SystemVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 324FF2EB12F8CC690039310E /* NSApplication+SystemVersion.m */; };
 		3272047F12C9AD320054F4B0 /* libsyringe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3272047E12C9AD320054F4B0 /* libsyringe.a */; };
 		327205DE12C9B5110054F4B0 /* ripURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 327205DD12C9B5110054F4B0 /* ripURL.m */; };
@@ -40,6 +41,7 @@
 		32799AA712DBC25B0013860A /* Seas0nPass.icns in Resources */ = {isa = PBXBuildFile; fileRef = 32799AA612DBC25B0013860A /* Seas0nPass.icns */; };
 		32799B3C12DBE3490013860A /* restore.png in Resources */ = {isa = PBXBuildFile; fileRef = 32799B3B12DBE3490013860A /* restore.png */; };
 		32799B3E12DBE35F0013860A /* success.png in Resources */ = {isa = PBXBuildFile; fileRef = 32799B3D12DBE35F0013860A /* success.png */; };
+		32D954D7131237CA007B5BE3 /* untethered.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D954D6131237CA007B5BE3 /* untethered.png */; };
 		32DF4A3A12DC2905002916D5 /* tetheredRemote.png in Resources */ = {isa = PBXBuildFile; fileRef = 32DF4A3912DC2905002916D5 /* tetheredRemote.png */; };
 		32DF57BD12DD6E74002916D5 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32DF57BC12DD6E74002916D5 /* Sparkle.framework */; };
 		32DF57C612DD6E86002916D5 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 32DF57BC12DD6E74002916D5 /* Sparkle.framework */; };
@@ -131,6 +133,7 @@
 		3200F4F912D4DDEB003EA66E /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3200F54612D4E1FF003EA66E /* tether.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tether.png; sourceTree = "<group>"; };
 		3200F54A12D4E2B7003EA66E /* ipsw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ipsw.png; sourceTree = "<group>"; };
+		32045133130DE20E0057C8B0 /* debs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = debs; sourceTree = "<group>"; };
 		324FF2EA12F8CC690039310E /* NSApplication+SystemVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSApplication+SystemVersion.h"; sourceTree = "<group>"; };
 		324FF2EB12F8CC690039310E /* NSApplication+SystemVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSApplication+SystemVersion.m"; sourceTree = "<group>"; };
 		3272047E12C9AD320054F4B0 /* libsyringe.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsyringe.a; sourceTree = "<group>"; };
@@ -191,6 +194,7 @@
 		32799AA612DBC25B0013860A /* Seas0nPass.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Seas0nPass.icns; sourceTree = "<group>"; };
 		32799B3B12DBE3490013860A /* restore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = restore.png; sourceTree = "<group>"; };
 		32799B3D12DBE35F0013860A /* success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = success.png; sourceTree = "<group>"; };
+		32D954D6131237CA007B5BE3 /* untethered.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = untethered.png; sourceTree = "<group>"; };
 		32DF4A3912DC2905002916D5 /* tetheredRemote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tetheredRemote.png; sourceTree = "<group>"; };
 		32DF57BC12DD6E74002916D5 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		32DF734512E0578A002916D5 /* bundles */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bundles; sourceTree = "<group>"; };
@@ -316,6 +320,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				32D954D6131237CA007B5BE3 /* untethered.png */,
+				32045133130DE20E0057C8B0 /* debs */,
 				32DF734512E0578A002916D5 /* bundles */,
 				32DF4A3912DC2905002916D5 /* tetheredRemote.png */,
 				32799B3D12DBE35F0013860A /* success.png */,
@@ -596,6 +602,8 @@
 				32799B3E12DBE35F0013860A /* success.png in Resources */,
 				32DF4A3A12DC2905002916D5 /* tetheredRemote.png in Resources */,
 				32DF734A12E0578A002916D5 /* bundles in Resources */,
+				3204513C130DE20E0057C8B0 /* debs in Resources */,
+				32D954D7131237CA007B5BE3 /* untethered.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -737,6 +745,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SDKROOT)/usr/lib/gcc/i686-apple-darwin10/4.0.1\"",
 					"\"$(SRCROOT)/../xpwn/idevice/QuicktimeSDK/Libraries\"",
+					"\"$(SRCROOT)/debs\"",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-lcurl";
@@ -768,6 +777,7 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SDKROOT)/usr/lib/gcc/i686-apple-darwin10/4.0.1\"",
 					"\"$(SRCROOT)/../xpwn/idevice/QuicktimeSDK/Libraries\"",
+					"\"$(SRCROOT)/debs\"",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
