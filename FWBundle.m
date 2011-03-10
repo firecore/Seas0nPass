@@ -133,12 +133,12 @@
 		return @"16541920";	
 	}
 }
-
+	//26067520
 - (NSString *)ramdiskSize
 {
 	if ([self is4point3])
 	{
-		return @"24676576";
+		return @"26067520";
 	} else {
 		return @"16541920";	
 	}
@@ -170,7 +170,7 @@
 	if ([self is4point3])
 	{
 		NSDictionary *thePatch = [NSDictionary dictionaryWithObjectsAndKeys:[[NSBundle mainBundle] pathForResource:@"status" ofType:@"patch" inDirectory:@"patches"], @"Patch", @"private/var/lib/dpkg/status", @"Target", @"7945d79f0dad7c3397b930877ba92ec4", @"md5", nil];
-			NSLog(@"extraPatch: %@", thePatch);
+			//NSLog(@"extraPatch: %@", thePatch);
 		return thePatch;					  
 	}
 	return nil;

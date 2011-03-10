@@ -23,13 +23,13 @@
 #import "include/libpois0n.h"
 
 #define kIPSWName @"AppleTV2,1_4.2.1_8C154_Restore.ipsw"
-#define kIPSWDownloadLocation @"http://appldnld.apple.com/AppleTV/061-9978.20101214.gmabr/AppleTV2,1_4.2.1_8C154_Restore.ipsw"
+#define kIPSWDownloadLocation @"http://appldnld.apple.com/AppleTV/061-9584.20110308.Cxdew/AppleTV2,1_4.3_8F191m_Restore.ipsw"
 #define DL [tetherKitAppDelegate downloadLocation]
 #define PTMD5 @"e8f4d590c8fe62386844d6a2248ae609"
-#define IPSWMD5 @"3fe1a01b8f5c8425a074ffd6deea7c86"
+#define IPSWMD5 @"85647af7e281cfca4f4e0d1c412f668f"
 #define KCACHE @"kernelcache.release.k66"
 #define iBSSDFU @"iBSS.k66ap.RELEASE.dfu"
-#define HCIPSW [DL stringByAppendingPathComponent:@"AppleTV2,1_4.2.1_8C154_Restore.ipsw"]
+#define HCIPSW [DL stringByAppendingPathComponent:@"AppleTV2,1_4.3_8F191m_Restore.ipsw"]
 #define CUSTOM_RESTORED @"AppleTV2,1_4.2.1_8C154_Custom_Restore.ipsw"
 #define CUSTOM_RESTORE @"AppleTV_SeasonPass.ipsw"
 #define BUNDLE_LOCATION [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"bundles"]
@@ -433,7 +433,7 @@ void LogIt (NSString *format, ...)
 
 + (NSString *)ipswFile
 {
-	return [DL stringByAppendingPathComponent:@"AppleTV2,1_4.2.1_8C154_Restore.ipsw"];
+	return [DL stringByAppendingPathComponent:@"AppleTV2,1_4.3_8F191m_Restore.ipsw"];
 }
 	//originally we downloaded and patched pwnagetool rather than making a custom ipsw, some deprecated code still in here commented out.
 
@@ -494,8 +494,9 @@ void LogIt (NSString *format, ...)
 
 - (IBAction)versionChanged:(id)sender
 {
-	NSLog(@"version changed");
+		//NSLog(@"version changed");
 	self.currentBundle = [FWBundle bundleWithName:LAST_BUNDLE];
+		//NSLog(@"self.currentBundle: %@", self.currentBundle);
 	if ([[self currentBundle] untethered])
 	{
 		[bootButton setImage:[self imageForMode:kSPATVUntetheredImage]];
@@ -535,7 +536,7 @@ void LogIt (NSString *format, ...)
 }
 
 int progress_cb(irecv_client_t client, const irecv_event_t* event) {
-	NSLog(@"progress");
+		//NSLog(@"progress");
 	if (event->type == IRECV_PROGRESS) {
 		print_progress_bar(event->progress);
 	}
@@ -1097,13 +1098,14 @@ NSLog(@"postcommand_cb");
 	}
 	[self checkScripting];
 	NSString *lastUsedbundle = LAST_BUNDLE;
-		//NSLog(@"lastUsedbundle: %@", lastUsedbundle);
+
 	if ([lastUsedbundle length] < 1)
 	{
-		lastUsedbundle = @"AppleTV2,1_4.2.1_8C154";
+		lastUsedbundle = @"AppleTV2,1_4.3_8F191m";
+		[[NSUserDefaults standardUserDefaults] setObject:lastUsedbundle forKey:@"lastUsedBundle"];
 	}
 	self.currentBundle = [FWBundle bundleWithName:LAST_BUNDLE];
-		//NSLog(@"lastUsedbundle: %@", lastUsedbundle);
+
 		//[self.currentBundle logDescription];
 		[FM removeFileAtPath:TMP_ROOT handler:nil];
 	
@@ -1520,7 +1522,8 @@ NSLog(@"postcommand_cb");
 	NSString *logPath2 = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/SP_Debug_new.log"];
 	[FM removeFileAtPath:logPath2 handler:nil];
 		//current bundle may be set by default, but we never want to assume the default processOne ipsw to be anything but the latest- which is still hardcoded to 4.2.1.
-	self.currentBundle = [FWBundle bundleWithName:@"AppleTV2,1_4.2.1_8C154"];
+		//self.currentBundle = LAST_BUNDLE;
+	self.currentBundle = [FWBundle bundleWithName:@"AppleTV2,1_4.3_8F191m"];
 	if ([self optionKeyIsDown])
 	{
 		NSOpenPanel *op = [NSOpenPanel openPanel];

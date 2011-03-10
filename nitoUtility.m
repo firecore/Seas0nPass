@@ -425,7 +425,7 @@
 					
 					status = [nitoUtility repackRamdisk:decryptRam toPath:finalRam withIV:ramdiskIV key:ramdiskKey originalPath:theRamdisk]; //9
 					
-						[FM removeItemAtPath:decryptRam error:nil]; //10 no need for 11?
+						//[FM removeItemAtPath:decryptRam error:nil]; //10 no need for 11?
 					
 					if (status == 0)
 					{
@@ -739,7 +739,25 @@
 {
 	NSTask *decryptTask = [[NSTask alloc] init];
 	[decryptTask setLaunchPath:XPWN];
-	[decryptTask setArguments:[NSArray arrayWithObjects:theRamdisk, outputDisk, @"-iv", iv, @"-k", key, nil]];
+	NSMutableArray *decryptArgs = [[NSMutableArray alloc ]init];
+	[decryptArgs addObject:theRamdisk];
+	[decryptArgs addObject:outputDisk];
+	if (iv != nil)
+	{
+		if (key != nil)
+		{
+			[decryptArgs addObject:@"-iv"];
+			[decryptArgs addObject:iv];
+			[decryptArgs addObject:@"-k"];
+			[decryptArgs addObject:key];
+			
+		}
+		
+		
+	}
+	[decryptTask setArguments:decryptArgs];
+	[decryptArgs release];
+		//[decryptTask setArguments:[NSArray arrayWithObjects:theRamdisk, outputDisk, @"-iv", iv, @"-k", key, nil]];
 	[decryptTask setStandardError:NULLOUT];
 	[decryptTask setStandardOutput:NULLOUT];
 	[decryptTask launch];
@@ -759,7 +777,29 @@
 	[decryptTask setLaunchPath:XPWN];
 	[decryptTask setStandardError:NULLOUT];
 	[decryptTask setStandardOutput:NULLOUT];
-	[decryptTask setArguments:[NSArray arrayWithObjects:theRamdisk, outputDisk, @"-iv", iv, @"-k", key, @"-t", original, nil]];
+	
+	NSMutableArray *decryptArgs = [[NSMutableArray alloc ]init];
+	[decryptArgs addObject:theRamdisk];
+	[decryptArgs addObject:outputDisk];
+	if (iv != nil)
+	{
+		if (key != nil)
+		{
+			[decryptArgs addObject:@"-iv"];
+			[decryptArgs addObject:iv];
+			[decryptArgs addObject:@"-k"];
+			[decryptArgs addObject:key];
+			
+		}
+		
+		
+	}
+	[decryptArgs addObject:@"-t"];
+	[decryptArgs addObject:original];
+	[decryptTask setArguments:decryptArgs];
+		//NSLog(@"xpwntool %@", [decryptArgs componentsJoinedByString:@" "]);
+	[decryptArgs release];
+		//[decryptTask setArguments:[NSArray arrayWithObjects:theRamdisk, outputDisk, @"-iv", iv, @"-k", key, @"-t", original, nil]];
 	[decryptTask launch];
 	[decryptTask waitUntilExit];
 	
@@ -1104,6 +1144,46 @@
 	NSTask *decryptTask = [[NSTask alloc] init];
 	[decryptTask setLaunchPath:IMAGE_TOOL];
 	[decryptTask setArguments:[NSArray arrayWithObjects:@"inject", theImage, outputPath, original, iv, key, nil]];
+	[decryptTask setStandardError:NULLOUT];
+	[decryptTask setStandardOutput:NULLOUT];
+	[decryptTask launch];
+	[decryptTask waitUntilExit];
+	
+	int returnStatus = [decryptTask terminationStatus];
+	[decryptTask release];
+	decryptTask = nil;
+	
+	return returnStatus;
+	
+}
+
++(int)repackImage:(NSString *)theImage toPath:(NSString *)outputPath originalPath:(NSString *)original
+{
+	
+	NSTask *decryptTask = [[NSTask alloc] init];
+	[decryptTask setLaunchPath:IMAGE_TOOL];
+	[decryptTask setArguments:[NSArray arrayWithObjects:@"inject", theImage, outputPath, original, nil]];
+	[decryptTask setStandardError:NULLOUT];
+	[decryptTask setStandardOutput:NULLOUT];
+	[decryptTask launch];
+	[decryptTask waitUntilExit];
+	
+	int returnStatus = [decryptTask terminationStatus];
+	[decryptTask release];
+	decryptTask = nil;
+	
+	return returnStatus;
+	
+}
+
+
+
++(int)decryptImage:(NSString *)theImage toPath:(NSString *)decPath
+{
+	
+	NSTask *decryptTask = [[NSTask alloc] init];
+	[decryptTask setLaunchPath:IMAGE_TOOL];
+	[decryptTask setArguments:[NSArray arrayWithObjects:@"extract", theImage, decPath, nil]];
 	[decryptTask setStandardError:NULLOUT];
 	[decryptTask setStandardOutput:NULLOUT];
 	[decryptTask launch];
