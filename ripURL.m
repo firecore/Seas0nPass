@@ -59,6 +59,7 @@
 }
 
 
+
 - (void)downloadFile:(NSString *)theFile
 {
 
@@ -76,6 +77,7 @@
 
 {
 	NSLog(@"%@ %s", self, _cmd);
+	[handler downloadFailed:downloadLocation];
 
 }
 

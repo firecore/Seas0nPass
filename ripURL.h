@@ -11,6 +11,7 @@
 @protocol ripURLDelegate
 
 - (void)downloadFinished:(NSString *)downloadFile;
+- (void)downloadFailed:(NSString *)downloadFile;
 - (void)setDownloadProgress:(double)theProgress;
 
 @end

@@ -23,18 +23,19 @@
 #import "include/libpois0n.h"
 
 #define kIPSWName @"AppleTV2,1_4.2.1_8C154_Restore.ipsw"
-#define kIPSWDownloadLocation @"http://appldnld.apple.com/AppleTV/061-9584.20110308.Cxdew/AppleTV2,1_4.3_8F191m_Restore.ipsw"
+#define kIPSWDownloadLocation @"http://appldnld.apple.com/AppleTV/041-0574.20110322.Dcfr5/AppleTV2,1_4.3_8F202_Restore.ipsw"
 #define DL [tetherKitAppDelegate downloadLocation]
 #define PTMD5 @"e8f4d590c8fe62386844d6a2248ae609"
-#define IPSWMD5 @"85647af7e281cfca4f4e0d1c412f668f"
+#define IPSWMD5 @"893cdf844a49ae2f7368e781b1ccf6d1"
 #define KCACHE @"kernelcache.release.k66"
 #define iBSSDFU @"iBSS.k66ap.RELEASE.dfu"
-#define HCIPSW [DL stringByAppendingPathComponent:@"AppleTV2,1_4.3_8F191m_Restore.ipsw"]
+#define HCIPSW [DL stringByAppendingPathComponent:@"AppleTV2,1_4.3_8F202_Restore.ipsw"]
 #define CUSTOM_RESTORED @"AppleTV2,1_4.2.1_8C154_Custom_Restore.ipsw"
 #define CUSTOM_RESTORE @"AppleTV_SeasonPass.ipsw"
 #define BUNDLE_LOCATION [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"bundles"]
 #define BUNDLES [FM contentsOfDirectoryAtPath:BUNDLE_LOCATION error:nil]
 #define LAST_BUNDLE [[NSUserDefaults standardUserDefaults] valueForKey:@"lastUsedBundle"]
+#define KILL_ITUNES [[NSUserDefaults standardUserDefaults] boolForKey:@"killiTunes"]
 
 int received_cb(irecv_client_t client, const irecv_event_t* event);
 int progress_cb(irecv_client_t client, const irecv_event_t* event);
@@ -433,7 +434,7 @@ void LogIt (NSString *format, ...)
 
 + (NSString *)ipswFile
 {
-	return [DL stringByAppendingPathComponent:@"AppleTV2,1_4.3_8F191m_Restore.ipsw"];
+	return [DL stringByAppendingPathComponent:@"AppleTV2,1_4.3_8F202_Restore.ipsw"];
 }
 	//originally we downloaded and patched pwnagetool rather than making a custom ipsw, some deprecated code still in here commented out.
 
@@ -494,6 +495,7 @@ void LogIt (NSString *format, ...)
 
 - (IBAction)versionChanged:(id)sender
 {
+	
 		//NSLog(@"version changed");
 	self.currentBundle = [FWBundle bundleWithName:LAST_BUNDLE];
 		//NSLog(@"self.currentBundle: %@", self.currentBundle);
@@ -511,14 +513,24 @@ void LogIt (NSString *format, ...)
 
 - (IBAction)cancel:(id)sender
 {
-	if ([downloadFile respondsToSelector:@selector(cancel)])
+		
+	if (downloadFile != nil)
 	{
-			//NSLog(@"cancel?");
-		[downloadFile cancel];
-			//self.processing = FALSE;
-		[self hideProgress];
+		if ([downloadFile isKindOfClass:[ripURL class]])
+		{
+			NSLog(@"downloadFile: %@", downloadFile);
+			if ([downloadFile respondsToSelector:@selector(cancel)])
+			{
+					//NSLog(@"cancel?");
+				[downloadFile cancel];
+					//self.processing = FALSE;
+				[self hideProgress];
+				
+			}
+		}
 		
 	}
+	
 	if (self.poisoning == TRUE)
 	{
 		pois0n_exit();
@@ -1075,6 +1087,7 @@ NSLog(@"postcommand_cb");
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	
 	
+		//killiTunes
 	if ([self optionKeyIsDown])
 	{
 		[otherWindow makeKeyAndOrderFront:nil];
@@ -1101,7 +1114,7 @@ NSLog(@"postcommand_cb");
 
 	if ([lastUsedbundle length] < 1)
 	{
-		lastUsedbundle = @"AppleTV2,1_4.3_8F191m";
+		lastUsedbundle = @"AppleTV2,1_4.3_8F202";
 		[[NSUserDefaults standardUserDefaults] setObject:lastUsedbundle forKey:@"lastUsedBundle"];
 	}
 	self.currentBundle = [FWBundle bundleWithName:LAST_BUNDLE];
@@ -1320,6 +1333,9 @@ NSLog(@"postcommand_cb");
 
 - (void)killiTunes
 {
+	if (KILL_ITUNES == NO)
+	return;
+	
 	NSTask *killTask = [[NSTask alloc] init];
 	[killTask setLaunchPath:@"/usr/bin/killall"];
 	[killTask setArguments:[NSArray arrayWithObject:@"iTunes"]];
@@ -1523,7 +1539,7 @@ NSLog(@"postcommand_cb");
 	[FM removeFileAtPath:logPath2 handler:nil];
 		//current bundle may be set by default, but we never want to assume the default processOne ipsw to be anything but the latest- which is still hardcoded to 4.2.1.
 		//self.currentBundle = LAST_BUNDLE;
-	self.currentBundle = [FWBundle bundleWithName:@"AppleTV2,1_4.3_8F191m"];
+	self.currentBundle = [FWBundle bundleWithName:@"AppleTV2,1_4.3_8F202"];
 	if ([self optionKeyIsDown])
 	{
 		NSOpenPanel *op = [NSOpenPanel openPanel];
@@ -1582,7 +1598,7 @@ NSLog(@"postcommand_cb");
 	[downloadFile setHandler:self];
 	[downloadFile setDownloadLocation:ptFile];
 	[downloadFile downloadFile:currentDownload];
-	[downloadFile autorelease];
+		//[downloadFile autorelease];
 		//if ([downloadFiles count] > 1)
 		//{
 		downloadIndex = 1;
@@ -1642,13 +1658,24 @@ NSLog(@"postcommand_cb");
 	[downloadBar setDoubleValue:theProgress];
 }
 
+- (void)downloadFailed:(NSString *)adownloadFile
+{
+	[downloadBar stopAnimation:self];
+	[downloadBar setHidden:YES];
+	[downloadBar setNeedsDisplay:YES];
+	[downloadFile release];
+	downloadFile = nil;
+	[self hideProgress];
+}
+
 - (void)downloadFinished:(NSString *)adownloadFile
 {
 		//NSLog(@"download complete: %@", adownloadFile);
 	[downloadBar stopAnimation:self];
 	[downloadBar setHidden:YES];
 	[downloadBar setNeedsDisplay:YES];
-
+	[downloadFile release];
+	downloadFile = nil;
 	if (downloadIndex == 1)
 	{
 			//NSString *currentDownload = [downloadFiles objectAtIndex:downloadIndex];
