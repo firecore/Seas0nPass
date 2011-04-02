@@ -1120,7 +1120,9 @@ NSLog(@"postcommand_cb");
 	self.currentBundle = [FWBundle bundleWithName:LAST_BUNDLE];
 
 		//[self.currentBundle logDescription];
-		[FM removeFileAtPath:TMP_ROOT handler:nil];
+		
+	
+			[FM removeFileAtPath:TMP_ROOT handler:nil];
 	
 		//[FM removeItemAtPath:TMP_ROOT error:nil];
 	[self setBundleControllerContent];
@@ -1249,6 +1251,8 @@ NSLog(@"postcommand_cb");
 	[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:NSLocalizedString(@"Creating IPSW...", @"Creating IPSW...") waitUntilDone:NO];
 	
 	[nitoUtility createIPSWToFile:ipswPath];
+	
+		//FIXME: COMMENT BACK IN!!
 	
 		[FM removeFileAtPath:TMP_ROOT handler:nil];
 	
@@ -1553,6 +1557,7 @@ NSLog(@"postcommand_cb");
 		}
 		NSString *ipsw = [op filename];
 		FWBundle *ourBundle = [FWBundle bundleForFile:ipsw];
+		
 		if (ourBundle == nil)
 		{
 			NSAlert *errorAlert = [NSAlert alertWithMessageText:@"Unsupported Firmware!" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"The firmware %@ is not compatible with this version of Seas0nPass.", [ipsw lastPathComponent]];
@@ -1567,7 +1572,8 @@ NSLog(@"postcommand_cb");
 		[buttonOne setEnabled:FALSE];
 		[bootButton setEnabled:FALSE];
 		[instructionImage setImage:[self imageForMode:kSPIPSWImage]];
-		[NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:ipsw];
+			
+			[NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:ipsw];
 		return;
 	}
 	

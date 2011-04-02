@@ -359,7 +359,7 @@
 - (int)performPatchesFromBundle:(FWBundle *)theBundle onRamdisk:(NSDictionary *)ramdiskDict
 {
 		//NSString *ramdiskSize = @"16541920";
-	NSString *ramdiskSize = [currentBundle ramdiskSize];
+		//NSString *ramdiskSize = [currentBundle ramdiskSize];
 		//NSLog(@"ramdisk size: %@", ramdiskSize);
 	NSString *ramdiskIV = [ramdiskDict valueForKey:@"IV"];
 	NSString *ramdiskKey = [ramdiskDict valueForKey:@"Key"];
@@ -369,9 +369,15 @@
 	NSString *finalRam = [IPSW_TMP stringByAppendingPathComponent:[theRamdisk lastPathComponent]];
 	NSString *decryptRam = [IPSW_TMP stringByAppendingPathComponent:@"decrypt.dmg"];
 	status = [nitoUtility decryptRamdisk:theRamdisk toPath:decryptRam withIV:ramdiskIV key:ramdiskKey]; //1
+	
+		//change up here, smarterize resize ramdisk
+	
+	
+	
 	if (status == 0)
 	{
 		NSLog(@"decrypted %@ successfully!", theRamdisk);
+		NSString *ramdiskSize = [self ramdiskResizeValue:decryptRam];
 		status = [nitoUtility resizeVolume:decryptRam toSize:ramdiskSize]; //2
 		
 		if (status == 0)
@@ -524,6 +530,111 @@
 	return -1;
 }
 
++ (NSDictionary *)fsImageInfo:(NSString *)inputFilesystem
+{
+	NSTask *irTask = [[NSTask alloc] init];
+	NSPipe *hdip = [[NSPipe alloc] init];
+    NSFileHandle *hdih = [hdip fileHandleForReading];
+	
+	NSMutableArray *irArgs = [[NSMutableArray alloc] init];
+	
+	[irArgs addObject:@"imageinfo"];
+	[irArgs addObject:@"-plist"];
+	
+	[irArgs addObject:inputFilesystem];
+	
+	
+	[irTask setLaunchPath:@"/usr/bin/hdiutil"];
+	
+	[irTask setArguments:irArgs];
+	
+	[irArgs release];
+	
+	[irTask setStandardError:hdip];
+	[irTask setStandardOutput:hdip];
+		//NSLog(@"hdiutil %@", [[irTask arguments] componentsJoinedByString:@" "]);
+	[irTask launch];
+	[irTask waitUntilExit];
+	
+	NSData *outData;
+	outData = [hdih readDataToEndOfFile];
+	NSString *the_error;
+	NSPropertyListFormat format;
+	id plist;
+	plist = [NSPropertyListSerialization propertyListFromData:outData
+											 mutabilityOption:NSPropertyListImmutable 
+													   format:&format
+											 errorDescription:&the_error];
+	
+	if(!plist)
+		
+	{
+		
+		NSLog(the_error);
+		
+		[the_error release];
+		
+	}
+		//NSLog(@"fsImageInfo: %@", plist);
+	
+	[irTask release];
+	irTask = nil;	
+	return plist;
+}
+
+- (NSString *)ramdiskResizeValue:(NSString *)inputRD //adds 3 megs to the ramdisk size
+{
+	NSDictionary *fsImageInfo = [nitoUtility fsImageInfo:inputRD];
+	
+	if (fsImageInfo == nil)
+	{
+		return [currentBundle ramdiskSize];
+		
+	}
+	
+	NSDictionary *sizeInfo = [fsImageInfo valueForKey:@"Size Information"];
+	float totalBytes = [[sizeInfo valueForKey:@"Total Bytes"] floatValue];
+	float totalEmptyBytes = [[sizeInfo valueForKey:@"Total Empty Bytes"] floatValue];
+	NSLog(@"bytes free: %.0f", totalEmptyBytes);
+	int finalTotal = totalBytes + 3145728;
+	NSLog(@"finalTotal to resize rd: %i", finalTotal);
+	return [NSString stringWithFormat:@"%i", finalTotal];
+
+}
+
+
+- (NSString *)filesystemResizeValue:(NSString *)inputFilesystem
+{
+	NSDictionary *fsImageInfo = [nitoUtility fsImageInfo:inputFilesystem];
+	if (fsImageInfo == nil)
+	{
+		return nil;
+		
+	}//divide by 1048576 to get approx MB value
+	
+	NSDictionary *sizeInfo = [fsImageInfo valueForKey:@"Size Information"];
+	float totalBytes = [[sizeInfo valueForKey:@"Total Bytes"] floatValue];
+	float totalEmptyBytes = [[sizeInfo valueForKey:@"Total Empty Bytes"] floatValue];
+	float freeMB = (totalEmptyBytes / 1048576);
+	NSLog(@"MB free: %f", freeMB);
+	
+	if (freeMB < 100) //check to see if there is more than 100 megs free
+	{
+			//we need to resize the filesystem!!
+			//approx 100 megs in bytes 104857600
+		
+		int finalTotal = totalBytes + 104857600;
+		
+		NSLog(@"finalTotal to resize fs: %i", finalTotal);
+		return [NSString stringWithFormat:@"%i", finalTotal];
+		
+		
+	}
+	return nil;
+	
+	
+}
+
 
 - (void)patchFilesystem:(NSString *)inputFilesystem
 {
@@ -573,8 +684,29 @@
 		if (convertImage =! nil)
 		{
 			NSLog(@"converted to read write successfully: %@", rwFS); 
+			
+			/*
+			 
+			 attempt undocumented/unsupported compat with other iOS devices. this will require resizing the filesystem if it doesn't have enough space free
+			 seems to be common.
+			 
+			 og line here was JUST 
+			 
+			 [self permissionedPatch:rwFS withOriginal:inputFilesystem];
+			 */
+			
+			NSString *resizeFSValue = [self filesystemResizeValue:decryptFS];
+			
+			if (resizeFSValue != nil)
+			{
+				NSLog(@"resizeFSValue: %@", resizeFSValue);
+				[nitoUtility resizeVolume:rwFS toSize:resizeFSValue];
+			}
+			
 				//need to take over with root access here for 3-8
+			
 			[self permissionedPatch:rwFS withOriginal:inputFilesystem];
+			
 		}
 	} 
 	

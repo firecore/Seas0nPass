@@ -53,6 +53,10 @@ enum{
 + (BOOL)unzipFile:(NSString *)theFile toPath:(NSString *)newPath;
 + (int)extractTar:(NSString *)inputTar toLocation:(NSString *)toLocation;
 
++ (NSDictionary *)fsImageInfo:(NSString *)inputFilesystem;
+- (NSString *)filesystemResizeValue:(NSString *)inputFilesystem;
+- (NSString *)ramdiskResizeValue:(NSString *)inputRD;
+
 + (void)unmountVolume:(NSString *)theVolume;
 + (NSString *)mountImage:(NSString *)irString;
 + (BOOL)checkFile:(NSString *)inputFile againstMD5:(NSString *)properMD5;

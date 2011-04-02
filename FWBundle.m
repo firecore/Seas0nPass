@@ -137,7 +137,7 @@
 - (NSString *)ramdiskSize
 {
 	if ([self is4point3])
-	{
+	{//23529796
 		return @"26067520";
 	} else {
 		return @"16541920";	
@@ -153,7 +153,99 @@
 		//make this smarter later, for now this will do
 }
 
+
+- (NSString *)deviceType
+{
+	NSString *firstLetter = [[self bundleName] substringToIndex:1];
+	if ([firstLetter isEqualToString:@"i"]) //ipad or iphone
+	{
+		NSString *clippedPath = [[self bundleName] substringToIndex:5];
+		if ([clippedPath isEqualToString:@"iPhone"])
+		{
+			return clippedPath;
+			
+		} else {
+			
+			return @"iPad";
+		}
+
+	}
+	
+	return @"AppleTV";
+	
+		//iPhone 5
+		//iPad 5
+		//AppleTV 7 
+}
+
+- (int)deviceInt
+{
+	if ([[self deviceType] isEqualToString:@"iPhone"])
+	{
+		return kiPhoneDevice;
+		
+	} else if ([[self deviceType] isEqualToString:@"iPad"]){
+		
+		return kiPadDevice;
+	
+	} else if (([[self deviceType] isEqualToString:@"AppleTV"])) {
+		
+		return kAppleTVDevice;
+	}
+
+	return kUnknownDevice;
+}
+
 - (BOOL)is4point3
+{
+	NSString *clippedPath = nil;
+	int deviceInteger = [self deviceInt];
+	
+	switch (deviceInteger) {
+	
+		
+		case kAppleTVDevice:
+		
+			clippedPath = [[self bundleName] substringWithRange:NSMakeRange(11, 3)];
+			break;
+	
+		case kiPadDevice:
+				//iPad1,1_4.3.1_8G4_Restore.ipsw
+			clippedPath = [[self bundleName] substringWithRange:NSMakeRange(8, 3)];
+			break;
+	
+		case kiPhoneDevice:
+			
+			clippedPath = [[self bundleName] substringWithRange:NSMakeRange(10, 3)];
+			
+			break;
+		
+	}
+
+	NSComparisonResult theResult = [clippedPath compare:@"4.3" options:NSNumericSearch];
+		//NSLog(@"theversion: %@  installed version %@", theVersion, installedVersion);
+	if ( theResult == NSOrderedDescending )
+	{
+				NSLog(@"%@ is greater than %@", clippedPath, @"4.3");
+		
+		return YES;
+		
+	} else if ( theResult == NSOrderedAscending ){
+		
+		NSLog(@"%@ is greater than %@", @"4.3", clippedPath);
+		return NO;
+		
+	} else if ( theResult == NSOrderedSame ) {
+		
+		NSLog(@"%@ is equal to %@", clippedPath, @"4.3");
+		return YES;
+	}
+	
+	return NO;
+}
+
+
+- (BOOL)is4point3old
 {
 	NSString *clippedPath = [[self bundleName] substringToIndex:14];
 	if ([clippedPath isEqualToString:@"AppleTV2,1_4.3"])

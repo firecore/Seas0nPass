@@ -25,6 +25,14 @@
 #define MOUNTED_RAMDISK @"RestoreRamdiskMountVolume"
 #define CORE_FILES @"Core Files Installation"
 
+enum  {
+	
+	kAppleTVDevice,
+	kiPadDevice,
+	kiPhoneDevice,
+	kUnknownDevice,
+};
+
 @interface FWBundle : NSBundle	{
 
 	NSString *fwRoot;
