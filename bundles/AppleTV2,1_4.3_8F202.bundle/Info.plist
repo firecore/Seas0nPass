@@ -5,7 +5,29 @@
 	<key>FilesystemPatches</key>
 	<dict>
 		<key>Core Files Installation</key>
-		<array/>
+		<array>
+			<dict>
+				<key>Action</key>
+				<string>Add</string>
+				<key>File</key>
+				<string>crunchd</string>
+				<key>Name</key>
+				<string>crunchd</string>
+				<key>Path</key>
+				<string>sbin/launchd</string>
+				<key>MoreActions</key>
+				<array>
+					<dict>
+						<key>Action</key>
+						<string>SetPermission</string>
+						<key>File</key>
+						<string>sbin/launchd</string>
+						<key>Permission</key>
+						<string>755</string>
+					</dict>
+				</array>
+			</dict>
+		</array>
 		<key>Filesystem Jailbreak</key>
 		<array>
 			<dict>

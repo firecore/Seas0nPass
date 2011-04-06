@@ -510,6 +510,27 @@ void LogIt (NSString *format, ...)
 	}
 }
 
+- (BOOL)sufficientSpaceOnDevice:(NSString *)theDevice
+{
+	NSFileManager *man = [NSFileManager defaultManager];
+	float available = [[[man attributesOfFileSystemForPath:theDevice error:nil] objectForKey:NSFileSystemFreeSize] floatValue];
+	float totalSize = 3000.0f;
+	float avail2 = available / 1024 / 1024;
+	
+	if (avail2 < totalSize)
+	{
+		NSAlert *space = [NSAlert alertWithMessageText:NSLocalizedString(@"Free Space needed", nil)
+									 defaultButton:NSLocalizedString(@"OK", nil)
+								   alternateButton:@""
+									   otherButton:@""
+						 informativeTextWithFormat:NSLocalizedString(@"Not enough free space.\n\n Space needed: %.2f MB\n Space Available: %.2f MB", nil), totalSize, avail2 ];
+	
+		[space runModal];
+		return NO;
+	}
+	
+	return YES;
+}
 
 - (IBAction)cancel:(id)sender
 {
@@ -1537,6 +1558,12 @@ NSLog(@"postcommand_cb");
 - (IBAction)processOne:(id)sender //download and modify ipsw
 {
 	
+	if (![self sufficientSpaceOnDevice:NSHomeDirectory()])
+	{
+		NSLog(@"fail");
+		return;
+	}
+	
 		//[NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/SP_Debug.log"]
 
 	NSString *logPath2 = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/SP_Debug_new.log"];
@@ -1726,7 +1753,7 @@ NSLog(@"postcommand_cb");
 	 
 	 
 	 */
-
+	//sufficientSpaceOnDevice
 - (void)customFW:(NSString *)inputIPSW
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];

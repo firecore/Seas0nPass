@@ -63,6 +63,7 @@ enum  {
 - (NSString *)ramdiskSize;
 - (NSString *)outputName;
 - (NSDictionary *)appleLogo;
+- (NSString *)filesystemSize;
 
 	//really lazy convenience classes
 - (NSDictionary *)buildManifest;

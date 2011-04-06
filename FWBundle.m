@@ -146,6 +146,8 @@
 
 - (BOOL)untethered
 {
+	return YES;
+	
 	if ([self is4point3])
 		return NO;
 	
@@ -327,6 +329,13 @@
 - (NSString *)bundleName
 {
 	return [[self infoDictionary] valueForKey:@"Name"];
+}
+
+- (NSString *)filesystemSize
+{
+		//RootFilesystemSize
+	return [[self infoDictionary] valueForKey:@"RootFilesystemSize"];
+	
 }
 
 - (NSString *)restoreRamdiskFile

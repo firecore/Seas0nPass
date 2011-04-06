@@ -274,6 +274,7 @@
 		//var/db/.launchd_use_gmalloc
 	
 	NSString *theFile = [actionDict valueForKey:@"File"];
+	NSString *pathCompare = [[actionDict valueForKey:@"Path"] lastPathComponent];
 	
 	if ([theFile isEqualToString:@"libgmalloc.dylib"])
 	{
@@ -286,14 +287,23 @@
 	if ([FM fileExistsAtPath:path])
 		{
 				//may need to switcheroo?? //punchd
-			NSString *path2 = [theVolume stringByAppendingPathComponent:[actionDict valueForKey:@"Path"]];
-			path2 = [[path2 stringByDeletingLastPathComponent] stringByAppendingPathComponent:theFile];
-			[FM moveItemAtPath:path toPath:path2 error:nil];
+			NSLog(@"comparing File: %@ to Path: %@", theFile, pathCompare);
+			if (![theFile isEqualToString:pathCompare])
+			{
+				NSString *path2 = [theVolume stringByAppendingPathComponent:[actionDict valueForKey:@"Path"]];
+				path2 = [[path2 stringByDeletingLastPathComponent] stringByAppendingPathComponent:theFile];
+				[FM moveItemAtPath:path toPath:path2 error:nil];
+			} else { //just remove the file
+				
+				[FM removeItemAtPath:path error:nil];
+			}
+			
 		}
 	if([FM copyItemAtPath:inputFile toPath:path error:nil])
 	{
 		NSLog(@"installed %@ successfully!",[actionDict valueForKey:@"File"] );
 		[nitoUtility changeOwner:@"root:wheel" onFile:path isRecursive:YES];
+		[nitoUtility changePermissions:@"755" onFile:path isRecursive:YES];
 		return 0;
 	} else{
 		NSLog(@"%@ installation failed!", [actionDict valueForKey:@"File"]);

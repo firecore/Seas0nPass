@@ -356,6 +356,19 @@
 	
 }
 
+- (void)editOptions:(NSString *)optionsFile withFSSize:(int)fsSize
+{
+
+	NSMutableDictionary *optionsDict = [[NSMutableDictionary alloc] initWithContentsOfFile:optionsFile];
+	[optionsDict setObject:[NSNumber numberWithBool:NO] forKey:@"UpdateBaseband"];
+	[optionsDict setObject:[NSNumber numberWithBool:YES] forKey:@"CreateFilesystemPartitions"];
+	[optionsDict setObject:[NSNumber numberWithInt:fsSize] forKey:@"SystemPartitionSize"];
+	[optionsDict writeToFile:optionsFile atomically:YES];
+	[optionsDict release];
+	
+	
+}
+
 - (int)performPatchesFromBundle:(FWBundle *)theBundle onRamdisk:(NSDictionary *)ramdiskDict
 {
 		//NSString *ramdiskSize = @"16541920";
@@ -416,12 +429,13 @@
 					
 				}
 				
-				/*
-				 
-				
-				status = [nitoUtility patchFile:[mountedImage stringByAppendingPathComponent:@"usr/sbin/asr"] withPatch:asrPath endMD5:@"072c70c08790a4d80f1683e60f4edb71"]; //4 5 6
-				[nitoUtility changePermissions:@"+x" onFile:[mountedImage stringByAppendingPathComponent:@"usr/sbin/asr"] isRecursive:YES]; //7
-				*/
+				NSString *optionPath = [mountedImage stringByAppendingPathComponent:@"usr/local/share/restore/options.plist"];
+				if ([[NSFileManager defaultManager] fileExistsAtPath:optionPath])
+				{
+					int fsSize = [[theBundle filesystemSize] intValue];
+					fsSize += 100;
+					[self editOptions:optionPath withFSSize:fsSize];
+				}
 				
 				if (status == 0)
 				{
