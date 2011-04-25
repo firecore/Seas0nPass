@@ -9,9 +9,7 @@
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		256AC3DA0F4B6AC300CF3369 /* tetherKitAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */; };
-		3200F1FA12D25226003EA66E /* libusb-1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3200F1F812D25226003EA66E /* libusb-1.0.0.dylib */; };
 		3200F1FB12D25226003EA66E /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3200F1F912D25226003EA66E /* libz.1.2.5.dylib */; };
-		3200F1FC12D25228003EA66E /* libusb-1.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3200F1F812D25226003EA66E /* libusb-1.0.0.dylib */; };
 		3200F1FD12D25228003EA66E /* libz.1.2.5.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3200F1F912D25226003EA66E /* libz.1.2.5.dylib */; };
 		3200F42A12D3F07F003EA66E /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 3200F42912D3F07F003EA66E /* Credits.rtf */; };
 		3200F4FA12D4DDEB003EA66E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3200F4F812D4DDEB003EA66E /* Localizable.strings */; };
@@ -19,6 +17,12 @@
 		3200F54B12D4E2B7003EA66E /* ipsw.png in Resources */ = {isa = PBXBuildFile; fileRef = 3200F54A12D4E2B7003EA66E /* ipsw.png */; };
 		3204513C130DE20E0057C8B0 /* debs in Resources */ = {isa = PBXBuildFile; fileRef = 32045133130DE20E0057C8B0 /* debs */; };
 		324FF2EC12F8CC690039310E /* NSApplication+SystemVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 324FF2EB12F8CC690039310E /* NSApplication+SystemVersion.m */; };
+		3264FF62135910C600F81C5A /* libusb-1.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3264FF61135910C600F81C5A /* libusb-1.0.a */; };
+		32704B0513593DBD00EE420C /* libusb-1.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3264FF61135910C600F81C5A /* libusb-1.0.a */; };
+		32704B0613593DC100EE420C /* libsyringe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3272047E12C9AD320054F4B0 /* libsyringe.a */; };
+		32704B471359410400EE420C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32704B461359410400EE420C /* IOKit.framework */; };
+		32704B4A1359410D00EE420C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32704B461359410400EE420C /* IOKit.framework */; };
+		32704BFD1359414300EE420C /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 32720A0B12CAD3780054F4B0 /* libstdc++.dylib */; };
 		3272047F12C9AD320054F4B0 /* libsyringe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3272047E12C9AD320054F4B0 /* libsyringe.a */; };
 		327205DE12C9B5110054F4B0 /* ripURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 327205DD12C9B5110054F4B0 /* ripURL.m */; };
 		327206AA12C9C32A0054F4B0 /* nitoUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */; };
@@ -109,7 +113,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				32DF57C612DD6E86002916D5 /* Sparkle.framework in CopyFiles */,
-				3200F1FC12D25228003EA66E /* libusb-1.0.0.dylib in CopyFiles */,
 				3200F1FD12D25228003EA66E /* libz.1.2.5.dylib in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -136,6 +139,8 @@
 		32045133130DE20E0057C8B0 /* debs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = debs; sourceTree = "<group>"; };
 		324FF2EA12F8CC690039310E /* NSApplication+SystemVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSApplication+SystemVersion.h"; sourceTree = "<group>"; };
 		324FF2EB12F8CC690039310E /* NSApplication+SystemVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSApplication+SystemVersion.m"; sourceTree = "<group>"; };
+		3264FF61135910C600F81C5A /* libusb-1.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libusb-1.0.a"; sourceTree = "<group>"; };
+		32704B461359410400EE420C /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		3272047E12C9AD320054F4B0 /* libsyringe.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsyringe.a; sourceTree = "<group>"; };
 		327204A612C9AEAD0054F4B0 /* syringe.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = syringe.xcodeproj; path = "../Chronic-Dev-syringe/_ide/syringe.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		327204C512C9AFBB0054F4B0 /* utilities.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = utilities.xcodeproj; path = "../Chronic-Dev-syringe/_ide/utilities.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -214,6 +219,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32704BFD1359414300EE420C /* libstdc++.dylib in Frameworks */,
+				32704B4A1359410D00EE420C /* IOKit.framework in Frameworks */,
+				32704B0613593DC100EE420C /* libsyringe.a in Frameworks */,
+				32704B0513593DBD00EE420C /* libusb-1.0.a in Frameworks */,
 				32720E8F12CC53F70054F4B0 /* Security.framework in Frameworks */,
 				32720E9112CC53F70054F4B0 /* SecurityFoundation.framework in Frameworks */,
 			);
@@ -228,10 +237,11 @@
 				32720A0C12CAD3780054F4B0 /* libstdc++.dylib in Frameworks */,
 				3272106E12CC78000054F4B0 /* Security.framework in Frameworks */,
 				3272106F12CC78000054F4B0 /* SecurityFoundation.framework in Frameworks */,
-				3200F1FA12D25226003EA66E /* libusb-1.0.0.dylib in Frameworks */,
 				3200F1FB12D25226003EA66E /* libz.1.2.5.dylib in Frameworks */,
 				32DF57BD12DD6E74002916D5 /* Sparkle.framework in Frameworks */,
 				32DF770312E2AB87002916D5 /* Carbon.framework in Frameworks */,
+				3264FF62135910C600F81C5A /* libusb-1.0.a in Frameworks */,
+				32704B471359410400EE420C /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,6 +314,7 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				32704B461359410400EE420C /* IOKit.framework */,
 			);
 			name = tetherKit;
 			sourceTree = "<group>";
@@ -354,6 +365,7 @@
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 				32720A0B12CAD3780054F4B0 /* libstdc++.dylib */,
 				32DF770212E2AB87002916D5 /* Carbon.framework */,
+				3264FF61135910C600F81C5A /* libusb-1.0.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -689,6 +701,11 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+					"\"$(SDKROOT)/usr/lib/gcc/i686-apple-darwin10/4.0.1\"",
+				);
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
@@ -704,6 +721,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -711,6 +729,11 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				INSTALL_PATH = /usr/local/bin;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+					"\"$(SDKROOT)/usr/lib/gcc/i686-apple-darwin10/4.0.1\"",
+				);
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
@@ -810,7 +833,7 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;

@@ -28,12 +28,17 @@ int main (int argc, const char * argv[]) {
 		NSString *option = [NSString stringWithUTF8String:argv[i]];
 		NSString *value = [NSString stringWithUTF8String:argv[i+1]]; //plist location
 		pwnHelperClass *phc = [[pwnHelperClass alloc] init];
+			//[phc sendCommand:value];
+		
 		NSDictionary *pDict = [NSDictionary dictionaryWithContentsOfFile:value];
 		FWBundle *cBundle = [FWBundle bundleWithPath:[pDict valueForKey:@"bundle"]];
 		[phc setCurrentBundle:cBundle];
 		[phc setProcessDict:pDict];
 		[phc setRunPath:path];
 		int returnStatus = [phc patchDmg:[pDict valueForKey:@"patch"]];
+		
+			//int returnStatus = 0;
+		
 		[pool release];
 		return returnStatus;
 	}

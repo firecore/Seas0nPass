@@ -8,6 +8,7 @@
 
 #import "pwnHelperClass.h"
 #import "nitoUtility.h"
+#import "include/libpois0n.h"
 
 @implementation pwnHelperClass
 
@@ -265,6 +266,62 @@
 	NSString *inputFile = [theVolume stringByAppendingPathComponent:[actionDict valueForKey:@"File"]];
 	NSString *patch = [self.currentBundle.bundlePath stringByAppendingPathComponent:[actionDict valueForKey:@"Patch"]];
 	return [nitoUtility patchFile:inputFile withPatch:patch endMD5:nil];
+	
+}
+
+- (void)sendCommand:(id)theKbag
+{
+	
+		//NSString *logPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/SP_Keys.log"];
+		//NSString *duplicate = [[logPath stringByDeletingPathExtension] stringByAppendingPathExtension:@"txt"];
+		//[FM removeFileAtPath:logPath handler:nil];
+		//FILE* file = freopen([logPath fileSystemRepresentation], "w+", stdout);
+	
+	NSString *command = [NSString stringWithFormat:@"go aes dec %@", theKbag];
+		//NSLog(@"command: %@", command);
+	int quit = 0;
+	
+	irecv_error_t error = 0;
+	irecv_init();
+	irecv_client_t client = NULL;
+	if (irecv_open(&client) != IRECV_E_SUCCESS)
+	{
+		NSLog(@"fail!");
+		return;
+		
+	}
+	
+		//irecv_set_debug_level(20);
+		//irecv_set_interface(client, 0, 0);
+	irecv_set_configuration(client, 1);
+	
+		//irecv_event_subscribe(client, IRECV_PRECOMMAND, &precommand_cb, NULL);
+		//irecv_event_subscribe(client, IRECV_POSTCOMMAND, &postcommand_cb, NULL);
+	while (!quit) {
+		irecv_set_interface(client, 0, 0);
+		irecv_set_interface(client, 1, 1);
+		error = irecv_receive(client);
+		
+			//irecv_set_interface(client, 1, 0);	
+		error = irecv_send_command(client, [command UTF8String]);
+		error = irecv_receive(client);
+			//debug("%s\n", irecv_strerror(error));
+		quit = 1;
+	}
+	irecv_close(client);
+	irecv_exit();
+	
+	/*
+		fclose(file);
+	
+	[FM copyItemAtPath:logPath toPath:duplicate error:nil];
+	NSString *me = [NSString stringWithContentsOfFile:duplicate];
+	NSLog(@"ME: %@", me);
+	*/
+	
+	
+	
+	
 	
 }
 
