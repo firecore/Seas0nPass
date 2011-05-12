@@ -12,11 +12,11 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="764"/>
-			<integer value="491"/>
-			<integer value="584"/>
 			<integer value="557"/>
+			<integer value="491"/>
+			<integer value="764"/>
 			<integer value="630"/>
+			<integer value="584"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1720,7 +1720,7 @@
 						</object>
 						<object class="NSButton" id="1996">
 							<reference key="NSNextResponder" ref="470046175"/>
-							<int key="NSvFlags">268</int>
+							<int key="NSvFlags">-2147483380</int>
 							<string key="NSFrame">{{54, 75}, {208, 18}}</string>
 							<reference key="NSSuperview" ref="470046175"/>
 							<bool key="NSEnabled">YES</bool>
@@ -3029,11 +3029,17 @@
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSArray" key="dict.sortedKeys">
 									<bool key="EncodedWithXMLCoder">YES</bool>
+									<string>NSMultipleValuesPlaceholder</string>
+									<string>NSNoSelectionPlaceholder</string>
+									<string>NSNotApplicablePlaceholder</string>
 									<string>NSNullPlaceholder</string>
 									<string>NSValidatesImmediately</string>
 								</object>
 								<object class="NSMutableArray" key="dict.values">
 									<bool key="EncodedWithXMLCoder">YES</bool>
+									<integer value="1"/>
+									<integer value="1"/>
+									<integer value="1"/>
 									<integer value="1"/>
 									<boolean value="YES"/>
 								</object>
@@ -3041,7 +3047,7 @@
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">817</int>
+					<int key="connectionID">820</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -5326,7 +5332,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">817</int>
+			<int key="maxID">820</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

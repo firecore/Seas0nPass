@@ -23,13 +23,13 @@
 #import "include/libpois0n.h"
 
 #define kIPSWName @"AppleTV2,1_4.2.1_8C154_Restore.ipsw"
-#define kIPSWDownloadLocation @"http://appldnld.apple.com/AppleTV/041-0574.20110322.Dcfr5/AppleTV2,1_4.3_8F202_Restore.ipsw"
+#define kIPSWDownloadLocation @"http://appldnld.apple.com/AppleTV/041-0596.20110511.Zz7mC/AppleTV2,1_4.3_8F305_Restore.ipsw"
 #define DL [tetherKitAppDelegate downloadLocation]
 #define PTMD5 @"e8f4d590c8fe62386844d6a2248ae609"
-#define IPSWMD5 @"893cdf844a49ae2f7368e781b1ccf6d1"
+#define IPSWMD5 @"4726cfb30f322f8cdbb5f20df7ca836f"
 #define KCACHE @"kernelcache.release.k66"
 #define iBSSDFU @"iBSS.k66ap.RELEASE.dfu"
-#define HCIPSW [DL stringByAppendingPathComponent:@"AppleTV2,1_4.3_8F202_Restore.ipsw"]
+#define HCIPSW [DL stringByAppendingPathComponent:@"AppleTV2,1_4.3_8F305_Restore.ipsw"]
 #define CUSTOM_RESTORED @"AppleTV2,1_4.2.1_8C154_Custom_Restore.ipsw"
 #define CUSTOM_RESTORE @"AppleTV_SeasonPass.ipsw"
 #define BUNDLE_LOCATION [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"bundles"]
@@ -434,7 +434,7 @@ void LogIt (NSString *format, ...)
 
 + (NSString *)ipswFile
 {
-	return [DL stringByAppendingPathComponent:@"AppleTV2,1_4.3_8F202_Restore.ipsw"];
+	return [DL stringByAppendingPathComponent:@"AppleTV2,1_4.3_8F305_Restore.ipsw"];
 }
 	//originally we downloaded and patched pwnagetool rather than making a custom ipsw, some deprecated code still in here commented out.
 
@@ -1304,7 +1304,7 @@ NSLog(@"postcommand_cb");
 
 	if ([lastUsedbundle length] < 1)
 	{
-		lastUsedbundle = @"AppleTV2,1_4.3_8F202";
+		lastUsedbundle = @"AppleTV2,1_4.3_8F305";
 		[[NSUserDefaults standardUserDefaults] setObject:lastUsedbundle forKey:@"lastUsedBundle"];
 	}
 	self.currentBundle = [FWBundle bundleWithName:LAST_BUNDLE];
@@ -1382,13 +1382,18 @@ NSLog(@"postcommand_cb");
 
 - (void)createSupportBundleWithCache:(NSString *)theCache iBSS:(NSString *)iBSS
 {
+	NSLog(@"createSupportBundleWithCache: %@ iBSS: %@", theCache, iBSS);
 	NSString *bundleOut = self.currentBundle.localBundlePath;
-	[FM createDirectoryAtPath:bundleOut withIntermediateDirectories:YES attributes:nil error:nil];
+	NSLog(@"localBundlePath: %@", bundleOut);
+	if ([FM createDirectoryAtPath:bundleOut withIntermediateDirectories:YES attributes:nil error:nil] == FALSE)
+	{
+		NSLog(@"failed to create directory: %@", bundleOut);
+	}
 	NSDictionary *buildManifest = [NSDictionary dictionaryWithObjectsAndKeys:[theCache lastPathComponent], @"KernelCache", [iBSS lastPathComponent], @"iBSS", nil];
 	[buildManifest writeToFile:[bundleOut stringByAppendingPathComponent:@"BuildManifest.plist"] atomically:YES];
-		//NSLog(@"copy: %@ to %@", theCache, [self.currentBundle localKernel]);
+		NSLog(@"copy: %@ to %@", theCache, [self.currentBundle localKernel]);
 	 [FM copyItemAtPath:theCache toPath:self.currentBundle.localKernel error:nil];
-		//NSLog(@"copy: %@ to %@", iBSS, self.currentBundle.localiBSS);
+		NSLog(@"copy: %@ to %@", iBSS, self.currentBundle.localiBSS);
 	 [FM copyItemAtPath:iBSS toPath:self.currentBundle.localiBSS error:nil];
 	
 }
@@ -1527,8 +1532,10 @@ NSLog(@"postcommand_cb");
 
 - (void)killiTunes
 {
-	if (KILL_ITUNES == NO)
-	return;
+	//if (KILL_ITUNES == NO)
+//	return;
+//	
+//	NSLog(@"kill itunes");
 	
 	NSTask *killTask = [[NSTask alloc] init];
 	[killTask setLaunchPath:@"/usr/bin/killall"];
@@ -1739,7 +1746,7 @@ NSLog(@"postcommand_cb");
 	[FM removeFileAtPath:logPath2 handler:nil];
 		//current bundle may be set by default, but we never want to assume the default processOne ipsw to be anything but the latest- which is still hardcoded to 4.2.1.
 		//self.currentBundle = LAST_BUNDLE;
-	self.currentBundle = [FWBundle bundleWithName:@"AppleTV2,1_4.3_8F202"];
+	self.currentBundle = [FWBundle bundleWithName:@"AppleTV2,1_4.3_8F305"];
 	if ([self optionKeyIsDown])
 	{
 		NSOpenPanel *op = [NSOpenPanel openPanel];
