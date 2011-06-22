@@ -1276,6 +1276,15 @@ NSLog(@"postcommand_cb");
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	
+	[self iTunesIsTenFive];
+	
+	if ([self homeWritable])
+	{
+		NSLog(@"can write to home!");
+	} else{
+		
+		NSLog(@"cant write to home!!");
+	}
 	
 		//killiTunes
 	if ([self optionKeyIsDown])
@@ -1445,38 +1454,72 @@ NSLog(@"postcommand_cb");
 	
 	[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:NSLocalizedString(@"Creating IPSW...", @"Creating IPSW...") waitUntilDone:NO];
 	
-	[nitoUtility createIPSWToFile:ipswPath];
+	int ipswStatus = [nitoUtility createIPSWToFile:ipswPath];
+	
+	NSLog(@"ipsw creation status: %i", ipswStatus);
 	
 		//FIXME: COMMENT BACK IN!!
 	
 		[FM removeFileAtPath:TMP_ROOT handler:nil];
 	
-	[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:NSLocalizedString(@"Custom IPSW created successfully!" , @"Custom IPSW created successfully!" ) waitUntilDone:NO];
 	
-	[self hideProgress];
-	[self killiTunes];
-	[self enterDFU];
+		// if we failed, say so
 	
-	if ([self scriptingEnabled])
+	if (ipswStatus == 0)
 	{
-		[self setDownloadText:NSLocalizedString(@"Restoring in iTunes...",@"Restoring in iTunes...") ];
-		if ([self loadItunesWithIPSW:ipswPath] == FALSE)
+		NSLog(@"ipsw created successfully!");
+		
+		[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:NSLocalizedString(@"Custom IPSW created successfully!" , @"Custom IPSW created successfully!" ) waitUntilDone:NO];
+		
+		[self hideProgress];
+		[self killiTunes];
+		[self enterDFU];
+		
+		if ([self scriptingEnabled])
 		{
-			[self setDownloadText:NSLocalizedString(@"iTunes restore script failed!, selecting IPSW in Finder...", @"iTunes restore script failed!, selecting IPSW in Finder...")];
+			[self setDownloadText:NSLocalizedString(@"Restoring in iTunes...",@"Restoring in iTunes...") ];
+			if ([self loadItunesWithIPSW:ipswPath] == FALSE)
+			{
+				[self setDownloadText:NSLocalizedString(@"iTunes restore script failed!, selecting IPSW in Finder...", @"iTunes restore script failed!, selecting IPSW in Finder...")];
+				[[NSWorkspace sharedWorkspace] selectFile:ipswPath inFileViewerRootedAtPath:NSHomeDirectory()];
+				[cancelButton setTitle:@"Done"];
+			} else {
+				[self setDownloadText:NSLocalizedString(@"iTunes restore script successful!", @"iTunes restore script successful!")];
+				[cancelButton setTitle:@"Done"];
+				[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
+			}
+		} else {
 			[[NSWorkspace sharedWorkspace] selectFile:ipswPath inFileViewerRootedAtPath:NSHomeDirectory()];
 			[cancelButton setTitle:@"Done"];
-		} else {
-			[self setDownloadText:NSLocalizedString(@"iTunes restore script successful!", @"iTunes restore script successful!")];
-			[cancelButton setTitle:@"Done"];
-			[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
 		}
-	} else {
-		[[NSWorkspace sharedWorkspace] selectFile:ipswPath inFileViewerRootedAtPath:NSHomeDirectory()];
 		[cancelButton setTitle:@"Done"];
+		[[NSUserDefaults standardUserDefaults] setObject:self.currentBundle.bundleName forKey:@"lastUsedBundle"];
+		
+	} else {
+		
+		[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:NSLocalizedString(@"Custom IPSW creation failed!" , @"Custom IPSW creation failed!" ) waitUntilDone:NO];
+		[self hideProgress];
+			[cancelButton setTitle:@"Failed"];
+		NSLog(@"ipsw creation failed!!");
+		
 	}
-	[cancelButton setTitle:@"Done"];
-	[[NSUserDefaults standardUserDefaults] setObject:self.currentBundle.bundleName forKey:@"lastUsedBundle"];
+	
+	
+	
+	
+	
 	[pool release];
+}
+
+- (BOOL)homeWritable
+{
+	
+	NSFileManager *man = [NSFileManager defaultManager];
+	NSDictionary *attrs = [man attributesOfItemAtPath:NSHomeDirectory() error:nil];
+		//NSLog(@"attrs: %@", attrs);
+	
+	return [man isWritableFileAtPath:NSHomeDirectory()];
+	
 }
 
 - (void)threadedDFURestore
@@ -1581,6 +1624,18 @@ NSLog(@"postcommand_cb");
 	
 }
 
+- (BOOL)iTunesIsTenFive
+{
+	NSBundle *itunesBundle = [NSBundle bundleWithPath:@"/Applications/iTunes.app"];
+	NSDictionary *itunesDict = [itunesBundle infoDictionary];
+	if ([[itunesDict valueForKey:@"CFBundleShortVersionString"] isEqualToString:@"10.5"])
+	{
+		NSLog(@"10.5 iTunes here!");
+		return YES;
+	}
+	return NO;
+}
+
 - (BOOL)loadItunesWithIPSW:(NSString *)ipsw
 {
 	NSDictionary *theError = nil;
@@ -1613,10 +1668,14 @@ NSLog(@"postcommand_cb");
 	 click button 2 of window 1
 	 
 	 
+	 
 	 end tell
 	 end tell
 	 
 	 */
+
+		
+	
 	NSString *ipswString = [NSString stringWithFormat:@"set value of text field 1 of sheet 1 of window 1 to \"%@\"\n", ipsw];
 	
 	NSMutableString *asString = [[NSMutableString alloc] init];
@@ -1639,7 +1698,15 @@ NSLog(@"postcommand_cb");
 	[asString appendString:@"tell application \"System Events\"\n"];
 	[asString appendString:@"tell Process \"iTunes\"\n"];
 	[asString appendString:@"key down option\n"];
-	[asString appendString:@"click button \"Restore\" of scroll area 1 of tab group 1 of window 1\n"];
+	if ([self iTunesIsTenFive] == TRUE)
+	{
+		[asString appendString:@"click button \"Restore\"  of scroll area 3 of window 1\n"];
+		
+	} else {
+		
+		[asString appendString:@"click button \"Restore\" of scroll area 1 of tab group 1 of window 1\n"];
+	}
+	 //itunes beta = @"click button \"Restore\"  of scroll area 3 of window 1\n" 
 	[asString appendString:@"key up option\n"];
 	[asString appendString:@"end tell\n"];
 	[asString appendString:@"end tell\n"];

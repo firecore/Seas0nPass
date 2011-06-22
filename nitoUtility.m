@@ -1484,18 +1484,23 @@
 	
 }
 
-+ (void)createIPSWToFile:(NSString *)theName
++ (int)createIPSWToFile:(NSString *)theName
 {
+	NSLog(@"createIPSWToFile: %@", theName);
 	NSTask *zipTask = [[NSTask alloc] init];
 	[zipTask setLaunchPath:@"/usr/bin/zip"];
 	[zipTask setCurrentDirectoryPath:IPSW_TMP];
 	[zipTask setArguments:[NSArray arrayWithObjects:@"-r", theName, @".", @"-x", @".DS_Store", nil]];
-	[zipTask setStandardOutput:NULLOUT];
-	[zipTask setStandardError:NULLOUT];
+		//[zipTask setStandardOutput:NULLOUT];
+		//[zipTask setStandardError:NULLOUT];
 	[zipTask launch];
 	[zipTask waitUntilExit];
+	int termStatus = [zipTask terminationStatus];
 	[zipTask release];
 	zipTask = nil;
+	
+	return termStatus;
+	
 }
 
 + (BOOL)unzipFile:(NSString *)theFile toPath:(NSString *)newPath

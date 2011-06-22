@@ -398,7 +398,6 @@
 
 - (int)patchDmg:(NSString *)theDMG
 {
-	
 	/*
 	 
 	 temporary
@@ -462,6 +461,10 @@
 	NSString *md5 = [patchDict valueForKey:@"md5"];
 	[nitoUtility patchFile:inputFile withPatch:thePatch endMD5:md5];
 	*/
+	
+
+	
+	
 	[self changeStatus:@"Installing Software..."];
 	NSLog(@"installing Software...");
 	[self installCydia:[[self processDict] valueForKey:@"cydia"] withRoot:mountImage];
@@ -503,6 +506,8 @@
 		
 		
 	}
+	
+	
 	
 	
 	NSLog(@"Unmounting Image...");

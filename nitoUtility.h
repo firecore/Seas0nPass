@@ -80,7 +80,7 @@ enum{
 + (void)createTempSetup;
 - (int)patchRamdisk:(NSString *)theRamdisk;
 + (int)runScript:(NSString *)theScript withInput:(NSString *)theInput;
-+ (void)createIPSWToFile:(NSString *)theName;
++ (int)createIPSWToFile:(NSString *)theName;
 +(int)decryptedPatchFromData:(NSDictionary *)patchData atRoot:(NSString *)rootPath fromBundle:(NSString *)bundlePath;
 - (int)performPatchesFromBundle:(FWBundle *)theBundle onRamdisk:(NSDictionary *)ramdiskDict;
 +(int)decryptImage:(NSString *)theImage toPath:(NSString *)finalPath withIV:(NSString *)iv key:(NSString *)key;

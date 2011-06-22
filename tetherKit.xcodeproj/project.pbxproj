@@ -310,6 +310,7 @@
 				327204C512C9AFBB0054F4B0 /* utilities.xcodeproj */,
 				327204A612C9AEAD0054F4B0 /* syringe.xcodeproj */,
 				32720E8512CC53D50054F4B0 /* Helper */,
+				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -470,7 +471,6 @@
 		32720E8512CC53D50054F4B0 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
-				080E96DDFE201D6D7F000001 /* Classes */,
 				32720E8912CC53E20054F4B0 /* pwnHelper.m */,
 				32720E8A12CC53E20054F4B0 /* pwnHelperClass.h */,
 				32720E8B12CC53E20054F4B0 /* pwnHelperClass.m */,
