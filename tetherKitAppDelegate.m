@@ -29,6 +29,7 @@
 #define IPSWMD5 @"4726cfb30f322f8cdbb5f20df7ca836f"
 #define KCACHE @"kernelcache.release.k66"
 #define iBSSDFU @"iBSS.k66ap.RELEASE.dfu"
+#define iBECDFU @"iBEC.k66ap.RELEASE.dfu"
 #define HCIPSW [DL stringByAppendingPathComponent:@"AppleTV2,1_4.3_8F305_Restore.ipsw"]
 #define CUSTOM_RESTORED @"AppleTV2,1_4.2.1_8C154_Custom_Restore.ipsw"
 #define CUSTOM_RESTORE @"AppleTV_SeasonPass.ipsw"
@@ -128,6 +129,14 @@ void print_progress(double progress, void* data) {
 - (BOOL) optionKeyIsDown
 {
 	return (GetCurrentKeyModifiers() & optionKey) != 0;
+}
+
+- (char *)iBEC
+{
+	NSString *iBEC = [[self currentBundle] localiBEC];
+		//NSLog(@"self current bundle: %@", self.currentBundle);
+		//NSLog(@"iBEC: %@", iBEC);
+	return [iBEC UTF8String];
 }
 
 - (char *)iBSS
@@ -650,7 +659,93 @@ void print_progress_bar(double progress) {
 	return 0;
 }
 
+
+- (int)enterDFUNEW
+{
+	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	NSLog(@"iSDFUNEW");
+	[self killiTunes];
+	self.poisoning = TRUE;
+	[self showProgress];
+		//[cancelButton setEnabled:TRUE];
+	int result = 0;
+	irecv_error_t ir_error = IRECV_E_SUCCESS;
+	
+		//int index;
+	const char *ibssFile = [self iBSS];
+	const char *ibecFile = [self iBEC];
+	pois0n_init();
+	pois0n_set_callback(&print_progress, self);
+		//printf("Waiting for device to enter DFU mode\n");
+	[self setDownloadText:NSLocalizedString(@"Waiting for device to enter DFU mode...", @"Waiting for device to enter DFU mode...")];
+	[self setInstructionText:NSLocalizedString(@"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.", @"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.")];
+		//NSImage *theImage = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tether" ofType:@"png"]];
+		//NSImage *theImage = [NSImage imageNamed:@"tether"];
+	[instructionImage setImage:[self imageForMode:kSPATVRestoreImage]];
+		//[theImage release];
+	while(pois0n_is_ready()) {
+		sleep(1);
+	}
+	
+	[self setDownloadText:NSLocalizedString(@"Found device in DFU mode", @"Found device in DFU mode")];
+	[self setInstructionText:@""];
+	
+	result = pois0n_is_compatible();
+	if (result < 0) {
+		[self setDownloadText:NSLocalizedString(@"Your device is not compatible with this exploit!", @"Your device is not compatible with this exploit!")];
+		return result;
+	}
+	
+	result = pois0n_injectonly();
+	if (result < 0) {
+		[self setDownloadText:NSLocalizedString(@"Exploit injection failed!", @"Exploit injection failed!")];
+		
+		return result;
+	}
+	
+	if (ibssFile != NULL) {
+		[self setDownloadText:[NSString stringWithFormat:@"Uploading %@ to device...", iBSSDFU]];
+		ir_error = irecv_send_file(client, ibssFile, 1);
+		if(ir_error != IRECV_E_SUCCESS) {
+			[self setDownloadText:NSLocalizedString(@"Unable to upload iBSS!", @"Unable to upload iBSS!")];
+			debug("%s\n", irecv_strerror(ir_error));
+			return -1;
+		}
+	} else {
+		return 0;
+	}
+	client = irecv_reconnect(client, 10);
+	
+	if (ibecFile != NULL) {
+		[self setDownloadText:[NSString stringWithFormat:@"Uploading %@ to device...", iBECDFU]];
+		ir_error = irecv_send_file(client, ibecFile, 1);
+		if(ir_error != IRECV_E_SUCCESS) {
+			[self setDownloadText:NSLocalizedString(@"Unable to upload iBEC!", @"Unable to upload iBEC!")];
+			debug("%s\n", irecv_strerror(ir_error));
+			return -1;
+		}
+	} else {
+		return 0;
+	}
+	client = irecv_reconnect(client, 10);
+	
+	
+	
+	[self setDownloadText:NSLocalizedString(@"DFU mode entered successfully!", @"DFU mode entered successfully!")];
+	
+	
+	
+	[self hideProgress];
+	pois0n_exit();
+	self.poisoning = FALSE;
+	[pool release];
+	return 0;
+	
+}
+
 	//this code is almost identical to the tetheredboot code
+
 
 - (int)enterDFU
 {
@@ -994,7 +1089,146 @@ NSLog(@"postcommand_cb");
 }
 
 
+- (int)tetheredBootNew
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	[self killiTunes];
+	self.poisoning = TRUE;
+	[self showProgress];
+	int result = 0;
+	irecv_error_t ir_error = IRECV_E_SUCCESS;
+	
+		//int index;
+	const char 
+	*ibssFile = [self iBSS],
+	*kernelcacheFile = [self kernelcache],
+	*ramdiskFile = NULL,
+	*bgcolor = NULL,
+	*bootlogo = NULL,
+	*ibecFile = [self iBEC];
+	pois0n_init();
+	pois0n_set_callback(&print_progress, self);
+		//printf("Waiting for device to enter DFU mode\n");
+	[self setDownloadText:NSLocalizedString(@"Waiting for device to enter DFU mode...", @"Waiting for device to enter DFU mode...")];
+	[self setInstructionText:NSLocalizedString(@"Connect USB, POWER then press and hold MENU and PLAY/PAUSE for 7 seconds", @"Connect USB, POWER then press and hold MENU and PLAY/PAUSE for 7 seconds")];
+	[instructionImage setImage:[self imageForMode:kSPATVTetheredRemoteImage]];
+	while(pois0n_is_ready()) {
+		sleep(1);
+	}
+		//irecv_set_debug_level(3);
+	[self setDownloadText:NSLocalizedString(@"Found device in DFU mode", @"Found device in DFU mode")];
+	[self setInstructionText:@""];
+	result = pois0n_is_compatible();
+	if (result < 0) {
+		[self setDownloadText:NSLocalizedString(@"Your device is not compatible with this exploit!", @"Your device is not compatible with this exploit!")];
+		[self hideProgress];
+		pois0n_exit();
+		self.poisoning = FALSE;
+		[pool release];
+		return result;
+	}
+		//irecv_send_command(client, "go kernel bootargs -v");
+	result = pois0n_injectonly();
+	if (result < 0) {
+		[self setDownloadText:NSLocalizedString(@"Exploit injection failed!",@"Exploit injection failed!" )];
+		[self hideProgress];
+		pois0n_exit();
+		self.poisoning = FALSE;
+		[pool release];
+		return result;
+	}
+	
+	if (ibssFile != NULL) {
+		[self setDownloadText:[NSString stringWithFormat:NSLocalizedString(@"Uploading %@ to device...",@"Uploading %@ to device..."), iBSSDFU]];
+		ir_error = irecv_send_file(client, ibssFile, 1);
+		if(ir_error != IRECV_E_SUCCESS) {
+			[self setDownloadText:NSLocalizedString(@"Unable to upload iBSS!", @"Unable to upload iBSS!")];
+			debug("%s\n", irecv_strerror(ir_error));
+			[self hideProgress];
+			pois0n_exit();
+			self.poisoning = FALSE;
+			[pool release];
+			return -1;
+		}
+	} else {
+		return 0;
+	}
+	
+	NSLog(@"iBSS upload successful! Reconnecting in 10 seconds...");
+
+	[self setDownloadText:NSLocalizedString(@"iBSS upload successful! Reconnecting in 10 seconds...", @"iBSS upload successful! Reconnecting in 10 seconds...")];  
+	
+		sleep(10);
+	
+	client = irecv_reconnect(client, 10);
+	
+	if (ibecFile != NULL) {
+		[self setDownloadText:[NSString stringWithFormat:NSLocalizedString(@"Uploading %@ to device...",@"Uploading %@ to device..."), iBECDFU]];
+		ir_error = irecv_send_file(client, ibecFile, 1);
+		if(ir_error != IRECV_E_SUCCESS) {
+			[self setDownloadText:NSLocalizedString(@"Unable to upload iBEC!", @"Unable to upload iBEC!")];
+			debug("%s\n", irecv_strerror(ir_error));
+			[self hideProgress];
+			pois0n_exit();
+			self.poisoning = FALSE;
+			[pool release];
+			return -1;
+		}
+	} else {
+		return 0;
+	}
+	[self setDownloadText:NSLocalizedString(@"iBEC upload successful! Reconnecting in 10 seconds...", @"iBEC upload successful! Reconnecting in 10 seconds...")];  
+	
+	NSLog(@"iBEC upload successful! Reconnecting in 10 seconds...");
+	
+	NSLog(@"resetting irecovery device");
+	irecv_reset(client);
+		//irecv_reset_counters(client);
+	sleep(10);
+	NSLog(@"reconnecting irecovery device");
+	client = irecv_reconnect(client, 10);
+	NSLog(@"changing interface?");
+		irecv_set_interface(client, 0, 0);
+		irecv_set_interface(client, 1, 1);
+	
+	NSLog(@"sending kernelcache");
+
+	if (kernelcacheFile != NULL) {
+		[self setDownloadText:[NSString stringWithFormat:NSLocalizedString(@"Uploading %@ to device...", @"Uploading %@ to device..."), KCACHE]];
+		ir_error = irecv_send_file(client, kernelcacheFile, 1);
+		if(ir_error != IRECV_E_SUCCESS) {
+			error("Unable to upload kernelcache\n");
+			debug("%s\n", irecv_strerror(ir_error));
+			[self hideProgress];
+			pois0n_exit();
+			self.poisoning = FALSE;
+			[pool release];
+			return -1;
+		}
+		
+		NSLog(@"bootx");
+		
+		ir_error = irecv_send_command(client, "bootx");
+		if(ir_error != IRECV_E_SUCCESS) {
+			error("Unable send the bootx command\n");
+			return -1;
+		}
+	}
+	[self setDownloadText:NSLocalizedString(@"Tethered boot complete! It is now safe to disconnect USB.",@"Tethered boot complete! It is now safe to disconnect USB." )];
+	[self hideProgress];
+	pois0n_exit();
+	self.poisoning = FALSE;
+	[cancelButton setTitle:@"Done"];
+	[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
+	[pool release];
+	
+	return 0;
+	
+}
+
 	//this code is pretty much verbatim adapted and slightly modified from tetheredboot.c
+
+
 
 - (int)tetheredBoot
 {
@@ -1273,6 +1507,26 @@ NSLog(@"postcommand_cb");
 	
 }
 
+- (void)showHomePermissionWarning
+{
+	
+	NSAlert *theAlert = [NSAlert alertWithMessageText:@"Home Folder Error" defaultButton:@"Quit" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Seas0nPass is unable to write to your home folder! Please check your ownerships and permissions (via Get Info) and re-run Seas0nPass."];
+	int buttonReturn = [theAlert runModal];
+		NSLog(@"buttonReturn: %i", buttonReturn);
+	switch (buttonReturn) {
+		case 0:
+			break;
+		case 1:
+			
+			[[NSApplication sharedApplication] terminate:self];
+			break;
+			
+			
+	}
+	
+	
+}
+
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	
@@ -1280,9 +1534,11 @@ NSLog(@"postcommand_cb");
 	
 	if ([self homeWritable])
 	{
+		
 		NSLog(@"can write to home!");
 	} else{
 		
+		[self showHomePermissionWarning];
 		NSLog(@"cant write to home!!");
 	}
 	
@@ -1407,6 +1663,32 @@ NSLog(@"postcommand_cb");
 	
 }
 
+- (void)createSupportBundleWithCache:(NSString *)theCache iBSS:(NSString *)iBSS iBEC:(NSString *)iBEC
+{
+	NSLog(@"createSupportBundleWithCache: %@ iBSS: %@ iBEC: %@", theCache, iBSS, iBEC);
+	NSString *bundleOut = self.currentBundle.localBundlePath;
+	NSLog(@"localBundlePath: %@", bundleOut);
+	if ([FM fileExistsAtPath:bundleOut])
+	{
+		[FM removeFileAtPath:bundleOut handler:nil];
+	}
+	if ([FM createDirectoryAtPath:bundleOut withIntermediateDirectories:YES attributes:nil error:nil] == FALSE)
+	{
+		NSLog(@"failed to create directory: %@", bundleOut);
+	}
+	NSDictionary *buildManifest = [NSDictionary dictionaryWithObjectsAndKeys:[theCache lastPathComponent], @"KernelCache", [iBSS lastPathComponent], @"iBSS", [iBEC lastPathComponent], @"iBEC", nil];
+	[buildManifest writeToFile:[bundleOut stringByAppendingPathComponent:@"BuildManifest.plist"] atomically:YES];
+	NSLog(@"copy: %@ to %@", theCache, [self.currentBundle localKernel]);
+	[FM copyItemAtPath:theCache toPath:self.currentBundle.localKernel error:nil];
+	NSLog(@"copy: %@ to %@", iBSS, self.currentBundle.localiBSS);
+	[FM copyItemAtPath:iBSS toPath:self.currentBundle.localiBSS error:nil];
+	
+	NSLog(@"copy: %@ to %@", iBEC, self.currentBundle.localiBEC);
+	[FM copyItemAtPath:iBEC toPath:self.currentBundle.localiBEC error:nil];
+	
+}
+
+
 - (void)wrapItUp:(NSDictionary *)theDict
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -1424,10 +1706,27 @@ NSLog(@"postcommand_cb");
 	
 	[nitoUtility scanForRestore:finalPath];
 	
+	BOOL is44 = [[self currentBundle] is4point4];
+	
 	NSString *kcache = [TMP_ROOT stringByAppendingPathComponent:[[self currentBundle] kernelCacheName]];
 	NSString *ibss = [TMP_ROOT stringByAppendingPathComponent:[[self currentBundle] iBSSName]];
-	[self createSupportBundleWithCache:kcache iBSS:ibss];
+	NSString *ibec = [TMP_ROOT stringByAppendingPathComponent:[[self currentBundle] iBECName]];
+	
+	if (is44 == TRUE)
+	{
+		
+		NSLog(@"4.4+!!!!");
+		
+		[self createSupportBundleWithCache:kcache iBSS:ibss iBEC:ibec];
+		
+		
+	} else {
+		NSLog(@"under 4.4/5.0");
+		[self createSupportBundleWithCache:kcache iBSS:ibss];
 
+	}
+	
+	
 	/*
 	if ([FM fileExistsAtPath:[self kcacheString]])
 	{
@@ -1473,7 +1772,16 @@ NSLog(@"postcommand_cb");
 		
 		[self hideProgress];
 		[self killiTunes];
-		[self enterDFU];
+		
+		if (is44 == TRUE)
+		{
+			NSLog(@"second is 44 check true!!");
+			[self enterDFUNEW];
+			
+		} else {
+			
+			[self enterDFU];
+		}
 		
 		if ([self scriptingEnabled])
 		{
@@ -1526,7 +1834,21 @@ NSLog(@"postcommand_cb");
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	[self killiTunes];
-	[self enterDFU];
+	
+	BOOL is44 = [[self currentBundle] is4point4];
+	if (is44 == TRUE)
+	{
+		NSLog(@"DFU NEW!");
+		[self enterDFUNEW];
+		
+	} else {
+		
+		NSLog(@"DFU OLD!");
+		
+		[self enterDFU];
+	}
+	
+	
 		//NSString *ipswPath = [NSHomeDirectory() stringByAppendingPathComponent:CUSTOM_RESTORE];
 	NSString *ipswPath = [self ipswOutputPath];
 	if(![FM fileExistsAtPath:ipswPath])
@@ -1700,11 +2022,12 @@ NSLog(@"postcommand_cb");
 	[asString appendString:@"key down option\n"];
 	if ([self iTunesIsTenFive] == TRUE)
 	{
-		[asString appendString:@"click button \"Restore\"  of scroll area 3 of window 1\n"];
-		
+			//[asString appendString:@"click button \"Restore\"  of scroll area 3 of window 1\n"];
+		[asString appendString:@"click button 1 of scroll area 3 of window 1\n"];
 	} else {
 		
-		[asString appendString:@"click button \"Restore\" of scroll area 1 of tab group 1 of window 1\n"];
+			//[asString appendString:@"click button \"Restore\" of scroll area 1 of tab group 1 of window 1\n"];
+		[asString appendString:@"click button 1 of scroll area 1 of tab group 1 of window 1\n"];
 	}
 	 //itunes beta = @"click button \"Restore\"  of scroll area 3 of window 1\n" 
 	[asString appendString:@"key up option\n"];
@@ -1782,7 +2105,19 @@ NSLog(@"postcommand_cb");
 		 
 	[window setContentView:self.secondView];
 	[window display];
-	[NSThread detachNewThreadSelector:@selector(tetheredBoot) toTarget:self withObject:nil];
+	
+	BOOL is44 = [[self currentBundle] is4point4];
+	
+	if (is44 == TRUE)
+	{
+		NSLog(@"new tethered boot!");
+		[NSThread detachNewThreadSelector:@selector(tetheredBootNew) toTarget:self withObject:nil];
+	} else {
+	
+		NSLog(@"old tethered boot!");
+		[NSThread detachNewThreadSelector:@selector(tetheredBoot) toTarget:self withObject:nil];
+	}
+	
 
 }
 
@@ -2049,6 +2384,32 @@ NSLog(@"postcommand_cb");
 			return -1;
 		}
 	}
+	
+	if ([theBundle iBEC] != nil)
+	{
+		status = [nitoUtility decryptedPatchFromData:[theBundle iBEC] atRoot:[theBundle fwRoot] fromBundle:[theBundle bundlePath]];
+		if (status == 0)
+		{
+			NSLog(@"patched iBEC successfully!");
+		} else {
+			NSLog(@"iBEC patch failed!");
+			return -1;
+		}
+	}
+	
+	if ([theBundle kernelcache] != nil)
+	{
+		status = [nitoUtility decryptedPatchFromData:[theBundle kernelcache] atRoot:[theBundle fwRoot] fromBundle:[theBundle bundlePath]];
+		if (status == 0)
+		{
+			NSLog(@"patched kernelcache successfully!");
+		} else {
+			NSLog(@"kernelcache patch failed!");
+			return -1;
+		}
+	}
+	
+	
 	if ([theBundle appleLogo] != nil)
 	{
 		status = [nitoUtility decryptedImageFromData:[theBundle appleLogo] atRoot:[theBundle fwRoot] fromBundle:[theBundle bundlePath]];
@@ -2062,10 +2423,12 @@ NSLog(@"postcommand_cb");
 	}
 	if ([theBundle restoreRamdisk] != nil)
 	{
-		[nitoUtil performPatchesFromBundle:theBundle onRamdisk:[theBundle restoreRamdisk]];
+		status = [nitoUtil performPatchesFromBundle:theBundle onRamdisk:[theBundle restoreRamdisk]];
 
 		
 	}
+	
+	return status;
 }
 
 - (void)pwnIPSW:(NSString *)inputIPSW

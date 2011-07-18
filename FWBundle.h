@@ -64,17 +64,20 @@ enum  {
 - (NSString *)outputName;
 - (NSDictionary *)appleLogo;
 - (NSString *)filesystemSize;
+- (NSDictionary *)kernelcache;
 
 	//really lazy convenience classes
 - (NSDictionary *)buildManifest;
 - (NSString *)localKernel;
 - (NSString *)localiBSS;
+- (NSString *)localiBEC;
 - (NSString *)kernelCacheName;
 - (NSString *)iBSSName;
 - (NSDictionary *)fwDictionary;
 - (NSString *)localBundlePath;
 
 - (BOOL)is4point3;
+- (BOOL)is4point4;
 - (BOOL)untethered;
 @end
 

@@ -369,6 +369,34 @@
 	
 }
 
+- (int)removeUselessFirmwareFilesFromRamdisk:(NSString *)mountedRamdisk
+{
+	NSString *firmwarePath = [mountedRamdisk stringByAppendingPathComponent:@"/usr/local/standalone/firmware/"];
+	NSArray *firmwareArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:firmwarePath error:nil];
+	NSEnumerator *firmwareEnum = [firmwareArray objectEnumerator];
+	id currentFile = nil;
+	while (currentFile = [firmwareEnum nextObject]) {
+		
+		NSString *extension = [[currentFile pathExtension] lowercaseString];
+		if ([extension isEqualToString:@"zip"])
+		{
+			NSString *fullPath = [firmwarePath stringByAppendingPathComponent:currentFile];
+			NSLog(@"removing file: %@", fullPath);
+
+			if ([[NSFileManager defaultManager] removeItemAtPath:fullPath error:nil])
+			{
+				NSLog(@"%@ removed successfully!", fullPath);
+				return 0;
+			} else {
+				NSLog(@"%@ removal failed!!!!!", fullPath);
+			}
+		}
+		
+	}
+	
+	return -1;
+}
+
 - (int)performPatchesFromBundle:(FWBundle *)theBundle onRamdisk:(NSDictionary *)ramdiskDict
 {
 		//NSString *ramdiskSize = @"16541920";
@@ -391,7 +419,15 @@
 	{
 		NSLog(@"decrypted %@ successfully!", theRamdisk);
 		NSString *ramdiskSize = [self ramdiskResizeValue:decryptRam];
-		status = [nitoUtility resizeVolume:decryptRam toSize:ramdiskSize]; //2
+		
+        if (![theBundle is4point4])
+        {
+            status = [nitoUtility resizeVolume:decryptRam toSize:ramdiskSize]; //2
+        } else {
+            //dont resize ramdisk for 4.4, fucks up in beta 3+
+            status = 0; //hopefully the removeUselessFirmwareFiles function works!!
+        }
+        
 		
 		if (status == 0)
 		{
@@ -406,6 +442,12 @@
 					 patches here
 					 
 					 */
+				
+					//FIXME: for now we are just going to delete useless files to fix ramdisk issues in beta3
+				
+				[self removeUselessFirmwareFilesFromRamdisk:mountedImage];
+				
+				
 				
 				NSEnumerator *patchEnum = [ramdiskPatches objectEnumerator];
 				id thePatch = nil;
@@ -422,6 +464,10 @@
 					{
 						NSLog(@"patched %@ successfully!", file);
 						[nitoUtility changePermissions:@"+x" onFile:[mountedImage stringByAppendingPathComponent:file] isRecursive:YES];
+						if ([file isEqualToString:@"usr/sbin/asr"])
+						{
+							[nitoUtility changePermissions:@"100755" onFile:[mountedImage stringByAppendingPathComponent:file] isRecursive:YES];
+						}
 					} else {
 						NSLog(@"patch %@ failure!!, bail!");
 						return -1;
@@ -445,7 +491,7 @@
 					
 					status = [nitoUtility repackRamdisk:decryptRam toPath:finalRam withIV:ramdiskIV key:ramdiskKey originalPath:theRamdisk]; //9
 					
-						//[FM removeItemAtPath:decryptRam error:nil]; //10 no need for 11?
+						[FM removeItemAtPath:decryptRam error:nil]; //10 no need for 11?
 					
 					if (status == 0)
 					{
@@ -615,7 +661,7 @@
 	return [NSString stringWithFormat:@"%i", finalTotal];
 
 }
-
+	//25747456
 
 - (NSString *)filesystemResizeValue:(NSString *)inputFilesystem
 {
@@ -960,6 +1006,9 @@
 
 +(int)resizeVolume:(NSString *)theVolume toSize:(NSString *)theSize
 {
+		//FIXME: for now this is just going to return 0 and we are going to delete the stupid files to test out latest bundle, make sure to make this smarter later!!
+	//return 0;
+	
 	NSTask *hdiTask = [[NSTask alloc] init];
 	[hdiTask setLaunchPath:HDIUTIL];
 	[hdiTask setArguments:[NSArray arrayWithObjects:@"resize", @"-size", theSize, theVolume, nil]];

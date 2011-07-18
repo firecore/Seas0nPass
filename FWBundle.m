@@ -61,6 +61,13 @@
 	return [[[[self buildManifest] valueForKey:@"iBSS"] valueForKey:@"Info"] valueForKey:@"Path"];
 }
 
+
+- (NSString *)iBECName
+{
+	return [[[[self buildManifest] valueForKey:@"iBEC"] valueForKey:@"Info"] valueForKey:@"Path"];
+}
+
+
 - (NSDictionary *)fwDictionary
 {
 	NSString *buildM = [TMP_ROOT stringByAppendingPathComponent:@"BuildManifest.plist"];
@@ -101,6 +108,15 @@
 	if ([self localManifest] != nil)
 	{
 		return [[self localBundlePath] stringByAppendingPathComponent:[[self localManifest] valueForKey:@"iBSS"]];
+	}
+	return nil;
+}
+
+- (NSString *)localiBEC
+{
+	if ([self localManifest] != nil)
+	{
+		return [[self localBundlePath] stringByAppendingPathComponent:[[self localManifest] valueForKey:@"iBEC"]];
 	}
 	return nil;
 }
@@ -146,9 +162,7 @@
 
 - (BOOL)untethered
 {
-	return YES;
-	
-	if ([self is4point3])
+	if ([self is4point4])
 		return NO;
 	
 	return YES;
@@ -198,6 +212,54 @@
 	return kUnknownDevice;
 }
 
+- (BOOL)is4point4
+{
+	NSString *clippedPath = nil;
+	int deviceInteger = [self deviceInt];
+	
+	switch (deviceInteger) {
+			
+			
+		case kAppleTVDevice:
+			
+			clippedPath = [[self bundleName] substringWithRange:NSMakeRange(11, 3)];
+			break;
+			
+		case kiPadDevice:
+				//iPad1,1_4.3.1_8G4_Restore.ipsw
+			clippedPath = [[self bundleName] substringWithRange:NSMakeRange(8, 3)];
+			break;
+			
+		case kiPhoneDevice:
+			
+			clippedPath = [[self bundleName] substringWithRange:NSMakeRange(10, 3)];
+			
+			break;
+			
+	}
+	
+	NSComparisonResult theResult = [clippedPath compare:@"4.4" options:NSNumericSearch];
+		//NSLog(@"theversion: %@  installed version %@", theVersion, installedVersion);
+	if ( theResult == NSOrderedDescending )
+	{
+	//	NSLog(@"%@ is greater than %@", clippedPath, @"4.4");
+		
+		return YES;
+		
+	} else if ( theResult == NSOrderedAscending ){
+		
+	//	NSLog(@"%@ is greater than %@", @"4.4", clippedPath);
+		return NO;
+		
+	} else if ( theResult == NSOrderedSame ) {
+		
+	//	NSLog(@"%@ is equal to %@", clippedPath, @"4.4");
+		return YES;
+	}
+	
+	return NO;
+}
+
 - (BOOL)is4point3
 {
 	NSString *clippedPath = nil;
@@ -228,18 +290,18 @@
 		//NSLog(@"theversion: %@  installed version %@", theVersion, installedVersion);
 	if ( theResult == NSOrderedDescending )
 	{
-				NSLog(@"%@ is greater than %@", clippedPath, @"4.3");
+				//NSLog(@"%@ is greater than %@", clippedPath, @"4.3");
 		
 		return YES;
 		
 	} else if ( theResult == NSOrderedAscending ){
 		
-		NSLog(@"%@ is greater than %@", @"4.3", clippedPath);
+		//NSLog(@"%@ is greater than %@", @"4.3", clippedPath);
 		return NO;
 		
 	} else if ( theResult == NSOrderedSame ) {
 		
-		NSLog(@"%@ is equal to %@", clippedPath, @"4.3");
+	//	NSLog(@"%@ is equal to %@", clippedPath, @"4.3");
 		return YES;
 	}
 	
@@ -359,6 +421,11 @@
 	return [[self firmwarePatches] valueForKey:UPDATE_RD];
 }
 
+- (NSDictionary *)iBEC
+{
+	return [[self firmwarePatches] valueForKey:@"iBEC"];
+}
+
 - (NSDictionary *)iBSS
 {
 	return [[self firmwarePatches] valueForKey:@"iBSS"];
@@ -367,6 +434,11 @@
 - (NSDictionary *)appleLogo
 {
 	return [[self firmwarePatches] valueForKey:@"AppleLogo"];
+}
+
+- (NSDictionary *)kernelcache
+{
+	return [[self firmwarePatches] valueForKey:@"kernelcache"];
 }
 
 
