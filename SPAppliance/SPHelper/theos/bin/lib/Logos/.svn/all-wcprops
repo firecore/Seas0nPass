@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/lib/Logos
+END
+BaseStaticClassGroup.pm
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/lib/Logos/BaseStaticClassGroup.pm
+END
+BaseSubclass.pm
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/lib/Logos/BaseSubclass.pm
+END
+BaseMethod.pm
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/lib/Logos/BaseMethod.pm
+END
+Group.pm
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/lib/Logos/Group.pm
+END
+BaseClass.pm
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/lib/Logos/BaseClass.pm
+END
+Ivar.pm
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/lib/Logos/Ivar.pm
+END

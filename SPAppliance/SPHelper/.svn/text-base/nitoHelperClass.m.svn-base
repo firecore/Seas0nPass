@@ -1,0 +1,335 @@
+//
+//  defaultHelper.m
+//  nitoTV
+//
+//  Created by blunt on 11/10/10.
+//  Copyright 2010 nito, LLC. All rights reserved.
+//
+
+#import "nitoHelperClass.h"
+
+
+/*
+
+ updaterepo.sh
+ 
+ echo "deb http://apt.awkwardtv.org/ stable main" > /etc/apt/sources.list.d/awkwardtv.list
+ wget -O- http://apt.awkwardtv.org/awkwardtv.pub | apt-key add -
+ 
+ */
+
+static NSString *aptGet = @"/usr/bin/apt-get";
+static NSString *aptCache = @"/usr/bin/apt-cache";
+
+@implementation nitoHelperClass
+
+- (NSFileHandle *)logHandle
+{
+	logHandle = [[NSFileHandle fileHandleForWritingAtPath:[self logPath]] retain];
+	return logHandle;
+}
+
+- (NSString *)logPath
+{
+	NSString * logPath = @"/tmp/aptoutput";
+	[[NSFileManager defaultManager] createFileAtPath: logPath contents:nil attributes:nil];
+	return logPath;
+}
+
+- (int)installQueue:(NSString *)theFile
+{
+	NSLog(@"installQueue: %@", theFile);
+	NSArray *queueArray = [NSArray arrayWithContentsOfFile:theFile];
+	NSLog(@"queueArray: %@", queueArray);
+	NSEnumerator *installEnum = [queueArray objectEnumerator];
+	id currentItem = nil;
+	int sysReturn = 0;
+	while (currentItem = [installEnum nextObject])
+	{
+		NSString *installString = [NSString stringWithFormat:@"/usr/bin/apt-get install -y --force-yes %@ 2>&1", currentItem];
+		sysReturn = system([installString UTF8String]);
+		NSLog(@"install %@ returned with %i", currentItem, sysReturn);
+	}
+	return sysReturn;
+}
+
+- (int)autoremove
+{
+	int sysReturn = system("/usr/bin/apt-get autoremove -y --force-yes 1>/tmp/aptoutput 2>/tmp/aptoutput");
+	return sysReturn;
+	
+}
+
+- (int)configure
+{
+	
+	int sysReturn = system("/usr/bin/dpkg --configure -a 1>/tmp/dpkgout 2>/tmp/dpkgout");
+	return sysReturn;
+}
+
++(int)aptUpdate
+{
+	NSTask *aptTask = [NSTask launchedTaskWithLaunchPath:@"/usr/bin/apt-get" arguments:[NSArray arrayWithObjects:@"update", nil]];
+	waitpid([aptTask processIdentifier], NULL, 0);
+	int i;
+	
+	int termStatus = [aptTask terminationStatus];
+	return termStatus;
+}
+
+- (int)dpkgPackage:(NSString *)packagePath
+{
+	NSLog(@"install dpkg: %@", packagePath);
+	NSTask *dpkgTask = [[NSTask alloc] init];
+	[dpkgTask setLaunchPath:@"/usr/bin/dpkg"];
+	[dpkgTask setArguments:[NSArray arrayWithObjects:@"-i", packagePath, nil]];
+	[dpkgTask setStandardError:[self logHandle]];
+	[dpkgTask launch];
+	waitpid([dpkgTask processIdentifier], NULL, 0);
+	
+	int termStatus = [dpkgTask terminationStatus];
+	[dpkgTask release];
+	dpkgTask = nil;
+	return termStatus;
+	
+}
+
+- (int)installPackage:(NSString *)packageId
+{
+	NSString *installString = [NSString stringWithFormat:@"/usr/bin/apt-get install -y --force-yes %@ 2>&1", packageId];
+	int sysReturn = system([installString UTF8String]);
+		//NSLog(@"install %@ returned with %i", installString, sysReturn);
+	
+	return sysReturn;
+}
+
+- (int)removePackage:(NSString *)packageId
+{
+	
+	NSString *removeString = [NSString stringWithFormat:@"/usr/bin/apt-get -y --force-yes remove %@ 2>&1", packageId];
+	int sysReturn = system([removeString UTF8String]);
+		//NSLog(@"remove %@ returned with %i", installString, sysReturn);
+	return sysReturn;
+	
+}
+
++(void)reboot
+{
+	NSTask *rebootTask = [NSTask launchedTaskWithLaunchPath:@"/usr/bin/reboot" arguments:nil];
+}
+
++(int)installKey
+{
+	NSTask *wgetTask = [NSTask launchedTaskWithLaunchPath:@"/usr/bin/wget" arguments:[NSArray arrayWithObjects:@"-O", @"/awkwardtv.pub", @"http://apt.awkwardtv.org/awkwardtv.pub", nil]];
+	 waitpid([wgetTask processIdentifier], NULL, 0);
+	int termStatus = [wgetTask terminationStatus];
+	if (termStatus == 0)
+	{
+		NSTask *aptKey = [NSTask launchedTaskWithLaunchPath:@"/usr/bin/apt-key" arguments:[NSArray arrayWithObjects:@"add", @"/awkwardtv.pub", nil]];
+		waitpid([aptKey processIdentifier], NULL, 0);
+		termStatus = [aptKey terminationStatus];
+		return termStatus;
+	}
+	return -1;
+}
+
+
+
++(int)updateRepo
+{
+	NSString *awkwardRepo = @"/etc/apt/sources.list.d/awkwardtv.list";
+	NSMutableString *awkFile = [[NSMutableString alloc] initWithContentsOfFile:awkwardRepo encoding:NSUTF8StringEncoding error:nil];
+	NSString *sm = @"stable main";
+	NSRange range = [awkFile rangeOfString: sm];
+	if ( range.location == NSNotFound )
+	{
+		[awkFile replaceOccurrencesOfString:@"./" withString:sm options:nil range:NSMakeRange(0, [awkFile length])];
+		//[[NSFileManager defaultManager] removeItemAtPath:awkwardRepo error:nil];
+		BOOL writeFile = [awkFile writeToFile:awkwardRepo atomically:YES];
+		NSLog(@"writing file: %@ success: %@", awkFile, [NSNumber numberWithBool:writeFile]);
+		[awkFile release];
+		if (writeFile == YES)
+		{
+			int termStatus = [nitoHelperClass installKey];
+			return termStatus;
+		} else {
+			return -1;
+		}
+
+	}
+	
+	return 0;
+}
++ (void)fixHosts
+{
+	NSMutableString *hosts2 = [[NSMutableString alloc] initWithContentsOfFile:@"/etc/hosts"];
+	[hosts2 replaceOccurrencesOfString:@"127.0.0.1\tappldnld.apple.com.edgesuite.net" withString:@"" options:nil range:NSMakeRange(0, [hosts2 length])];
+	[hosts2 replaceOccurrencesOfString:@"127.0.0.1\tappldnld.apple.com" withString:@"" options:nil range:NSMakeRange(0, [hosts2 length])];
+	[hosts2 replaceOccurrencesOfString:@"127.0.0.1\tmesu.apple.com" withString:@"" options:nil range:NSMakeRange(0, [hosts2 length])];
+	[hosts2 writeToFile:@"/etc/hosts" atomically:YES];
+	[hosts2 release];
+	return;
+}
+
++ (void)fixHostsold
+{
+		//NSLog(@"toggleUpdate");
+	NSMutableString *hosts2 = [[NSMutableString alloc] initWithContentsOfFile:@"/etc/hosts"];
+	NSRange range = [hosts2 rangeOfString: @"127.0.0.1      mesu.apple.com"];
+	
+	if ( range.location != NSNotFound )
+	{
+			//[hosts replaceOccurrencesOfString:@"127.0.0.1      mesu.apple.com" withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [hosts length])]
+			//NSLog(@"mesu exists!");
+		hosts2 = [hosts2 stringByReplacingCharactersInRange:range withString:@""];
+	}
+	
+	range = [hosts2 rangeOfString:@"127.0.0.1      appldnld.apple.com"];
+	if (range.location != NSNotFound)
+	{
+			//NSLog(@"appldnld.apple.com exists!");
+		hosts2 = [hosts2 stringByReplacingCharactersInRange:range withString:@""];
+	}
+	
+	range = [hosts2 rangeOfString:@"127.0.0.1		 appldnld.apple.com.edgesuite.net"];
+	if (range.location != NSNotFound)
+	{
+			//NSLog(@"appldnld.apple.com.edgesuite.net exists!");
+		hosts2 = [hosts2 stringByReplacingCharactersInRange:range withString:@""];
+	}
+	
+	[hosts2 writeToFile:@"/etc/hosts" atomically:YES];
+	[hosts2 release];
+	return;
+	
+	/*
+	 NSMutableArray *hostArray = [[NSMutableArray alloc] initWithArray:[hosts componentsSeparatedByString:@"\n"]];
+	 int i;
+	 for (i = 0; i < [hostArray count]; i++)
+	 {
+	 NSString *currentItem = [hostArray objectAtIndex:i];
+	 currentItem = [currentItem stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	 //NSLog(@"currentItem: %@", currentItem);
+	 NSArray *items = [currentItem componentsSeparatedByString:@" "];
+	 //NSLog(@"items: %@ index: %i", items, i);
+	 if ([items containsObject:@"mesu.apple.com"])
+	 {
+	 
+	 //NSLog(@"item %i: %@ item to remove", i, currentItem);
+	 [hostArray removeObjectAtIndex:i];
+	 }
+	 
+	 if ([items containsObject:@"appldnld.apple.com"])
+	 {
+	 
+	 //NSLog(@"item %i: %@ item to remove", i, currentItem);
+	 [hostArray removeObjectAtIndex:i];
+	 }
+	 
+	 if ([items containsObject:@"appldnld.apple.com.edgesuite.net"])
+	 {
+	 
+	 //NSLog(@"item %i: %@ item to remove", i, currentItem);
+	 [hostArray removeObjectAtIndex:i];
+	 }
+	 }
+	 
+	 NSMutableString *thePl = [[NSMutableString alloc] initWithString:[hostArray componentsJoinedByString:@"\n"]];
+	 [thePl writeToFile:@"/etc/hosts" atomically:YES];
+	 [hostArray release];
+	 [hosts release];
+	 [thePl release];
+	 */
+}
+
++ (int)toggleUpdate
+{
+	BOOL addHost = YES;
+	int returnValue = 0;
+	NSMutableString *hosts = [[NSMutableString alloc] initWithContentsOfFile:@"/etc/hosts"];
+	NSMutableArray *hostArray = [[NSMutableArray alloc] initWithArray:[hosts componentsSeparatedByString:@"\n"]];
+	int i;
+		//NSLog(@"hostARray: %@", hostArray);
+	if ([hostArray containsObject:@"127.0.0.1\tappldnld.apple.com.edgesuite.net"])
+	{
+			//NSLog(@"fix hosts!");
+		[nitoHelperClass fixHosts];
+		[hostArray release];
+		[hosts release];
+			//NSLog(@"here?");
+		return 2;
+	}
+	if ([hostArray containsObject:@"127.0.0.1\tmesu.apple.com"])
+	{
+		addHost = NO;
+		returnValue = 1;
+		[hostArray removeObject:@"127.0.0.1\tmesu.apple.com"];
+		
+	}
+	
+	if ([hostArray containsObject:@"127.0.0.1\tappldnld.apple.com"])
+	{
+		addHost = NO;
+		returnValue = 1;
+		[hostArray removeObject:@"127.0.0.1\tappldnld.apple.com"];
+		
+	}
+	
+	if ([hostArray containsObject:@"127.0.0.1\tappldnld.apple.com.edgesuite.net"])
+	{
+		addHost = NO;
+		returnValue = 1;
+		[hostArray removeObject:@"127.0.0.1\tappldnld.apple.com.edgesuite.net"];
+	}
+	/*
+	 for (i = 0; i < [hostArray count]; i++)
+	 {
+	 NSString *currentItem = [hostArray objectAtIndex:i];
+	 currentItem = [currentItem stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	 //NSLog(@"currentItem: %@", currentItem);
+	 NSArray *items = [currentItem componentsSeparatedByString:@" "];
+	 //NSLog(@"items: %@", items);
+	 if ([items containsObject:@"127.0.0.1\tmesu.apple.com"])
+	 {
+	 addHost = NO;
+	 returnValue = 1;
+	 //NSLog(@"item %i: %@ item to remove", i, currentItem);
+	 //[hostArray removeObjectAtIndex:i];
+	 [hostArray removeObject:@"127.0.0.1\tmesu.apple.com"];
+	 } else if ([items containsObject:@"127.0.0.1\tappldnld.apple.com"])
+	 {
+	 NSLog(@"containsObject: appldnld.apple.com remove: %@", [hostArray objectAtIndex:i]);
+	 addHost = NO;
+	 returnValue = 1;
+	 //NSLog(@"item %i: %@ item to remove", i, currentItem);
+	 //[hostArray removeObjectAtIndex:i];
+	 [hostArray removeObject:@"127.0.0.1\tappldnld.apple.com"];
+	 } else if ([items containsObject:@"127.0.0.1\tappldnld.apple.com.edgesuite.net"])
+	 {
+	 addHost = NO;
+	 returnValue = 1;
+	 //NSLog(@"item %i: %@ item to remove", i, currentItem);
+	 //[hostArray removeObjectAtIndex:i];
+	 [hostArray removeObject:@"127.0.0.1\tappldnld.apple.com.edgesuite.net"];
+	 }
+	 
+	 }
+	 */
+	if (addHost == YES)
+	{
+		[hostArray addObject:@"127.0.0.1\tmesu.apple.com"];
+			//[hostArray addObject:@"127.0.0.1\tappldnld.apple.com"];
+			//[hostArray addObject:@"127.0.0.1\tappldnld.apple.com.edgesuite.net"];
+	}
+	NSMutableString *thePl = [[NSMutableString alloc] initWithString:[hostArray componentsJoinedByString:@"\n"]];
+	[thePl writeToFile:@"/etc/hosts" atomically:YES];
+	[hostArray release];
+	[hosts release];
+	[thePl release];
+	return returnValue;
+}
+
+
+
+
+@end

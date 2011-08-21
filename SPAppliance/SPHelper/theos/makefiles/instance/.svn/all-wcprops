@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/makefiles/instance
+END
+bundle.mk
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/makefiles/instance/bundle.mk
+END
+null.mk
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/makefiles/instance/null.mk
+END
+rules.mk
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/makefiles/instance/rules.mk
+END
+tweak.mk
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/makefiles/instance/tweak.mk
+END
+framework.mk
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/makefiles/instance/framework.mk
+END
+tool.mk
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/makefiles/instance/tool.mk
+END
+subproject.mk
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/makefiles/instance/subproject.mk
+END
+application.mk
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/makefiles/instance/application.mk
+END
+library.mk
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/makefiles/instance/library.mk
+END

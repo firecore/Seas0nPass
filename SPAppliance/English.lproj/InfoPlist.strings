@@ -1,0 +1,4 @@
+﻿/* Localized versions of Info.plist keys */
+
+CFBundleName = "Seas0nPass";
+NSHumanReadableCopyright = "Copyright © 2011, Firecore, LLC";

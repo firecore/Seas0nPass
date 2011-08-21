@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin
+END
+install.copyFile
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/install.copyFile
+END
+deb_build_num.sh
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/deb_build_num.sh
+END
+fakeroot.sh
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/fakeroot.sh
+END
+install.mergeDir
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/install.mergeDir
+END
+logify.pl
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/logify.pl
+END
+nic.pl
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/nic.pl
+END
+denicify.pl
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/denicify.pl
+END
+install.exec
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/install.exec
+END
+package_version.sh
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/package_version.sh
+END
+nicify.pl
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/nicify.pl
+END
+plistkey.py
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/plistkey.py
+END
+logos.pl
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/bin/logos.pl
+END

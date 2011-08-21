@@ -1,0 +1,20 @@
+ifeq ($(FW_TARGET_LOADED),)
+FW_TARGET_LOADED := 1
+FW_TARGET_NAME := linux
+
+ifneq ($(words $(_FW_TARGET_ARGS)),0)
+CROSS_COMPILE := $(firstword $(_FW_TARGET_ARGS))-
+endif 
+
+TARGET_CC ?= $(CROSS_COMPILE)gcc
+TARGET_CXX ?= $(CROSS_COMPILE)g++
+TARGET_STRIP ?= $(CROSS_COMPILE)strip
+TARGET_STRIP_FLAGS ?=
+TARGET_CODESIGN_ALLOCATE ?=
+TARGET_CODESIGN ?=
+TARGET_CODESIGN_FLAGS ?=
+
+include $(FW_MAKEDIR)/targets/_common/linux.mk
+
+SDKFLAGS :=
+endif

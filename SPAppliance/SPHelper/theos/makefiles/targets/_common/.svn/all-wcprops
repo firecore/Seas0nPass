@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/makefiles/targets/_common
+END
+install_deb_local.mk
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/makefiles/targets/_common/install_deb_local.mk
+END
+install_deb_remote.mk
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/makefiles/targets/_common/install_deb_remote.mk
+END
+linux.mk
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/makefiles/targets/_common/linux.mk
+END
+darwin.mk
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/abathingchris/nito/svn/!svn/ver/3/nitoTV3/trunk/nitoHelper/theos/makefiles/targets/_common/darwin.mk
+END
