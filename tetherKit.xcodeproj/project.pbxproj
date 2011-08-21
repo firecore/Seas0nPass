@@ -33,7 +33,6 @@
 		32720E8F12CC53F70054F4B0 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32720E8E12CC53F70054F4B0 /* Security.framework */; };
 		32720E9112CC53F70054F4B0 /* SecurityFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32720E9012CC53F70054F4B0 /* SecurityFoundation.framework */; };
 		32720E9E12CC54190054F4B0 /* nitoUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */; };
-		32720EAE12CC546E0054F4B0 /* dbHelper in Resources */ = {isa = PBXBuildFile; fileRef = 32720EAD12CC546E0054F4B0 /* dbHelper */; };
 		32720EF212CC63F80054F4B0 /* FWManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 32720EF112CC63F80054F4B0 /* FWManager.m */; };
 		32720F1112CC66E10054F4B0 /* PatchedFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 32720F1012CC66E10054F4B0 /* PatchedFile.m */; };
 		32720FB512CC71610054F4B0 /* PatchedFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 32720F1012CC66E10054F4B0 /* PatchedFile.m */; };
@@ -55,6 +54,7 @@
 		32DF78CB12E2DEAB002916D5 /* FWBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DF741812E17498002916D5 /* FWBundle.m */; };
 		32DF825512E65280002916D5 /* SPButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DF825412E65280002916D5 /* SPButton.m */; };
 		32DF84CE12E6E426002916D5 /* SPMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DF84CD12E6E426002916D5 /* SPMenuItem.m */; };
+		898270B213F3605F003BC7AF /* dbHelper in Resources */ = {isa = PBXBuildFile; fileRef = 898270B113F3605F003BC7AF /* dbHelper */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -151,7 +151,6 @@
 		32720E8E12CC53F70054F4B0 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		32720E9012CC53F70054F4B0 /* SecurityFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SecurityFoundation.framework; path = System/Library/Frameworks/SecurityFoundation.framework; sourceTree = SDKROOT; };
 		32720E9212CC53F70054F4B0 /* SecurityInterface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SecurityInterface.framework; path = System/Library/Frameworks/SecurityInterface.framework; sourceTree = SDKROOT; };
-		32720EAD12CC546E0054F4B0 /* dbHelper */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = dbHelper; path = build/Release/dbHelper; sourceTree = "<group>"; };
 		32720EF012CC63F80054F4B0 /* FWManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FWManager.h; sourceTree = "<group>"; };
 		32720EF112CC63F80054F4B0 /* FWManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FWManager.m; sourceTree = "<group>"; };
 		32720F0F12CC66E10054F4B0 /* PatchedFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PatchedFile.h; sourceTree = "<group>"; };
@@ -173,6 +172,8 @@
 		32DF825412E65280002916D5 /* SPButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPButton.m; sourceTree = "<group>"; };
 		32DF84CC12E6E426002916D5 /* SPMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPMenuItem.h; sourceTree = "<group>"; };
 		32DF84CD12E6E426002916D5 /* SPMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPMenuItem.m; sourceTree = "<group>"; };
+		898270B113F3605F003BC7AF /* dbHelper */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = dbHelper; path = "../../../../../../Users/kbradley/Library/Developer/Xcode/DerivedData/tetherKit-cuilzvqujodtqqgowqyasaavevel/Build/Products/Release/dbHelper"; sourceTree = "<group>"; };
+		89D83C5E13E88E310077FC29 /* tests.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tests.c; path = ../../../../../../Users/kbradley/Desktop/tests.c; sourceTree = "<group>"; };
 		89F0B1EB13D4C44E009C794C /* Seas0nPass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Seas0nPass.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D1107310486CEB800E47090 /* tetherKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "tetherKit-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -269,6 +270,7 @@
 		29B97314FDCFA39411CA2CEA /* tetherKit */ = {
 			isa = PBXGroup;
 			children = (
+				89D83C5E13E88E310077FC29 /* tests.c */,
 				327204F812C9B1760054F4B0 /* include */,
 				32720E8512CC53D50054F4B0 /* Helper */,
 				080E96DDFE201D6D7F000001 /* Classes */,
@@ -294,6 +296,7 @@
 			isa = PBXGroup;
 			children = (
 				32D954D6131237CA007B5BE3 /* untethered.png */,
+				898270B113F3605F003BC7AF /* dbHelper */,
 				32045133130DE20E0057C8B0 /* debs */,
 				32DF734512E0578A002916D5 /* bundles */,
 				32DF4A3912DC2905002916D5 /* tetheredRemote.png */,
@@ -306,7 +309,6 @@
 				3200F42912D3F07F003EA66E /* Credits.rtf */,
 				327211BE12CC816D0054F4B0 /* scripts */,
 				3272119912CC80DC0054F4B0 /* archives */,
-				32720EAD12CC546E0054F4B0 /* dbHelper */,
 				327210E512CC7C2F0054F4B0 /* patches */,
 				32720C1312CB3A6C0054F4B0 /* bin */,
 				8D1107310486CEB800E47090 /* tetherKit-Info.plist */,
@@ -495,7 +497,6 @@
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
 				32720C1B12CB3A6C0054F4B0 /* bin in Resources */,
-				32720EAE12CC546E0054F4B0 /* dbHelper in Resources */,
 				327210EA12CC7C2F0054F4B0 /* patches in Resources */,
 				3272119C12CC80DC0054F4B0 /* archives in Resources */,
 				327211C112CC816D0054F4B0 /* scripts in Resources */,
@@ -510,6 +511,7 @@
 				32DF734A12E0578A002916D5 /* bundles in Resources */,
 				3204513C130DE20E0057C8B0 /* debs in Resources */,
 				32D954D7131237CA007B5BE3 /* untethered.png in Resources */,
+				898270B213F3605F003BC7AF /* dbHelper in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

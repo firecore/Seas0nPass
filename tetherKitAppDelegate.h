@@ -63,6 +63,7 @@ enum  {
 @property (readwrite, assign) int downloadIndex;
 @property (readwrite, assign) int counter;
 
+- (NSString *)buildVersion;
 - (IBAction)versionChanged:(id)sender;
 - (IBAction)poison:(id)sender;
 - (IBAction)startCountdown:(id)sender;
@@ -91,9 +92,10 @@ enum  {
 - (void)setInstructionText:(NSString *)instructions;
 - (NSImage *)imageForMode:(int)inputMode;
 - (NSString *)ipswOutputPath;
-
+- (void)createSupportBundleWithCache:(NSString *)theCache iBSS:(NSString *)iBSS iBEC:(NSString *)iBEC;
 - (IBAction)keydumpPrep:(id)sender;
 - (IBAction)sendCommand:(id)sender;
-
-
+- (int)performSupportBundlePatches:(FWBundle *)theBundle;
+- (BOOL)homeWritable;
++ (NSArray *)appSupportBundles;
 @end

@@ -20,7 +20,7 @@
 
 @implementation nitoUtility
 
-@synthesize delegate, enableScripting, currentBundle, sshKey, sigServer;
+@synthesize delegate, enableScripting, currentBundle, sshKey, sigServer, debWhitelist;
 
 - (id)init
 {
@@ -79,7 +79,7 @@
 		
 	{
 		
-		NSLog(the_error);
+		NSLog(@"%@",the_error);
 		
 		[the_error release];
 		
@@ -165,7 +165,7 @@
 		
 	{
 		
-		NSLog(the_error);
+		NSLog(@"%@", the_error);
 		
 		[the_error release];
 		
@@ -369,6 +369,30 @@
 	
 }
 
+- (int)removeUselessFilesFromRamdisk:(NSString *)mountedRamdisk
+{
+	NSString *firmwarePath = [mountedRamdisk stringByAppendingPathComponent:@"/usr/local/standalone/firmware/"];
+	NSArray *firmwareArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:firmwarePath error:nil];
+	NSEnumerator *firmwareEnum = [firmwareArray objectEnumerator];
+	id currentFile = nil;
+	while (currentFile = [firmwareEnum nextObject]) {
+
+        NSString *fullPath = [firmwarePath stringByAppendingPathComponent:currentFile];
+        NSLog(@"removing file: %@", fullPath);
+        
+        if ([[NSFileManager defaultManager] removeItemAtPath:fullPath error:nil])
+        {
+            NSLog(@"%@ removed successfully!", fullPath);
+            
+        } else {
+            NSLog(@"%@ removal failed!!!!!", fullPath);
+        }
+		
+	}
+	
+	return 0;
+}
+
 - (int)removeUselessFirmwareFilesFromRamdisk:(NSString *)mountedRamdisk
 {
 	NSString *firmwarePath = [mountedRamdisk stringByAppendingPathComponent:@"/usr/local/standalone/firmware/"];
@@ -445,7 +469,8 @@
 				
 					//FIXME: for now we are just going to delete useless files to fix ramdisk issues in beta3
 				
-				[self removeUselessFirmwareFilesFromRamdisk:mountedImage];
+				//[self removeUselessFirmwareFilesFromRamdisk:mountedImage];
+                [self removeUselessFilesFromRamdisk:mountedImage];
 				
 				
 				
@@ -469,7 +494,7 @@
 							[nitoUtility changePermissions:@"100755" onFile:[mountedImage stringByAppendingPathComponent:file] isRecursive:YES];
 						}
 					} else {
-						NSLog(@"patch %@ failure!!, bail!");
+						NSLog(@"patch %@ failure!!, bail!", thePatch);
 						return -1;
 					}
 					
@@ -630,7 +655,7 @@
 		
 	{
 		
-		NSLog(the_error);
+		NSLog(@"%@", the_error);
 		
 		[the_error release];
 		
@@ -836,6 +861,8 @@
 	
 	NSString *theDict = [self pwnctionaryFromPath:theFile original:originalDMG withBundle:self.currentBundle.bundlePath];
 	
+    NSLog(@"pwnctionary: %@", theDict);
+    
 	NSString *helpPath = [[NSBundle mainBundle] pathForResource: @"dbHelper" ofType: @""];
 	
 	NSTask *pwnHelper = [[NSTask alloc] init];
@@ -900,6 +927,11 @@
 	{
 		[bundleDict setObject:@"TRUE" forKey:@"sigServer"];
 	}
+    
+    if ([self debWhitelist] == TRUE)
+	{
+		[bundleDict setObject:@"TRUE" forKey:@"debWhitelist"];
+	}
 	
 	if ([[self sshKey] length] > 0)
 	{
@@ -914,6 +946,23 @@
 	[bundleDict writeToFile:cliPath atomically:YES];
 	return cliPath;	
 	 
+}
+
++ (int)linkFile:(NSString *)theFile toPath:(NSString *)thePath inWorkingDirectory:(NSString *)theDir
+{
+    NSTask *linkTask = [[NSTask alloc] init];
+    [linkTask setLaunchPath:@"/bin/ln"];
+    if ([theDir length] > 0)
+    {
+        [linkTask setCurrentDirectoryPath:theDir];
+    }
+    [linkTask setArguments:[NSArray arrayWithObjects:@"-ns", theFile, thePath, nil]];
+    [linkTask launch];
+    [linkTask waitUntilExit];
+    int termStatus = [linkTask terminationStatus];
+    [linkTask release];
+    linkTask = nil;
+    return  termStatus;
 }
 
 + (int)runScript:(NSString *)theScript withInput:(NSString *)theInput

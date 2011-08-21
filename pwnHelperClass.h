@@ -34,4 +34,6 @@
 - (int)addAction:(NSDictionary *)actionDict toVolume:(NSString *)theVolume;
 - (int)ownerAction:(NSDictionary *)actionDict toVolume:(NSString *)theVolume;
 - (int)permissionAction:(NSDictionary *)actionDict toVolume:(NSString *)theVolume;
+- (int)extractAction:(NSDictionary *)actionDict toVolume:(NSString *)theVolume;
+- (void)useCydiaServer;
 @end

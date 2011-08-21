@@ -13,6 +13,7 @@
 #define FS_PATCHES @"FilesystemPatches"
 #define FS_JB @"Filesystem Jailbreak"
 #define FW_PATCHES @"FirmwarePatches"
+#define SB_PATCHES @"SupportBundlePatches"
 #define RD_PATCHES @"RamdiskPatches"
 #define PREINST_PACKAGES @"PreInstalledPackages"
 #define RS_MOUNT @"RestoreRamdiskMountVolume"
@@ -50,6 +51,7 @@ enum  {
 - (NSDictionary *)ramdiskPatches;
 - (NSDictionary *)preInstalledPackages;
 - (NSDictionary *)iBSS;
+- (NSDictionary *)iBEC;
 - (NSDictionary *)restoreRamdisk;
 - (NSDictionary *)updateRamdisk;
 - (NSString *)rootFilesystem;
@@ -73,12 +75,15 @@ enum  {
 - (NSString *)localiBEC;
 - (NSString *)kernelCacheName;
 - (NSString *)iBSSName;
+- (NSString *)iBECName;
 - (NSDictionary *)fwDictionary;
 - (NSString *)localBundlePath;
-
+- (NSDictionary *)supportBundlePatches;
+- (NSDictionary *)sbkernel;
 - (BOOL)is4point3;
 - (BOOL)is4point4;
 - (BOOL)untethered;
+- (BOOL)is8F455;
 @end
 
 /*

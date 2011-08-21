@@ -35,6 +35,7 @@ enum{
 	id delegate;
 	BOOL enableScripting;
 	BOOL sigServer;
+    BOOL debWhitelist;
 	NSString *sshKey;
 	FWBundle *currentBundle;
 	
@@ -42,10 +43,12 @@ enum{
 }
 @property (readwrite, assign) BOOL enableScripting;
 @property (readwrite, assign) BOOL sigServer;
+@property (readwrite, assign) BOOL debWhitelist;
 @property (nonatomic, assign) id delegate;
 @property (nonatomic, retain) NSString *sshKey;
 @property (nonatomic, assign) FWBundle *currentBundle;
 
++ (int)linkFile:(NSString *)theFile toPath:(NSString *)thePath inWorkingDirectory:(NSString *)theDir;
 + (int)bunZip:(NSString *)inputTar toRoot:(NSString *)toLocation excluding:(NSString *)excludeFile;
 + (int)extractGZip:(NSString *)inputTar toRoot:(NSString *)toLocation;
 + (int)bunZip:(NSString *)inputTar toRoot:(NSString *)toLocation;
@@ -84,4 +87,6 @@ enum{
 +(int)decryptedPatchFromData:(NSDictionary *)patchData atRoot:(NSString *)rootPath fromBundle:(NSString *)bundlePath;
 - (int)performPatchesFromBundle:(FWBundle *)theBundle onRamdisk:(NSDictionary *)ramdiskDict;
 +(int)decryptImage:(NSString *)theImage toPath:(NSString *)finalPath withIV:(NSString *)iv key:(NSString *)key;
++(int)decryptedImageFromData:(NSDictionary *)patchData atRoot:(NSString *)rootPath fromBundle:(NSString *)bundlePath;
++ (NSString *)applicationSupportFolder;
 @end

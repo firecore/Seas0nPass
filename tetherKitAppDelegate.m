@@ -23,31 +23,32 @@
 #import "include/libpois0n.h"
 
 #define kIPSWName @"AppleTV2,1_4.2.1_8C154_Restore.ipsw"
-#define kIPSWDownloadLocation @"http://appldnld.apple.com/AppleTV/041-0596.20110511.Zz7mC/AppleTV2,1_4.3_8F305_Restore.ipsw"
+#define kIPSWDownloadLocation @"http://appldnld.apple.com/AppleTV/041-0895.20110728.TcF4T/AppleTV2,1_4.3_8F455_Restore.ipsw"
 #define DL [tetherKitAppDelegate downloadLocation]
 #define PTMD5 @"e8f4d590c8fe62386844d6a2248ae609"
-#define IPSWMD5 @"4726cfb30f322f8cdbb5f20df7ca836f"
+#define IPSWMD5 @"785f859b63edd329e9b5039324ebaf49"
 #define KCACHE @"kernelcache.release.k66"
 #define iBSSDFU @"iBSS.k66ap.RELEASE.dfu"
 #define iBECDFU @"iBEC.k66ap.RELEASE.dfu"
-#define HCIPSW [DL stringByAppendingPathComponent:@"AppleTV2,1_4.3_8F305_Restore.ipsw"]
+#define HCIPSW [DL stringByAppendingPathComponent:@"AppleTV2,1_4.3_8F455_Restore.ipsw"]
 #define CUSTOM_RESTORED @"AppleTV2,1_4.2.1_8C154_Custom_Restore.ipsw"
 #define CUSTOM_RESTORE @"AppleTV_SeasonPass.ipsw"
 #define BUNDLE_LOCATION [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"bundles"]
 #define BUNDLES [FM contentsOfDirectoryAtPath:BUNDLE_LOCATION error:nil]
 #define LAST_BUNDLE [[NSUserDefaults standardUserDefaults] valueForKey:@"lastUsedBundle"]
 #define KILL_ITUNES [[NSUserDefaults standardUserDefaults] boolForKey:@"killiTunes"]
+#define DEFAULTS [NSUserDefaults standardUserDefaults]
 
 int received_cb(irecv_client_t client, const irecv_event_t* event);
 int progress_cb(irecv_client_t client, const irecv_event_t* event);
 int precommand_cb(irecv_client_t client, const irecv_event_t* event);
 int postcommand_cb(irecv_client_t client, const irecv_event_t* event);
 static unsigned int quit = 0;
-static unsigned int verbose = 0;
+//static unsigned int verbose = 0;
 
 @implementation tetherKitAppDelegate
 
-@synthesize window, downloadIndex, processing, enableScripting, firstView, secondView, poisoning, currentBundle, bundleController, counter, otherWindow, commandTextField, tetherLabel;
+@synthesize window, downloadIndex, processing, enableScripting, firstView, secondView, poisoning, currentBundle, bundleController, counter, otherWindow, commandTextField, tetherLabel, countdownField;
 
 /*
  
@@ -88,6 +89,12 @@ void print_progress(double progress, void* data) {
 }
 
 
+- (void)nextCountdown
+{
+	counter = 7;
+	[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(secondTimer:) userInfo:nil repeats:YES];
+}
+
 - (void)firstTimer:(NSTimer *)timer
 {
     [self setCounter:(counter -1)];
@@ -116,11 +123,7 @@ void print_progress(double progress, void* data) {
 
 }
 
-- (void)nextCountdown
-{
-	counter = 7;
-	[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(secondTimer:) userInfo:nil repeats:YES];
-}
+
 
 
 
@@ -131,7 +134,7 @@ void print_progress(double progress, void* data) {
 	return (GetCurrentKeyModifiers() & optionKey) != 0;
 }
 
-- (char *)iBEC
+- (__strong const char *)iBEC
 {
 	NSString *iBEC = [[self currentBundle] localiBEC];
 		//NSLog(@"self current bundle: %@", self.currentBundle);
@@ -139,7 +142,7 @@ void print_progress(double progress, void* data) {
 	return [iBEC UTF8String];
 }
 
-- (char *)iBSS
+- (__strong const char *)iBSS
 {
 	NSString *iBSS = [[self currentBundle] localiBSS];
 		//NSLog(@"self current bundle: %@", self.currentBundle);
@@ -147,20 +150,20 @@ void print_progress(double progress, void* data) {
 	return [iBSS UTF8String];
 }
 
-- (char *)oldiBSS
+- (__strong const char *)oldiBSS
 {
 	NSString *iBSS = [DL stringByAppendingPathComponent:iBSSDFU];
 	return [iBSS UTF8String];
 }
 
 
-- (char *)kernelcache
+- (__strong const char *)kernelcache
 {
 	NSString *kc = [[self currentBundle] localKernel];
 	return [kc UTF8String];
 }
 
-- (char *)oldkernelcache
+- (__strong const char *)oldkernelcache
 {
 	NSString *kc = [DL stringByAppendingPathComponent:KCACHE];
 	return [kc UTF8String];
@@ -228,7 +231,7 @@ void print_progress(double progress, void* data) {
 
 - (void)startupAlert
 {
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	NSUserDefaults *defaults = DEFAULTS;
 	BOOL warningShown = [defaults boolForKey:@"SPWarningShown"];
 
 	if (warningShown == TRUE)
@@ -277,7 +280,7 @@ void LogIt (NSString *format, ...)
 	
     va_end (args);
 	
-    printf ("%s", [string cString]);
+    printf ("%s", [string UTF8String]);
 	
     [string release];
 	
@@ -334,8 +337,8 @@ void LogIt (NSString *format, ...)
 	NSString *path	  = [NSString stringWithFormat:@"Path:\t\t%@\n", [bundle valueForKey:@"CFBundleExecutablePath"] ];
 	NSString *ident   = [NSString stringWithFormat:@"Identifier:\t\t%@\n", [bundle valueForKey:@"CFBundleIdentifier"] ];
 	NSString *vers    = [NSString stringWithFormat:@"Version:\t\t%@ (%@)\n", [bundle valueForKey:@"CFBundleShortVersionString"], [bundle valueForKey:@"CFBundleVersion"]];
-	NSString *ct	  = [NSString stringWithFormat:@"Code Type:\t\t%@\n", @"idontknow"];
-	NSString *pp      = [NSString stringWithFormat:@"Parent Process:\t\t%@\n\n", [bundle valueForKey:@"CFBundleIdentifier"] ];
+	//NSString *ct	  = [NSString stringWithFormat:@"Code Type:\t\t%@\n", @"idontknow"];
+	//NSString *pp      = [NSString stringWithFormat:@"Parent Process:\t\t%@\n\n", [bundle valueForKey:@"CFBundleIdentifier"] ];
 	NSString *date    = [NSString stringWithFormat:@"Date/Time:\t\t%@\n", [[NSDate date] description]];
 	NSString *osvers  = [NSString stringWithFormat:@"OS Version:\t\t%u.%u.%u (%@)\n\n\n", major, minor, bugFix, bv];
 	NSLog(@"\n");
@@ -351,6 +354,8 @@ void LogIt (NSString *format, ...)
 
 	
 }
+
+/*
 
 - (void)gestaltFun
 {
@@ -416,6 +421,7 @@ void LogIt (NSString *format, ...)
 		NSLog(@"error calling Gestalt: %d", returnType);
 	}
 }
+*/
 
 + (NSString *)applicationSupportFolder {
 	
@@ -443,7 +449,7 @@ void LogIt (NSString *format, ...)
 
 + (NSString *)ipswFile
 {
-	return [DL stringByAppendingPathComponent:@"AppleTV2,1_4.3_8F305_Restore.ipsw"];
+	return [DL stringByAppendingPathComponent:@"AppleTV2,1_4.3_8F455_Restore.ipsw"];
 }
 	//originally we downloaded and patched pwnagetool rather than making a custom ipsw, some deprecated code still in here commented out.
 
@@ -618,7 +624,7 @@ void print_progress_bar(double progress) {
 	self.poisoning = TRUE;
 	[self showProgress];
 	int result = 0;
-	irecv_error_t ir_error = IRECV_E_SUCCESS;
+	//irecv_error_t ir_error = IRECV_E_SUCCESS;
 	
 	pois0n_init();
 	pois0n_set_callback(&print_progress, self);
@@ -813,7 +819,7 @@ void print_progress_bar(double progress) {
 }
 
 int received_cb(irecv_client_t client, const irecv_event_t* event) {
-		NSLog(@"received_cb");
+		//NSLog(@"received_cb");
 	if (event->type == IRECV_RECEIVED) {
 		int i = 0;
 		int size = event->size;
@@ -826,7 +832,7 @@ int received_cb(irecv_client_t client, const irecv_event_t* event) {
 }
 
 void parse_command(irecv_client_t client, unsigned char* command, unsigned int size) {
-		NSLog(@"parse command");
+		//NSLog(@"parse command");
 	char* cmd = strdup(command);
 	char* action = strtok(cmd, " ");
 	debug("Executing %s\n", action);
@@ -868,9 +874,9 @@ void parse_command(irecv_client_t client, unsigned char* command, unsigned int s
 }
 
 int precommand_cb(irecv_client_t client, const irecv_event_t* event) {
-	NSLog(@"precommand_cb");
+	//NSLog(@"precommand_cb");
 	if (event->type == IRECV_PRECOMMAND) {
-		irecv_error_t error = 0;
+		//irecv_error_t error = 0;
 		if (event->data[0] == '/') {
 			parse_command(client, event->data, event->size);
 			return -1;
@@ -995,10 +1001,12 @@ NSLog(@"postcommand_cb");
 //	NSLog(@"iv: -%@- other side", iv);
 //		return;
 	NSString *logPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/SP_Keys.log"];
-	[FM removeFileAtPath:logPath handler:nil];
-	FILE* file = freopen([logPath fileSystemRepresentation], "a", stdout);
+	
 
-	NSString *command = [commandTextField stringValue];
+    [FM removeItemAtPath:logPath error:nil];
+    FILE* file = freopen([logPath fileSystemRepresentation], "a", stdout);
+
+	//NSString *command = [commandTextField stringValue];
 	
 	quit = 0;
 
@@ -1046,10 +1054,9 @@ NSLog(@"postcommand_cb");
 	irecv_exit();
 		
 		fclose(file);
-	
-	
-	NSString *me = [NSString stringWithContentsOfFile:logPath];
-	me = [me stringByReplacingOccurrencesOfString:@"\0" withString:@""];
+
+    NSString *me = [NSString stringWithContentsOfFile:logPath encoding:NSUTF8StringEncoding error:nil];
+    me = [me stringByReplacingOccurrencesOfString:@"\0" withString:@""];
 	NSLog(@"ME: %@", me);
 
 	
@@ -1102,9 +1109,9 @@ NSLog(@"postcommand_cb");
 	const char 
 	*ibssFile = [self iBSS],
 	*kernelcacheFile = [self kernelcache],
-	*ramdiskFile = NULL,
-	*bgcolor = NULL,
-	*bootlogo = NULL,
+	//*ramdiskFile = NULL,
+	//*bgcolor = NULL,
+	//*bootlogo = NULL,
 	*ibecFile = [self iBEC];
 	pois0n_init();
 	pois0n_set_callback(&print_progress, self);
@@ -1252,7 +1259,7 @@ NSLog(@"postcommand_cb");
 	[self setDownloadText:NSLocalizedString(@"Waiting for device to enter DFU mode...", @"Waiting for device to enter DFU mode...")];
 	[self setInstructionText:NSLocalizedString(@"Connect USB, POWER then press and hold MENU and PLAY/PAUSE for 7 seconds", @"Connect USB, POWER then press and hold MENU and PLAY/PAUSE for 7 seconds")];
 	[instructionImage setImage:[self imageForMode:kSPATVTetheredRemoteImage]];
-	while(pois0n_is_ready()) {
+	while(pois0n_is_ready_old()) {
 		sleep(1);
 	}
 	
@@ -1294,7 +1301,7 @@ NSLog(@"postcommand_cb");
 		return 0;
 	}
 	[self setDownloadText:NSLocalizedString(@"iBSS upload successful! Reconnecting in 10 seconds...", @"iBSS upload successful! Reconnecting in 10 seconds...")];  
-	client = irecv_reconnect(client, 10);
+	client = irecv_reconnect_old(client, 10);
 	
 	if (ramdiskFile != NULL) {
 		[self setDownloadText:[NSString stringWithFormat:NSLocalizedString(@"Uploading %s to device...", @"Uploading %s to device..."), ramdiskFile]];
@@ -1406,6 +1413,11 @@ NSLog(@"postcommand_cb");
 	return [[NSUserDefaults standardUserDefaults] boolForKey:@"sigServer"];
 }
 
++ (BOOL)debWhitelist
+{
+    return [[NSUserDefaults standardUserDefaults] boolForKey:@"debWhitelist"];
+}
+
 - (void)setBundleControllerContent
 {
 
@@ -1475,7 +1487,7 @@ NSLog(@"postcommand_cb");
     while((outData = [swh readDataToEndOfFile]) && [outData length])
     {
         temp = [[[NSString alloc] initWithData:outData encoding:NSASCIIStringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-		NSLog(@"temp length: %i", [temp length]);
+		NSLog(@"temp length: %lu", [temp length]);
 	
 		if ([temp length] > 800)
 		{
@@ -1530,12 +1542,12 @@ NSLog(@"postcommand_cb");
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	
-	[self iTunesIsTenFive];
+//	[self iTunesIsTenFourPlus];
 	
 	if ([self homeWritable])
 	{
 		
-		NSLog(@"can write to home!");
+		//NSLog(@"can write to home!");
 	} else{
 		
 		[self showHomePermissionWarning];
@@ -1545,7 +1557,7 @@ NSLog(@"postcommand_cb");
 		//killiTunes
 	if ([self optionKeyIsDown])
 	{
-		[otherWindow makeKeyAndOrderFront:nil];
+		//[otherWindow makeKeyAndOrderFront:nil];
 	}
 	
 	[self printEnvironment];
@@ -1565,19 +1577,20 @@ NSLog(@"postcommand_cb");
 		[[NSApplication sharedApplication] terminate:self];
 	}
 	[self checkScripting];
+    
 	NSString *lastUsedbundle = LAST_BUNDLE;
 
 	if ([lastUsedbundle length] < 1)
 	{
-		lastUsedbundle = @"AppleTV2,1_4.3_8F305";
+		lastUsedbundle = @"AppleTV2,1_4.3_8F455";
 		[[NSUserDefaults standardUserDefaults] setObject:lastUsedbundle forKey:@"lastUsedBundle"];
 	}
 	self.currentBundle = [FWBundle bundleWithName:LAST_BUNDLE];
 
 		//[self.currentBundle logDescription];
 		
-	
-			[FM removeFileAtPath:TMP_ROOT handler:nil];
+	[FM removeItemAtPath:TMP_ROOT error:nil];
+		
 	
 		//[FM removeItemAtPath:TMP_ROOT error:nil];
 	[self setBundleControllerContent];
@@ -1647,47 +1660,58 @@ NSLog(@"postcommand_cb");
 
 - (void)createSupportBundleWithCache:(NSString *)theCache iBSS:(NSString *)iBSS
 {
-	NSLog(@"createSupportBundleWithCache: %@ iBSS: %@", theCache, iBSS);
+	//NSLog(@"createSupportBundleWithCache: %@ iBSS: %@", theCache, iBSS);
 	NSString *bundleOut = self.currentBundle.localBundlePath;
-	NSLog(@"localBundlePath: %@", bundleOut);
+	//NSLog(@"localBundlePath: %@", bundleOut);
 	if ([FM createDirectoryAtPath:bundleOut withIntermediateDirectories:YES attributes:nil error:nil] == FALSE)
 	{
 		NSLog(@"failed to create directory: %@", bundleOut);
 	}
 	NSDictionary *buildManifest = [NSDictionary dictionaryWithObjectsAndKeys:[theCache lastPathComponent], @"KernelCache", [iBSS lastPathComponent], @"iBSS", nil];
 	[buildManifest writeToFile:[bundleOut stringByAppendingPathComponent:@"BuildManifest.plist"] atomically:YES];
-		NSLog(@"copy: %@ to %@", theCache, [self.currentBundle localKernel]);
+	//	NSLog(@"copy: %@ to %@", theCache, [self.currentBundle localKernel]);
+    if ([FM fileExistsAtPath:self.currentBundle.localKernel])
+        [FM removeItemAtPath:self.currentBundle.localKernel error:nil];
 	 [FM copyItemAtPath:theCache toPath:self.currentBundle.localKernel error:nil];
-		NSLog(@"copy: %@ to %@", iBSS, self.currentBundle.localiBSS);
+	//	NSLog(@"copy: %@ to %@", iBSS, self.currentBundle.localiBSS);
+    if ([FM fileExistsAtPath:self.currentBundle.localiBSS])
+        [FM removeItemAtPath:self.currentBundle.localiBSS error:nil];
 	 [FM copyItemAtPath:iBSS toPath:self.currentBundle.localiBSS error:nil];
 	
 }
 
 - (void)createSupportBundleWithCache:(NSString *)theCache iBSS:(NSString *)iBSS iBEC:(NSString *)iBEC
 {
-	NSLog(@"createSupportBundleWithCache: %@ iBSS: %@ iBEC: %@", theCache, iBSS, iBEC);
+ 
+	//NSLog(@"createSupportBundleWithCache: %@ iBSS: %@ iBEC: %@", theCache, iBSS, iBEC);
 	NSString *bundleOut = self.currentBundle.localBundlePath;
-	NSLog(@"localBundlePath: %@", bundleOut);
+	//NSLog(@"localBundlePath: %@", bundleOut);
 	if ([FM fileExistsAtPath:bundleOut])
 	{
-		[FM removeFileAtPath:bundleOut handler:nil];
-	}
+        [FM removeItemAtPath:bundleOut error:nil];
+	
+    }
 	if ([FM createDirectoryAtPath:bundleOut withIntermediateDirectories:YES attributes:nil error:nil] == FALSE)
 	{
 		NSLog(@"failed to create directory: %@", bundleOut);
 	}
 	NSDictionary *buildManifest = [NSDictionary dictionaryWithObjectsAndKeys:[theCache lastPathComponent], @"KernelCache", [iBSS lastPathComponent], @"iBSS", [iBEC lastPathComponent], @"iBEC", nil];
 	[buildManifest writeToFile:[bundleOut stringByAppendingPathComponent:@"BuildManifest.plist"] atomically:YES];
-	NSLog(@"copy: %@ to %@", theCache, [self.currentBundle localKernel]);
+	//NSLog(@"copy: %@ to %@", theCache, [self.currentBundle localKernel]);
 	[FM copyItemAtPath:theCache toPath:self.currentBundle.localKernel error:nil];
-	NSLog(@"copy: %@ to %@", iBSS, self.currentBundle.localiBSS);
+	//NSLog(@"copy: %@ to %@", iBSS, self.currentBundle.localiBSS);
 	[FM copyItemAtPath:iBSS toPath:self.currentBundle.localiBSS error:nil];
 	
-	NSLog(@"copy: %@ to %@", iBEC, self.currentBundle.localiBEC);
+	//NSLog(@"copy: %@ to %@", iBEC, self.currentBundle.localiBEC);
 	[FM copyItemAtPath:iBEC toPath:self.currentBundle.localiBEC error:nil];
 	
 }
 
+- (void)showSemiTetheredAlert
+{
+    NSAlert *errorAlert = [NSAlert alertWithMessageText:@"Semi-Tethered Jailbreak" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"The %@ firmware is semi-tethered and requires a single initial tethered boot to work properly!", [self.currentBundle bundleName]];
+	[errorAlert runModal];
+}
 
 - (void)wrapItUp:(NSDictionary *)theDict
 {
@@ -1722,10 +1746,16 @@ NSLog(@"postcommand_cb");
 		
 	} else {
 		NSLog(@"under 4.4/5.0");
+        
 		[self createSupportBundleWithCache:kcache iBSS:ibss];
 
 	}
 	
+    int status = [self performSupportBundlePatches:[self currentBundle]];
+    
+    NSLog(@"support bundle patches ended with status: %i", status);
+    
+    
 	
 	/*
 	if ([FM fileExistsAtPath:[self kcacheString]])
@@ -1759,7 +1789,9 @@ NSLog(@"postcommand_cb");
 	
 		//FIXME: COMMENT BACK IN!!
 	
-		[FM removeFileAtPath:TMP_ROOT handler:nil];
+		
+   
+    [FM removeItemAtPath:TMP_ROOT error:nil];
 	
 	
 		// if we failed, say so
@@ -1802,7 +1834,12 @@ NSLog(@"postcommand_cb");
 		}
 		[cancelButton setTitle:@"Done"];
 		[[NSUserDefaults standardUserDefaults] setObject:self.currentBundle.bundleName forKey:@"lastUsedBundle"];
-		
+//		if([self.currentBundle is8F455])
+//        {
+//            //[self showSemiTetheredAlert];
+//            [self performSelectorOnMainThread:@selector(showSemiTetheredAlert) withObject:nil waitUntilDone:NO];
+//        }
+        
 	} else {
 		
 		[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:NSLocalizedString(@"Custom IPSW creation failed!" , @"Custom IPSW creation failed!" ) waitUntilDone:NO];
@@ -1823,7 +1860,7 @@ NSLog(@"postcommand_cb");
 {
 	
 	NSFileManager *man = [NSFileManager defaultManager];
-	NSDictionary *attrs = [man attributesOfItemAtPath:NSHomeDirectory() error:nil];
+	//NSDictionary *attrs = [man attributesOfItemAtPath:NSHomeDirectory() error:nil];
 		//NSLog(@"attrs: %@", attrs);
 	
 	return [man isWritableFileAtPath:NSHomeDirectory()];
@@ -1891,6 +1928,7 @@ NSLog(@"postcommand_cb");
 	self.currentBundle = [FWBundle bundleWithName:lastUsedbundle];
 	[window setContentView:self.secondView];
 	[window display];
+    [self showProgress];
 [	NSThread detachNewThreadSelector:@selector(threadedDFURestore) toTarget:self withObject:nil];
 		//[self enterDFU];
 }
@@ -1913,6 +1951,7 @@ NSLog(@"postcommand_cb");
 
 - (BOOL)scriptingEnabled
 {
+   
 	NSString *assitivePath = @"/private/var/db/.AccessibilityAPIEnabled";
 	if (![FM fileExistsAtPath:assitivePath])
 		return FALSE;
@@ -1931,7 +1970,7 @@ NSLog(@"postcommand_cb");
 	[asString appendString:@"end tell\n"];
 	[asString appendString:@"end tell\n"];
 	NSAppleScript *as = [[NSAppleScript alloc] initWithSource:asString];
-		NSLog(@"fixScript: %@", asString);
+		//NSLog(@"fixScript: %@", asString);
 	[as executeAndReturnError:nil];
 	[asString release];
 	asString = nil;
@@ -1944,6 +1983,33 @@ NSLog(@"postcommand_cb");
 	[as executeAndReturnError:nil];
 	[as release];
 	
+}
+
+- (BOOL)iTunesIsTenFourPlus
+{
+	NSBundle *itunesBundle = [NSBundle bundleWithPath:@"/Applications/iTunes.app"];
+	NSDictionary *itunesDict = [itunesBundle infoDictionary];
+	NSString *versionNumber = [itunesDict valueForKey:@"CFBundleShortVersionString"];
+	NSComparisonResult theResult = [versionNumber compare:@"10.4" options:NSNumericSearch];
+    //NSLog(@"theversion: %@  installed version %@", theVersion, installedVersion);
+	if ( theResult == NSOrderedDescending )
+	{
+		//NSLog(@"%@ is greater than %@", versionNumber, @"10.4");
+		
+		return YES;
+		
+	} else if ( theResult == NSOrderedAscending ){
+		
+		//NSLog(@"%@ is greater than %@", @"10.4", versionNumber);
+		return NO;
+		
+	} else if ( theResult == NSOrderedSame ) {
+		
+		//NSLog(@"%@ is equal to %@", versionNumber, @"10.4");
+		return YES;
+	}
+	
+	return NO;
 }
 
 - (BOOL)iTunesIsTenFive
@@ -2020,7 +2086,7 @@ NSLog(@"postcommand_cb");
 	[asString appendString:@"tell application \"System Events\"\n"];
 	[asString appendString:@"tell Process \"iTunes\"\n"];
 	[asString appendString:@"key down option\n"];
-	if ([self iTunesIsTenFive] == TRUE)
+	if ([self iTunesIsTenFourPlus] == TRUE)
 	{
 			//[asString appendString:@"click button \"Restore\"  of scroll area 3 of window 1\n"];
 		[asString appendString:@"click button 1 of scroll area 3 of window 1\n"];
@@ -2107,7 +2173,7 @@ NSLog(@"postcommand_cb");
 	[window display];
 	
 	BOOL is44 = [[self currentBundle] is4point4];
-	
+	[self showProgress];
 	if (is44 == TRUE)
 	{
 		NSLog(@"new tethered boot!");
@@ -2145,10 +2211,10 @@ NSLog(@"postcommand_cb");
 		//[NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/SP_Debug.log"]
 
 	NSString *logPath2 = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/SP_Debug_new.log"];
-	[FM removeFileAtPath:logPath2 handler:nil];
-		//current bundle may be set by default, but we never want to assume the default processOne ipsw to be anything but the latest- which is still hardcoded to 4.2.1.
+	[FM removeItemAtPath:logPath2 error:nil];
+	//current bundle may be set by default, but we never want to assume the default processOne ipsw to be anything but the latest- which is still hardcoded to 4.2.1.
 		//self.currentBundle = LAST_BUNDLE;
-	self.currentBundle = [FWBundle bundleWithName:@"AppleTV2,1_4.3_8F305"];
+	self.currentBundle = [FWBundle bundleWithName:@"AppleTV2,1_4.3_8F455"];
 	if ([self optionKeyIsDown])
 	{
 		NSOpenPanel *op = [NSOpenPanel openPanel];
@@ -2178,7 +2244,8 @@ NSLog(@"postcommand_cb");
 		[bootButton setEnabled:FALSE];
 		[instructionImage setImage:[self imageForMode:kSPIPSWImage]];
 			
-			[NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:ipsw];
+        [self showProgress];
+        [NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:ipsw];
 		return;
 	}
 	
@@ -2192,6 +2259,7 @@ NSLog(@"postcommand_cb");
 	BOOL download = [self filesToDownload];
 	if (download == TRUE)
 	{
+        [self showProgress];
 		[self downloadFiles];
 	} else {
 	
@@ -2348,13 +2416,14 @@ NSLog(@"postcommand_cb");
 	}
 	
 	[nu setSigServer:[tetherKitAppDelegate sigServer]];
-	
+	[nu setDebWhitelist:[tetherKitAppDelegate debWhitelist]];
 	[nu setEnableScripting:self.enableScripting];
 	[nu setCurrentBundle:theBundle];
 	[self showProgress];
 	[self setDownloadText:NSLocalizedString(@"Unzipping IPSW...",@"Unzipping IPSW..." )];
 	if ([nitoUtility unzipFile:inputIPSW toPath:TMP_ROOT])
 	{
+        NSLog(@"unzip finished successfully!");
 		[self setDownloadText:NSLocalizedString(@"Patching ramdisk...", @"Patching ramdisk...")];
 		status = [self performFirmwarePatches:theBundle withUtility:nu];
 		if (status == 0)
@@ -2367,6 +2436,20 @@ NSLog(@"postcommand_cb");
 	}
 		//[self hideProgress];
 	[pool release];
+}
+
+- (int)performSupportBundlePatches:(FWBundle *)theBundle
+{
+    int status = 0;
+	if ([theBundle sbkernel] != nil)
+	{
+        NSLog(@"decryptedPatchFromData: %@ atRoot: %@ fromBundle: %@", [theBundle sbkernel], [theBundle localBundlePath], [theBundle bundlePath]);
+		status = [nitoUtility decryptedPatchFromData:[theBundle sbkernel] atRoot:[theBundle localBundlePath] fromBundle:[theBundle bundlePath]];
+        
+
+    }
+    
+    return status;
 }
 
 - (int)performFirmwarePatches:(FWBundle *)theBundle withUtility:(nitoUtility *)nitoUtil
@@ -2484,7 +2567,7 @@ NSLog(@"postcommand_cb");
 	
 	NSString *helperPath = [[NSBundle mainBundle] pathForResource: @"dbHelper" ofType: @""];
 	NSFileManager *man = [NSFileManager defaultManager];
-	NSDictionary *attrs = [man fileAttributesAtPath:helperPath traverseLink:YES];
+    NSDictionary *attrs = [man attributesOfItemAtPath:helperPath error:nil];
 	NSNumber *curPerms = [attrs objectForKey:NSFilePosixPermissions];
 		//NSLog(@"curPerms: %@", curPerms);
 	if (![[attrs objectForKey:NSFileOwnerAccountName] isEqualToString:@"root"] || [curPerms intValue] < 2541)
@@ -2506,10 +2589,10 @@ NSLog(@"postcommand_cb");
 		OSStatus myStatus = AuthorizationCreate (NULL, kAuthorizationEmptyEnvironment, myFlags, &myAuthorizationRef);
 		
 		
-		NSString *helpPath = [[NSBundle mainBundle] pathForResource: @"dHelper" ofType: @""];
+	//	NSString *helpPath = [[NSBundle mainBundle] pathForResource: @"dHelper" ofType: @""];
 		
 		
-		char *systemCopier = ( char * ) [helpPath fileSystemRepresentation];
+		//char *systemCopier = ( char * ) [helpPath fileSystemRepresentation];
 		
 		
 		AuthorizationItem rightSet[] = {{kAuthorizationRightExecute, 0, NULL, 0}};

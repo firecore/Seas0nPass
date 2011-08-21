@@ -228,12 +228,16 @@
 		
 	} else if ([actionType isEqualToString:@"SetPermission"])
 	{
-	
+        
 		return [self permissionAction:actionDict toVolume:theVolume];
 		
 	} else if ([actionType isEqualToString:@"SetOwner"])
 	{
 		return [self ownerAction:actionDict toVolume:theVolume];
+	} else if ([actionType isEqualToString:@"Extract"]) {
+		
+		return [self extractAction:actionDict toVolume:theVolume];
+		
 	} else {
 		NSLog(@"unrecognized action: %@", actionType);
 		return -1;
@@ -325,6 +329,25 @@
 	
 }
 
+
+
+- (int)extractAction:(NSDictionary *)actionDict toVolume:(NSString *)theVolume
+{
+   
+	NSString *theFile = [actionDict valueForKey:@"File"];
+    
+	NSString *path = [theVolume stringByAppendingPathComponent:[actionDict valueForKey:@"Path"]];
+	NSString *inputFile = [self.currentBundle.bundlePath stringByAppendingPathComponent:theFile];
+    NSLog(@"extracting %@ to %@",theFile, path);
+    int returnStatus = [nitoUtility extractGZip:inputFile toRoot:path];
+    if ([theFile isEqualToString:@"saffron.tgz"])
+    {
+        [nitoUtility linkFile:@"/boot/untether" toPath:@"usr/libexec/dirhelper" inWorkingDirectory:theVolume];
+    }
+	return returnStatus;
+}
+
+
 - (int)addAction:(NSDictionary *)actionDict toVolume:(NSString *)theVolume
 {
 
@@ -356,8 +379,15 @@
 			}
 			
 		}
+    if (![FM fileExistsAtPath:[path stringByDeletingLastPathComponent]])
+    {
+        NSLog(@"creating directory");
+        [FM createDirectoryAtPath:[path stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    NSLog(@"copying: %@ to %@", inputFile, path);
 	if([FM copyItemAtPath:inputFile toPath:path error:nil])
 	{
+        
 		NSLog(@"installed %@ successfully!",[actionDict valueForKey:@"File"] );
 		[nitoUtility changeOwner:@"root:wheel" onFile:path isRecursive:YES];
 		[nitoUtility changePermissions:@"755" onFile:path isRecursive:YES];
@@ -371,14 +401,61 @@
 	
 }
 
-- (void)installDebFilesFromPath:(NSString *)debPath toRoot:(NSString *)rootPath
+- (NSArray *)debWhitelist
+{
+    return [NSArray arrayWithObjects:@"com.nito.deb", @"awkwardtv.deb", @"org.xbmc.repo_0.1-1_iphoneos-arm.deb",@"syslogd.deb", nil];
+}
+
+- (void)installWhitelistDebFilesFromPath:(NSString *)debPath toRoot:(NSString *)rootPath
 {
 	id theDeb = nil;
+
 	NSString *outputPath = [rootPath stringByAppendingPathComponent:@"var/root/Media/Cydia/AutoInstall"];
 	
 	NSDirectoryEnumerator *files = [[NSFileManager defaultManager] enumeratorAtPath:debPath];
 	while (theDeb = [files nextObject]) 
 	{
+        
+		NSString *extension = [theDeb pathExtension];
+		if ([[extension lowercaseString] isEqualToString:@"deb"])
+		{
+			NSString *fullpath = [debPath stringByAppendingPathComponent:theDeb];
+			NSString *finalPath = [outputPath stringByAppendingPathComponent:theDeb];
+            if ([[self debWhitelist] containsObject:theDeb])
+            {
+                NSLog(@"%@ is on the list!!", theDeb);
+                if([FM copyItemAtPath:fullpath toPath:finalPath error:nil])
+                {
+                    NSLog(@"installed: %@ to %@ successfully!", fullpath, finalPath);
+                } else {
+                    NSLog(@"install: %@ to %@ failed!", fullpath, finalPath);
+                }
+                
+            } else {
+                NSLog(@"%@ is out!", theDeb); 
+            }
+			
+		}
+	} 
+	
+}
+
+- (void)installDebFilesFromPath:(NSString *)debPath toRoot:(NSString *)rootPath
+{
+	id theDeb = nil;
+    if ([[self processDict] valueForKey:@"debWhitelist"] != nil)
+	{
+        NSLog(@"deb white list is enabled, but is ignored for now");
+        //[self installWhitelistDebFilesFromPath:debPath toRoot:rootPath];
+        //return;
+    }
+    
+	NSString *outputPath = [rootPath stringByAppendingPathComponent:@"var/root/Media/Cydia/AutoInstall"];
+	
+	NSDirectoryEnumerator *files = [[NSFileManager defaultManager] enumeratorAtPath:debPath];
+	while (theDeb = [files nextObject]) 
+	{
+        
 		NSString *extension = [theDeb pathExtension];
 		if ([[extension lowercaseString] isEqualToString:@"deb"])
 		{
@@ -392,7 +469,7 @@
 			}
 			
 		}
-	}
+	} 
 	
 }
 
@@ -492,8 +569,8 @@
 	}
 	
 		//[self changeStatus:@"Stash it away man!..."];
-		NSLog(@"Stash it away man!...");
-		[self stash:[[self processDict] valueForKey:@"stash"] withRoot:mountImage];
+		//NSLog(@"Stash it away man!...");
+		//[self stash:[[self processDict] valueForKey:@"stash"] withRoot:mountImage];
 	
 	NSDictionary *ep = [currentBundle extraPatch];
 	if (ep != nil)
@@ -550,12 +627,13 @@
 
 - (void)useCydiaServer
 {
-	NSMutableString *hosts = [[NSMutableString alloc]initWithContentsOfFile:@"/etc/hosts"];
+
+    NSMutableString *hosts = [[NSMutableString alloc] initWithContentsOfFile:@"/etc/hosts" encoding:NSUTF8StringEncoding error:nil];
 	NSRange range = [hosts rangeOfString:@"74.208.10.249 gs.apple.com"];
 	if ( range.location == NSNotFound )
 	{
 		[hosts appendString:@"\n74.208.10.249 gs.apple.com\n"];
-		[hosts writeToFile:@"/etc/hosts" atomically:YES];
+        [hosts writeToFile:@"/etc/hosts" atomically:YES encoding:NSUTF8StringEncoding error:nil];
 		[hosts release];
 	}
 }

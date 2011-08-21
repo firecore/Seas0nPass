@@ -165,6 +165,9 @@
 	if ([self is4point4])
 		return NO;
 	
+//    if ([self is8F455])
+//        return NO;
+    
 	return YES;
 		//make this smarter later, for now this will do
 }
@@ -210,6 +213,15 @@
 	}
 
 	return kUnknownDevice;
+}
+
+- (BOOL)is8F455
+{
+    if ([[self bundleName] isEqualToString:@"AppleTV2,1_4.3_8F455"])
+    {
+        return YES;
+    }
+    return NO;
 }
 
 - (BOOL)is4point4
@@ -441,6 +453,10 @@
 	return [[self firmwarePatches] valueForKey:@"kernelcache"];
 }
 
+- (NSDictionary *)sbkernel
+{
+    return [[self supportBundlePatches] valueForKey:@"kernelcache"];
+}
 
 - (NSString *)rootFilesystem
 {
@@ -471,6 +487,12 @@
 {
 	return [[self infoDictionary] valueForKey:FW_PATCHES];
 	
+}
+
+- (NSDictionary *)supportBundlePatches
+{
+    return [[self infoDictionary] valueForKey:SB_PATCHES];
+    
 }
 
 - (NSDictionary *)ramdiskPatches

@@ -25,7 +25,7 @@ int main (int argc, const char * argv[]) {
 	int i;
 	for (i = 1; i < (argc - 1); i+= 2){
 		NSString *path = [NSString stringWithUTF8String:argv[0]];
-		NSString *option = [NSString stringWithUTF8String:argv[i]];
+		//NSString *option = [NSString stringWithUTF8String:argv[i]];
 		NSString *value = [NSString stringWithUTF8String:argv[i+1]]; //plist location
 		pwnHelperClass *phc = [[pwnHelperClass alloc] init];
 			//[phc sendCommand:value];

@@ -193,7 +193,7 @@ static const struct irecv_device irecv_devices[] = {
 	{  6, "iPad1,1",    "k48ap",  2,  8930,
 	"http://appldnld.apple.com/iPad/061-8801.20100811.CvfR5/iPad1,1_3.2.2_7B500_Restore.ipsw" },
 	{  7, "iPhone3,1",  "n90ap",  0,  8930,
-	"http://appldnld.apple.com/iPhone4/061-7939.20100908.Lcyg3/iPhone3,1_4.1_8B117_Restore.ipsw" },
+	"http://appldnld.apple.com/iPhone4/061-9858.20101122.Er456/iPhone3,1_4.2.1_8C148_Restore.ipsw" },
 	{  8, "iPod4,1",    "n81ap",  8,  8930,
 	"http://appldnld.apple.com/iPhone4/061-8490.20100901.hyjtR/iPod4,1_4.1_8B117_Restore.ipsw" },
 	{  9, "AppleTV2,1", "k66ap", 10,  8930,
@@ -205,7 +205,9 @@ static const struct irecv_device irecv_devices[] = {
 LIBIRECOVERY_EXPORT void irecv_set_debug_level(int level);
 LIBIRECOVERY_EXPORT const char* irecv_strerror(irecv_error_t error);
 LIBIRECOVERY_EXPORT irecv_error_t irecv_open_attempts(irecv_client_t* pclient, int attempts);
+LIBIRECOVERY_EXPORT irecv_error_t irecv_open_attempts_old(irecv_client_t* pclient, int attempts);
 LIBIRECOVERY_EXPORT irecv_error_t irecv_open(irecv_client_t* client);
+LIBIRECOVERY_EXPORT irecv_error_t irecv_open_old(irecv_client_t* client);
 LIBIRECOVERY_EXPORT irecv_error_t irecv_reset(irecv_client_t client);
 LIBIRECOVERY_EXPORT irecv_error_t irecv_close(irecv_client_t client);
 LIBIRECOVERY_EXPORT irecv_error_t irecv_receive(irecv_client_t client);
@@ -233,6 +235,7 @@ LIBIRECOVERY_EXPORT void irecv_hexdump(unsigned char* buf, unsigned int len, uns
 LIBIRECOVERY_EXPORT void irecv_init();
 LIBIRECOVERY_EXPORT void irecv_exit();
 LIBIRECOVERY_EXPORT irecv_client_t irecv_reconnect(irecv_client_t client, int initial_pause);
+LIBIRECOVERY_EXPORT irecv_client_t irecv_reconnect_old(irecv_client_t client, int initial_pause);
 LIBIRECOVERY_EXPORT irecv_error_t irecv_reset_counters(irecv_client_t client);
 LIBIRECOVERY_EXPORT irecv_error_t irecv_finish_transfer(irecv_client_t client);
 LIBIRECOVERY_EXPORT irecv_error_t irecv_recv_buffer(irecv_client_t client, char* buffer, unsigned long length);
