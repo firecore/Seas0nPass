@@ -215,6 +215,21 @@
 	return kUnknownDevice;
 }
 
+- (NSString *)buildVersion
+{
+	NSString *name = [self bundleName];
+	NSArray *objects = [name componentsSeparatedByString:@"_"];
+	return [objects lastObject];
+}
+
+- (BOOL)is50B7
+{
+	if ([[self buildVersion] isEqualToString:@"9A5313e"])
+		return YES;
+	
+	return NO;
+}
+
 - (BOOL)is8F455
 {
     if ([[self bundleName] isEqualToString:@"AppleTV2,1_4.3_8F455"])

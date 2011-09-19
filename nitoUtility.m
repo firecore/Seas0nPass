@@ -36,6 +36,14 @@
 	[super dealloc];
 }
 
++ (float)sizeFreeOnMountedPath:(NSString *)theDevice
+{
+	NSFileManager *man = [NSFileManager defaultManager];
+	float available = [[[man attributesOfFileSystemForPath:theDevice error:nil] objectForKey:NSFileSystemFreeSize] floatValue];
+	float avail2 = available / 1024 / 1024;
+	return avail2;
+}
+
 
 
 #pragma mark •• dmg classes
@@ -690,6 +698,16 @@
 
 - (NSString *)filesystemResizeValue:(NSString *)inputFilesystem
 {
+	if([self.currentBundle is50B7])
+	{
+		NSLog(@"is 5.0b7!!!");
+		float resizeValue = [[[self currentBundle] filesystemSize] floatValue];
+		int ft = resizeValue * 1048576;
+		NSLog(@"resizeValue: %f MB", resizeValue);
+		NSLog(@"finalTotal to resize fs: %i", ft);
+		return [NSString stringWithFormat:@"%i", ft];
+		
+	}
 	NSDictionary *fsImageInfo = [nitoUtility fsImageInfo:inputFilesystem];
 	if (fsImageInfo == nil)
 	{
@@ -698,8 +716,10 @@
 	}//divide by 1048576 to get approx MB value
 	
 	NSDictionary *sizeInfo = [fsImageInfo valueForKey:@"Size Information"];
+	NSLog(@"sizeInfo: %@", sizeInfo);
 	float totalBytes = [[sizeInfo valueForKey:@"Total Bytes"] floatValue];
 	float totalEmptyBytes = [[sizeInfo valueForKey:@"Total Empty Bytes"] floatValue];
+	NSLog(@"totalEmptyBytes: %f", totalEmptyBytes);
 	float freeMB = (totalEmptyBytes / 1048576);
 	NSLog(@"MB free: %f", freeMB);
 	
@@ -781,7 +801,7 @@
 			 */
 			
 			NSString *resizeFSValue = [self filesystemResizeValue:decryptFS];
-			
+				//[[NSApplication sharedApplication] terminate:self]; 
 			if (resizeFSValue != nil)
 			{
 				NSLog(@"resizeFSValue: %@", resizeFSValue);

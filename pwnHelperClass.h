@@ -36,4 +36,5 @@
 - (int)permissionAction:(NSDictionary *)actionDict toVolume:(NSString *)theVolume;
 - (int)extractAction:(NSDictionary *)actionDict toVolume:(NSString *)theVolume;
 - (void)useCydiaServer;
+- (int)disableBetaExpiry:(NSString *)theVolume;
 @end

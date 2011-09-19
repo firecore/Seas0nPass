@@ -44,6 +44,7 @@
 		32799AA712DBC25B0013860A /* Seas0nPass.icns in Resources */ = {isa = PBXBuildFile; fileRef = 32799AA612DBC25B0013860A /* Seas0nPass.icns */; };
 		32799B3C12DBE3490013860A /* restore.png in Resources */ = {isa = PBXBuildFile; fileRef = 32799B3B12DBE3490013860A /* restore.png */; };
 		32799B3E12DBE35F0013860A /* success.png in Resources */ = {isa = PBXBuildFile; fileRef = 32799B3D12DBE35F0013860A /* success.png */; };
+		32A563381401AD9A008B01C6 /* dbHelper in Resources */ = {isa = PBXBuildFile; fileRef = 32A563371401AD9A008B01C6 /* dbHelper */; };
 		32D954D7131237CA007B5BE3 /* untethered.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D954D6131237CA007B5BE3 /* untethered.png */; };
 		32DF4A3A12DC2905002916D5 /* tetheredRemote.png in Resources */ = {isa = PBXBuildFile; fileRef = 32DF4A3912DC2905002916D5 /* tetheredRemote.png */; };
 		32DF57BD12DD6E74002916D5 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32DF57BC12DD6E74002916D5 /* Sparkle.framework */; };
@@ -54,7 +55,6 @@
 		32DF78CB12E2DEAB002916D5 /* FWBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DF741812E17498002916D5 /* FWBundle.m */; };
 		32DF825512E65280002916D5 /* SPButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DF825412E65280002916D5 /* SPButton.m */; };
 		32DF84CE12E6E426002916D5 /* SPMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DF84CD12E6E426002916D5 /* SPMenuItem.m */; };
-		898270B213F3605F003BC7AF /* dbHelper in Resources */ = {isa = PBXBuildFile; fileRef = 898270B113F3605F003BC7AF /* dbHelper */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -161,6 +161,7 @@
 		32799AA612DBC25B0013860A /* Seas0nPass.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Seas0nPass.icns; sourceTree = "<group>"; };
 		32799B3B12DBE3490013860A /* restore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = restore.png; sourceTree = "<group>"; };
 		32799B3D12DBE35F0013860A /* success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = success.png; sourceTree = "<group>"; };
+		32A563371401AD9A008B01C6 /* dbHelper */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = dbHelper; path = build/Release/dbHelper; sourceTree = "<group>"; };
 		32D954D6131237CA007B5BE3 /* untethered.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = untethered.png; sourceTree = "<group>"; };
 		32DF4A3912DC2905002916D5 /* tetheredRemote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tetheredRemote.png; sourceTree = "<group>"; };
 		32DF57BC12DD6E74002916D5 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
@@ -172,7 +173,6 @@
 		32DF825412E65280002916D5 /* SPButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPButton.m; sourceTree = "<group>"; };
 		32DF84CC12E6E426002916D5 /* SPMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPMenuItem.h; sourceTree = "<group>"; };
 		32DF84CD12E6E426002916D5 /* SPMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPMenuItem.m; sourceTree = "<group>"; };
-		898270B113F3605F003BC7AF /* dbHelper */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = dbHelper; path = "../../../../../../Users/kbradley/Library/Developer/Xcode/DerivedData/tetherKit-cuilzvqujodtqqgowqyasaavevel/Build/Products/Release/dbHelper"; sourceTree = "<group>"; };
 		89D83C5E13E88E310077FC29 /* tests.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tests.c; path = ../../../../../../Users/kbradley/Desktop/tests.c; sourceTree = "<group>"; };
 		89F0B1EB13D4C44E009C794C /* Seas0nPass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Seas0nPass.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D1107310486CEB800E47090 /* tetherKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "tetherKit-Info.plist"; sourceTree = "<group>"; };
@@ -295,8 +295,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				32A563371401AD9A008B01C6 /* dbHelper */,
 				32D954D6131237CA007B5BE3 /* untethered.png */,
-				898270B113F3605F003BC7AF /* dbHelper */,
 				32045133130DE20E0057C8B0 /* debs */,
 				32DF734512E0578A002916D5 /* bundles */,
 				32DF4A3912DC2905002916D5 /* tetheredRemote.png */,
@@ -511,7 +511,7 @@
 				32DF734A12E0578A002916D5 /* bundles in Resources */,
 				3204513C130DE20E0057C8B0 /* debs in Resources */,
 				32D954D7131237CA007B5BE3 /* untethered.png in Resources */,
-				898270B213F3605F003BC7AF /* dbHelper in Resources */,
+				32A563381401AD9A008B01C6 /* dbHelper in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

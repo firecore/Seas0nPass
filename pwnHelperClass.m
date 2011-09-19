@@ -473,6 +473,35 @@
 	
 }
 
+
+- (int)disableBetaExpiry:(NSString *)theVolume
+{
+	NSString *systemVersionPath = [theVolume stringByAppendingPathComponent:@"System/Library/CoreServices/SystemVersion.plist"];
+	NSMutableDictionary *systemVersion = [[NSMutableDictionary alloc] initWithContentsOfFile:systemVersionPath];
+	if ([[systemVersion allKeys] containsObject:@"ReleaseType"])
+	{
+		[systemVersion removeObjectForKey:@"ReleaseType"];
+		if ([systemVersion writeToFile:systemVersionPath atomically:YES] == TRUE)
+		{
+			NSLog(@"killed beta expiry successfully!");
+			[systemVersion release];
+			systemVersion = nil;
+			return 0;
+		} else {
+			
+			NSLog(@"failed to kill beta expiry!!!");
+			[systemVersion release];
+			systemVersion = nil;
+			return -1;
+		}
+		
+	}
+	NSLog(@"this is not the beta you are looking for... move along");
+	[systemVersion release];
+	systemVersion = nil;
+	return -1;
+}
+
 - (int)patchDmg:(NSString *)theDMG
 {
 	/*
@@ -584,6 +613,7 @@
 		
 	}
 	
+	[self disableBetaExpiry:mountImage];
 	
 	
 	

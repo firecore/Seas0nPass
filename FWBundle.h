@@ -84,6 +84,8 @@ enum  {
 - (BOOL)is4point4;
 - (BOOL)untethered;
 - (BOOL)is8F455;
+- (BOOL)is50B7;
+- (NSString *)buildVersion;
 @end
 
 /*
