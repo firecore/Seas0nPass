@@ -64,6 +64,7 @@ enum  {
 @property (readwrite, assign) int counter;
 
 - (NSString *)buildVersion;
+- (IBAction)showHelpLog:(id)sender;
 - (IBAction)versionChanged:(id)sender;
 - (IBAction)poison:(id)sender;
 - (IBAction)startCountdown:(id)sender;

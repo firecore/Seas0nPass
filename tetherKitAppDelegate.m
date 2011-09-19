@@ -665,6 +665,12 @@ void print_progress_bar(double progress) {
 	return 0;
 }
 
+- (IBAction)showHelpLog:(id)sender;
+{
+	NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
+	NSString *logLocation = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/SP_Debug.log"];
+	[workspace selectFile:logLocation inFileViewerRootedAtPath:[logLocation stringByDeletingLastPathComponent]];
+}
 
 - (int)enterDFUNEW
 {
