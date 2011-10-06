@@ -487,12 +487,14 @@ void LogIt (NSString *format, ...)
 
 - (void)showProgress
 {
+	LOG_SELF;
 	[buttonOne setEnabled:FALSE];
 	[bootButton setEnabled:FALSE];
 	self.processing = TRUE;
 	[downloadBar startAnimation:self];
 	[downloadBar setHidden:FALSE];
 	[downloadBar setNeedsDisplay:TRUE];
+	[downloadBar display];
 	[self setDownloadProgress:0];
 		[cancelButton setEnabled:FALSE];
 }
@@ -2173,7 +2175,7 @@ NSLog(@"postcommand_cb");
 	[window display];
 	
 	BOOL is44 = [[self currentBundle] is4point4];
-	[self showProgress];
+	[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 	if (is44 == TRUE)
 	{
 		NSLog(@"new tethered boot!");
@@ -2201,6 +2203,7 @@ NSLog(@"postcommand_cb");
 
 - (IBAction)processOne:(id)sender //download and modify ipsw
 {
+	LOG_SELF;
 	
 	if (![self sufficientSpaceOnDevice:NSHomeDirectory()])
 	{
@@ -2243,8 +2246,7 @@ NSLog(@"postcommand_cb");
 		[buttonOne setEnabled:FALSE];
 		[bootButton setEnabled:FALSE];
 		[instructionImage setImage:[self imageForMode:kSPIPSWImage]];
-			
-        [self showProgress];
+		[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
         [NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:ipsw];
 		return;
 	}
@@ -2259,10 +2261,12 @@ NSLog(@"postcommand_cb");
 	BOOL download = [self filesToDownload];
 	if (download == TRUE)
 	{
-        [self showProgress];
+		[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+			//[self showProgress];
 		[self downloadFiles];
 	} else {
-	
+			//[self showProgress];
+		[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 		[NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:HCIPSW];
 	}
 
@@ -2402,6 +2406,7 @@ NSLog(@"postcommand_cb");
 	//sufficientSpaceOnDevice
 - (void)customFW:(NSString *)inputIPSW
 {
+	LOG_SELF;
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	FWBundle *theBundle = self.currentBundle;
 	NSString *fileSystemFile = [self.currentBundle rootFilesystem];
@@ -2419,7 +2424,7 @@ NSLog(@"postcommand_cb");
 	[nu setDebWhitelist:[tetherKitAppDelegate debWhitelist]];
 	[nu setEnableScripting:self.enableScripting];
 	[nu setCurrentBundle:theBundle];
-	[self showProgress];
+		//[self showProgress];
 	[self setDownloadText:NSLocalizedString(@"Unzipping IPSW...",@"Unzipping IPSW..." )];
 	if ([nitoUtility unzipFile:inputIPSW toPath:TMP_ROOT])
 	{

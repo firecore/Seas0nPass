@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+#define LOG_SELF NSLog(@"%@ %s", self, _cmd)
 
 @interface PatchedFile : NSDictionary {
 	

@@ -228,6 +228,86 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
+				<string>32D1103A143BD04D0095ACEA</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>tetherKitAppDelegate.m</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>32D1103B143BD04D0095ACEA</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>tetherKitAppDelegate.m</string>
+						<key>_historyCapacity</key>
+						<integer>0</integer>
+						<key>bookmark</key>
+						<string>32D1103D143BD04D0095ACEA</string>
+						<key>history</key>
+						<array>
+							<string>32D1103C143BD04D0095ACEA</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {1496, 1176}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>678 173 1496 1217 0 0 2560 1418 </string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
+				<string>32D1103E143BD04D0095ACEA</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>tetherKit_Prefix.pch</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>32D1103F143BD04D0095ACEA</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>tetherKit_Prefix.pch</string>
+						<key>_historyCapacity</key>
+						<integer>0</integer>
+						<key>bookmark</key>
+						<string>32D11040143BD04D0095ACEA</string>
+						<key>history</key>
+						<array>
+							<string>32D1101C143BCC6D0095ACEA</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {1282, 1261}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>1222 56 1282 1302 0 0 2560 1418 </string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
 				<string>327BF2EA141432820078BB20</string>
 				<key>PBXProjectModuleLabel</key>
 				<string>appletv_setup.sh</string>
@@ -242,10 +322,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>32A69C23141AE2CD009186F7</string>
+						<string>32D11041143BD04D0095ACEA</string>
 						<key>history</key>
 						<array>
-							<string>327BF2ED141432820078BB20</string>
+							<string>32AC223F142D5CC70033050F</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -341,7 +421,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>12</integer>
+									<integer>14</integer>
 									<integer>4</integer>
 									<integer>0</integer>
 								</array>
@@ -364,7 +444,7 @@
 							<real>389</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>250 467 2220 823 0 0 2560 1418 </string>
+						<string>248 436 2220 823 0 0 2560 1418 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -375,12 +455,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>327203A712C942470054F4B0</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>appletv_setup.sh</string>
+								<string>tetherKitAppDelegate.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -388,11 +470,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>327203A812C942470054F4B0</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>appletv_setup.sh</string>
+										<string>tetherKitAppDelegate.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>32A69C21141AE2CD009186F7</string>
+										<string>32D11030143BD04D0095ACEA</string>
 										<key>history</key>
 										<array>
 											<string>32720A2412CAD5020054F4B0</string>
@@ -497,7 +579,8 @@
 											<string>32605859140B94CE006518EB</string>
 											<string>327BF271141395BE0078BB20</string>
 											<string>327BF2E5141432820078BB20</string>
-											<string>327BF2E8141432820078BB20</string>
+											<string>32AC2236142D5CC70033050F</string>
+											<string>32D1102F143BD04D0095ACEA</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -511,23 +594,21 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {1809, 0}}</string>
+								<string>{{0, 0}, {1809, 197}}</string>
 								<key>RubberWindowFrame</key>
-								<string>250 467 2220 823 0 0 2560 1418 </string>
+								<string>248 436 2220 823 0 0 2560 1418 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>0pt</string>
+							<string>197pt</string>
 						</dict>
 						<dict>
 							<key>Proportion</key>
-							<string>755pt</string>
+							<string>558pt</string>
 							<key>Tabs</key>
 							<array>
 								<dict>
-									<key>BecomeActive</key>
-									<true/>
 									<key>ContentConfiguration</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
@@ -538,9 +619,9 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {1809, 728}}</string>
+										<string>{{10, 27}, {1809, 531}}</string>
 										<key>RubberWindowFrame</key>
-										<string>250 467 2220 823 0 0 2560 1418 </string>
+										<string>248 436 2220 823 0 0 2560 1418 </string>
 									</dict>
 									<key>Module</key>
 									<string>XCDetailModule</string>
@@ -556,7 +637,7 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {1841, 603}}</string>
+										<string>{{10, 27}, {1809, 531}}</string>
 									</dict>
 									<key>Module</key>
 									<string>PBXProjectFindModule</string>
@@ -622,11 +703,11 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>32A69C16141ADDC3009186F7</string>
+				<string>32D11031143BD04D0095ACEA</string>
 				<string>1CA23ED40692098700951B8B</string>
-				<string>32A69C17141ADDC3009186F7</string>
+				<string>32D11032143BD04D0095ACEA</string>
 				<string>327203A712C942470054F4B0</string>
-				<string>32A69C18141ADDC3009186F7</string>
+				<string>32D11033143BD04D0095ACEA</string>
 				<string>1CA23EDF0692099D00951B8B</string>
 				<string>1CA23EE00692099D00951B8B</string>
 				<string>1CA23EE10692099D00951B8B</string>
@@ -775,14 +856,14 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>32A69C19141ADDC3009186F7</string>
+				<string>32D11034143BD04D0095ACEA</string>
 				<string>1CCC7628064C1048000F2A68</string>
 				<string>1CCC7629064C1048000F2A68</string>
-				<string>32A69C1A141ADDC3009186F7</string>
-				<string>32A69C1B141ADDC3009186F7</string>
-				<string>32A69C1C141ADDC3009186F7</string>
-				<string>32A69C1D141ADDC3009186F7</string>
-				<string>32A69C1E141ADDC3009186F7</string>
+				<string>32D11035143BD04D0095ACEA</string>
+				<string>32D11036143BD04D0095ACEA</string>
+				<string>32D11037143BD04D0095ACEA</string>
+				<string>32D11038143BD04D0095ACEA</string>
+				<string>32D11039143BD04D0095ACEA</string>
 			</array>
 			<key>ToolbarConfigUserDefaultsMinorVersion</key>
 			<string>2</string>
@@ -816,13 +897,16 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>32A69C25141AE2CD009186F7</string>
-		<string>32A69C26141AE2CD009186F7</string>
+		<string>1C530D5B069F1CE1000CFCEE</string>
+		<string>32D11044143BD04D0095ACEA</string>
+		<string>32D11045143BD04D0095ACEA</string>
 		<string>327BF2EA141432820078BB20</string>
+		<string>32D1103E143BD04D0095ACEA</string>
 		<string>/Users/kevinbradley/Projects/Seas0nPass/tetherKit.xcodeproj</string>
+		<string>32D1103A143BD04D0095ACEA</string>
 	</array>
 	<key>WindowString</key>
-	<string>250 467 2220 823 0 0 2560 1418 </string>
+	<string>248 436 2220 823 0 0 2560 1418 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
@@ -1195,7 +1279,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D5B069F1CE1000CFCEE</string>
-				<string>32F8D4D8134118D600BFA0E1</string>
+				<string>32D11043143BD04D0095ACEA</string>
 				<string>1C78EAAC065D492600B07095</string>
 			</array>
 			<key>ToolbarConfiguration</key>
