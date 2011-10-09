@@ -31,6 +31,7 @@ enum  {
 	kAppleTVDevice,
 	kiPadDevice,
 	kiPhoneDevice,
+	kiPodDevice,
 	kUnknownDevice,
 };
 

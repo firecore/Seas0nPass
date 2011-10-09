@@ -176,7 +176,7 @@
 - (NSString *)deviceType
 {
 	NSString *firstLetter = [[self bundleName] substringToIndex:1];
-	if ([firstLetter isEqualToString:@"i"]) //ipad or iphone
+	if ([firstLetter isEqualToString:@"i"]) //ipad or iphone oops forgot ipod dummy!! ;-P
 	{
 		NSString *clippedPath = [[self bundleName] substringToIndex:5];
 		if ([clippedPath isEqualToString:@"iPhone"])
@@ -184,8 +184,8 @@
 			return clippedPath;
 			
 		} else {
-			
-			return @"iPad";
+			 
+			return [[self bundleName] substringToIndex:3]; //since iPod/iPad are both 4 letters this should return either one.
 		}
 
 	}
@@ -207,11 +207,16 @@
 		
 		return kiPadDevice;
 	
-	} else if (([[self deviceType] isEqualToString:@"AppleTV"])) {
+	} else if ([[self deviceType] isEqualToString:@"AppleTV"]) {
 		
 		return kAppleTVDevice;
+		
+	} else if ([[self deviceType] isEqualToString:@"iPod"]) {
+		
+		return kiPodDevice;
+		
 	}
-
+	
 	return kUnknownDevice;
 }
 
@@ -224,6 +229,10 @@
 
 - (BOOL)is50B7
 {
+	
+	if ([[self buildVersion] isEqualToString:@"9A334"])
+		return YES;
+	
 	if ([[self buildVersion] isEqualToString:@"9A5313e"])
 		return YES;
 	
@@ -239,8 +248,11 @@
     return NO;
 }
 
+
 - (BOOL)is4point4
 {
+	NSString *comparisonVersion = @"4.4"; //yes pandering to appletv2, what of it? ;-P
+	
 	NSString *clippedPath = nil;
 	int deviceInteger = [self deviceInt];
 	
@@ -253,19 +265,21 @@
 			break;
 			
 		case kiPadDevice:
+		case kiPodDevice:
 				//iPad1,1_4.3.1_8G4_Restore.ipsw
 			clippedPath = [[self bundleName] substringWithRange:NSMakeRange(8, 3)];
+			comparisonVersion = @"5.0";
 			break;
 			
 		case kiPhoneDevice:
 			
 			clippedPath = [[self bundleName] substringWithRange:NSMakeRange(10, 3)];
-			
+			comparisonVersion = @"5.0";
 			break;
 			
 	}
 	
-	NSComparisonResult theResult = [clippedPath compare:@"4.4" options:NSNumericSearch];
+	NSComparisonResult theResult = [clippedPath compare:comparisonVersion options:NSNumericSearch];
 		//NSLog(@"theversion: %@  installed version %@", theVersion, installedVersion);
 	if ( theResult == NSOrderedDescending )
 	{

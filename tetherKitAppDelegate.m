@@ -487,7 +487,7 @@ void LogIt (NSString *format, ...)
 
 - (void)showProgress
 {
-	LOG_SELF;
+		//LOG_SELF;
 	[buttonOne setEnabled:FALSE];
 	[bootButton setEnabled:FALSE];
 	self.processing = TRUE;
@@ -624,7 +624,7 @@ void print_progress_bar(double progress) {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	[self killiTunes];
 	self.poisoning = TRUE;
-	[self showProgress];
+	[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 	int result = 0;
 	//irecv_error_t ir_error = IRECV_E_SUCCESS;
 	
@@ -681,7 +681,7 @@ void print_progress_bar(double progress) {
 	NSLog(@"iSDFUNEW");
 	[self killiTunes];
 	self.poisoning = TRUE;
-	[self showProgress];
+	[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 		//[cancelButton setEnabled:TRUE];
 	int result = 0;
 	irecv_error_t ir_error = IRECV_E_SUCCESS;
@@ -1109,7 +1109,7 @@ NSLog(@"postcommand_cb");
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	[self killiTunes];
 	self.poisoning = TRUE;
-	[self showProgress];
+	[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 	int result = 0;
 	irecv_error_t ir_error = IRECV_E_SUCCESS;
 	
@@ -1250,7 +1250,7 @@ NSLog(@"postcommand_cb");
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	[self killiTunes];
 	self.poisoning = TRUE;
-	[self showProgress];
+	[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 	int result = 0;
 	irecv_error_t ir_error = IRECV_E_SUCCESS;
 	
@@ -1725,7 +1725,7 @@ NSLog(@"postcommand_cb");
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 		//NSLog(@"pwnFinished!");
-	[self showProgress];
+	[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 	NSString *outputPath = [theDict valueForKey:@"Path"];
 	NSString *theDMG = [theDict valueForKey:@"os"];
 	[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:NSLocalizedString(@"Converting image to read only compressed...",@"Converting image to read only compressed...") waitUntilDone:NO];
@@ -1936,7 +1936,7 @@ NSLog(@"postcommand_cb");
 	self.currentBundle = [FWBundle bundleWithName:lastUsedbundle];
 	[window setContentView:self.secondView];
 	[window display];
-    [self showProgress];
+    [self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 [	NSThread detachNewThreadSelector:@selector(threadedDFURestore) toTarget:self withObject:nil];
 		//[self enterDFU];
 }
@@ -2209,7 +2209,7 @@ NSLog(@"postcommand_cb");
 
 - (IBAction)processOne:(id)sender //download and modify ipsw
 {
-	LOG_SELF;
+		//LOG_SELF;
 	
 	if (![self sufficientSpaceOnDevice:NSHomeDirectory()])
 	{
@@ -2268,10 +2268,10 @@ NSLog(@"postcommand_cb");
 	if (download == TRUE)
 	{
 		[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
-			//[self showProgress];
+
 		[self downloadFiles];
 	} else {
-			//[self showProgress];
+	
 		[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 		[NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:HCIPSW];
 	}
@@ -2430,7 +2430,7 @@ NSLog(@"postcommand_cb");
 	[nu setDebWhitelist:[tetherKitAppDelegate debWhitelist]];
 	[nu setEnableScripting:self.enableScripting];
 	[nu setCurrentBundle:theBundle];
-		//[self showProgress];
+		[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 	[self setDownloadText:NSLocalizedString(@"Unzipping IPSW...",@"Unzipping IPSW..." )];
 	if ([nitoUtility unzipFile:inputIPSW toPath:TMP_ROOT])
 	{
@@ -2536,7 +2536,7 @@ NSLog(@"postcommand_cb");
 	[nu setEnableScripting:self.enableScripting];
 	[nu setCurrentBundle:self.currentBundle];
 	[nitoUtility createTempSetup];
-	[self showProgress];
+	[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 	[self setDownloadText:NSLocalizedString(@"Unzipping IPSW...",@"Unzipping IPSW..." )];
 	if ([nitoUtility unzipFile:inputIPSW toPath:TMP_ROOT])
 	{
