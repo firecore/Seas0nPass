@@ -43,6 +43,22 @@
  
  */
 
+	//DownloadUrl
+
+- (NSString *)downloadURL
+{
+	NSString *url = [[self infoDictionary] valueForKey:DOWNLOAD_URL];
+	if ([url length] > 1)
+		return url;
+	
+	return nil;
+}
+
+- (NSString *)SHA
+{
+	return [[self infoDictionary] valueForKey:SHA_ONE];
+}
+
 - (NSDictionary *)buildManifest
 {
 	NSArray *buildIdentities = [[self fwDictionary] objectForKey:@"BuildIdentities"];
@@ -130,6 +146,39 @@
 	return nil;
 }
 
+- (NSString *)oldOutputFile
+{
+	return [NSHomeDirectory() stringByAppendingPathComponent:self.outputName];
+}
+
+- (NSString *)outputFile
+{
+	NSString *newOutputFile = [[nitoUtility firmwareFolder] stringByAppendingPathComponent:self.outputName];
+	NSString *oldOutputFile = [self oldOutputFile];
+	NSFileManager *man = [NSFileManager defaultManager];
+	if ([man fileExistsAtPath:oldOutputFile])
+	{
+		if (![man fileExistsAtPath:newOutputFile]) //we have the file in the old location, but not the new. migrate that shit!!
+		{
+			if ([man moveItemAtPath:oldOutputFile toPath:newOutputFile error:nil])
+			{
+				NSLog(@"migrated: %@ to proper location, returning now!", self.outputName);
+				return newOutputFile;
+			} else {
+				NSLog(@"failed to migrate the file, but we still have the old one, so return it anyways");
+				return oldOutputFile;
+			}
+		}
+	}
+
+		//if we got this far, we dont have teh old deprecated file, but we are still not sure if we have hte new proper location either.
+	
+	if ([man fileExistsAtPath:newOutputFile])
+		return newOutputFile;
+	
+	return nil; //we got nothing!!!
+	
+}
 
 - (NSString *)outputName
 {

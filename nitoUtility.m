@@ -244,7 +244,51 @@
 	return termStatus;
 }
 
-
++ (BOOL)validateFile:(NSString *)inputFile withChecksum:(NSString *)checksum
+{
+	
+	
+	NSTask *sslTask = [[NSTask alloc] init];
+	NSPipe *sspipe = [[NSPipe alloc] init];
+	NSFileHandle *ssh = [sspipe fileHandleForReading];
+	
+	[sslTask setLaunchPath:@"/usr/bin/openssl"];
+	
+	[sslTask setArguments:[NSArray arrayWithObjects:@"sha1", inputFile, nil]];
+	[sslTask setStandardOutput:sspipe];
+	[sslTask setStandardError:sspipe];
+	[sslTask launch];
+	[sslTask waitUntilExit];
+	NSData *outData = [ssh readDataToEndOfFile];
+	NSString *outputString = [[[NSString alloc] initWithData:outData 
+													encoding:NSASCIIStringEncoding] 
+							  stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	
+		//example outputString: SHA1(~/Documents/Tether/AppleTV2,1_4.3_8F455_Restore.ipsw)= b6a2b0baae79daf95f75044c12946839c662d01d
+	
+							                 //b6a2b0baae79daf95f75044c12946839c662d01d cleaned up
+	NSString *outputSHA = [[[outputString componentsSeparatedByString:@"="] lastObject] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	
+	
+	
+	NSLog(@"sha1: %@ against: %@", outputSHA, checksum);
+	if ([outputSHA isEqualToString:checksum])
+	{
+		[sslTask release];
+		sslTask = nil;
+		[sspipe release];
+		sspipe = nil;
+		return YES;
+		
+	} 
+	[sslTask release];
+	sslTask = nil;
+	[sspipe release];
+	sspipe = nil;
+	return NO;
+	
+	
+}
 
 + (BOOL)checkFile:(NSString *)inputFile againstMD5:(NSString *)properMD5
 {
@@ -898,6 +942,24 @@
 	[pwnHelper release];
 	
 	pwnHelper = nil;
+}
+
++ (NSString *)firmwareFolder
+{
+	NSFileManager *man = [NSFileManager defaultManager];
+	NSString *fullFolder = [[nitoUtility applicationSupportFolder] stringByAppendingPathComponent:@"Firmware"];
+	if (![man fileExistsAtPath:fullFolder])
+	{
+		if ([man createDirectoryAtPath:fullFolder withIntermediateDirectories:TRUE attributes:nil error:nil] == TRUE)
+		{
+			NSLog(@"created firmware folder successfully!");
+		} else {
+			
+			NSLog(@"creating firmware folder failed!?!??! bail!!!");
+			return nil;
+		}
+	}
+	return fullFolder;
 }
 
 + (NSString *)applicationSupportFolder {
