@@ -48,6 +48,8 @@ enum{
 @property (nonatomic, retain) NSString *sshKey;
 @property (nonatomic, assign) FWBundle *currentBundle;
 
++ (NSString *)firmwareFolder;
++ (BOOL)validateFile:(NSString *)inputFile withChecksum:(NSString *)checksum;
 + (float)sizeFreeOnMountedPath:(NSString *)theDevice;
 + (int)linkFile:(NSString *)theFile toPath:(NSString *)thePath inWorkingDirectory:(NSString *)theDir;
 + (int)bunZip:(NSString *)inputTar toRoot:(NSString *)toLocation excluding:(NSString *)excludeFile;

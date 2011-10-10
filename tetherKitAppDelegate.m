@@ -19,7 +19,6 @@
 #import <Security/Authorization.h>
 #include <Security/AuthorizationTags.h>
 #import "tetherKitAppDelegate.h"
-#import "nitoUtility.h"
 #import "include/libpois0n.h"
 
 #define kIPSWName @"AppleTV2,1_4.2.1_8C154_Restore.ipsw"
@@ -262,8 +261,10 @@ void print_progress(double progress, void* data) {
 
 - (NSString *)ipswOutputPath
 {
+	return [[self currentBundle] outputFile];
+		//return outputIPSW;
 		//NSString *appSupport = [tetherKitAppDelegate applicationSupportFolder];
-	return [NSHomeDirectory() stringByAppendingPathComponent:self.currentBundle.outputName];
+		//return [NSHomeDirectory() stringByAppendingPathComponent:self.currentBundle.outputName];
 	
 }
 
@@ -453,7 +454,96 @@ void LogIt (NSString *format, ...)
 }
 	//originally we downloaded and patched pwnagetool rather than making a custom ipsw, some deprecated code still in here commented out.
 
++ (NSRange)customRangeFromString:(NSString *)inputFile
+{
+		//NSLog(@"inputFile: %@", inputFile);
+	NSString *baseName = [inputFile stringByDeletingPathExtension];
+	int length = [baseName length];
+	int start = length - 10;
+		//NSLog(@"range: (%i, %i)", start, 10);
+	return NSMakeRange(start, 10);
+	
+}
+
+- (void)cleanupHomeFolder
+{
+	/*
+	 
+	 search through the ~ folder for any item that ends with SP_Restore.ipsw and move it to the proper folder.
+	 
+	 
+	 */
+	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	NSFileManager *man = [NSFileManager defaultManager];
+	NSArray *homeContents = [man contentsOfDirectoryAtPath:NSHomeDirectory() error:nil];
+	NSEnumerator *homeEnum = [homeContents objectEnumerator];
+		//NSDirectoryEnumerator *homeEnum = [man enumeratorAtPath:NSHomeDirectory()];
+	for (id currentObject in homeEnum)
+	{
+		if ([[currentObject pathExtension] isEqualToString:@"ipsw"])
+		{
+			NSString *endString = [currentObject substringWithRange:[tetherKitAppDelegate customRangeFromString:currentObject]];
+				//NSLog(@"endString: %@ fromString: %@", endString, currentObject);
+			if ([endString isEqualToString:@"SP_Restore"])
+			{
+				NSLog(@"is sp restore file, migrate: %@", currentObject);
+				NSString *fullOldPath = [NSHomeDirectory() stringByAppendingPathComponent:currentObject];
+				NSString *newPath = [[nitoUtility firmwareFolder] stringByAppendingPathComponent:currentObject];
+				
+				if([man moveItemAtPath:fullOldPath toPath:newPath error:nil])
+				{
+					NSLog(@"moved: %@ successfully!", currentObject);
+				}
+			}
+		}
+		
+	}
+	
+	
+	[pool release];
+		//AppleTV2,1_4.1_8M89_SP_Restore.ipsw
+}
+
 - (BOOL)filesToDownload
+{
+	NSFileManager *man = [NSFileManager defaultManager];
+	NSString *ipsw = [tetherKitAppDelegate ipswFile];
+	NSString *sha = [[self currentBundle] SHA];
+	NSString *downloadLink = [[self currentBundle] downloadURL];
+	if ([man fileExistsAtPath:ipsw])
+	{
+		if ([nitoUtility validateFile:ipsw withChecksum:sha] == FALSE) //actually use the sha1, not sure if it actually works.
+		{
+			NSLog(@"ipsw SHA Invalid, not removing file (for now, need to make sure its not a beta)");
+			if (downloadLink != nil)
+			{
+				NSLog(@"there is a download url!, we can safely delete and then re-download");
+				[ man removeItemAtPath:ipsw error:nil];
+			}
+				
+		}
+		
+	}
+	
+	
+	if (![man fileExistsAtPath:ipsw])
+	{
+		[downloadFiles addObject:downloadLink];
+	}
+	if ([downloadFiles count] > 0)
+	{
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+	
+	return FALSE;
+	
+}
+
+- (BOOL)oldfilesToDownload
 {
 		//NSMutableArray *filesToDownload = [[NSMutableArray alloc] init];
 	NSFileManager *man = [NSFileManager defaultManager];
@@ -1552,6 +1642,10 @@ NSLog(@"postcommand_cb");
 	
 //	[self iTunesIsTenFourPlus];
 	
+	
+	
+		//[tetherKitAppDelegate cleanupHomeFolder];
+	
 	if ([self homeWritable])
 	{
 		
@@ -1603,6 +1697,7 @@ NSLog(@"postcommand_cb");
 		//[FM removeItemAtPath:TMP_ROOT error:nil];
 	[self setBundleControllerContent];
 	[self versionChanged:nil];
+	[NSThread detachNewThreadSelector:@selector(cleanupHomeFolder) toTarget:self withObject:nil];
 	
 }
 
@@ -2412,7 +2507,9 @@ NSLog(@"postcommand_cb");
 	//sufficientSpaceOnDevice
 - (void)customFW:(NSString *)inputIPSW
 {
+
 		//LOG_SELF;
+
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	FWBundle *theBundle = self.currentBundle;
 	NSString *fileSystemFile = [self.currentBundle rootFilesystem];

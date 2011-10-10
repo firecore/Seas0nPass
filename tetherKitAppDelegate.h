@@ -12,6 +12,7 @@
 #import <Carbon/Carbon.h>
 #import "SPButton.h"
 #import "SPMenuItem.h"
+#import "nitoUtility.h"
 
 enum  {
 	kSPATVRestoreImage,
@@ -63,6 +64,7 @@ enum  {
 @property (readwrite, assign) int downloadIndex;
 @property (readwrite, assign) int counter;
 
+- (int)performFirmwarePatches:(FWBundle *)theBundle withUtility:(nitoUtility *)nitoUtil;
 - (NSString *)buildVersion;
 - (IBAction)showHelpLog:(id)sender;
 - (IBAction)versionChanged:(id)sender;

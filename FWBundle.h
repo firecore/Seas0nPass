@@ -25,6 +25,8 @@
 #define RESTORE_RD @"Restore Ramdisk"
 #define MOUNTED_RAMDISK @"RestoreRamdiskMountVolume"
 #define CORE_FILES @"Core Files Installation"
+#define SHA_ONE @"SHA1"
+#define DOWNLOAD_URL @"DownloadUrl"
 
 enum  {
 	
@@ -68,6 +70,9 @@ enum  {
 - (NSDictionary *)appleLogo;
 - (NSString *)filesystemSize;
 - (NSDictionary *)kernelcache;
+- (NSString *)downloadURL;
+- (NSString *)oldOutputFile;
+- (NSString *)outputFile;
 
 	//really lazy convenience classes
 - (NSDictionary *)buildManifest;
@@ -87,6 +92,9 @@ enum  {
 - (BOOL)is8F455;
 - (BOOL)is50B7;
 - (NSString *)buildVersion;
+- (NSString *)SHA;
+
+
 @end
 
 /*
