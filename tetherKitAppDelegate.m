@@ -2412,7 +2412,7 @@ NSLog(@"postcommand_cb");
 	//sufficientSpaceOnDevice
 - (void)customFW:(NSString *)inputIPSW
 {
-	LOG_SELF;
+		//LOG_SELF;
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	FWBundle *theBundle = self.currentBundle;
 	NSString *fileSystemFile = [self.currentBundle rootFilesystem];

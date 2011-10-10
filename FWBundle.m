@@ -227,7 +227,7 @@
 	return [objects lastObject];
 }
 
-- (BOOL)is50B7
+- (BOOL)is50B7 //pretty much whether or not we listen to fileSystemSize in the plist... obvious, no?
 {
 	
 	if ([[self buildVersion] isEqualToString:@"9A334"])
@@ -248,8 +248,7 @@
     return NO;
 }
 
-
-- (BOOL)is4point4
+- (BOOL)is4point4 //5.0 for other, 4.4 for AppleTV 2
 {
 	NSString *comparisonVersion = @"4.4"; //yes pandering to appletv2, what of it? ;-P
 	
