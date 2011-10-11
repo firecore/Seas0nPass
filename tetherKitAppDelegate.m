@@ -1701,7 +1701,7 @@ NSLog(@"postcommand_cb");
 	
 	if (DID_MIGRATE == TRUE)
 	{
-		NSLog(@"did migrate already");
+		NSLog(@"already migrated");
 	} else {
 		[NSThread detachNewThreadSelector:@selector(cleanupHomeFolder) toTarget:self withObject:nil];
 	}
