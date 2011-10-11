@@ -34,6 +34,7 @@
 #define CUSTOM_RESTORE @"AppleTV_SeasonPass.ipsw"
 #define BUNDLE_LOCATION [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"bundles"]
 #define BUNDLES [FM contentsOfDirectoryAtPath:BUNDLE_LOCATION error:nil]
+#define DID_MIGRATE [[NSUserDefaults standardUserDefaults] boolForKey:@"newVersionMigrate"]
 #define LAST_BUNDLE [[NSUserDefaults standardUserDefaults] valueForKey:@"lastUsedBundle"]
 #define KILL_ITUNES [[NSUserDefaults standardUserDefaults] boolForKey:@"killiTunes"]
 #define DEFAULTS [NSUserDefaults standardUserDefaults]
@@ -501,7 +502,7 @@ void LogIt (NSString *format, ...)
 		
 	}
 	
-	
+	[DEFAULTS setBool:YES forKey:@"newVersionMigrate"];
 	[pool release];
 		//AppleTV2,1_4.1_8M89_SP_Restore.ipsw
 }
@@ -1697,7 +1698,14 @@ NSLog(@"postcommand_cb");
 		//[FM removeItemAtPath:TMP_ROOT error:nil];
 	[self setBundleControllerContent];
 	[self versionChanged:nil];
-	[NSThread detachNewThreadSelector:@selector(cleanupHomeFolder) toTarget:self withObject:nil];
+	
+	if (DID_MIGRATE == TRUE)
+	{
+		NSLog(@"did migrate already");
+	} else {
+		[NSThread detachNewThreadSelector:@selector(cleanupHomeFolder) toTarget:self withObject:nil];
+	}
+	
 	
 }
 
