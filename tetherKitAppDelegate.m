@@ -1641,12 +1641,6 @@ NSLog(@"postcommand_cb");
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	
-//	[self iTunesIsTenFourPlus];
-	
-	
-	
-		//[tetherKitAppDelegate cleanupHomeFolder];
-	
 	if ([self homeWritable])
 	{
 		
@@ -1685,6 +1679,7 @@ NSLog(@"postcommand_cb");
 
 	if ([lastUsedbundle length] < 1)
 	{
+			//NSLog(@"lastUsedBundle is nil, set it!");
 		lastUsedbundle = @"AppleTV2,1_4.3_8F455";
 		[[NSUserDefaults standardUserDefaults] setObject:lastUsedbundle forKey:@"lastUsedBundle"];
 	}
@@ -1973,8 +1968,8 @@ NSLog(@"postcommand_cb");
 	NSFileManager *man = [NSFileManager defaultManager];
 	//NSDictionary *attrs = [man attributesOfItemAtPath:NSHomeDirectory() error:nil];
 		//NSLog(@"attrs: %@", attrs);
-	
-	return [man isWritableFileAtPath:NSHomeDirectory()];
+	NSString *homeDir = [nitoUtility applicationSupportFolder];
+	return [man isWritableFileAtPath:homeDir];
 	
 }
 

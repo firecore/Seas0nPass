@@ -172,11 +172,9 @@
 	}
 
 		//if we got this far, we dont have teh old deprecated file, but we are still not sure if we have hte new proper location either.
+
 	
-	if ([man fileExistsAtPath:newOutputFile])
-		return newOutputFile;
-	
-	return nil; //we got nothing!!!
+	return newOutputFile; //we got nothing!!!
 	
 }
 
