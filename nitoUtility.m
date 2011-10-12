@@ -742,9 +742,9 @@
 
 - (NSString *)filesystemResizeValue:(NSString *)inputFilesystem
 {
-	if([self.currentBundle is50B7])
+	if([self.currentBundle is4point4])
 	{
-		NSLog(@"is 5.0b7!!!");
+		NSLog(@"is 4.4/5.0");
 		float resizeValue = [[[self currentBundle] filesystemSize] floatValue];
 		int ft = resizeValue * 1048576;
 		NSLog(@"resizeValue: %f MB", resizeValue);
