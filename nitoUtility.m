@@ -411,10 +411,12 @@
 - (void)editOptions:(NSString *)optionsFile withFSSize:(int)fsSize
 {
 
+	NSLog(@"editing options: %@", optionsFile);
 	NSMutableDictionary *optionsDict = [[NSMutableDictionary alloc] initWithContentsOfFile:optionsFile];
 	[optionsDict setObject:[NSNumber numberWithBool:NO] forKey:@"UpdateBaseband"];
 	[optionsDict setObject:[NSNumber numberWithBool:YES] forKey:@"CreateFilesystemPartitions"];
 	[optionsDict setObject:[NSNumber numberWithInt:fsSize] forKey:@"SystemPartitionSize"];
+	[optionsDict setObject:[NSNumber numberWithInt:fsSize] forKey:@"MinimumSystemPartition"];
 	[optionsDict writeToFile:optionsFile atomically:YES];
 	[optionsDict release];
 	
@@ -558,6 +560,14 @@
 					int fsSize = [[theBundle filesystemSize] intValue];
 					fsSize += 100;
 					[self editOptions:optionPath withFSSize:fsSize];
+				}
+				
+					//update appletv partition size stuff
+				NSString *optionPathATV = [mountedImage stringByAppendingPathComponent:@"usr/local/share/restore/options.k66.plist"];
+				if ([[NSFileManager defaultManager] fileExistsAtPath:optionPathATV])
+				{
+					int fsSize = [[theBundle filesystemSize] intValue];
+					[self editOptions:optionPathATV withFSSize:fsSize];
 				}
 				
 				if (status == 0)

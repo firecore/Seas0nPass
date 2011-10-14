@@ -59,6 +59,7 @@
 	return [[self infoDictionary] valueForKey:SHA_ONE];
 }
 
+
 - (NSDictionary *)buildManifest
 {
 	NSArray *buildIdentities = [[self fwDictionary] objectForKey:@"BuildIdentities"];
@@ -83,6 +84,39 @@
 	return [[[[self buildManifest] valueForKey:@"iBEC"] valueForKey:@"Info"] valueForKey:@"Path"];
 }
 
+- (NSString *)buildManifestPath
+{
+	NSString *buildM = [TMP_ROOT stringByAppendingPathComponent:@"BuildManifest.plist"];
+	if ([FM fileExistsAtPath:buildM])
+	{
+		return buildM;
+		
+	}
+	return nil;
+}
+
+- (NSString *)restoreDictionaryPath
+{
+	NSString *restore = [TMP_ROOT stringByAppendingPathComponent:@"Restore.plist"];
+	if ([FM fileExistsAtPath:restore])
+	{
+		return restore;
+		
+	}
+	return nil;
+}
+
+- (NSMutableDictionary *)mutableFWDictionary
+{
+	NSString *buildM = [TMP_ROOT stringByAppendingPathComponent:@"BuildManifest.plist"];
+	if ([FM fileExistsAtPath:buildM])
+	{
+		NSMutableDictionary *outputDict = [[NSMutableDictionary alloc] initWithContentsOfFile:buildM];
+		return [outputDict autorelease];
+		
+	}
+	return nil;
+}
 
 - (NSDictionary *)fwDictionary
 {
@@ -181,6 +215,68 @@
 - (NSString *)outputName
 {
 	return [[self bundleName] stringByAppendingString:@"_SP_Restore.ipsw"];
+}
+
+/*
+ 
+ BuildManifest.plist -> BuildIdentities - > Item 01 -> info -> MinimumSystemPartition
+ BuildManifest.plist -> BuildIdentities - > Item 01 -> info -> MinimumSystemPartition
+ 
+ Restore.plist -> MinimumSystemPartition -> DMG_NAME
+ 
+ */
+
+- (BOOL)shouldUpdatePartitionSize
+{
+	return [self is4point4];
+}
+
+- (void)setMinimumSystemPartition:(int)newSize
+{
+	NSFileManager *man = [NSFileManager defaultManager];
+	NSString *outputFile = [self buildManifestPath];
+	
+	if ([man fileExistsAtPath:outputFile])
+	{
+		NSMutableDictionary *fullDict = [self mutableFWDictionary];
+		id buildIdentities = [fullDict objectForKey:@"BuildIdentities"];
+		id one = [buildIdentities lastObject];
+		id infoDict = [one valueForKey:@"Info"];
+		int buildIndex = [buildIdentities count]-1;
+		
+		[infoDict setValue:[NSNumber numberWithInt:newSize] forKey:@"MinimumSystemPartition"];
+		[one setObject:infoDict forKey:@"Info"];
+		[buildIdentities replaceObjectAtIndex:buildIndex withObject:one];
+		[fullDict setObject:buildIdentities forKey:@"BuildIdentities"];
+		
+		[fullDict writeToFile:outputFile atomically:YES];
+		
+			//On to the restore file
+		
+		NSString *restoreFile = [self restoreDictionaryPath];
+		if ([man fileExistsAtPath:restoreFile])
+		{
+			NSMutableDictionary *restoreDict = [[NSMutableDictionary alloc] initWithContentsOfFile:restoreFile];
+			id msp = [restoreDict valueForKey:@"MinimumSystemPartition"];
+			NSString *fsKey = [[msp allKeys] lastObject];
+			[msp setValue:[NSNumber numberWithInt:newSize] forKey:fsKey];
+			[restoreDict writeToFile:restoreFile atomically:YES];
+			
+			[restoreDict release];
+			restoreDict = nil;
+			
+		} else {
+			
+			NSLog(@"no file at %@", restoreFile);
+			
+		}
+		
+		
+	} else {
+		
+		NSLog(@"editing build manifest for setMinimumSystemPartition failed!!!!! BAIL");
+	}
+	
 }
 
 - (NSString *)oldramdiskSize

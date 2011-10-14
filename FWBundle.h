@@ -44,6 +44,10 @@ enum  {
 
 @property (nonatomic, retain) NSString *fwRoot;
 
+- (void)setMinimumSystemPartition:(int)newSize;
+- (NSString *)restoreDictionaryPath;
+- (NSMutableDictionary *)mutableFWDictionary;
+- (NSString *)buildManifestPath;
 + (FWBundle *)bundleWithName:(NSString *)bundleName;
 + (FWBundle *)bundleForFile:(NSString *)theFile;
 - (void)logDescription;

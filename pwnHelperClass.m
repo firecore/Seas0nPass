@@ -597,9 +597,9 @@
 		[self installSSHKey:[[self processDict] valueForKey:@"sshKey"] withRoot:mountImage];
 	}
 	
-		//[self changeStatus:@"Stash it away man!..."];
-		//NSLog(@"Stash it away man!...");
-		//[self stash:[[self processDict] valueForKey:@"stash"] withRoot:mountImage];
+		[self changeStatus:@"Stash it away man!..."];
+		NSLog(@"Stash it away man!...");
+		[self stash:[[self processDict] valueForKey:@"stash"] withRoot:mountImage];
 	
 	NSDictionary *ep = [currentBundle extraPatch];
 	if (ep != nil)

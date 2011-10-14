@@ -2535,6 +2535,15 @@ NSLog(@"postcommand_cb");
 	if ([nitoUtility unzipFile:inputIPSW toPath:TMP_ROOT])
 	{
         NSLog(@"unzip finished successfully!");
+		
+		if ([[self currentBundle] shouldUpdatePartitionSize])
+		{
+			NSLog(@"updating partition size!!");
+			{
+				[[self currentBundle] setMinimumSystemPartition:1024];
+			}
+		}
+		
 		[self setDownloadText:NSLocalizedString(@"Patching ramdisk...", @"Patching ramdisk...")];
 		status = [self performFirmwarePatches:theBundle withUtility:nu];
 		if (status == 0)
