@@ -2130,6 +2130,8 @@ NSLog(@"postcommand_cb");
 	return NO;
 }
 
+	//restore button for other devices: click button 2 of scroll area 3 of window 1
+
 - (BOOL)loadItunesWithIPSW:(NSString *)ipsw
 {
 	NSDictionary *theError = nil;
