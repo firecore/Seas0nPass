@@ -1589,7 +1589,7 @@ NSLog(@"postcommand_cb");
     while((outData = [swh readDataToEndOfFile]) && [outData length])
     {
         temp = [[[NSString alloc] initWithData:outData encoding:NSASCIIStringEncoding] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-		NSLog(@"temp length: %lu", [temp length]);
+		NSLog(@"temp length: %lu", (unsigned long)[temp length]);
 	
 		if ([temp length] > 800)
 		{
