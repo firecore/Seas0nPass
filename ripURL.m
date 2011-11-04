@@ -76,7 +76,7 @@
 - (void)download:(NSURLDownload *)download didFailWithError:(NSError *)error
 
 {
-	NSLog(@"%@ %s", self, _cmd);
+	NSLog(@"%@ %s", self, __PRETTY_FUNCTION__);
 	[handler downloadFailed:downloadLocation];
 
 }
@@ -149,7 +149,7 @@
     } else {
         
        // [downloadpBar setIndeterminate:YES];
-        NSLog(@"Bytes received - %d",bytesReceived);
+        NSLog(@"Bytes received - %0.2f",bytesReceived);
         
     }
 	

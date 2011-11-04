@@ -46,6 +46,8 @@ int postcommand_cb(irecv_client_t client, const irecv_event_t* event);
 static unsigned int quit = 0;
 //static unsigned int verbose = 0;
 
+static void print_progress_bar(double progress);
+
 @implementation tetherKitAppDelegate
 
 @synthesize window, downloadIndex, processing, enableScripting, firstView, secondView, poisoning, currentBundle, bundleController, counter, otherWindow, commandTextField, tetherLabel, countdownField;
@@ -64,6 +66,7 @@ static unsigned int quit = 0;
 	/* probably not using this callback data variable properly, but i couldnt figure out how else to set download progress from the double values sent during uploading of iBSS and kernelcache */
 
 void print_progress(double progress, void* data) {
+	tetherKitAppDelegate *self = (tetherKitAppDelegate *)data;
 	int i = 0;
 	if(progress < 0) {
 		return;
@@ -72,7 +75,7 @@ void print_progress(double progress, void* data) {
 	if(progress > 100) {
 		progress = 100;
 	}
-	[data setDownloadProgress:progress];
+	[self setDownloadProgress:progress];
 	printf("\r[");
 	for(i = 0; i < 50; i++) {
 		if(i < progress / 2) {
@@ -684,7 +687,7 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event) {
 	return 0;
 }
 
-void print_progress_bar(double progress) {
+static void print_progress_bar(double progress) {
 	int i = 0;
 	if(progress < 0) {
 		return;
@@ -727,7 +730,7 @@ void print_progress_bar(double progress) {
 	while(pois0n_is_ready()) {
 		sleep(1);
 	}
-	irecv_event_subscribe(client, IRECV_RECEIVED, &print_progress, NULL);
+	irecv_event_subscribe(client, IRECV_RECEIVED, (irecv_event_cb_t)&print_progress, self);
 	[self setDownloadText:NSLocalizedString(@"Found device in DFU mode", @"Found device in DFU mode")];
 	[self setInstructionText:@""];
 	
@@ -922,7 +925,7 @@ int received_cb(irecv_client_t client, const irecv_event_t* event) {
 	if (event->type == IRECV_RECEIVED) {
 		int i = 0;
 		int size = event->size;
-		char* data = event->data;
+		const char* data = event->data;
 		for (i = 0; i < size; i++) {
 			printf("%c", data[i]);
 		}
@@ -2708,31 +2711,28 @@ NSLog(@"postcommand_cb");
 		
 		AuthorizationRef myAuthorizationRef;
 		
-		OSStatus myStatus = AuthorizationCreate (NULL, kAuthorizationEmptyEnvironment, myFlags, &myAuthorizationRef);
+		OSStatus myStatus = AuthorizationCreate (NULL, kAuthorizationEmptyEnvironment, myFlags, &myAuthorizationRef);	
+		if (myStatus != errAuthorizationSuccess) {
+			NSLog(@"Error creating authorization environment");
+			return NO;
+		}
 		
-		
-	//	NSString *helpPath = [[NSBundle mainBundle] pathForResource: @"dHelper" ofType: @""];
+		//	NSString *helpPath = [[NSBundle mainBundle] pathForResource: @"dHelper" ofType: @""];
 		
 		
 		//char *systemCopier = ( char * ) [helpPath fileSystemRepresentation];
-		
 		
 		AuthorizationItem rightSet[] = {{kAuthorizationRightExecute, 0, NULL, 0}};
 		
 		AuthorizationRights rights = {1, rightSet};
 		
-		
-		myFlags = kAuthorizationFlagDefaults |// 8
-		
-		kAuthorizationFlagInteractionAllowed |// 9
-		
-		kAuthorizationFlagPreAuthorize |// 10
-		
-		kAuthorizationFlagExtendRights;// 11
+		myFlags = (kAuthorizationFlagDefaults |// 8
+				   kAuthorizationFlagInteractionAllowed |// 9
+				   kAuthorizationFlagPreAuthorize |// 10
+				   kAuthorizationFlagExtendRights);// 11
 		
 		OSStatus result = AuthorizationCopyRights (myAuthorizationRef, &rights, NULL, myFlags, NULL );// 12
-		
-		
+
 		if(result == errAuthorizationSuccess)
 		{
 			char *command = "chown root:wheel \"$HELP\" && chmod 4755 \"$HELP\" && chmod +s \"$HELP\"";
@@ -2747,8 +2747,6 @@ NSLog(@"postcommand_cb");
 			/*Need to present the error dialog here telling the user to fix the permissions*/
 			return NO;
 		}
-			//
-			//return (NO);
 	}
 	
 	return (YES);
