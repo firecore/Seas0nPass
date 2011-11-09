@@ -554,6 +554,8 @@
 					
 				}
 				
+				
+				
 				NSString *optionPath = [mountedImage stringByAppendingPathComponent:@"usr/local/share/restore/options.plist"];
 				if ([[NSFileManager defaultManager] fileExistsAtPath:optionPath])
 				{
@@ -562,6 +564,8 @@
 					[self editOptions:optionPath withFSSize:fsSize];
 				}
 				
+				/*
+				
 					//update appletv partition size stuff
 				NSString *optionPathATV = [mountedImage stringByAppendingPathComponent:@"usr/local/share/restore/options.k66.plist"];
 				if ([[NSFileManager defaultManager] fileExistsAtPath:optionPathATV])
@@ -569,6 +573,8 @@
 					int fsSize = [[theBundle filesystemSize] intValue];
 					[self editOptions:optionPathATV withFSSize:fsSize];
 				}
+				*/
+				
 				
 				if (status == 0)
 				{
@@ -1640,6 +1646,12 @@
 	NSString *decrypt = [file stringByAppendingPathExtension:@"decrypt"];
 	NSString *repacked = [file stringByAppendingPathExtension:@"2"];
 	NSString *patch = [bundlePath stringByAppendingPathComponent:[patchData valueForKey:@"Patch"]];
+	
+	if (![FM fileExistsAtPath:patch])
+	{
+		NSLog(@"patch %@ is missing!, bail!!!!", patch);
+	}
+	
 	NSString *iv = [patchData valueForKey:@"IV"];
 	NSString *k = [patchData valueForKey:@"Key"];
 	int decryptStatus = [nitoUtility decryptRamdisk:file toPath:decrypt withIV:iv key:k];

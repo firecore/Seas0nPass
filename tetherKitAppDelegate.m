@@ -2097,6 +2097,7 @@ NSLog(@"postcommand_cb");
 	NSDictionary *itunesDict = [itunesBundle infoDictionary];
 	NSString *versionNumber = [itunesDict valueForKey:@"CFBundleShortVersionString"];
 	NSComparisonResult theResult = [versionNumber compare:@"10.4" options:NSNumericSearch];
+	NSLog(@"iTunes version: %@", versionNumber);
     //NSLog(@"theversion: %@  installed version %@", theVersion, installedVersion);
 	if ( theResult == NSOrderedDescending )
 	{
@@ -2313,7 +2314,7 @@ NSLog(@"postcommand_cb");
 	
 	if (![self sufficientSpaceOnDevice:NSHomeDirectory()])
 	{
-		NSLog(@"fail");
+		NSLog(@"insufficient space on device!!!!!");
 		return;
 	}
 	
@@ -2324,6 +2325,9 @@ NSLog(@"postcommand_cb");
 	//current bundle may be set by default, but we never want to assume the default processOne ipsw to be anything but the latest- which is still hardcoded to 4.2.1.
 		//self.currentBundle = LAST_BUNDLE;
 	self.currentBundle = [FWBundle bundleWithName:@"AppleTV2,1_4.3_8F455"];
+	
+	
+	
 	if ([self optionKeyIsDown])
 	{
 		NSOpenPanel *op = [NSOpenPanel openPanel];
@@ -2345,6 +2349,9 @@ NSLog(@"postcommand_cb");
 			return;
 		}
 		self.currentBundle = ourBundle;
+		
+		NSLog(@"Seas0nPass: Software payload: %@ (option key)", [self.currentBundle bundleName]);
+		
 		[window setContentView:self.secondView];
 		[window display];
 		
@@ -2369,16 +2376,19 @@ NSLog(@"postcommand_cb");
 	{
 		[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 
-		[self downloadFiles];
+		NSLog(@"downloading IPSW...");
+		
+		[self downloadTheFiles];
 	} else {
 	
+		NSLog(@"Seas0nPass: Software payload: %@", [self.currentBundle bundleName]);
 		[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 		[NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:HCIPSW];
 	}
 
 }
 
-- (void)downloadFiles
+- (void)downloadTheFiles
 {
 	NSString *currentDownload = [downloadFiles objectAtIndex:downloadIndex];
 	NSString *ptFile = [DL stringByAppendingPathComponent:[currentDownload lastPathComponent]];
@@ -2538,6 +2548,7 @@ NSLog(@"postcommand_cb");
 	{
         NSLog(@"unzip finished successfully!");
 		
+		/*
 		if ([[self currentBundle] shouldUpdatePartitionSize])
 		{
 			NSLog(@"updating partition size!!");
@@ -2545,6 +2556,7 @@ NSLog(@"postcommand_cb");
 				[[self currentBundle] setMinimumSystemPartition:1024];
 			}
 		}
+		*/
 		
 		[self setDownloadText:NSLocalizedString(@"Patching ramdisk...", @"Patching ramdisk...")];
 		status = [self performFirmwarePatches:theBundle withUtility:nu];
