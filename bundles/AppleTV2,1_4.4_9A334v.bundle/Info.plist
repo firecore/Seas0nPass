@@ -5,7 +5,7 @@
 	<key>DeleteBuildManifest</key>
 	<false/>
 	<key>DownloadUrl</key>
-	<string></string>
+	<string>http://appldnld.apple.com/AppleTV/061-9621.20111012.Vgijx/AppleTV2,1_4.4_9A334v_Restore.ipsw</string>
 	<key>Filename</key>
 	<string>AppleTV2,1_4.4_9A334v_Restore</string>
 	<key>FilesystemPatches</key>

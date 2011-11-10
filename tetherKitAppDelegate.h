@@ -64,6 +64,8 @@ enum  {
 @property (readwrite, assign) int downloadIndex;
 @property (readwrite, assign) int counter;
 
+
+- (void)downloadTheFiles;
 - (int)performFirmwarePatches:(FWBundle *)theBundle withUtility:(nitoUtility *)nitoUtil;
 - (NSString *)buildVersion;
 - (IBAction)showHelpLog:(id)sender;

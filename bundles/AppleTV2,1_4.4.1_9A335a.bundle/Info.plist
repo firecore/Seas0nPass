@@ -5,7 +5,7 @@
 	<key>DeleteBuildManifest</key>
 	<false/>
 	<key>DownloadUrl</key>
-	<string></string>
+	<string>http://appldnld.apple.com/AppleTV/041-2846.20111017.34NPe/AppleTV2,1_4.4.1_9A335a_Restore.ipsw</string>
 	<key>Filename</key>
 	<string>AppleTV2,1_4.4.1_9A335a_Restore</string>
 	<key>FilesystemPatches</key>
@@ -48,7 +48,8 @@
 			<key>IV</key>
 			<string>7fc23d2153b98e672798fc61f0f3d968</string>
 			<key>Key</key>
-			<string>927357e9f22be77cf5040254b6935b9162a5dfeb133379b795d6020d7b3b1ab6</string>
+			<string>927357e9f22be77cf5040254b6935b9162a5dfeb133379b795d6020d7b3b1ab6
+</string>
 			<key>Patch</key>
 			<string>iBEC.k66ap.RELEASE.patch</string>
 			<key>TypeFlag</key>

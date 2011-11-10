@@ -2350,6 +2350,31 @@ NSLog(@"postcommand_cb");
 		}
 		self.currentBundle = ourBundle;
 		
+		NSString *sha = [[self currentBundle] SHA];
+		NSString *downloadLink = [[self currentBundle] downloadURL];
+		
+		BOOL isValid = [nitoUtility validateFile:ipsw withChecksum:sha];
+		
+		if (!isValid)
+		{
+			NSLog(@"invalid file: %@, redownloading...", ipsw);
+			if([downloadLink length] > 2)
+			{
+				[downloadFiles addObject:downloadLink];
+				[window setContentView:self.secondView];
+				[window display];
+				
+				self.processing = TRUE;
+				[buttonOne setEnabled:FALSE];
+				[bootButton setEnabled:FALSE];
+				[instructionImage setImage:[self imageForMode:kSPIPSWImage]];
+				[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+				[self downloadTheFiles];
+			}
+			return;
+			
+		}
+		
 		NSLog(@"Seas0nPass: Software payload: %@ (option key)", [self.currentBundle bundleName]);
 		
 		[window setContentView:self.secondView];
@@ -2390,6 +2415,7 @@ NSLog(@"postcommand_cb");
 
 - (void)downloadTheFiles
 {
+	//LOG_SELF;
 	NSString *currentDownload = [downloadFiles objectAtIndex:downloadIndex];
 	NSString *ptFile = [DL stringByAppendingPathComponent:[currentDownload lastPathComponent]];
 	[self setDownloadText:[NSString stringWithFormat:@"Downloading %@...", [currentDownload lastPathComponent]]];
@@ -2469,7 +2495,7 @@ NSLog(@"postcommand_cb");
 
 - (void)downloadFinished:(NSString *)adownloadFile
 {
-		//NSLog(@"download complete: %@", adownloadFile);
+		NSLog(@"download complete: %@", adownloadFile);
 	[downloadBar stopAnimation:self];
 	[downloadBar setHidden:YES];
 	[downloadBar setNeedsDisplay:YES];
@@ -2491,7 +2517,7 @@ NSLog(@"postcommand_cb");
 		[self setDownloadText:NSLocalizedString(@"Downloads complete", @"Downloads complete")];
 		 NSLog(@"downloads complete!!");
 		[self setDownloadProgress:0];
-		[NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:HCIPSW];
+		[NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:adownloadFile];
 		
 		
 	}
