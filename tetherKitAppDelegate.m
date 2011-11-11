@@ -2495,6 +2495,7 @@ NSLog(@"postcommand_cb");
 
 - (void)downloadFinished:(NSString *)adownloadFile
 {
+	[FM removeItemAtPath:TMP_ROOT error:nil];
 		NSLog(@"download complete: %@", adownloadFile);
 	[downloadBar stopAnimation:self];
 	[downloadBar setHidden:YES];
