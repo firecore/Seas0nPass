@@ -122,8 +122,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 341725106;
-			PBXWorkspaceStateSaveDate = 341725106;
+			PBXPerProjectTemplateStateSaveDate = 343272723;
+			PBXWorkspaceStateSaveDate = 343272723;
 		};
 		perUserProjectItems = {
 			256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */ = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
@@ -172,7 +172,6 @@
 			322C5CDD145111DC00BABC47 /* PlistBookmark */ = 322C5CDD145111DC00BABC47 /* PlistBookmark */;
 			3238356F13A627E700E890AF /* PBXTextBookmark */ = 3238356F13A627E700E890AF /* PBXTextBookmark */;
 			3240483312D150E400B4E50B /* PBXTextBookmark */ = 3240483312D150E400B4E50B /* PBXTextBookmark */;
-			3244F525145C14D300374B04 /* PlistBookmark */ = 3244F525145C14D300374B04 /* PlistBookmark */;
 			324FF1B412F7D69F0039310E /* PBXTextBookmark */ = 324FF1B412F7D69F0039310E /* PBXTextBookmark */;
 			324FF2F612F8CCB40039310E /* PBXTextBookmark */ = 324FF2F612F8CCB40039310E /* PBXTextBookmark */;
 			324FF4CA12F8D9700039310E /* PBXTextBookmark */ = 324FF4CA12F8D9700039310E /* PBXTextBookmark */;
@@ -184,7 +183,6 @@
 			32605859140B94CE006518EB /* PBXTextBookmark */ = 32605859140B94CE006518EB /* PBXTextBookmark */;
 			326252C61446A26400E1B9DB /* PBXTextBookmark */ = 326252C61446A26400E1B9DB /* PBXTextBookmark */;
 			326252C71446A26400E1B9DB /* PBXTextBookmark */ = 326252C71446A26400E1B9DB /* PBXTextBookmark */;
-			3262537D1446B9A600E1B9DB /* PlistBookmark */ = 3262537D1446B9A600E1B9DB /* PlistBookmark */;
 			326253B81446C4CA00E1B9DB /* PBXTextBookmark */ = 326253B81446C4CA00E1B9DB /* PBXTextBookmark */;
 			326261561449380100E1B9DB /* PBXTextBookmark */ = 326261561449380100E1B9DB /* PBXTextBookmark */;
 			326261571449380100E1B9DB /* PBXTextBookmark */ = 326261571449380100E1B9DB /* PBXTextBookmark */;
@@ -210,7 +208,6 @@
 			3280F4D4144FB0F900F4877A /* PBXTextBookmark */ = 3280F4D4144FB0F900F4877A /* PBXTextBookmark */;
 			32976424134540E9009EA83D /* PBXTextBookmark */ = 32976424134540E9009EA83D /* PBXTextBookmark */;
 			32A3DB641349C430002BD9F7 /* PBXTextBookmark */ = 32A3DB641349C430002BD9F7 /* PBXTextBookmark */;
-			32AC2236142D5CC70033050F /* PBXTextBookmark */ = 32AC2236142D5CC70033050F /* PBXTextBookmark */;
 			32D9548C1310E752007B5BE3 /* PBXTextBookmark */ = 32D9548C1310E752007B5BE3 /* PBXTextBookmark */;
 			32D9548D1310E752007B5BE3 /* PBXTextBookmark */ = 32D9548D1310E752007B5BE3 /* PBXTextBookmark */;
 			32D9596613147377007B5BE3 /* PBXBookmark */ = 32D9596613147377007B5BE3 /* PBXBookmark */;
@@ -232,7 +229,6 @@
 			32DF798B12E30971002916D5 /* PBXTextBookmark */ = 32DF798B12E30971002916D5 /* PBXTextBookmark */;
 			32DF799B12E30A16002916D5 /* PBXTextBookmark */ = 32DF799B12E30A16002916D5 /* PBXTextBookmark */;
 			32DF7B0312E39E8F002916D5 /* PBXTextBookmark */ = 32DF7B0312E39E8F002916D5 /* PBXTextBookmark */;
-			32DF7B3A12E3A071002916D5 /* PlistBookmark */ = 32DF7B3A12E3A071002916D5 /* PlistBookmark */;
 			32DF825412E65280002916D5 /* SPButton.m */ = 32DF825412E65280002916D5 /* SPButton.m */;
 			32DF825F12E653E2002916D5 /* PBXTextBookmark */ = 32DF825F12E653E2002916D5 /* PBXTextBookmark */;
 			32DF844D12E660CA002916D5 /* PBXTextBookmark */ = 32DF844D12E660CA002916D5 /* PBXTextBookmark */;
@@ -245,7 +241,6 @@
 			32DF8B5712E824FD002916D5 /* PBXTextBookmark */ = 32DF8B5712E824FD002916D5 /* PBXTextBookmark */;
 			32DF8F6312E8DB2A002916D5 /* PBXTextBookmark */ = 32DF8F6312E8DB2A002916D5 /* PBXTextBookmark */;
 			32DF901712E8EF25002916D5 /* PBXTextBookmark */ = 32DF901712E8EF25002916D5 /* PBXTextBookmark */;
-			32F7B198145E515D00F35A13 /* PlistBookmark */ = 32F7B198145E515D00F35A13 /* PlistBookmark */;
 		};
 		sourceControlManager = 327203AD12C942470054F4B0 /* Source Control */;
 		userBuildSettings = {
@@ -918,24 +913,6 @@
 		vrLen = 890;
 		vrLoc = 0;
 	};
-	3244F525145C14D300374B04 /* PlistBookmark */ = {
-		isa = PlistBookmark;
-		fRef = 3244F526145C14D300374B04 /* Info.plist */;
-		fallbackIsa = PBXBookmark;
-		isK = 0;
-		kPath = (
-		);
-		name = "/Users/kevinbradley/Projects/Seas0nPass/bundles/AppleTV2,1_4.4_9A5259f.bundle/Info.plist";
-		rLen = 0;
-		rLoc = 9223372036854775808;
-	};
-	3244F526145C14D300374B04 /* Info.plist */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = text.plist.xml;
-		name = Info.plist;
-		path = "/Users/kevinbradley/Projects/Seas0nPass/bundles/AppleTV2,1_4.4_9A5259f.bundle/Info.plist";
-		sourceTree = "<absolute>";
-	};
 	324FF1B412F7D69F0039310E /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 327204FD12C9B1760054F4B0 /* libpois0n.h */;
@@ -1110,24 +1087,6 @@
 		name = listener.mm;
 		path = /Volumes/2TB/Projects/ATV2/beigelist/example_listener/listener.mm;
 		sourceTree = "<absolute>";
-	};
-	326252CA1446A26400E1B9DB /* Info.plist */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = text.plist.xml;
-		name = Info.plist;
-		path = "/Users/kevinbradley/Projects/Seas0nPass/bundles/AppleTV2,1_4.3_8F5153d.bundle/Info.plist";
-		sourceTree = "<absolute>";
-	};
-	3262537D1446B9A600E1B9DB /* PlistBookmark */ = {
-		isa = PlistBookmark;
-		fRef = 326252CA1446A26400E1B9DB /* Info.plist */;
-		fallbackIsa = PBXBookmark;
-		isK = 0;
-		kPath = (
-		);
-		name = "/Users/kevinbradley/Projects/Seas0nPass/bundles/AppleTV2,1_4.3_8F5153d.bundle/Info.plist";
-		rLen = 0;
-		rLoc = 9223372036854775808;
 	};
 	326253B81446C4CA00E1B9DB /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -1675,23 +1634,6 @@
 		vrLen = 451;
 		vrLoc = 0;
 	};
-	32A69C22141AE2CD009186F7 /* appletv_setup.sh */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = text.script.sh;
-		name = appletv_setup.sh;
-		path = /Users/kevinbradley/appletv_setup.sh;
-		sourceTree = "<absolute>";
-	};
-	32AC2236142D5CC70033050F /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 32A69C22141AE2CD009186F7 /* appletv_setup.sh */;
-		name = "appletv_setup.sh: 29";
-		rLen = 0;
-		rLoc = 1950;
-		rType = 0;
-		vrLen = 870;
-		vrLoc = 0;
-	};
 	32D9548C1310E752007B5BE3 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 3200F4F912D4DDEB003EA66E /* English */;
@@ -1969,24 +1911,6 @@
 		vrLen = 1561;
 		vrLoc = 1001;
 	};
-	32DF7B1512E39F7C002916D5 /* Info.plist */ = {
-		isa = PBXFileReference;
-		lastKnownFileType = text.plist.xml;
-		name = Info.plist;
-		path = "/Users/kevinbradley/Projects/Seas0nPass/bundles/AppleTV2,1_4.3_8F5148c.bundle/Info.plist";
-		sourceTree = "<absolute>";
-	};
-	32DF7B3A12E3A071002916D5 /* PlistBookmark */ = {
-		isa = PlistBookmark;
-		fRef = 32DF7B1512E39F7C002916D5 /* Info.plist */;
-		fallbackIsa = PBXBookmark;
-		isK = 0;
-		kPath = (
-		);
-		name = "/Users/kevinbradley/Projects/Seas0nPass/bundles/AppleTV2,1_4.3_8F5148c.bundle/Info.plist";
-		rLen = 0;
-		rLoc = 9223372036854775808;
-	};
 	32DF825312E65280002916D5 /* SPButton.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1461, 816}}";
@@ -2174,23 +2098,6 @@
 		vrLen = 1591;
 		vrLoc = 3;
 	};
-	32F7B198145E515D00F35A13 /* PlistBookmark */ = {
-		isa = PlistBookmark;
-		fRef = 32F7B199145E515D00F35A13 /* Info.plist */;
-		fallbackIsa = PBXBookmark;
-		isK = 0;
-		kPath = (
-		);
-		name = "/Users/kevinbradley/Projects/Seas0nPass/bundles/AppleTV2,1_4.4_9A5259f.bundle/Info.plist";
-		rLen = 0;
-		rLoc = 9223372036854775807;
-	};
-	32F7B199145E515D00F35A13 /* Info.plist */ = {
-		isa = PBXFileReference;
-		name = Info.plist;
-		path = "/Users/kevinbradley/Projects/Seas0nPass/bundles/AppleTV2,1_4.4_9A5259f.bundle/Info.plist";
-		sourceTree = "<absolute>";
-	};
 	8D1107260486CEB800E47090 /* Seas0nPass */ = {
 		activeExec = 0;
 		executables = (
@@ -2199,7 +2106,7 @@
 	};
 	8D1107310486CEB800E47090 /* tetherKit-Info.plist */ = {
 		uiCtxt = {
-			sepNavWindowFrame = "{{198, 108}, {1529, 878}}";
+			sepNavWindowFrame = "{{14, 0}, {1529, 878}}";
 		};
 	};
 }
