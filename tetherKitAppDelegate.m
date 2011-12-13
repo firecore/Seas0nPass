@@ -1923,7 +1923,7 @@ NSLog(@"postcommand_cb");
 		
 		if ([self scriptingEnabled])
 		{
-			[self setDownloadText:NSLocalizedString(@"Restoring in iTunes...",@"Restoring in iTunes...") ];
+			[self setDownloadText:NSLocalizedString(@"Restoring in iTunes, Please wait while script is running...",@"Restoring in iTunes, Please wait while script is running...") ];
 			if ([self loadItunesWithIPSW:ipswPath] == FALSE)
 			{
 				[self setDownloadText:NSLocalizedString(@"iTunes restore script failed!, selecting IPSW in Finder...", @"iTunes restore script failed!, selecting IPSW in Finder...")];
@@ -2000,7 +2000,7 @@ NSLog(@"postcommand_cb");
 		[self hideProgress];
 		return;
 	}
-	[self setDownloadText:NSLocalizedString(@"Restoring in iTunes...",@"Restoring in iTunes...") ];
+	[self setDownloadText:NSLocalizedString(@"Restoring in iTunes, Please wait while script is running...",@"Restoring in iTunes, Please wait while script is running...") ];
 	
 	if ([self loadItunesWithIPSW:ipswPath] == FALSE)
 	{
@@ -2190,6 +2190,54 @@ NSLog(@"postcommand_cb");
 	 front
 	 
 	 */
+	
+	/*
+	 
+	 there have been some reports of script failures, this is an attempt to do a repeat cycle until the AppleTV device playlist 
+	 actually shows up in iTunes, it /should/ always be named "Apple TV" regardless of the users name for it
+	 
+	 */
+	
+	/*
+	
+
+	 //old version that doesn't have a timeout, susceptible to infinite loop
+	 
+	 [asString appendString:@"activate application \"iTunes\"\n"];
+	[asString appendString:@"tell application \"iTunes\"\n"];
+	[asString appendString:@"copy name of view of window 1 to the_name\n"]; //frontmost playlist of the first window
+	[asString appendString:@"repeat until the_name is equal to \"Apple TV\"\n"];
+	[asString appendString:@"copy name of view of window 1 to the_name\n"];
+	[asString appendString:@"end repeat\n"];
+	[asString appendString:@"end tell\n"];
+	
+	 */
+	
+	[asString appendString:@"tell application \"iTunes\"\n"];
+	[asString appendString:@"copy name of view of window 1 to the_name\n"]; //Should be AppleTV device playlist
+	[asString appendString:@"set thisTime to current date\n"]; //get the current time so we can timeout after 25 seconds of waiting
+	[asString appendString:@"set dropDeadTime to thisTime + 25\n"]; //set the var for the time to die
+	[asString appendString:@"try\n"];
+	[asString appendString:@"repeat until the_name is equal to \"Apple TV\"\n"]; //should properly wait until the AppleTV actually pops up in iTunes
+	[asString appendString:@"if (current date) > dropDeadTime then error \"Apple TV Not Found.\"\n"]; //we done waiting!!
+	[asString appendString:@"copy name of view of window 1 to the_name\n"]; //copy the name to check it
+	[asString appendString:@"--if (current date) > dropDeadTime then exit repeat\n"]; //alternate way that wont give error
+	[asString appendString:@"end repeat\n"];
+	//on error errText
+	//		display dialog errText as string
+	[asString appendString:@"end try\n"];
+	
+	[asString appendString:@"end tell\n"];
+	
+	
+	
+	/*
+	 
+	 okay we SHOULD have a window 1 now, AND we should have the frontmost playlist item being the Apple TV, SHOULD be okay
+	 to proceed.
+	 
+	 */
+	
 	
 	[asString appendString:@"activate application \"iTunes\"\n"];
 	[asString appendString:@"tell application \"System Events\"\n"];
