@@ -305,14 +305,54 @@
 
 - (BOOL)untethered
 {
-	if ([self is4point4])
-		return NO;
+	NSString *comparisonVersion = @"5.0"; //yes pandering to appletv2, what of it? ;-P
 	
-//    if ([self is8F455])
-//        return NO;
-    
-	return YES;
-		//make this smarter later, for now this will do
+	NSString *clippedPath = nil;
+	int deviceInteger = [self deviceInt];
+	
+	switch (deviceInteger) {
+			
+			
+		case kAppleTVDevice:
+			
+			clippedPath = [[self bundleName] substringWithRange:NSMakeRange(11, 3)];
+			break;
+			
+		case kiPadDevice:
+		case kiPodDevice:
+			//iPad1,1_4.3.1_8G4_Restore.ipsw
+			clippedPath = [[self bundleName] substringWithRange:NSMakeRange(8, 3)];
+			comparisonVersion = @"5.0";
+			break;
+			
+		case kiPhoneDevice:
+			
+			clippedPath = [[self bundleName] substringWithRange:NSMakeRange(10, 3)];
+			comparisonVersion = @"5.0";
+			break;
+			
+	}
+	
+	NSComparisonResult theResult = [clippedPath compare:comparisonVersion options:NSNumericSearch];
+	//NSLog(@"theversion: %@  installed version %@", theVersion, installedVersion);
+	if ( theResult == NSOrderedDescending )
+	{
+			NSLog(@"%@ is greater than %@ NO", clippedPath, @"4.4");
+		
+		return NO;
+		
+	} else if ( theResult == NSOrderedAscending ){
+		
+			NSLog(@"%@ is greater than %@ YES", @"4.4", clippedPath);
+		return YES;
+		
+	} else if ( theResult == NSOrderedSame ) {
+		
+			NSLog(@"%@ is equal to %@ NO", clippedPath, @"4.4");
+		return NO;
+	}
+	
+	return NO;
 }
 
 

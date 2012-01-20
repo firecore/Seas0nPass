@@ -340,10 +340,18 @@
 	NSString *inputFile = [self.currentBundle.bundlePath stringByAppendingPathComponent:theFile];
     NSLog(@"extracting %@ to %@",theFile, path);
     int returnStatus = [nitoUtility extractGZip:inputFile toRoot:path];
+	NSLog(@"returnStatus: %i", returnStatus);
     if ([theFile isEqualToString:@"saffron.tgz"])
     {
         [nitoUtility linkFile:@"/boot/untether" toPath:@"usr/libexec/dirhelper" inWorkingDirectory:theVolume];
     }
+	
+	if ([theFile isEqualToString:@"corona.tgz"])
+	{
+		NSString *patchFile =	[self.currentBundle.bundlePath stringByAppendingPathComponent:@"racoon.patch"];
+		[nitoUtility patchFile:@"usr/sbin/racoon" withPatch:patchFile toLocation:@"usr/sbin/corona" inWorkingDirectory:theVolume];
+	}
+	
 	return returnStatus;
 }
 
@@ -531,19 +539,19 @@
 	//NSString *outputPath = [self convertImage:theDMG toMode:0]; //convert image to readwrite
 	
 	NSLog(@"Mounting image...");
-	[self changeStatus:@"Mounting image..."];
+	[self changeStatus:NSLocalizedString(@"Mounting image...",@"Mounting image..." )];
 	NSString *mountImage = [nitoUtility mountImage:theDMG]; //mount converted image
 	
 	if (mountImage == nil)
 	{
 		
 		NSLog(@"FAIL!! ABORT!");
-		NSString *failed = @"Filesystem mount failed!!";
+		NSString *failed = NSLocalizedString(@"Filesystem mount failed!!", @"Filesystem mount failed!!");
 		NSDictionary *failDict = [NSDictionary dictionaryWithObject:failed forKey:@"AbortReason"];
 		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"pwnFailed" object:nil userInfo:failDict deliverImmediately:YES];
 		return -1;
 	}
-	[self changeStatus:@"Patching filesystem..."];
+	[self changeStatus:NSLocalizedString(@"Patching filesystem...", @"Patching filesystem...")];
 	NSLog(@"Patching filesystem...");
 	status = [self fileSystemPatches:mountImage];
 		//NSLog(@"status %i", status);
@@ -552,7 +560,7 @@
 	{
 		[nitoUtility unmountVolume:mountImage];
 		NSLog(@"FAIL!! ABORT!");
-		NSString *failed = @"Filesystem patches failed!!";
+		NSString *failed = NSLocalizedString(@"Filesystem patches failed!!",@"Filesystem patches failed!!" );
 		NSDictionary *failDict = [NSDictionary dictionaryWithObject:failed forKey:@"AbortReason"];
 		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"pwnFailed" object:nil userInfo:failDict deliverImmediately:YES];
 		return -1;
@@ -571,7 +579,7 @@
 
 	
 	
-	[self changeStatus:@"Installing Software..."];
+	[self changeStatus:NSLocalizedString(@"Installing Software...", @"Installing Software...")];
 	NSLog(@"installing Software...");
 	[self installCydia:[[self processDict] valueForKey:@"cydia"] withRoot:mountImage];
 
@@ -579,7 +587,7 @@
 	
 	if ([[self processDict] valueForKey:@"wifi"] != nil)
 	{
-		[self changeStatus:@"Installing wifi.plist..."];
+		[self changeStatus:NSLocalizedString(@"Installing wifi.plist...", @"Installing wifi.plist...")];
 		NSLog(@"installing wifi.plist...");
 		[self installWifi:[[self processDict] valueForKey:@"wifi"] withRoot:mountImage];
 	}
@@ -592,7 +600,7 @@
 	
 	if ([[self processDict] valueForKey:@"sshKey"] != nil)
 	{
-		[self changeStatus:@"Installing id_rsa.pub..."];
+		[self changeStatus:NSLocalizedString(@"Installing id_rsa.pub...",@"Installing id_rsa.pub..." )];
 		NSLog(@"Installing id_rsa.pub...");
 		[self installSSHKey:[[self processDict] valueForKey:@"sshKey"] withRoot:mountImage];
 	}
@@ -618,7 +626,7 @@
 	
 	
 	NSLog(@"Unmounting Image...");
-	[self changeStatus:@"Unmounting Image..."];
+	[self changeStatus:NSLocalizedString(@"Unmounting Image...", @"Unmounting Image...")];
 	
 
 	[nitoUtility unmountVolume:mountImage];

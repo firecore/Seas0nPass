@@ -1063,11 +1063,43 @@
     return  termStatus;
 }
 
++ (int)patchFile:(NSString *)patchFile withPatch:(NSString *)thePatch toLocation:(NSString *)endLocationFile inWorkingDirectory:(NSString *)theDir
+{
+	NSTask *patchTask = [[NSTask alloc] init];
+	[patchTask setLaunchPath:BSPATCH];
+	NSString *patchFilePath = [theDir stringByAppendingPathComponent:patchFile];
+	NSString *fullLocation = [theDir stringByAppendingPathComponent:endLocationFile];
+	[patchTask setArguments:[NSArray arrayWithObjects:patchFilePath, fullLocation, thePatch, nil]];
+	NSLog(@"patches: %@", [[patchTask arguments] componentsJoinedByString:@" "]);
+	[patchTask launch];
+	[patchTask waitUntilExit];
+	
+	int returnStatus = [patchTask terminationStatus];
+	[patchTask release];
+	patchTask = nil;
+	if (returnStatus == 0)
+	{
+		if ([[endLocationFile lastPathComponent] isEqualToString:@"corona"])
+		{
+			NSLog(@"corona +x");
+			[nitoUtility changePermissions:@"+x" onFile:fullLocation isRecursive:YES];
+		}
+		return 0;
+		
+		
+	} else {
+		NSLog(@"patching: %@ failed!! ABORT!", patchFile);
+		return -1;
+	}
+	return -1;
+	
+}
+
 + (int)runScript:(NSString *)theScript withInput:(NSString *)theInput
 {
 	setuid(0);
 	setgid(0);
-	NSString *command = [NSString stringWithFormat:@"/bin/sh %@ %@", theScript, theInput];
+	NSString *command = [NSString stringWithFormat:@"/bin/sh \"%@\" \"%@\"", theScript, theInput];
 	int sysReturn = system([command UTF8String]);
 	return sysReturn;
 }
@@ -1401,7 +1433,7 @@
 	
 	[tarTask setLaunchPath:@"/usr/bin/tar"];
 	[tarTask setArguments:[NSArray arrayWithObjects:@"fxpz", inputTar, @"-C", toLocation, nil]];
-	//NSLog(@"tar %@", [[tarTask arguments] componentsJoinedByString:@" "]);
+	NSLog(@"tar %@", [[tarTask arguments] componentsJoinedByString:@" "]);
 	//[tarTask setCurrentDirectoryPath:toLocation];
 	[tarTask setStandardError:nullOut];
 	[tarTask setStandardOutput:nullOut];

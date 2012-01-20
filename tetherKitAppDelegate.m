@@ -12,6 +12,9 @@
 // libpois0n/libsyringe by Joshua Hill & Chronic-Dev Team. ( feel free to help me update these credits )
 // xpwntool by planetbeing
 // limera1n exploit by George Hotz
+// 4.3.x exploit by i0n1c (steffan esser)
+// 4.3.3 exploit by comex
+// 4.4.x exploit by pod2g
 
 	//4.3b1 md5 for iBSS 0b03c11af9bd013a6cf98be65eb0e146
     //4.3b1 patched md5 for iBSS 
@@ -20,16 +23,17 @@
 #include <Security/AuthorizationTags.h>
 #import "tetherKitAppDelegate.h"
 #import "include/libpois0n.h"
+#import <Foundation/Foundation.h>
 
 #define kIPSWName @"AppleTV2,1_4.2.1_8C154_Restore.ipsw"
-#define kIPSWDownloadLocation @"http://appldnld.apple.com/AppleTV/041-0895.20110728.TcF4T/AppleTV2,1_4.3_8F455_Restore.ipsw"
+#define kIPSWDownloadLocation @"http://appldnld.apple.com/AppleTV/041-3539.20111215.EQTW8/AppleTV2,1_4.4.4_9A406a_Restore.ipsw"
 #define DL [tetherKitAppDelegate downloadLocation]
 #define PTMD5 @"e8f4d590c8fe62386844d6a2248ae609"
 #define IPSWMD5 @"785f859b63edd329e9b5039324ebaf49"
 #define KCACHE @"kernelcache.release.k66"
 #define iBSSDFU @"iBSS.k66ap.RELEASE.dfu"
 #define iBECDFU @"iBEC.k66ap.RELEASE.dfu"
-#define HCIPSW [DL stringByAppendingPathComponent:@"AppleTV2,1_4.3_8F455_Restore.ipsw"]
+#define HCIPSW [DL stringByAppendingPathComponent:@"AppleTV2,1_4.4.4_9A406a_Restore.ipsw"]
 #define CUSTOM_RESTORED @"AppleTV2,1_4.2.1_8C154_Custom_Restore.ipsw"
 #define CUSTOM_RESTORE @"AppleTV_SeasonPass.ipsw"
 #define BUNDLE_LOCATION [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"bundles"]
@@ -451,7 +455,7 @@ void LogIt (NSString *format, ...)
 
 + (NSString *)ipswFile
 {
-	return [DL stringByAppendingPathComponent:@"AppleTV2,1_4.3_8F455_Restore.ipsw"];
+	return [DL stringByAppendingPathComponent:@"AppleTV2,1_4.4.4_9A406a_Restore.ipsw"];
 }
 	//originally we downloaded and patched pwnagetool rather than making a custom ipsw, some deprecated code still in here commented out.
 
@@ -894,7 +898,7 @@ void print_progress_bar(double progress) {
 	}
 	
 	if (ibssFile != NULL) {
-		[self setDownloadText:[NSString stringWithFormat:@"Uploading %@ to device...", iBSSDFU]];
+		[self setDownloadText:[NSString stringWithFormat:NSLocalizedString(@"Uploading %@ to device...", @"Uploading %@ to device..."), iBSSDFU]];
 		ir_error = irecv_send_file(client, ibssFile, 1);
 		if(ir_error != IRECV_E_SUCCESS) {
 			[self setDownloadText:NSLocalizedString(@"Unable to upload iBSS!", @"Unable to upload iBSS!")];
@@ -1621,7 +1625,7 @@ NSLog(@"postcommand_cb");
 - (void)showHomePermissionWarning
 {
 	
-	NSAlert *theAlert = [NSAlert alertWithMessageText:@"Home Folder Error" defaultButton:@"Quit" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Seas0nPass is unable to write to your home folder! Please check your ownerships and permissions (via Get Info) and re-run Seas0nPass."];
+	NSAlert *theAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"Home Folder Error",@"Home Folder Error") defaultButton:NSLocalizedString(@"Quit", @"Quit") alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedString(@"Seas0nPass is unable to write to your home folder! Please check your ownerships and permissions (via Get Info) and re-run Seas0nPass.", @"Seas0nPass is unable to write to your home folder! Please check your ownerships and permissions (via Get Info) and re-run Seas0nPass.")];
 	int buttonReturn = [theAlert runModal];
 		NSLog(@"buttonReturn: %i", buttonReturn);
 	switch (buttonReturn) {
@@ -1640,6 +1644,8 @@ NSLog(@"postcommand_cb");
 
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+	
+	//[self iTunesScriptReady];
 	
 	if ([self homeWritable])
 	{
@@ -1680,7 +1686,7 @@ NSLog(@"postcommand_cb");
 	if ([lastUsedbundle length] < 1)
 	{
 			//NSLog(@"lastUsedBundle is nil, set it!");
-		lastUsedbundle = @"AppleTV2,1_4.3_8F455";
+		lastUsedbundle = @"AppleTV2,1_4.4.4_9A406a";
 		[[NSUserDefaults standardUserDefaults] setObject:lastUsedbundle forKey:@"lastUsedBundle"];
 	}
 	self.currentBundle = [FWBundle bundleWithName:LAST_BUNDLE];
@@ -1728,7 +1734,7 @@ NSLog(@"postcommand_cb");
 - (void)pwnFailed:(NSNotification *)n
 {
 
-	NSString *fail = [NSString stringWithFormat:@"Process failed with reason: %@", [[n userInfo] objectForKey:@"AbortReason"]];
+	NSString *fail = [NSString stringWithFormat:NSLoczlizedString(@"Process failed with reason: %@",@"Process failed with reason: %@" ), [[n userInfo] objectForKey:@"AbortReason"]];
 	[self setDownloadText:fail];
 	[self hideProgress];
 	[[NSWorkspace sharedWorkspace] selectFile:@"SP_Debug.log" inFileViewerRootedAtPath:[NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/"]];
@@ -1928,17 +1934,17 @@ NSLog(@"postcommand_cb");
 			{
 				[self setDownloadText:NSLocalizedString(@"iTunes restore script failed!, selecting IPSW in Finder...", @"iTunes restore script failed!, selecting IPSW in Finder...")];
 				[[NSWorkspace sharedWorkspace] selectFile:ipswPath inFileViewerRootedAtPath:NSHomeDirectory()];
-				[cancelButton setTitle:@"Done"];
+				[cancelButton setTitle:NSLocalizedString(@"Done", @"Done")];
 			} else {
 				[self setDownloadText:NSLocalizedString(@"iTunes restore script successful!", @"iTunes restore script successful!")];
-				[cancelButton setTitle:@"Done"];
+				[cancelButton setTitle:NSLocalizedString(@"Done", @"Done")];
 				[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
 			}
 		} else {
 			[[NSWorkspace sharedWorkspace] selectFile:ipswPath inFileViewerRootedAtPath:NSHomeDirectory()];
-			[cancelButton setTitle:@"Done"];
+			[cancelButton setTitle:NSLocalizedString(@"Done", @"Done")];
 		}
-		[cancelButton setTitle:@"Done"];
+		[cancelButton setTitle:NSLocalizedString(@"Done", @"Done")];
 		[[NSUserDefaults standardUserDefaults] setObject:self.currentBundle.bundleName forKey:@"lastUsedBundle"];
 //		if([self.currentBundle is8F455])
 //        {
@@ -1950,7 +1956,7 @@ NSLog(@"postcommand_cb");
 		
 		[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:NSLocalizedString(@"Custom IPSW creation failed!" , @"Custom IPSW creation failed!" ) waitUntilDone:NO];
 		[self hideProgress];
-			[cancelButton setTitle:@"Failed"];
+			[cancelButton setTitle:NSLocalizedString(@"Failed", @"Failed")];
 		NSLog(@"ipsw creation failed!!");
 		
 	}
@@ -2007,7 +2013,7 @@ NSLog(@"postcommand_cb");
 		[self setDownloadText:NSLocalizedString(@"Failed to run iTunes script!!",@"Failed to run iTunes script!!") ];
 	} else {
 		[self setDownloadText:NSLocalizedString(@"iTunes restore script successful!", @"iTunes restore script successful!")];
-		[cancelButton setTitle:@"Done"];
+		[cancelButton setTitle:NSLocalizedString(@"Done", @"Done")];
 		[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
 	}
 	
@@ -2040,6 +2046,15 @@ NSLog(@"postcommand_cb");
 }
 
 - (void)killiTunes
+{
+	NSString *killItunesString = @"tell application \"iTunes\" to quit";
+	NSAppleScript *theScript = [[NSAppleScript alloc] initWithSource:killItunesString];
+	[theScript executeAndReturnError:nil];
+	[theScript release];
+	theScript = nil;
+}
+
+- (void)killiTunesOld
 {
 	//if (KILL_ITUNES == NO)
 //	return;
@@ -2131,10 +2146,159 @@ NSLog(@"postcommand_cb");
 	return NO;
 }
 
+- (BOOL)iTunesScriptReady
+{
+	//use applescript to launch the app and give it ample time to do full screen animation just in case it is full screen
+	
+	NSDictionary *theError = nil;
+	NSMutableString *asString = [[NSMutableString alloc] init];
+	
+	[asString appendString:@"activate application \"iTunes\"\n"];
+	[asString appendString:@"tell application \"System Events\"\n"];
+	[asString appendString:@"tell Process \"iTunes\"\n"];
+	[asString appendString:@"delay 3\n"];
+	[asString appendString:@"end tell\n"];
+	[asString appendString:@"end tell\n"];
+	
+	NSAppleScript *as = [[NSAppleScript alloc] initWithSource:asString];
+	[as executeAndReturnError:&theError];
+	[asString release];
+	asString = nil;
+	[as release];
+	
+	//use AXUI shit to get the bounds, much more elegant than doing it with applescript, should be more reliable / less error prone.
+	
+	AXUIElementRef _systemWideElement;
+    AXUIElementRef _focusedApp;
+    CFTypeRef _focusedWindow;
+   // CFTypeRef _position;
+    CFTypeRef _size;
+	
+    _systemWideElement = AXUIElementCreateSystemWide();
+	
+	//Get the app that has the focus
+    AXUIElementCopyAttributeValue(_systemWideElement,
+								  (CFStringRef)kAXFocusedApplicationAttribute,
+								  (CFTypeRef*)&_focusedApp);
+	
+    //Get the window that has the focus
+    if(AXUIElementCopyAttributeValue((AXUIElementRef)_focusedApp,
+									 (CFStringRef)NSAccessibilityFocusedWindowAttribute,
+									 (CFTypeRef*)&_focusedWindow) == kAXErrorSuccess) {
+		
+		if(CFGetTypeID(_focusedWindow) == AXUIElementGetTypeID()) {
+			//Get the Window's Current Position
+			//if(AXUIElementCopyAttributeValue((AXUIElementRef)_focusedWindow,
+//											 (CFStringRef)NSAccessibilityPositionAttribute,
+//											 (CFTypeRef*)&_position) != kAXErrorSuccess) {
+//				NSLog(@"Can't Retrieve Window Position");
+//			}
+			//Get the Window's Current Size
+			if(AXUIElementCopyAttributeValue((AXUIElementRef)_focusedWindow,
+											 (CFStringRef)NSAccessibilitySizeAttribute,
+											 (CFTypeRef*)&_size) != kAXErrorSuccess) {
+				NSLog(@"Can't Retrieve Window Size");
+			} else {
+				NSSize size;
+				
+				
+				if(AXValueGetType(_size) == kAXValueCGSizeType) {
+					AXValueGetValue(_size, kAXValueCGSizeType, (void*)&size);
+					NSLog(@"itunes window size: %@", NSStringFromSize(size));
+					
+					
+					if ([self isFullScreen:size])
+					{
+						NSLog(@"is full screen!");
+						return FALSE;
+					} else {
+						
+						NSLog(@"is NOT full screen");
+						
+					}
+					
+				} //kAXValueCGSizeType true
+				
+			} //kAXErrorSuccess else
+		}
+    } else {
+		NSLog(@"Cant determine iTunes bounds");
+		return FALSE;
+    }
+	
+	return TRUE; //default to it not being full screen, may not be idiot proof enough if something goes awry
+}
+
+- (BOOL)isFullScreen:(NSSize)theSize
+{
+	NSRect fsRect = [[NSScreen mainScreen] frame];
+	NSSize fsSize = fsRect.size;
+	
+	int fsWidth = fsSize.width;
+	int fsHeight = fsSize.height;
+	
+	int width = theSize.width;
+	int height = theSize.height;
+	
+	if (fsWidth == width && fsHeight == height)
+	{
+		return TRUE;
+	}
+	
+	return FALSE;
+	
+}
+
+- (BOOL)iTunesScriptReadyOld
+{
+	NSDictionary *theError = nil;
+	
+	/*
+	 
+	 check to see if we are full screen, if we are exit out
+	 
+	 
+	 
+	 */
+	
+	NSMutableString *asString = [[NSMutableString alloc] init];
+
+	[asString appendString:@"activate application \"iTunes\"\n"];
+	[asString appendString:@"tell application \"System Events\"\n"];
+	[asString appendString:@"tell process \"iTunes\"\n"];
+	[asString appendString:@"set isFull to (get value of attribute \"AXFullScreen\" of window 1)\n"];
+	//[asString appendString:@"if isFull then\n"];
+	//[asString appendString:@"key code 3 using {command down, control down}\n"];
+	//[asString appendString:@"end if\n"];
+	[asString appendString:@"end tell\n"];
+	[asString appendString:@"end tell\n"];
+	NSAppleScript *as = [[NSAppleScript alloc] initWithSource:asString];
+	//NSLog(@"applescript: %@", asString);
+	[as executeAndReturnError:&theError];
+	[asString release];
+	asString = nil;
+	[as release];
+	if (theError != nil)
+	{
+		NSLog(@"iTunes might be full screen");
+		//NSLog(@"iTunes Scripting failed with error: %@", theError);
+		return FALSE;
+	}
+	
+	NSLog(@"success?");
+	
+	return TRUE;
+}
+
 	//restore button for other devices: click button 2 of scroll area 3 of window 1
 
 - (BOOL)loadItunesWithIPSW:(NSString *)ipsw
 {
+	
+	
+	
+	
+	
 	NSDictionary *theError = nil;
 	
 		//AppleTV2,1_4.2.1_8C154_Custom_Restore.ipsw
@@ -2176,9 +2340,26 @@ NSLog(@"postcommand_cb");
 	NSString *ipswString = [NSString stringWithFormat:@"set value of text field 1 of sheet 1 of window 1 to \"%@\"\n", ipsw];
 	
 	NSMutableString *asString = [[NSMutableString alloc] init];
+
+	
+	
+	
+	
+	
+	
 	[asString appendString:@"activate application \"iTunes\"\n"];
 	[asString appendString:@"tell application \"System Events\"\n"];
 	[asString appendString:@"tell Process \"iTunes\"\n"];
+	
+	if (![self iTunesScriptReady])
+	{
+		NSLog(@"iTunes fullscreen?");
+		[asString appendString:@"delay 5\n"];
+		[asString appendString:@"key code 3 using {command down, control down}\n"];
+		[asString appendString:@"delay 5\n"];
+		
+	}
+	
 	[asString appendString:@"repeat until window 1 is not equal to null\n"];
 	[asString appendString:@"end repeat\n"];
 	[asString appendString:@"end tell\n"];
@@ -2306,7 +2487,7 @@ NSLog(@"postcommand_cb");
 
 - (void)showUntetheredAlert
 {
-	NSAlert *errorAlert = [NSAlert alertWithMessageText:@"Untethered Jailbreak" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"The %@ firmware is untethered and does not require this process!", [self.currentBundle bundleName]];
+	NSAlert *errorAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"Untethered Jailbreak", @"Untethered Jailbreak") defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedString(@"The %@ firmware is untethered and does not require this process!", @"The %@ firmware is untethered and does not require this process!"), [self.currentBundle bundleName]];
 	[errorAlert runModal];
 }
 
@@ -2372,14 +2553,14 @@ NSLog(@"postcommand_cb");
 	[FM removeItemAtPath:logPath2 error:nil];
 	//current bundle may be set by default, but we never want to assume the default processOne ipsw to be anything but the latest- which is still hardcoded to 4.2.1.
 		//self.currentBundle = LAST_BUNDLE;
-	self.currentBundle = [FWBundle bundleWithName:@"AppleTV2,1_4.3_8F455"];
+	self.currentBundle = [FWBundle bundleWithName:@"AppleTV2,1_4.4.4_9A406a"];
 	
 	
 	
 	if ([self optionKeyIsDown])
 	{
 		NSOpenPanel *op = [NSOpenPanel openPanel];
-		[op setTitle:@"Please select an AppleTV firmware image"];
+		[op setTitle:NSLocalizedString(@"Please select an AppleTV firmware image",@"Please select an AppleTV firmware image" )];
 		[op setCanChooseFiles:YES];
 		[op setCanCreateDirectories:NO];
 		int buttonPressed = [op runModalForTypes:[NSArray arrayWithObject:@"ipsw"]];
@@ -2392,7 +2573,7 @@ NSLog(@"postcommand_cb");
 		
 		if (ourBundle == nil)
 		{
-			NSAlert *errorAlert = [NSAlert alertWithMessageText:@"Unsupported Firmware!" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"The firmware %@ is not compatible with this version of Seas0nPass.", [ipsw lastPathComponent]];
+			NSAlert *errorAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"Unsupported Firmware!", @"Unsupported Firmware!") defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedString(@"The firmware %@ is not compatible with this version of Seas0nPass.", @"The firmware %@ is not compatible with this version of Seas0nPass."), [ipsw lastPathComponent]];
 			[errorAlert runModal];
 			return;
 		}
@@ -2435,7 +2616,7 @@ NSLog(@"postcommand_cb");
 		[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
         [NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:ipsw];
 		return;
-	}
+	} //end option key down if / custom payload selection
 	
 	[window setContentView:self.secondView];
 	[window display];
@@ -2466,7 +2647,7 @@ NSLog(@"postcommand_cb");
 	//LOG_SELF;
 	NSString *currentDownload = [downloadFiles objectAtIndex:downloadIndex];
 	NSString *ptFile = [DL stringByAppendingPathComponent:[currentDownload lastPathComponent]];
-	[self setDownloadText:[NSString stringWithFormat:@"Downloading %@...", [currentDownload lastPathComponent]]];
+	[self setDownloadText:[NSString stringWithFormat:NSLocalizedString(@"Downloading %@...",@"Downloading %@..."), [currentDownload lastPathComponent]]];
 	downloadFile = [[ripURL alloc] init];
 	[downloadFile setHandler:self];
 	[downloadFile setDownloadLocation:ptFile];

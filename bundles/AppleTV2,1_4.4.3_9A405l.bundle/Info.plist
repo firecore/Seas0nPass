@@ -5,11 +5,24 @@
 	<key>DeleteBuildManifest</key>
 	<false/>
 	<key>DownloadUrl</key>
-	<string></string>
+	<string>http://appldnld.apple.com/AppleTV/041-3117.20111117.Gj79d/AppleTV2,1_4.4.3_9A405l_Restore.ipsw</string>
 	<key>Filename</key>
 	<string>AppleTV2,1_4.4.3_9A405l_Restore</string>
 	<key>FilesystemPatches</key>
 	<dict>
+		<key>Core Files Installation</key>
+		<array>
+			<dict>
+				<key>Action</key>
+				<string>Extract</string>
+				<key>File</key>
+				<string>corona.tgz</string>
+				<key>Name</key>
+				<string>corona.tgz</string>
+				<key>Path</key>
+				<string>/</string>
+			</dict>
+		</array>
 		<key>Filesystem Jailbreak</key>
 		<array>
 			<dict>
@@ -48,7 +61,8 @@
 			<key>IV</key>
 			<string>3cb31d78e4096fb3a596c869e1780a3f</string>
 			<key>Key</key>
-			<string>02d501bc4a5be0d80df13aac8265ebba6739a6b5722e003b971dd5917892affb</string>
+			<string>02d501bc4a5be0d80df13aac8265ebba6739a6b5722e003b971dd5917892affb
+</string>
 			<key>Patch</key>
 			<string>iBEC.k66ap.RELEASE.patch</string>
 			<key>TypeFlag</key>
@@ -64,19 +78,6 @@
 			<string>0b9a871abbe670a9c8391df347b5331a770cb09d870f81293b974ca9253f4c29</string>
 			<key>Patch</key>
 			<string>iBSS.k66ap.RELEASE.patch</string>
-			<key>TypeFlag</key>
-			<string>8</string>
-		</dict>
-		<key>kernelcache</key>
-		<dict>
-			<key>File</key>
-			<string>kernelcache.release.k66</string>
-			<key>IV</key>
-			<string>41f15e0db5db7794ac26eda6fdcc9af3</string>
-			<key>Key</key>
-			<string>2d64bc79450ec1e6e9aa738c61e7daa4a8992518110c1be727d37b353811faf8</string>
-			<key>Patch</key>
-			<string>kernelcache.release.patch</string>
 			<key>TypeFlag</key>
 			<string>8</string>
 		</dict>
