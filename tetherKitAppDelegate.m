@@ -1734,7 +1734,7 @@ NSLog(@"postcommand_cb");
 - (void)pwnFailed:(NSNotification *)n
 {
 
-	NSString *fail = [NSString stringWithFormat:NSLoczlizedString(@"Process failed with reason: %@",@"Process failed with reason: %@" ), [[n userInfo] objectForKey:@"AbortReason"]];
+	NSString *fail = [NSString stringWithFormat:NSLocalizedString(@"Process failed with reason: %@",@"Process failed with reason: %@" ), [[n userInfo] objectForKey:@"AbortReason"]];
 	[self setDownloadText:fail];
 	[self hideProgress];
 	[[NSWorkspace sharedWorkspace] selectFile:@"SP_Debug.log" inFileViewerRootedAtPath:[NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/"]];
