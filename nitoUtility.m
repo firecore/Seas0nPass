@@ -846,7 +846,7 @@
 	{
 		NSLog(@"Decrypted Filesystem successfully!");
 		NSString *convertImage = [nitoUtility convertImage:decryptFS toFile:rwFS toMode:kDMGReadWrite]; //2
-		if (convertImage =! nil)
+		if (convertImage != nil)
 		{
 			NSLog(@"converted to read write successfully: %@", rwFS); 
 			
@@ -924,7 +924,7 @@
 	{
 		NSLog(@"Decrypted Filesystem successfully!");
 		NSString *convertImage = [nitoUtility convertImage:decryptFS toFile:rwFS toMode:kDMGReadWrite]; //2
-		if (convertImage =! nil)
+		if (convertImage != nil)
 		{
 			NSLog(@"converted to read write successfully: %@", rwFS); 
 				//need to take over with root access here for 3-8

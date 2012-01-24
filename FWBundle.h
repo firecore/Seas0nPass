@@ -77,6 +77,7 @@ enum  {
 - (NSString *)downloadURL;
 - (NSString *)oldOutputFile;
 - (NSString *)outputFile;
+- (BOOL)shouldUpdatePartitionSize;
 
 	//really lazy convenience classes
 - (NSDictionary *)buildManifest;
