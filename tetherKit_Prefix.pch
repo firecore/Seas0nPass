@@ -6,4 +6,5 @@
     #import <Cocoa/Cocoa.h>
 	#import "PatchedFile.h"
 	#import "NSApplication+SystemVersion.h"
+	#import "NSData+Flip.h"
 #endif

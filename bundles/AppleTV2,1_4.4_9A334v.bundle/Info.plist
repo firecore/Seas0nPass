@@ -116,5 +116,7 @@
 	<string>3</string>
 	<key>subplatform</key>
 	<string>10</string>
+	<key>Untethered</key>
+	<false/>
 </dict>
 </plist>

@@ -7,7 +7,7 @@
 	<key>DownloadUrl</key>
 	<string></string>
 	<key>Filename</key>
-	<string>AppleTV2,1_5.0_9B5127c_Restore</string>
+	<string>AppleTV2,1_5.0_9B5127c_Restore.ipsw</string>
 	<key>FilesystemPatches</key>
 	<dict>
 		<key>Filesystem Jailbreak</key>
@@ -103,5 +103,7 @@
 	<string>3</string>
 	<key>subplatform</key>
 	<string>10</string>
+	<key>Untethered</key>
+	<false/>
 </dict>
 </plist>

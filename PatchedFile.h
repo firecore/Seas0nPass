@@ -9,6 +9,15 @@
 #import <Cocoa/Cocoa.h>
 
 #define LOG_SELF NSLog(@"%@ %s", self, _cmd)
+#ifndef LocationLog
+#define LocationLog(format,...) \
+{ \
+NSString *file = [[NSString stringWithUTF8String:__FILE__] lastPathComponent]; \
+fprintf(stdout, "%s:%d - ", [file UTF8String], __LINE__); \
+QuietLog((format),##__VA_ARGS__); \
+}
+#endif
+
 
 @interface PatchedFile : NSDictionary {
 	

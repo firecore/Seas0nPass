@@ -77,6 +77,7 @@
 
 {
 	NSLog(@"%@ %s", self, _cmd);
+	NSLog(@"error: %@", error);
 	[handler downloadFailed:downloadLocation];
 
 }

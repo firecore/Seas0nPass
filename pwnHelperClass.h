@@ -18,6 +18,7 @@
 
 }
 @property (nonatomic, assign) FWBundle *currentBundle;
+- (void)useAppleServer;
 - (int)permissionedCopy:(NSString *)inputFile toPath:(NSString *)outputFile;
 - (NSDictionary *)processDict;
 - (void)setProcessDict:(NSDictionary *)value;

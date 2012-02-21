@@ -526,6 +526,14 @@
 	NSString *fileLocation = [[installerBundle bundlePath] stringByAppendingPathComponent:@"files"];
 	[self runBundleCommands:commands onFiles:fileLocation];
 	*/
+	
+	
+	NSString *restoreMode = [processDict valueForKey:@"restoreMode"];
+	
+	int resMode = [restoreMode intValue];
+	
+	NSLog(@"restoreMode: %i", resMode);
+	
 	int status = 0;
 	
 		//NSLog(@"processDictionary %@", [self processDict]);
@@ -592,11 +600,28 @@
 		[self installWifi:[[self processDict] valueForKey:@"wifi"] withRoot:mountImage];
 	}
 	
+	if (resMode == kRestoreCydiaRedirectMode)
+	{
+		[self useCydiaServer];
+		NSLog(@"redirecting 74.208.10.249 gs.apple.com...");
+		
+	} else if (resMode == kRestoreDefaultMode)
+	{
+		
+		[self useAppleServer];
+		NSLog(@"attempting to remove any 74.208.10.249 gs.apple.com redirects...");
+		
+	}
+	
+	
+	/*
 	if ([[self processDict] valueForKey:@"sigServer"] != nil)
 	{
 		[self useCydiaServer];
 		NSLog(@"redirecting 74.208.10.249 gs.apple.com...");
 	}
+	*/
+	
 	
 	if ([[self processDict] valueForKey:@"sshKey"] != nil)
 	{
@@ -633,7 +658,7 @@
 	
 	NSString *ogDMG = [processDict valueForKey:@"os"];
 	
-	NSDictionary * userInfo = [NSDictionary dictionaryWithObjectsAndKeys: theDMG, @"Path", ogDMG, @"os", nil];
+	NSDictionary * userInfo = [NSDictionary dictionaryWithObjectsAndKeys: theDMG, @"Path", ogDMG, @"os", restoreMode, @"restoreMode", nil];
 	
 	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"pwnFinished" object:nil userInfo:userInfo deliverImmediately:YES];
 	return -1;
@@ -665,12 +690,39 @@
 
 - (void)useCydiaServer
 {
-
     NSMutableString *hosts = [[NSMutableString alloc] initWithContentsOfFile:@"/etc/hosts" encoding:NSUTF8StringEncoding error:nil];
-	NSRange range = [hosts rangeOfString:@"74.208.10.249 gs.apple.com"];
+	NSRange commentrange = [hosts rangeOfString:@"#74.208.10.249 gs.apple.com"]; 
+	NSRange range = [hosts rangeOfString:@"74.208.10.249 gs.apple.com"]; //this doesnt account for if #74.208.10.249 gs.apple.com is found
+	
+	if ( commentrange.location != NSNotFound )
+	{
+		[hosts replaceOccurrencesOfString:@"#74.208.10.249" withString:@"74.208.10.249" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [hosts length])];
+		[hosts writeToFile:@"/etc/hosts" atomically:YES encoding:NSUTF8StringEncoding error:nil];
+	}
+	
 	if ( range.location == NSNotFound )
 	{
 		[hosts appendString:@"\n74.208.10.249 gs.apple.com\n"];
+        [hosts writeToFile:@"/etc/hosts" atomically:YES encoding:NSUTF8StringEncoding error:nil];
+		[hosts release];
+	}
+}
+
+- (void)useAppleServer
+{
+	
+    NSMutableString *hosts = [[NSMutableString alloc] initWithContentsOfFile:@"/etc/hosts" encoding:NSUTF8StringEncoding error:nil];
+	NSRange commentrange = [hosts rangeOfString:@"#74.208.10.249 gs.apple.com"]; 
+	NSRange range = [hosts rangeOfString:@"74.208.10.249 gs.apple.com"]; //this doesnt account for if #74.208.10.249 gs.apple.com is found
+	
+	if ( commentrange.location != NSNotFound )
+	{
+		[hosts replaceOccurrencesOfString:@"#74.208.10.249" withString:@"74.208.10.249" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [hosts length])];
+	}
+	
+	if ( range.location != NSNotFound )
+	{
+		[hosts replaceOccurrencesOfString:@"74.208.10.249 gs.apple.com" withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [hosts length])];
         [hosts writeToFile:@"/etc/hosts" atomically:YES encoding:NSUTF8StringEncoding error:nil];
 		[hosts release];
 	}

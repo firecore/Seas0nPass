@@ -1,5 +1,5 @@
 //
-//  SPButton.h
+//  SPFWButton.h
 //  tetherKit
 //
 //  Created by Kevin Bradley on 1/18/11.
@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface SPButton : NSButton {
+@interface SPFWButton : NSButton {
 
 }
 

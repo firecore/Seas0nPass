@@ -116,5 +116,7 @@
 	<string>b6a2b0baae79daf95f75044c12946839c662d01d</string>
 	<key>SubPlatform</key>
 	<integer>6</integer>
+	<key>Untethered</key>
+	<true/>
 </dict>
 </plist>

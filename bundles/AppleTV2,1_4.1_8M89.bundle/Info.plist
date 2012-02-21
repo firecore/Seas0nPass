@@ -135,10 +135,12 @@
 	<key>Name</key>
 	<string>AppleTV2,1_4.1_8M89</string>
 	<key>DownloadUrl</key>
-	<string></string>
+	<string>http://appldnld.apple.com/AppleTV/061-8940.20100926.Tvtnz/AppleTV2,1_4.1_8M89_Restore.ipsw</string>
 	<key>Platform</key>
 	<integer>3</integer>
 	<key>SubPlatform</key>
 	<integer>10</integer>
+	<key>Untethered</key>
+	<true/>
 </dict>
 </plist>

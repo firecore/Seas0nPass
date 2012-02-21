@@ -8,11 +8,14 @@
 
 #import "FWBundle.h"
 #import "nitoUtility.h"
+#import "TSSManager.h"
 
 
 @implementation FWBundle
 
 @synthesize fwRoot;
+
+
 
 + (FWBundle *)bundleWithName:(NSString *)bundleName
 {
@@ -303,8 +306,42 @@
 	}
 }
 
+- (NSString *)osVersion
+{
+	NSString *clippedPath = nil;
+	int deviceInteger = [self deviceInt];
+	
+	switch (deviceInteger) {
+			
+			
+		case kAppleTVDevice:
+			
+			clippedPath = [[self bundleName] substringWithRange:NSMakeRange(11, 3)];
+			break;
+			
+		case kiPadDevice:
+		case kiPodDevice:
+				//iPad1,1_4.3.1_8G4_Restore.ipsw
+			clippedPath = [[self bundleName] substringWithRange:NSMakeRange(8, 3)];
+			break;
+			
+		case kiPhoneDevice:
+			
+			clippedPath = [[self bundleName] substringWithRange:NSMakeRange(10, 3)];
+			break;
+			
+	}
+	
+	return clippedPath;
+}
+
 - (BOOL)untethered
 {
+	
+	return [[[self infoDictionary] valueForKey:@"Untethered"] boolValue];
+	
+		//code below is deprecated for now..
+	
 	NSString *comparisonVersion = @"5.0"; //yes pandering to appletv2, what of it? ;-P
 	
 	NSString *clippedPath = nil;
@@ -401,6 +438,13 @@
 	}
 	
 	return kUnknownDevice;
+}
+
+- (NSString *)allFlashLocation
+{
+		//BuildIdentities - > Manifest -> AppleLogo -> Info -> Path
+	return [[self unzippedPathForFirmwareKey:@"AppleLogo"] stringByDeletingLastPathComponent];
+	
 }
 
 - (NSString *)buildVersion
@@ -714,6 +758,17 @@
 - (NSDictionary *)preInstalledPackages
 {
 	return [[self infoDictionary] valueForKey:PREINST_PACKAGES];
+}
+
+- (NSString *)unzippedPathForFirmwareKey:(NSString *)firmwareKey
+{
+	return [TMP_ROOT stringByAppendingPathComponent:[[[[self buildManifest] valueForKey:firmwareKey] valueForKey:@"Info"] valueForKey:@"Path"]];
+}
+
++ (NSArray *)signKeyArray
+{
+	
+	return [NSArray arrayWithObjects:@"AppleLogo", @"BatteryCharging", @"BatteryCharging0", @"BatteryCharging1", @"BatteryFull", @"BatteryLow0", @"BatteryLow1", @"BatteryPlugin", @"DeviceTree", @"LLB", @"RecoveryMode", @"iBoot", nil];
 }
 
 - (void)dealloc

@@ -5,7 +5,7 @@
 	<key>DeleteBuildManifest</key>
 	<false/>
 	<key>DownloadUrl</key>
-	<string></string>
+	<string>http://appldnld.apple.com/AppleTV/041-0596.20110511.Zz7mC/AppleTV2,1_4.3_8F305_Restore.ipsw</string>
 	<key>Filename</key>
 	<string>AppleTV2,1_4.3_8F305_Restore.ipsw</string>
 	<key>FilesystemPatches</key>
@@ -127,5 +127,7 @@
 	<string>26551145dc4b72ccfbc313e24566cfb35437bd09</string>
 	<key>SubPlatform</key>
 	<integer>6</integer>
+	<key>Untethered</key>
+	<true/>
 </dict>
 </plist>

@@ -7,7 +7,7 @@
 	<key>DownloadUrl</key>
 	<string>http://appldnld.apple.com/AppleTV/041-2846.20111017.34NPe/AppleTV2,1_4.4.1_9A335a_Restore.ipsw</string>
 	<key>Filename</key>
-	<string>AppleTV2,1_4.4.1_9A335a_Restore</string>
+	<string>AppleTV2,1_4.4.1_9A335a_Restore.ipsw</string>
 	<key>FilesystemPatches</key>
 	<dict>
 		<key>Filesystem Jailbreak</key>
@@ -114,5 +114,7 @@
 	<string>3</string>
 	<key>subplatform</key>
 	<string>10</string>
+	<key>Untethered</key>
+	<false/>
 </dict>
 </plist>

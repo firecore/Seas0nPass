@@ -1,6 +1,7 @@
 /**
   * Seas0nPass
-  * Copyright (C) 2010 FireCore, LLC
+  * Copyright (C) 2012 FireCore, LLC
+  * Portions Copyright © 2012 Kevin Bradley
   * Portions Copyright (C) 2010 Joshua Hill
   * Portions Copyright (C) 2010 planetbeing
   * Portions Copyright © 2010 iPhone Dev team
@@ -20,8 +21,4 @@
   * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-
-
 I apologize if I missed anyone in the credits file that deserved credits, If I did miss anyone please let me know.
-
-This is the initial commit, it is going to be lacking on installation instructions and a thorough readme, will look to make this a bit more concise in the future.

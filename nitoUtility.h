@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "PatchedFile.h"
 #import "FWBundle.h"
+#import "NSData+Flip.h"
 
 #define XPWN [[NSBundle mainBundle] pathForResource:@"xpwntool" ofType:@"" inDirectory:@"bin"]
 #define IMAGE_TOOL [[NSBundle mainBundle] pathForResource:@"imagetool" ofType:@"" inDirectory:@"bin"]
@@ -24,6 +25,8 @@
 #define TMP_ROOT @"/private/tmp/tk"
 #define IPSW_TMP @"/private/tmp/tk/ipsw"
 
+
+
 enum{
 	kDMGReadWrite = 0,
 	kDMGReadOnly = 1,
@@ -38,16 +41,22 @@ enum{
     BOOL debWhitelist;
 	NSString *sshKey;
 	FWBundle *currentBundle;
+	int restoreMode;
 	
 
 }
 @property (readwrite, assign) BOOL enableScripting;
 @property (readwrite, assign) BOOL sigServer;
 @property (readwrite, assign) BOOL debWhitelist;
+@property (readwrite, assign) int restoreMode;
 @property (nonatomic, assign) id delegate;
 @property (nonatomic, retain) NSString *sshKey;
 @property (nonatomic, assign) FWBundle *currentBundle;
 
+
++ (int)patchFile:(NSString *)patchFile withPatch:(NSString *)thePatch toLocation:(NSString *)endLocationFile inWorkingDirectory:(NSString *)theDir;
++ (int)gunzip:(NSString *)inputFile;
++ (BOOL)hasFirmware;
 + (NSString *)firmwareFolder;
 + (BOOL)validateFile:(NSString *)inputFile withChecksum:(NSString *)checksum;
 + (float)sizeFreeOnMountedPath:(NSString *)theDevice;
@@ -73,7 +82,6 @@ enum{
 + (void)changePermissions:(NSString *)perms onFile:(NSString *)theFile isRecursive:(BOOL)isR;
 
 + (int)patchFile:(NSString *)patchFile withPatch:(NSString *)thePatch endMD5:(NSString *)desiredMD5;
-- (int)modifyPT:(NSString *)ptFile;
 + (int)decryptRamdisk:(NSString *)theRamdisk toPath:(NSString *)outputDisk withIV:(NSString *)iv key:(NSString *)key;
 + (int)repackRamdisk:(NSString *)theRamdisk toPath:(NSString *)outputDisk withIV:(NSString *)iv key:(NSString *)key originalPath:(NSString *)original;
 + (int)decryptFilesystem:(NSString *)fileSystem withKey:(NSString *)fileSystemKey;

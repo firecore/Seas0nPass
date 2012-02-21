@@ -23,6 +23,15 @@ enum  {
 	kSPATVUntetheredImage,
 };
 
+enum {
+	
+	kSPStandardMode,
+	kSPCydiaSigningMode,
+	kSPStitchSigningMode,
+};
+
+
+
 @interface tetherKitAppDelegate : NSObject <ripURLDelegate> {
     NSWindow *window;
 	IBOutlet NSProgressIndicator *downloadBar;
@@ -47,8 +56,13 @@ enum  {
 	IBOutlet NSTextField *countdownField;
 	int counter;
 	IBOutlet NSTextField *tetherLabel;
+	NSString *theEcid;
+	int runMode;
+	int _restoreMode;
+	int _downloadRetries;
 	
 }
+@property (nonatomic, retain) NSString *theEcid;
 @property (assign) IBOutlet NSTextField *commandTextField;
 @property (assign) IBOutlet NSTextField *countdownField;
 @property (assign) IBOutlet NSTextField *tetherLabel;
@@ -58,21 +72,33 @@ enum  {
 @property (assign) IBOutlet NSWindow *otherWindow;
 @property (assign) IBOutlet NSView	*firstView;
 @property (assign) IBOutlet NSView	*secondView;
+@property (readwrite, assign) int runMode;
 @property (readwrite, assign) BOOL processing;
 @property (readwrite, assign) BOOL poisoning;
 @property (readwrite, assign) BOOL enableScripting;
 @property (readwrite, assign) int downloadIndex;
 @property (readwrite, assign) int counter;
 
-
++ (NSArray *)filteredBundleNames;
+- (void)downloadBundle:(NSString *)theFile;
+- (BOOL)isFullScreen:(NSSize)theSize;
+- (void)updateManifestFile:(NSString *)manifest;
++ (NSString *)bundleNameFromLabel:(NSString *)theBundle;
++ (NSString *)formattedStringFromBundle:(NSString *)theBundle;
+- (NSData *)hexFileSize:(NSString *)inputFile;
+- (BOOL)signFile:(NSString *)inputFile withBlob:(NSData *)blobData;
+- (void)fetchBlobs:(NSString *)myEcid;
+- (int)showDeviceAlert;
+- (int)showDeviceFailedAlert;
+- (void)showDeviceIneligibleAlert;
 - (void)downloadTheFiles;
 - (int)performFirmwarePatches:(FWBundle *)theBundle withUtility:(nitoUtility *)nitoUtil;
 - (NSString *)buildVersion;
 - (IBAction)showHelpLog:(id)sender;
 - (IBAction)versionChanged:(id)sender;
 - (IBAction)poison:(id)sender;
-- (IBAction)startCountdown:(id)sender;
-- (void)firstTimer:(NSTimer *)timer;
+	//- (IBAction)startCountdown:(id)sender;
+	//- (void)firstTimer:(NSTimer *)timer;
 - (BOOL) optionKeyIsDown;
 + (NSString *)applicationSupportFolder;
 + (NSString *)wifiFile;
@@ -88,7 +114,6 @@ enum  {
 - (IBAction)cancel:(id)sender;
 - (IBAction)userGuides:(id)sender;
 + (NSString *)downloadLocation;
-- (void)downloadFiles;
 - (int)tetheredBoot;
 - (IBAction)bootTethered:(id)sender;
 - (IBAction)dfuMode:(id)sender;
@@ -98,8 +123,6 @@ enum  {
 - (NSImage *)imageForMode:(int)inputMode;
 - (NSString *)ipswOutputPath;
 - (void)createSupportBundleWithCache:(NSString *)theCache iBSS:(NSString *)iBSS iBEC:(NSString *)iBEC;
-- (IBAction)keydumpPrep:(id)sender;
-- (IBAction)sendCommand:(id)sender;
 - (int)performSupportBundlePatches:(FWBundle *)theBundle;
 - (BOOL)homeWritable;
 + (NSArray *)appSupportBundles;

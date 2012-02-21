@@ -45,6 +45,15 @@
 		32799AA712DBC25B0013860A /* Seas0nPass.icns in Resources */ = {isa = PBXBuildFile; fileRef = 32799AA612DBC25B0013860A /* Seas0nPass.icns */; };
 		32799B3C12DBE3490013860A /* restore.png in Resources */ = {isa = PBXBuildFile; fileRef = 32799B3B12DBE3490013860A /* restore.png */; };
 		32799B3E12DBE35F0013860A /* success.png in Resources */ = {isa = PBXBuildFile; fileRef = 32799B3D12DBE35F0013860A /* success.png */; };
+		327E65CF14CF481B0058D651 /* TSSCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 327E65C914CF481B0058D651 /* TSSCommon.m */; };
+		327E65D114CF481B0058D651 /* TSSManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */; };
+		327E65D214CF481B0058D651 /* TSSWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = 327E65CE14CF481B0058D651 /* TSSWorker.m */; };
+		327E917114D1E1040058D651 /* NSData+Flip.mm in Sources */ = {isa = PBXBuildFile; fileRef = 327E917014D1E1040058D651 /* NSData+Flip.mm */; };
+		327EB38914D5F0140058D651 /* SPFWButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 327EB38814D5F0140058D651 /* SPFWButton.m */; };
+		327EE51A14E23655003C5407 /* NSData+Flip.mm in Sources */ = {isa = PBXBuildFile; fileRef = 327E917014D1E1040058D651 /* NSData+Flip.mm */; };
+		3285ACA014E350EA00677CC3 /* TSSCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 327E65C914CF481B0058D651 /* TSSCommon.m */; };
+		3285ACA214E350EB00677CC3 /* TSSManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */; };
+		3285ACA314E350EC00677CC3 /* TSSWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = 327E65CE14CF481B0058D651 /* TSSWorker.m */; };
 		32D954D7131237CA007B5BE3 /* untethered.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D954D6131237CA007B5BE3 /* untethered.png */; };
 		32DF4A3A12DC2905002916D5 /* tetheredRemote.png in Resources */ = {isa = PBXBuildFile; fileRef = 32DF4A3912DC2905002916D5 /* tetheredRemote.png */; };
 		32DF57BD12DD6E74002916D5 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32DF57BC12DD6E74002916D5 /* Sparkle.framework */; };
@@ -161,6 +170,17 @@
 		32799AA612DBC25B0013860A /* Seas0nPass.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Seas0nPass.icns; sourceTree = "<group>"; };
 		32799B3B12DBE3490013860A /* restore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = restore.png; sourceTree = "<group>"; };
 		32799B3D12DBE35F0013860A /* success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = success.png; sourceTree = "<group>"; };
+		327E65C814CF481B0058D651 /* TSSCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSCommon.h; sourceTree = "<group>"; };
+		327E65C914CF481B0058D651 /* TSSCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSCommon.m; sourceTree = "<group>"; };
+		327E65CA14CF481B0058D651 /* TSSHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSHelper.m; sourceTree = "<group>"; };
+		327E65CB14CF481B0058D651 /* TSSManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSManager.h; sourceTree = "<group>"; };
+		327E65CC14CF481B0058D651 /* TSSManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TSSManager.mm; sourceTree = "<group>"; };
+		327E65CD14CF481B0058D651 /* TSSWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSWorker.h; sourceTree = "<group>"; };
+		327E65CE14CF481B0058D651 /* TSSWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSWorker.m; sourceTree = "<group>"; };
+		327E916F14D1E1040058D651 /* NSData+Flip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Flip.h"; sourceTree = "<group>"; };
+		327E917014D1E1040058D651 /* NSData+Flip.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSData+Flip.mm"; sourceTree = "<group>"; };
+		327EB38714D5F0140058D651 /* SPFWButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPFWButton.h; sourceTree = "<group>"; };
+		327EB38814D5F0140058D651 /* SPFWButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPFWButton.m; sourceTree = "<group>"; };
 		32D954D6131237CA007B5BE3 /* untethered.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = untethered.png; sourceTree = "<group>"; };
 		32DF4A3912DC2905002916D5 /* tetheredRemote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tetheredRemote.png; sourceTree = "<group>"; };
 		32DF57BC12DD6E74002916D5 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
@@ -214,6 +234,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				327E65C714CF481B0058D651 /* TSS */,
 				324FF2EA12F8CC690039310E /* NSApplication+SystemVersion.h */,
 				324FF2EB12F8CC690039310E /* NSApplication+SystemVersion.m */,
 				32720F0F12CC66E10054F4B0 /* PatchedFile.h */,
@@ -230,8 +251,12 @@
 				32DF741812E17498002916D5 /* FWBundle.m */,
 				32DF825312E65280002916D5 /* SPButton.h */,
 				32DF825412E65280002916D5 /* SPButton.m */,
+				327EB38714D5F0140058D651 /* SPFWButton.h */,
+				327EB38814D5F0140058D651 /* SPFWButton.m */,
 				32DF84CC12E6E426002916D5 /* SPMenuItem.h */,
 				32DF84CD12E6E426002916D5 /* SPMenuItem.m */,
+				327E916F14D1E1040058D651 /* NSData+Flip.h */,
+				327E917014D1E1040058D651 /* NSData+Flip.mm */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -420,6 +445,20 @@
 			name = Helper;
 			sourceTree = "<group>";
 		};
+		327E65C714CF481B0058D651 /* TSS */ = {
+			isa = PBXGroup;
+			children = (
+				327E65C814CF481B0058D651 /* TSSCommon.h */,
+				327E65C914CF481B0058D651 /* TSSCommon.m */,
+				327E65CA14CF481B0058D651 /* TSSHelper.m */,
+				327E65CB14CF481B0058D651 /* TSSManager.h */,
+				327E65CC14CF481B0058D651 /* TSSManager.mm */,
+				327E65CD14CF481B0058D651 /* TSSWorker.h */,
+				327E65CE14CF481B0058D651 /* TSSWorker.m */,
+			);
+			path = TSS;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -525,6 +564,10 @@
 				32720E9E12CC54190054F4B0 /* nitoUtility.m in Sources */,
 				32720FB512CC71610054F4B0 /* PatchedFile.m in Sources */,
 				32DF78CB12E2DEAB002916D5 /* FWBundle.m in Sources */,
+				327EE51A14E23655003C5407 /* NSData+Flip.mm in Sources */,
+				3285ACA014E350EA00677CC3 /* TSSCommon.m in Sources */,
+				3285ACA214E350EB00677CC3 /* TSSManager.mm in Sources */,
+				3285ACA314E350EC00677CC3 /* TSSWorker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -542,6 +585,11 @@
 				32DF825512E65280002916D5 /* SPButton.m in Sources */,
 				32DF84CE12E6E426002916D5 /* SPMenuItem.m in Sources */,
 				324FF2EC12F8CC690039310E /* NSApplication+SystemVersion.m in Sources */,
+				327E65CF14CF481B0058D651 /* TSSCommon.m in Sources */,
+				327E65D114CF481B0058D651 /* TSSManager.mm in Sources */,
+				327E65D214CF481B0058D651 /* TSSWorker.m in Sources */,
+				327E917114D1E1040058D651 /* NSData+Flip.mm in Sources */,
+				327EB38914D5F0140058D651 /* SPFWButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

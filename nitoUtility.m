@@ -20,7 +20,7 @@
 
 @implementation nitoUtility
 
-@synthesize delegate, enableScripting, currentBundle, sshKey, sigServer, debWhitelist;
+@synthesize delegate, enableScripting, currentBundle, sshKey, sigServer, debWhitelist, restoreMode;
 
 - (id)init
 {
@@ -371,32 +371,6 @@
 
 #pragma mark •• pwnage classes
 
--(int)modifyPT:(NSString *)ptFile //deprecated?
-{
-	NSString *mountFile = [nitoUtility mountImage:ptFile];
-	NSFileManager *man = [NSFileManager defaultManager];
-	if (mountFile != nil)
-	{
-		NSString *pwnageTool = [mountFile stringByAppendingPathComponent:@"PwnageTool.app"];
-		NSString *finalLocation = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents/Tether/PwnageTool.app"];
-		[man copyItemAtPath:pwnageTool toPath:finalLocation error:nil];
-		if ([man fileExistsAtPath:finalLocation])
-		{
-			NSLog(@"extract PT success!");
-			[nitoUtility unmountVolume:mountFile];
-			NSString *tgzFile = [[NSBundle mainBundle] pathForResource:@"PT" ofType:@"tgz"];
-			if([nitoUtility extractGZip:tgzFile toRoot:[finalLocation stringByDeletingLastPathComponent]] == 0)
-			{
-				NSLog(@"PT Modified Successfully!");
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"FinishedModPT" object:nil];
-				return 0;
-			}
-		
-		}
-	}
-	return -1;
-	
-}
 
 + (void)createTempSetup
 {
@@ -685,6 +659,7 @@
 
 + (NSDictionary *)fsImageInfo:(NSString *)inputFilesystem
 {
+	return nil;
 	NSTask *irTask = [[NSTask alloc] init];
 	NSPipe *hdip = [[NSPipe alloc] init];
     NSFileHandle *hdih = [hdip fileHandleForReading];
@@ -737,11 +712,17 @@
 
 - (NSString *)ramdiskResizeValue:(NSString *)inputRD //adds 3 megs to the ramdisk size
 {
+	return [currentBundle ramdiskSize];
+	
 	NSDictionary *fsImageInfo = [nitoUtility fsImageInfo:inputRD];
 	
 	if (fsImageInfo == nil)
 	{
 		return [currentBundle ramdiskSize];
+		
+	} else {
+		
+		NSLog(@"fsImageInfo: %@", fsImageInfo);
 		
 	}
 	
@@ -846,7 +827,7 @@
 	{
 		NSLog(@"Decrypted Filesystem successfully!");
 		NSString *convertImage = [nitoUtility convertImage:decryptFS toFile:rwFS toMode:kDMGReadWrite]; //2
-		if (convertImage =! nil)
+		if (convertImage != nil)
 		{
 			NSLog(@"converted to read write successfully: %@", rwFS); 
 			
@@ -924,7 +905,7 @@
 	{
 		NSLog(@"Decrypted Filesystem successfully!");
 		NSString *convertImage = [nitoUtility convertImage:decryptFS toFile:rwFS toMode:kDMGReadWrite]; //2
-		if (convertImage =! nil)
+		if (convertImage != nil)
 		{
 			NSLog(@"converted to read write successfully: %@", rwFS); 
 				//need to take over with root access here for 3-8
@@ -941,7 +922,7 @@
 	
 	NSString *theDict = [self pwnctionaryFromPath:theFile original:originalDMG withBundle:self.currentBundle.bundlePath];
 	
-    NSLog(@"pwnctionary: %@", theDict);
+		// NSLog(@"pwnctionary: %@", theDict);
     
 	NSString *helpPath = [[NSBundle mainBundle] pathForResource: @"dbHelper" ofType: @""];
 	
@@ -958,6 +939,38 @@
 	[pwnHelper release];
 	
 	pwnHelper = nil;
+}
+
++ (BOOL)hasFirmware //by default it returns false. it will check to see if the Firmware folder exists. if it does it will cycle through the folder till something has the "ipsw" path extension, as soon as it finds a single file that does, it will return true
+{
+	if ([FM fileExistsAtPath:[nitoUtility firmwareFolder]])
+	{
+		NSArray *contents = [FM contentsOfDirectoryAtPath:[nitoUtility firmwareFolder] error:nil];
+			//	NSLog(@"contents: %@", contents);
+		if ([contents count] > 1){
+			for (id theObject in contents)
+			{
+				NSString *suffix = [[theObject pathExtension] lowercaseString];
+				if ([suffix isEqualToString:@"ipsw"])
+					return (TRUE);
+			}
+		} else if ([contents count] == 1){
+			NSString *lastObject = [contents lastObject];
+			if (![lastObject isEqualToString:@".DS_Store"])
+			{
+				
+				if ([[[lastObject lastPathComponent] lowercaseString] isEqualToString:@"ipsw"])
+				{
+					NSLog(@"only one object, not .DS_Store, extension is ipsw. should be a ipsw!!: %@", lastObject);
+					return (TRUE);
+				}
+					//make sure if there is only one item that its not .DS_Store
+				
+			}
+		}
+	}
+	
+	return (FALSE);
 }
 
 + (NSString *)firmwareFolder
@@ -1005,10 +1018,12 @@
 - (NSString *)pwnctionaryFromPath:(NSString *)mountedPath original:(NSString *)original withBundle:(NSString *)theBundle
 {
 	NSString *es = [NSString stringWithFormat:@"%i", (int)[self enableScripting]];
+	NSString *resMode = [NSString stringWithFormat:@"%i",[self restoreMode]];
 	NSMutableDictionary *bundleDict = [[NSMutableDictionary alloc] init];
 	[bundleDict setObject:es forKey:@"enableScripting"];
 	[bundleDict setObject:mountedPath forKey:@"patch"];
 	[bundleDict setObject:original forKey:@"os"];
+	[bundleDict setObject:resMode forKey:@"restoreMode"];
 		//[bundleDict setObject:[[NSBundle mainBundle] pathForResource:@"CydiaInstallerATV" ofType:@"bundle"] forKey:@"CydiaBundle"];
 	NSMutableDictionary *fstabDict = [[NSMutableDictionary alloc] init];
 	[fstabDict setObject:@"/etc/fstab" forKey:@"inputFile"];
@@ -1424,6 +1439,27 @@
 	tarTask = nil;
 	return theTerm;
 	
+}
+
++ (int)gunzip:(NSString *)inputFile
+{
+	NSTask *gzTask = [[NSTask alloc] init];
+	NSFileHandle *nullOut = [NSFileHandle fileHandleWithNullDevice];
+	
+	[gzTask setLaunchPath:@"/usr/bin/gunzip"];
+	[gzTask setArguments:[NSArray arrayWithObjects:@"-d", inputFile, nil]];
+		//NSLog(@"gunzip %@", [[gzTask arguments] componentsJoinedByString:@" "]);
+		//[gzTask setCurrentDirectoryPath:toLocation];
+	[gzTask setStandardError:nullOut];
+	[gzTask setStandardOutput:nullOut];
+	[gzTask launch];
+	[gzTask waitUntilExit];
+	
+	int theTerm = [gzTask terminationStatus];
+	
+	[gzTask release];
+	gzTask = nil;
+	return theTerm;
 }
 
 + (int)extractGZip:(NSString *)inputTar toRoot:(NSString *)toLocation

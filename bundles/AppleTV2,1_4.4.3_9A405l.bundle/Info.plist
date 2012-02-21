@@ -7,7 +7,7 @@
 	<key>DownloadUrl</key>
 	<string>http://appldnld.apple.com/AppleTV/041-3117.20111117.Gj79d/AppleTV2,1_4.4.3_9A405l_Restore.ipsw</string>
 	<key>Filename</key>
-	<string>AppleTV2,1_4.4.3_9A405l_Restore</string>
+	<string>AppleTV2,1_4.4.3_9A405l_Restore.ipsw</string>
 	<key>FilesystemPatches</key>
 	<dict>
 		<key>Core Files Installation</key>
@@ -114,5 +114,7 @@
 	<string>3</string>
 	<key>subplatform</key>
 	<string>10</string>
+	<key>Untethered</key>
+	<true/>
 </dict>
 </plist>

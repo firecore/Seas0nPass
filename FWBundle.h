@@ -37,6 +37,16 @@ enum  {
 	kUnknownDevice,
 };
 
+enum {
+	
+	kRestoreDefaultMode,
+	kRestoreCydiaRedirectMode,
+	kRestoreStitchMode,
+	kRestoreUnavailableMode,
+	kRestoreFirmwareIneligible,
+	kRestoreNoDevice,
+};
+
 @interface FWBundle : NSBundle	{
 
 	NSString *fwRoot;
@@ -44,6 +54,11 @@ enum  {
 
 @property (nonatomic, retain) NSString *fwRoot;
 
+- (NSString *)allFlashLocation;
+- (NSString *)unzippedPathForFirmwareKey:(NSString *)firmwareKey;
+- (int)deviceInt;
+- (NSString *)osVersion;
++ (NSArray *)signKeyArray;
 - (void)setMinimumSystemPartition:(int)newSize;
 - (NSString *)restoreDictionaryPath;
 - (NSMutableDictionary *)mutableFWDictionary;

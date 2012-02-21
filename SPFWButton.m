@@ -1,15 +1,15 @@
 //
-//  SPButton.m
+//  SPFWButton.m
 //  tetherKit
 //
 //  Created by Kevin Bradley on 1/18/11.
 //  Copyright 2011 FireCore, LLC. All rights reserved.
 //
 
-#import "SPButton.h"
+#import "SPFWButton.h"
 #import "tetherKitAppDelegate.h"
 
-@implementation SPButton
+@implementation SPFWButton
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
@@ -31,11 +31,16 @@
 	return [super rightMouseDown:theEvent];
 }
 
+- (IBAction)restoreLatest:(id)sender
+{
+	[[NSApp delegate] itunesRestore:sender];
+}
+
 - (IBAction)add:(id)sender
 {
 		//NSLog(@"add: %@", [sender title]);
-	[[NSUserDefaults standardUserDefaults] setObject:[sender title] forKey:@"lastUsedBundle"];
-	[[NSApp delegate] bootTethered:nil];
+		//[[NSUserDefaults standardUserDefaults] setObject:[sender title] forKey:@"lastUsedBundle"];
+	[[NSApp delegate] downloadBundle:[sender title]];
 	
 }
 
@@ -58,13 +63,37 @@
                                        clickCount:1
                                          pressure:1];
 	
-	NSArray *appBundles = [tetherKitAppDelegate appSupportBundles];
+	NSArray *appBundles = [tetherKitAppDelegate filteredBundleNames];
 		//NSLog(@"appBundles: %@", appBundles);
 	NSEnumerator *bundleEnum = [appBundles objectEnumerator];
 	id currentObject = nil;
-	int i = 0;
+	int i = 2;
     NSMenu *menu = [[NSMenu alloc] init];
     
+		NSMenuItem *restoreLatest = [[NSMenuItem alloc] initWithTitle:@"Restore latest version in iTunes" action:@selector(restoreLatest:) keyEquivalent:@""];
+	
+	BOOL hasFirmware = [nitoUtility hasFirmware];
+	if (hasFirmware == TRUE)
+	{
+			//	NSLog(@"has firmware!!!!!");
+	} else {
+		
+		[restoreLatest setEnabled:FALSE];
+		[restoreLatest setAction:nil];
+	}
+	
+
+	
+	[menu insertItem:[restoreLatest autorelease] atIndex:0];
+		//[restoreLatest setEnabled:hasFirmware];
+		//[menu insertItemWithTitle:@"Restore latest version in iTunes" action:@selector(restoreLatest:) keyEquivalent:@"" atIndex:0];
+	
+	
+	NSMenuItem *dividerItem = [NSMenuItem separatorItem];
+	
+	[menu insertItem:dividerItem atIndex:1];
+	
+	
 	while (currentObject = [bundleEnum nextObject])
 	{
 			//	NSLog(@"addObject: %@", currentObject);
