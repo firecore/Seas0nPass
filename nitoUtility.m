@@ -1756,6 +1756,11 @@
 
 + (int)createIPSWToFile:(NSString *)theName
 {
+	if ([FM fileExistsAtPath:theName])
+	{
+		NSLog(@"previous ipsw exists! %@ deleting!", theName);
+		[FM removeItemAtPath:theName error:nil];
+	}
 	NSLog(@"createIPSWToFile: %@", theName);
 	NSTask *zipTask = [[NSTask alloc] init];
 	[zipTask setLaunchPath:@"/usr/bin/zip"];
