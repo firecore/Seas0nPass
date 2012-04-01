@@ -19,6 +19,25 @@ QuietLog((format),##__VA_ARGS__); \
 #endif
 
 
+#define APPLETV_31_DEVICE DeviceIDMake(8, 35138)
+#define APPLETV_21_DEVICE DeviceIDMake(16, 35120)
+#define IPAD_11_DEVICE DeviceIDMake(2, 35120)
+#define IPAD_21_DEVICE DeviceIDMake(4, 35136)
+#define IPAD_22_DEVICE DeviceIDMake(6, 35136)
+#define IPAD_23_DEVICE DeviceIDMake(2, 35136)
+#define IPHONE_11_DEVICE DeviceIDMake(0, 35072)
+#define IPHONE_12_DEVICE DeviceIDMake(4, 35072)
+#define IPHONE_21_DEVICE DeviceIDMake(0, 35104)
+#define IPHONE_31_DEVICE DeviceIDMake(0, 35120)
+#define IPHONE_33_DEVICE DeviceIDMake(6, 35120)
+#define IPOD_11_DEVICE DeviceIDMake(2, 35072)
+#define IPOD_21_DEVICE DeviceIDMake(0, 34592)
+#define IPOD_31_DEVICE DeviceIDMake(2, 35106)
+#define IPOD_41_DEVICE DeviceIDMake(8, 35120)
+
+#define APPLETV_31_DEVICE_CLASS @"j33ap"
+#define APPLETV_21_DEVICE_CLASS @"k66ap"
+
 @interface PatchedFile : NSDictionary {
 	
 	NSString *originalFile;

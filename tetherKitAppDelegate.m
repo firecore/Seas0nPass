@@ -24,16 +24,20 @@
 #import "tetherKitAppDelegate.h"
 #import "include/libpois0n.h"
 #import <Foundation/Foundation.h>
-#import "TSSWorker.h"
+
 
 	//CURRENT_BUNDLE is the finally the only place that the bundle name needs to be replaced to change default version for future versions.
 
-#define CURRENT_BUNDLE @"AppleTV2,1_4.4.4_9A406a"
+//previous @"AppleTV2,1_4.4.4_9A406a"
+
+
+#define CURRENT_BUNDLE @"AppleTV2,1_5.0_9B179b"
+#define CURRENT_IPSW [NSString stringWithFormat:@"%@_Restore.ipsw", CURRENT_BUNDLE]
 #define DL [tetherKitAppDelegate downloadLocation]
 #define KCACHE @"kernelcache.release.k66"
 #define iBSSDFU @"iBSS.k66ap.RELEASE.dfu"
 #define iBECDFU @"iBEC.k66ap.RELEASE.dfu"
-#define HCIPSW [DL stringByAppendingPathComponent:CURRENT_BUNDLE]
+#define HCIPSW [DL stringByAppendingPathComponent:CURRENT_IPSW]
 #define BUNDLE_LOCATION [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"bundles"]
 #define BUNDLES [FM contentsOfDirectoryAtPath:BUNDLE_LOCATION error:nil]
 #define BLOB_KEY @"sentLocalBlobs"
@@ -53,7 +57,7 @@ static NSString *ChipID_ = nil;
 @implementation tetherKitAppDelegate
 
 @synthesize window, downloadIndex, processing, enableScripting, firstView, secondView, poisoning, currentBundle, bundleController, counter, otherWindow, commandTextField, tetherLabel, countdownField, runMode, theEcid;
-
+@synthesize deviceClass;
 /*
  
  
@@ -404,8 +408,10 @@ void LogIt (NSString *format, ...)
 	NSString *ipsw = [tetherKitAppDelegate ipswFile];
 	NSString *sha = [[self currentBundle] SHA];
 	NSString *downloadLink = [[self currentBundle] downloadURL];
+	NSLog(@"ipsw: %@", ipsw);
 	if ([man fileExistsAtPath:ipsw])
 	{
+		NSLog(@"validating file: %@", ipsw);
 		if ([nitoUtility validateFile:ipsw withChecksum:sha] == FALSE) 
 		{
 			NSLog(@"ipsw SHA Invalid, not removing file (for now, need to make sure its not a beta)");
@@ -1227,6 +1233,144 @@ void parse_command(irecv_client_t client, unsigned char* command, unsigned int s
 
 
 
+
++ (NSString *)modelFromDevice:(TSSDeviceID)inputDevice
+{
+	if (DeviceIDEqualToDevice(inputDevice, APPLETV_31_DEVICE))
+	{ return APPLETV_31_DEVICE_CLASS; } 
+	else if (DeviceIDEqualToDevice(inputDevice, APPLETV_21_DEVICE))
+	{ return APPLETV_21_DEVICE_CLASS; }  
+	else if (DeviceIDEqualToDevice(inputDevice, IPHONE_11_DEVICE))
+	{ return @"m68ap"; } 
+	else if (DeviceIDEqualToDevice(inputDevice, IPOD_11_DEVICE))
+	{ return @"n46ap"; } 
+	else if (DeviceIDEqualToDevice(inputDevice, IPHONE_12_DEVICE)) 
+	{ return @"n82ap"; }
+	else if (DeviceIDEqualToDevice(inputDevice, IPOD_21_DEVICE)) 
+	{ return @"n72ap"; }
+	else if (DeviceIDEqualToDevice(inputDevice, IPOD_21_DEVICE)) 
+	{ return @"n72ap"; }
+	else if (DeviceIDEqualToDevice(inputDevice, IPHONE_21_DEVICE)) 
+	{ return @"n88ap"; }
+	else if (DeviceIDEqualToDevice(inputDevice, IPOD_31_DEVICE)) 
+	{ return @"n18ap"; }
+	else if (DeviceIDEqualToDevice(inputDevice, IPAD_11_DEVICE)) 
+	{ return @"k48ap"; }
+	else if (DeviceIDEqualToDevice(inputDevice, IPHONE_31_DEVICE)) 
+	{ return @"n90ap"; }
+	else if (DeviceIDEqualToDevice(inputDevice, IPOD_41_DEVICE)) 
+	{ return @"n81ap"; }
+	else if (DeviceIDEqualToDevice(inputDevice, IPHONE_33_DEVICE)) 
+	{ return @"n92ap"; }
+	else if (DeviceIDEqualToDevice(inputDevice, IPAD_21_DEVICE)) 
+	{ return @"k93ap"; }
+	else if (DeviceIDEqualToDevice(inputDevice, IPAD_22_DEVICE)) 
+	{ return @"k94ap"; }
+	else if (DeviceIDEqualToDevice(inputDevice, IPAD_23_DEVICE)) 
+	{ return @"k95ap"; }
+	else { NSLog(@"unkown model!"); return nil; }
+	
+}
+
+
+
+static NSString *HexToDec(NSString *hexValue)
+{
+	if (hexValue == nil)
+		return nil;
+	
+	unsigned long long dec;
+	NSScanner *scan = [NSScanner scannerWithString:hexValue];
+	if ([scan scanHexLongLong:&dec])
+	{
+		
+		return [NSString stringWithFormat:@"%llu", dec];
+		//NSLog(@"chipID binary: %@", finalValue);
+	}
+	
+	return nil;
+}
+
+
++ (TSSDeviceID)_getConnectedDevice
+{
+	
+	irecv_init();
+	irecv_client_t client = NULL;
+	uint32_t bdid = 0;
+	uint32_t cpid = 0;
+	if (irecv_open(&client) != IRECV_E_SUCCESS)
+	{
+		NSLog(@"fail!");
+		return TSSNullDevice;
+		
+	}
+	
+	if (irecv_get_cpid(client, &cpid) < 0) {
+		return TSSNullDevice;
+	}
+	
+	if (irecv_get_bdid(client, &bdid) < 0) {
+		return TSSNullDevice;
+	}
+	
+	irecv_close(client);
+	irecv_exit();
+	
+	NSString *cpidDecimal = HexToDec([NSString stringWithFormat:@"0x%llu", cpid]);
+	NSString *bpidDecimal = HexToDec([NSString stringWithFormat:@"0x%llu", bdid]);
+
+	return DeviceIDMake([bpidDecimal longLongValue], [cpidDecimal longLongValue]);
+}
+
++ (NSString *)_fetchDeviceModel
+{
+	TSSDeviceID connectedDevice = [tetherKitAppDelegate _getConnectedDevice];
+	
+	return [tetherKitAppDelegate modelFromDevice:connectedDevice];
+	
+}
+
+
+
+- (void)_fetchDeviceInfo
+{	
+	irecv_init();
+	irecv_client_t client = NULL;
+	if (irecv_open(&client) != IRECV_E_SUCCESS)
+	{
+		//NSLog(@"fail!");
+		return;
+		
+	}
+	int ret;
+	uint32_t bdid = 0;
+	uint32_t cpid = 0;
+	if (irecv_get_cpid(client, &cpid) < 0) {
+		NSLog(@"failed to get cpid!");
+	}
+	
+	if (irecv_get_bdid(client, &bdid) < 0) {
+		NSLog(@"failed to get bdid!");
+	}
+	
+	unsigned long long ecid;
+	ret = irecv_get_ecid(client, &ecid);
+	if(ret == IRECV_E_SUCCESS) {
+		//	printf("ECID: %lld\n", ecid);
+	}
+	irecv_close(client);
+	irecv_exit();
+	
+	NSString *cpidDecimal = HexToDec([NSString stringWithFormat:@"0x%llu", cpid]);
+	NSString *bpidDecimal = HexToDec([NSString stringWithFormat:@"0x%llu", bdid]);
+	currentDevice = DeviceIDMake([bpidDecimal longLongValue], [cpidDecimal longLongValue]);
+	self.deviceClass = [tetherKitAppDelegate modelFromDevice:currentDevice];
+	self.theEcid = [NSString stringWithFormat:@"%llu", ecid];
+	ChipID_ = self.theEcid;
+	
+}
+
 /*
  
  get the ecid of the current device to pretty much do any install now. we check saurik's TSS/SHSH signature server for what blobs are available for either the TSS replay attack restore, or stitching blobs.
@@ -1370,7 +1514,7 @@ void parse_command(irecv_client_t client, unsigned char* command, unsigned int s
 	NSString *ecid = self.theEcid;
 		//NSLog(@"chipID: %@ ecid: %@", ChipID_, self.theEcid);
 	
-	NSArray *signableVersions = [TSSManager signableVersions]; //check what versions apple is still signing
+	NSArray *signableVersions = [TSSManager signableVersionsFromModel:self.deviceClass]; //check what versions apple is still signing
 	NSString *buildNumber = [[self currentBundle] buildVersion]; //
 	NSString *osVersion = [[self currentBundle] osVersion];
 	NSString *fourPointThree = @"4.3";
@@ -1383,9 +1527,9 @@ void parse_command(irecv_client_t client, unsigned char* command, unsigned int s
 	
 	if (ecid == nil)
 	{
-		ecid = [self _getEcid]; //at least try to get it again.
-		self.theEcid = ecid;
-		ChipID_ - ecid;
+		[self _fetchDeviceInfo];
+		ecid = self.theEcid;
+		ChipID_ = ecid;
 		if (ecid == nil)
 		{
 			
@@ -1401,8 +1545,8 @@ void parse_command(irecv_client_t client, unsigned char* command, unsigned int s
 				NSLog(@"sleeping for 5 seconds to give appletv time to detect");
 				sleep(5);
 				NSLog(@"trying to grab the ecid again");
-				ecid = [self _getEcid]; //at least try to get it again.
-				self.theEcid = ecid;
+				[self _fetchDeviceInfo];
+				ecid = self.theEcid;
 				ChipID_ = ecid;
 				NSLog(@"chipID: %@ ecid: %@", ChipID_, self.theEcid);
 				if (ecid == nil)
@@ -1426,7 +1570,8 @@ void parse_command(irecv_client_t client, unsigned char* command, unsigned int s
 	
 	NSLog(@"apple is not signing, check what blobs cydia has for %@", ecid);
 	
-	TSSManager *tss = [[TSSManager alloc] initWithECID:ecid];
+	TSSManager *tss = [[TSSManager alloc] initWithECID:ecid device:currentDevice];
+	//TSSManager *tss = [[TSSManager alloc] initWithECID:ecid];
 	NSArray *cydiaBlobs = [tss _simpleSynchronousBlobCheck];
 	[tss release];
 	tss = nil;
@@ -1515,7 +1660,13 @@ void parse_command(irecv_client_t client, unsigned char* command, unsigned int s
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
+	
+	
 	[self printEnvironment];
+	
+	[self _fetchDeviceInfo];
+	
+	NSLog(@"ecid: %@ deviceClass: %@", self.theEcid, self.deviceClass);
 	
 	if ([self interwebAvailable] == FALSE)
 	{
@@ -1985,7 +2136,16 @@ void parse_command(irecv_client_t client, unsigned char* command, unsigned int s
 		NSLog(@"stitch it up!");
 		
 	
-		TSSManager *tss = [[TSSManager alloc] initWithECID:ChipID_];
+		TSSManager *tss = nil;
+		
+		if (!DeviceIDEqualToDevice(currentDevice, TSSNullDevice))
+		{
+			tss = [[TSSManager alloc] initWithECID:ChipID_ device:currentDevice];
+		} else {
+		
+			tss = [[TSSManager alloc] initWithECID:ChipID_];
+		}
+		
 		
 		[tss stitchFirmware:[self currentBundle]];
 		

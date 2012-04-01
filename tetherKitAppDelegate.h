@@ -13,6 +13,7 @@
 #import "SPButton.h"
 #import "SPMenuItem.h"
 #import "nitoUtility.h"
+#import "TSSWorker.h"
 
 enum  {
 	kSPATVRestoreImage,
@@ -57,12 +58,15 @@ enum {
 	int counter;
 	IBOutlet NSTextField *tetherLabel;
 	NSString *theEcid;
+	NSString *deviceClass;
 	int runMode;
 	int _restoreMode;
 	int _downloadRetries;
+	TSSDeviceID currentDevice;
 	
 }
 @property (nonatomic, retain) NSString *theEcid;
+@property (nonatomic, retain) NSString *deviceClass;
 @property (assign) IBOutlet NSTextField *commandTextField;
 @property (assign) IBOutlet NSTextField *countdownField;
 @property (assign) IBOutlet NSTextField *tetherLabel;

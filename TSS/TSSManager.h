@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "FWBundle.h"
 
+
+#define BLOB_PLIST_BASE_URL @"http://files.firecore.com/FW"
 #define BLOB_PLIST_URL @"http://files.firecore.com/FW/k66ap.plist"
 
 enum {
@@ -21,7 +23,7 @@ enum {
 };
 
 
-#define TSSNullDevice DeviceIDMake(0, 0);
+#define TSSNullDevice DeviceIDMake(0, 0)
 
 struct TSSDeviceID {
 	int boardID;
@@ -57,15 +59,20 @@ static inline bool DeviceIDEqualToDevice(TSSDeviceID device1, TSSDeviceID device
 	NSString *					ecid;
 	int							mode;
 	TSSDeviceID					theDevice;
+	NSString					*deviceModel;
 }
 
 @property (readwrite, assign) TSSDeviceID theDevice;
 @property (readwrite, assign) int mode;
+@property (nonatomic, retain) NSString *deviceModel;
 @property (nonatomic, assign) NSString *_returnDataAsString;
 @property (nonatomic, assign) NSString *baseUrlString;
 @property (nonatomic, assign) NSString *ecid;
 @property (nonatomic, retain) id delegate;
 
++ (NSArray *)signableVersionsFromModel:(NSString *)theModel;
++ (NSArray *)supportedDevices;
+- (id)initWithECID:(NSString *)theEcid device:(TSSDeviceID)myDevice;
 - (void)_sendBlobs:(NSArray *)blobs;
 + (NSArray *)localAppleTVBlobs;
 - (NSString *)_synchronousPushBlob:(NSString *)theBlob withECID:(NSString *)theEcid;

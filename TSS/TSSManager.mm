@@ -19,14 +19,16 @@
 #import "TSSCommon.h"
 #import "TSSWorker.h"
 #import "nitoUtility.h"
-
+#import "../include/libpois0n.h"
 
 static NSString *myChipID_ = nil;
 
 
 @implementation TSSManager
 
-@synthesize baseUrlString, delegate, _returnDataAsString, ecid, mode, theDevice;
+@synthesize baseUrlString, delegate, _returnDataAsString, ecid, mode, theDevice, deviceModel;
+
+
 
 /*
  
@@ -53,6 +55,9 @@ static NSString *myChipID_ = nil;
  
  
  */
+
+
+
 
 + (NSArray *)blobArrayFromString:(NSString *)theString
 {
@@ -127,6 +132,9 @@ static NSString *myChipID_ = nil;
 		//NSString *theDevice = [rawDevice stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
 	//NSLog(@"theDevice: -%@-", theDevice);
+	
+	if ([theDevice isEqualToString:@"AppleTV3,1"])
+		return DeviceIDMake(8, 35138);
 	
 	if ([theDevice isEqualToString:@"AppleTV2,1"])
 		return DeviceIDMake(16, 35120);
@@ -334,11 +342,30 @@ static NSString *myChipID_ = nil;
 	//return request;
 }
 
++ (NSArray *)signableVersionsFromModel:(NSString *)theModel
+{
+	if (theModel == nil) theModel = @"k66ap";
+	if ([[TSSManager supportedDevices] containsObject:theModel])
+	{
+		NSString *theURL = [BLOB_PLIST_BASE_URL stringByAppendingFormat:@"/%@.plist", theModel];
+		//NSLog(@"url: %@", theURL);
+		NSDictionary *blobDict = [NSDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:theURL]];
+		return [blobDict valueForKey:@"openVersions"];
+	}
+	return nil;
+}
+
 + (NSArray *)signableVersions
 {
 	NSDictionary *k66 = [NSDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:BLOB_PLIST_URL]];
 	return [k66 valueForKey:@"openVersions"];
 }
+
++ (NSArray *)supportedDevices
+{
+	return [NSArray arrayWithObjects:APPLETV_21_DEVICE_CLASS, APPLETV_31_DEVICE_CLASS, nil];
+}
+
 
 /*
  
@@ -354,7 +381,14 @@ static NSString *myChipID_ = nil;
 	TSSDeviceID cd = self.theDevice;
 	//[self logDevice:cd];
 	
-	NSDictionary *k66 = [NSDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:BLOB_PLIST_URL]];
+	NSString *theModel = self.deviceModel;
+	if (theModel == nil) theModel = @"k66ap";
+	
+	NSString *theURL = [BLOB_PLIST_BASE_URL stringByAppendingFormat:@"/%@.plist", theModel];
+	
+	NSLog(@"theURl: %@", theURL);
+	
+	NSDictionary *k66 = [NSDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:theURL]];
 		//NSDictionary *k66 = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle bundleForClass:[TSSManager class]] pathForResource:@"k66ap" ofType:@"plist"]];
 	//NSLog(@"k66: %@", k66);
 	NSDictionary *versionDict = [k66 valueForKey:versionNumber];
@@ -420,6 +454,22 @@ static NSString *myChipID_ = nil;
 	return nil;
 }
 
+- (id)initWithECID:(NSString *)theEcid device:(TSSDeviceID)myDevice
+{
+	if ((self = [super init]) != nil);
+	{
+		
+		myChipID_ = theEcid;
+		theDevice = myDevice;
+		
+		
+		
+		return (self);
+		
+	}
+	
+	return nil;
+}
 
 
 
@@ -1054,7 +1104,7 @@ static NSString *myChipID_ = nil;
 - (void)dealloc {
 
 	
-	
+	[deviceModel release];
     [super dealloc];
 }
 
