@@ -1470,6 +1470,11 @@ static NSString *HexToDec(NSString *hexValue)
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	NSArray *theArray = [TSSManager localAppleTVBlobs];
+	if (theArray == nil)
+	{
+		NSLog(@"no blobs to send!");
+		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"blobsFinished" object:nil userInfo:nil deliverImmediately:YES];
+	}
 	NSDictionary *theDict = [NSDictionary dictionaryWithObject:theArray forKey:@"blobs"];
 	NSString *cliPath = @"/tmp/031231";
 	[theDict writeToFile:cliPath atomically:YES];
@@ -1493,6 +1498,7 @@ static NSString *HexToDec(NSString *hexValue)
 {
 	[DEFAULTS setBool:TRUE forKey:BLOB_KEY];
 		NSLog(@"blobsFinished: %@", n);
+	[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:@"" waitUntilDone:NO];
 	[self hideProgress];
 	[window setContentView:self.firstView];
 	[self versionChanged:nil];
@@ -1680,11 +1686,11 @@ static NSString *HexToDec(NSString *hexValue)
 	}
 	_downloadRetries = 0;
 	//[self iTunesScriptReady];
-	ChipID_ = [self _getEcid];
-	_restoreMode = -1;
+	ChipID_ = self.theEcid;
+	_restoreMode = kRestoreUnavailableMode;
 	NSLog(@"ecid: %@", ChipID_);
 	
-	self.theEcid = ChipID_;
+	//self.theEcid = ChipID_;
 
 		//NSLog(@"localATvBlobs: %@", [TSSManager localAppleTVBlobs]);
 
@@ -1848,6 +1854,7 @@ static NSString *HexToDec(NSString *hexValue)
 		id object = nil;
 		switch (theRestoreMode) {
 				
+			case -1:
 			case kRestoreUnavailableMode: //shouldn't get this anymore. deprecated
 				NSLog(@"bailing!!!!");
 				object = [NSAlert alertWithMessageText:NSLocalizedString(@"Unspecified Error", @"Unspecified Error") defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedString(@"The firmware %@ is either not being signed by Apple anymore, not backed up to cydia, or the device cannot be detected: kRestoreUnavailableMode.", @"The firmware %@ is either not being signed by Apple anymore, not backed up to cydia, or the device cannot be detected: kRestoreUnavailableMode."), [ipsw lastPathComponent]];

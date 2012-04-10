@@ -48,6 +48,34 @@
 
 #pragma mark •• dmg classes
 
++ (int)mountImageSimple:(NSString *)irString
+{
+	NSTask *irTask = [[NSTask alloc] init];
+	
+	NSMutableArray *irArgs = [[NSMutableArray alloc] init];
+	
+	[irArgs addObject:@"attach"];
+	[irArgs addObject:irString];
+	
+	[irTask setLaunchPath:@"/usr/bin/hdiutil"];
+	
+	[irTask setArguments:irArgs];
+	
+	[irArgs release];
+	
+	[irTask setStandardError:NULLOUT];
+	[irTask setStandardOutput:NULLOUT];
+	
+	[irTask launch];
+	[irTask waitUntilExit];
+	
+	int returnStatus = [irTask terminationStatus];
+	
+	[irTask release];
+	irTask = nil;	
+	return returnStatus;
+}
+
 + (NSString *)mountImageWithoutOwners:(NSString *)irString
 {
 	NSTask *irTask = [[NSTask alloc] init];
@@ -485,7 +513,36 @@
 		{
 			NSLog(@"resized %@ successfully!", decryptRam);
 			NSString *mountedImage = [nitoUtility mountImageWithoutOwners:decryptRam]; //3
-			
+			if (mountedImage == nil) //an attempt to fix the Unexpected character 2 at line 1 bug
+			{ 
+				NSLog(@"dictionary parse may have failed, trying to unmount all /Volumes/ramdisk*");
+				NSLog(@"remounting and hardcoding /Volumes/ramdisk, cross your fingers!");
+				/*
+				 
+				 my theory is that the volume is mounting BUT the plist return from hdiutil is borking for some reason (maybe the use of deprecated code?)
+				 
+				 anyhow, going to try and "clean" any /Volume/ramdisk mounts (i know, not ideal, but what else can i do?)
+				 
+				 from there, use the attach code that doesnt try to parse the output, do a ghetto check to see if /Volumes/ramdisk exists, if it does, continue
+				 
+				 */
+				
+				[nitoUtility unmountVolume:@"/Volumes/ramdisk"];
+				[nitoUtility unmountVolume:@"/Volumes/ramdisk 1"];
+				[nitoUtility unmountVolume:@"/Volumes/ramdisk 2"];
+				
+				int mountReturn = [nitoUtility mountImageSimple:decryptRam]; //now force this to be /Volumes/ramdisk
+				
+				NSLog(@"mountImageSimple return: %i", mountReturn);
+				
+				if ([FM fileExistsAtPath:@"/Volumes/ramdisk"])
+				{
+					NSLog(@"ramdisk 'volume' exists!");
+					mountedImage = @"/Volumes/ramdisk";
+				}
+				
+				
+			}
 			if (mountedImage != nil)
 			{
 				NSLog(@"mountedImage %@ successfully!", decryptRam);
