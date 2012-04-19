@@ -412,6 +412,7 @@ void LogIt (NSString *format, ...)
 	if ([man fileExistsAtPath:ipsw])
 	{
 		NSLog(@"validating file: %@", ipsw);
+		[self showProgressViewWithText:NSLocalizedString(@"Validating IPSW...", @"Validating IPSW...")];
 		if ([nitoUtility validateFile:ipsw withChecksum:sha] == FALSE) 
 		{
 			NSLog(@"ipsw SHA Invalid, not removing file (for now, need to make sure its not a beta)");
@@ -1667,7 +1668,6 @@ static NSString *HexToDec(NSString *hexValue)
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
 	
-	
 	[self printEnvironment];
 	
 	[self _fetchDeviceInfo];
@@ -1688,13 +1688,10 @@ static NSString *HexToDec(NSString *hexValue)
 	//[self iTunesScriptReady];
 	ChipID_ = self.theEcid;
 	_restoreMode = kRestoreUnavailableMode;
+	
 	NSLog(@"ecid: %@", ChipID_);
 	
-	//self.theEcid = ChipID_;
 
-		//NSLog(@"localATvBlobs: %@", [TSSManager localAppleTVBlobs]);
-
-	
 	if ([self homeWritable])
 	{
 		
@@ -1702,6 +1699,7 @@ static NSString *HexToDec(NSString *hexValue)
 	} else{
 		
 		[self showHomePermissionWarning];
+		
 		NSLog(@"cant write to home!!");
 	}
 	
@@ -1722,12 +1720,15 @@ static NSString *HexToDec(NSString *hexValue)
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(blobsFinished:) name:@"blobsFinished" object:nil];
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(statusChanged:) name:@"statusChanged" object:nil];
 		//[self startupAlert];
+	
+	//check the ownership to make sure we can continue on our merry way
+	
 	BOOL theStuff = [self pwnHelperCheckOwner];
 	if (theStuff == FALSE)
 	{
 		[[NSApplication sharedApplication] terminate:self];
 	}
-	[self checkScripting];
+	[self checkScripting]; //make sure UI scripting is enabled for the iTunes chicanery
     
 	NSString *lastUsedbundle = LAST_BUNDLE;
 
@@ -1737,6 +1738,8 @@ static NSString *HexToDec(NSString *hexValue)
 		lastUsedbundle = CURRENT_BUNDLE;
 		[[NSUserDefaults standardUserDefaults] setObject:lastUsedbundle forKey:@"lastUsedBundle"];
 	}
+	
+	
 	self.currentBundle = [FWBundle bundleWithName:LAST_BUNDLE];
 
 		//[self.currentBundle logDescription];
@@ -1745,6 +1748,7 @@ static NSString *HexToDec(NSString *hexValue)
 		
 	
 	[self setBundleControllerContent];
+	
 	[self versionChanged:nil];
 	
 	if (DID_MIGRATE == TRUE)
@@ -1777,6 +1781,32 @@ static NSString *HexToDec(NSString *hexValue)
 
 }
 
+- (void)showInitialView
+{
+	[window setContentView:self.firstView];
+	
+	[window display];
+	self.processing = FALSE;
+	[buttonOne setEnabled:TRUE];
+	[bootButton setEnabled:TRUE];
+}
+
+- (void)showProgressViewWithText:(NSString *)theString
+{
+	[window setContentView:self.secondView];
+	[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:theString waitUntilDone:YES];
+
+	self.processing = TRUE;
+	[buttonOne setEnabled:FALSE];
+	[bootButton setEnabled:FALSE];
+	
+	[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+	[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+	
+	[instructionImage setImage:[self imageForMode:kSPIPSWImage]];
+		[window display];
+}
+
 
 - (IBAction)processOne:(id)sender //download and modify ipsw
 {
@@ -1790,10 +1820,7 @@ static NSString *HexToDec(NSString *hexValue)
 		return;
 	}
 	
-		//[NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/SP_Debug.log"]
 	
-	NSString *logPath2 = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/SP_Debug_new.log"];
-	[FM removeItemAtPath:logPath2 error:nil];
 		//current bundle may be set by default, but we never want to assume the default processOne ipsw to be anything but the latest- which is still hardcoded to 4.2.1.
 
 	self.currentBundle = [FWBundle bundleWithName:CURRENT_BUNDLE];
@@ -1822,9 +1849,12 @@ static NSString *HexToDec(NSString *hexValue)
 		}
 		self.currentBundle = ourBundle;
 		
+		//okay we need a way to validate this shit without holding up the woodworks
+		
 		NSString *sha = [[self currentBundle] SHA];
 		NSString *downloadLink = [[self currentBundle] downloadURL];
 		
+		[self showProgressViewWithText:NSLocalizedString(@"Validating IPSW...", @"Validating IPSW...")];
 		BOOL isValid = [nitoUtility validateFile:ipsw withChecksum:sha];
 		
 		if (!isValid)
@@ -1841,12 +1871,13 @@ static NSString *HexToDec(NSString *hexValue)
 				[bootButton setEnabled:FALSE];
 				[instructionImage setImage:[self imageForMode:kSPIPSWImage]];
 				[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+				[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 				[self downloadTheFiles];
 			}
 			return;
 			
 		}
-		
+		[self showProgressViewWithText:NSLocalizedString(@"Checking Firmware Compatibility",@"Checking Firmware Compatibility" )];
 		theRestoreMode = [self restoreMode];
 		_restoreMode = theRestoreMode;
 		
@@ -1908,7 +1939,7 @@ static NSString *HexToDec(NSString *hexValue)
 	if (download == TRUE)
 	{
 		[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
-		
+		[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 		NSLog(@"downloading IPSW...");
 		
 		[self downloadTheFiles];
@@ -2793,6 +2824,7 @@ static NSString *HexToDec(NSString *hexValue)
 	
 	NSAlert *errorAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"Sorry. :-(", @"Sorry. :-(") defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedString(@"This AppleTV is not eligible for this version.", @"This AppleTV is not eligible for this version.")];
 	[errorAlert runModal];
+	[self showInitialView];
 	return;
 }
 
@@ -2806,6 +2838,7 @@ static NSString *HexToDec(NSString *hexValue)
 	NSString *sha = [[self currentBundle] SHA];
 	if ([FM fileExistsAtPath:theFirmwareDownload])
 	{
+		[self showProgressViewWithText:NSLocalizedString(@"Validating IPSW...", @"Validating IPSW...")];
 		if([nitoUtility validateFile:theFirmwareDownload withChecksum:sha] == FALSE)
 		{
 			NSLog(@"failed to validate file, delete file and continue to new download");
@@ -2838,6 +2871,7 @@ static NSString *HexToDec(NSString *hexValue)
 		return;
 	}
 	[[NSUserDefaults standardUserDefaults] setObject:[bundleName stringByDeletingPathExtension] forKey:@"lastUsedBundle"];
+		[self showProgressViewWithText:NSLocalizedString(@"Checking Firmware Compatibility",@"Checking Firmware Compatibility" )];
 	int theRestoreMode = [self restoreMode];
 	_restoreMode = theRestoreMode;
 	
@@ -2894,6 +2928,7 @@ static NSString *HexToDec(NSString *hexValue)
 			[buttonOne setEnabled:FALSE];
 			[bootButton setEnabled:FALSE];
 			[instructionImage setImage:[self imageForMode:kSPIPSWImage]];
+			[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 			[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 			[self downloadTheFiles];
 		}
@@ -2955,7 +2990,7 @@ static NSString *HexToDec(NSString *hexValue)
 
 	
 	NSString *sha = [[self currentBundle] SHA];
-	
+	[self showProgressViewWithText:NSLocalizedString(@"Validating IPSW...", @"Validating IPSW...")];
 	if ([nitoUtility validateFile:adownloadFile withChecksum:sha] == FALSE)
 	{
 		if (_downloadRetries > 0)
@@ -2970,6 +3005,8 @@ static NSString *HexToDec(NSString *hexValue)
 			
 			self.downloadIndex = 0;
 			NSLog(@"download corrupt on first try, trying once more!");
+			[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+			[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 			[self downloadTheFiles];
 			_downloadRetries++;
 			return;
