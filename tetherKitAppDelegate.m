@@ -1877,7 +1877,7 @@ static NSString *HexToDec(NSString *hexValue)
 			return;
 			
 		}
-		[self showProgressViewWithText:NSLocalizedString(@"Checking Firmware Compatibility",@"Checking Firmware Compatibility" )];
+		[self showProgressViewWithText:NSLocalizedString(@"Checking firmware compatibility...",@"Checking firmware compatibility..." )];
 		theRestoreMode = [self restoreMode];
 		_restoreMode = theRestoreMode;
 		
@@ -2871,7 +2871,7 @@ static NSString *HexToDec(NSString *hexValue)
 		return;
 	}
 	[[NSUserDefaults standardUserDefaults] setObject:[bundleName stringByDeletingPathExtension] forKey:@"lastUsedBundle"];
-		[self showProgressViewWithText:NSLocalizedString(@"Checking Firmware Compatibility",@"Checking Firmware Compatibility" )];
+		[self showProgressViewWithText:NSLocalizedString(@"Checking firmware compatibility...",@"Checking firmware compatibility..." )];
 	int theRestoreMode = [self restoreMode];
 	_restoreMode = theRestoreMode;
 	

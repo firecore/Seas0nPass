@@ -62,7 +62,10 @@ static NSString *myChipID_ = nil;
 + (NSArray *)blobArrayFromString:(NSString *)theString
 {
 		//NSLog(@"theString: %@", theString);
-	
+	if ([[theString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] isEqualToString:@"[]"])
+	{
+		return nil;
+	}
 	NSMutableString *stripped = [[NSMutableString alloc] initWithString:theString];
 	[stripped replaceOccurrencesOfString:@"[" withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [stripped length])];
 	[stripped replaceOccurrencesOfString:@"{" withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, [stripped length])];
