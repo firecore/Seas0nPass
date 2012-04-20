@@ -1561,7 +1561,8 @@ static NSString *HexToDec(NSString *hexValue)
 					NSLog(@"still failed to get the ecid, alert to quit and re-open seas0npass");
 					
 					[self showDeviceFailedAlert];
-					
+					[self showInitialView];
+					[self hideProgress];
 					return kRestoreNoDevice;
 				}
 				
@@ -1689,7 +1690,7 @@ static NSString *HexToDec(NSString *hexValue)
 	ChipID_ = self.theEcid;
 	_restoreMode = kRestoreUnavailableMode;
 	
-	NSLog(@"ecid: %@", ChipID_);
+	//NSLog(@"ecid: %@", ChipID_);
 	
 
 	if ([self homeWritable])
@@ -1825,7 +1826,27 @@ static NSString *HexToDec(NSString *hexValue)
 
 	self.currentBundle = [FWBundle bundleWithName:CURRENT_BUNDLE];
 	
+	NSString *fullDeviceType = [self.currentBundle fullDeviceType];
 	
+	NSLog(@"fullDeviceType: %@", fullDeviceType);
+	
+	if ([fullDeviceType isEqualToString:@"AppleTV3,1"])
+	{
+		NSLog(@"BAIL! AppleTV3,1 not supported!");
+		
+		return;
+	}
+	
+	
+	if (![self.deviceClass isEqualToString:APPLETV_21_DEVICE_CLASS])
+	{
+		
+		NSLog(@"only AppleTV2,1 / k66ap is supported in default mode!");
+		return;
+	}
+	
+	
+
 	
 	if ([self optionKeyIsDown]) //choose custom firmware version
 	{
@@ -1893,7 +1914,8 @@ static NSString *HexToDec(NSString *hexValue)
 				return;
 				
 			case kRestoreNoDevice: //already showed alert, just bail
-				
+				[self showInitialView];
+				[self hideProgress];
 				return;
 				
 				
@@ -2873,6 +2895,15 @@ static NSString *HexToDec(NSString *hexValue)
 	[[NSUserDefaults standardUserDefaults] setObject:[bundleName stringByDeletingPathExtension] forKey:@"lastUsedBundle"];
 		[self showProgressViewWithText:NSLocalizedString(@"Checking firmware compatibility...",@"Checking firmware compatibility..." )];
 	int theRestoreMode = [self restoreMode];
+	
+	if (![self.deviceClass isEqualToString:APPLETV_21_DEVICE_CLASS])
+	{
+		[self hideProgress];
+		[self showInitialView];
+		NSLog(@"download mode only works with AppleTV2,1 / k66ap");
+		return;
+		
+	}
 	_restoreMode = theRestoreMode;
 	
 	NSLog(@"restoreMode: %i", theRestoreMode);
@@ -2881,6 +2912,8 @@ static NSString *HexToDec(NSString *hexValue)
 			
 			
 		case kRestoreNoDevice: //already showed alert, just bail
+			[self showInitialView];
+			[self hideProgress];
 			return;
 			
 		case kRestoreFirmwareIneligible:

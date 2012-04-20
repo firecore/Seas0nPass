@@ -392,6 +392,29 @@
 	return NO;
 }
 
+- (NSString *)fullDeviceType
+{
+	NSString *firstLetter = [[self bundleName] substringToIndex:1];
+	if ([firstLetter isEqualToString:@"i"]) //ipad or iphone oops forgot ipod dummy!! ;-P
+	{
+		NSString *clippedPath = [[self bundleName] substringToIndex:9];
+		if ([clippedPath isEqualToString:@"iPhone"])
+		{
+			return clippedPath;
+			
+		} else {
+			
+			return [[self bundleName] substringToIndex:7]; //since iPod/iPad are both 4 letters this should return either one.
+		}
+		
+	}
+	
+	return [[self bundleName] substringToIndex:10];
+	
+	//iPhone 5
+	//iPad 5
+	//AppleTV 7 
+}
 
 - (NSString *)deviceType
 {
