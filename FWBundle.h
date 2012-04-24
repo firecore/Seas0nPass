@@ -45,6 +45,7 @@ enum {
 	kRestoreUnavailableMode,
 	kRestoreFirmwareIneligible,
 	kRestoreNoDevice,
+	kRestoreUnsupportedDevice,
 };
 
 @interface FWBundle : NSBundle	{

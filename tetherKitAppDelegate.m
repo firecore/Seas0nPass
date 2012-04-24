@@ -240,7 +240,7 @@ void print_progress(double progress, void* data) {
 	if (warningShown == TRUE)
 		return;
 	
-	NSAlert *startupAlert = [NSAlert alertWithMessageText:@"Warning! Please read carefully." defaultButton:@"OK" alternateButton:@"More Info" otherButton:@"Cancel" informativeTextWithFormat:@"Currently the jailbreak for the 4.1.1 (iOS 4.2.1) software is 'tethered'. A tethered jailbreak requires the AppleTV to be connected to a computer for a brief moment during startup.\n\nSeas0nPass makes this as easy as possible, but please do not proceed unless you are comfortable with this process."];
+	NSAlert *startupAlert = [NSAlert alertWithMessageText:@"Warning! Please read carefully." defaultButton:@"OK" alternateButton:@"More Info" otherButton:@"Cancel" informativeTextWithFormat:@"Currently the jailbreak for the 4.1.1 (iOS 4.2.1) software is 'tethered'. A tethered jailbreak requires the Apple TV to be connected to a computer for a brief moment during startup.\n\nSeas0nPass makes this as easy as possible, but please do not proceed unless you are comfortable with this process."];
 	int button = [startupAlert runModal];
 
 	switch (button) {
@@ -1576,6 +1576,11 @@ static NSString *HexToDec(NSString *hexValue)
 		
 	}
 	
+	if ([self.deviceClass isEqualToString:APPLETV_31_DEVICE_CLASS])
+	{
+		return kRestoreUnsupportedDevice;
+	}
+	
 	NSLog(@"apple is not signing, check what blobs cydia has for %@", ecid);
 	
 	TSSManager *tss = [[TSSManager alloc] initWithECID:ecid device:currentDevice];
@@ -1830,7 +1835,7 @@ static NSString *HexToDec(NSString *hexValue)
 	
 	NSLog(@"fullDeviceType: %@", fullDeviceType);
 	
-	if ([fullDeviceType isEqualToString:@"AppleTV3,1"])
+	if ([fullDeviceType isEqualToString:@"AppleTV3,1"]) //not going to happen, there are no built in bundles with appletv3,1
 	{
 		NSLog(@"BAIL! AppleTV3,1 not supported!");
 		
@@ -1842,6 +1847,8 @@ static NSString *HexToDec(NSString *hexValue)
 	{
 		
 		NSLog(@"only AppleTV2,1 / k66ap is supported in default mode!");
+		NSAlert *errorAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"Unsupported Device!", @"Unsupported Device!") defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedString(@"The third generation Apple TV is not compatible with Seas0nPass.", @"The third generation Apple TV is not compatible with Seas0nPass.")];
+		[errorAlert runModal];
 		return;
 	}
 	
@@ -1851,7 +1858,7 @@ static NSString *HexToDec(NSString *hexValue)
 	if ([self optionKeyIsDown]) //choose custom firmware version
 	{
 		NSOpenPanel *op = [NSOpenPanel openPanel];
-		[op setTitle:NSLocalizedString(@"Please select an AppleTV firmware image",@"Please select an AppleTV firmware image" )];
+		[op setTitle:NSLocalizedString(@"Please select an Apple TV firmware image",@"Please select an Apple TV firmware image" )];
 		[op setCanChooseFiles:YES];
 		[op setCanCreateDirectories:NO];
 		int buttonPressed = [op runModalForTypes:[NSArray arrayWithObject:@"ipsw"]];
@@ -1920,8 +1927,17 @@ static NSString *HexToDec(NSString *hexValue)
 				
 				
 			case kRestoreFirmwareIneligible:
-				
+				[self showInitialView];
+				[self hideProgress];
 				[self showDeviceIneligibleAlert];
+				return;
+				
+				
+			case kRestoreUnsupportedDevice:
+				[self showInitialView];
+				[self hideProgress];
+				[self showIncompatDeviceAlert];
+				
 				return;
 				
 			default:
@@ -2780,13 +2796,13 @@ static NSString *HexToDec(NSString *hexValue)
 
 - (int)showDeviceAlert
 {
-	NSAlert *errorAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"No Device Detected.", @"No Device Detected.") defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:NSLocalizedString(@"Cancel", @"Cancel") otherButton:nil informativeTextWithFormat:NSLocalizedString(@"Please connect the AppleTV via USB to continue.", @"Please connect the AppleTV via USB to continue.")];
+	NSAlert *errorAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"No Device Detected.", @"No Device Detected.") defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:NSLocalizedString(@"Cancel", @"Cancel") otherButton:nil informativeTextWithFormat:NSLocalizedString(@"Please connect the Apple TV via USB to continue.", @"Please connect the Apple TV via USB to continue.")];
 	return [errorAlert runModal];
 }
 
 - (int)showDeviceFailedAlert
 {
-	NSAlert *errorAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"No Device Detected.", @"No Device Detected.") defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedString(@"Failed to detect AppleTV, please quit and re-open Seas0nPass and try again.", @"Failed to detect AppleTV, please quit and re-open Seas0nPass and try again.")];
+	NSAlert *errorAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"No Device Detected.", @"No Device Detected.") defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedString(@"Failed to detect Apple TV, please quit and re-open Seas0nPass and try again.", @"Failed to detect Apple TV, please quit and re-open Seas0nPass and try again.")];
 	return [errorAlert runModal];
 }
 
@@ -2840,11 +2856,21 @@ static NSString *HexToDec(NSString *hexValue)
 	
 }
 
+- (void)showIncompatDeviceAlert
+{
+	//This AppleTV is not eligible for this version
+	
+	NSAlert *errorAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"Sorry. :-(", @"Sorry. :-(") defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedString(@"This device is not supported by Seas0nPass.", @"This device is not supported by Seas0nPass.")];
+	[errorAlert runModal];
+	[self showInitialView];
+	return;
+}
+
 - (void)showDeviceIneligibleAlert
 {
 		//This AppleTV is not eligible for this version
 	
-	NSAlert *errorAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"Sorry. :-(", @"Sorry. :-(") defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedString(@"This AppleTV is not eligible for this version.", @"This AppleTV is not eligible for this version.")];
+	NSAlert *errorAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"Sorry. :-(", @"Sorry. :-(") defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedString(@"This Apple TV is not eligible for this version.", @"This Apple TV is not eligible for this version.")];
 	[errorAlert runModal];
 	[self showInitialView];
 	return;
@@ -2900,6 +2926,7 @@ static NSString *HexToDec(NSString *hexValue)
 	{
 		[self hideProgress];
 		[self showInitialView];
+		[self showIncompatDeviceAlert];
 		NSLog(@"download mode only works with AppleTV2,1 / k66ap");
 		return;
 		
@@ -2919,6 +2946,15 @@ static NSString *HexToDec(NSString *hexValue)
 		case kRestoreFirmwareIneligible:
 			
 			[self showDeviceIneligibleAlert];
+			[self showInitialView];
+			[self hideProgress];
+			return;
+			
+			
+		case kRestoreUnsupportedDevice:
+			[self showInitialView];
+			[self hideProgress];
+			[self showIncompatDeviceAlert];
 			return;
 			
 		default:
