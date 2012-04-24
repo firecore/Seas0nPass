@@ -2812,8 +2812,23 @@ static NSString *HexToDec(NSString *hexValue)
 	[errorAlert runModal];
 }
 
+- (BOOL)isAppleTV3
+{
+	if ([self.deviceClass isEqualToString:APPLETV_31_DEVICE_CLASS])
+	{
+		return (TRUE);
+	}
+	
+	return (FALSE);
+}
+
 - (IBAction)bootTethered:(id)sender
 {
+	if ([self isAppleTV3])
+	{
+		[self showIncompatDeviceAlert];
+		return;
+	}
 	NSString *lastUsedbundle = LAST_BUNDLE;
 	NSLog(@"last used bundle: %@", lastUsedbundle);
 	self.currentBundle = [FWBundle bundleWithName:lastUsedbundle];

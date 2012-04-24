@@ -83,6 +83,8 @@ enum {
 @property (readwrite, assign) int downloadIndex;
 @property (readwrite, assign) int counter;
 
+- (void)showIncompatDeviceAlert;
+- (BOOL)isAppleTV3;
 - (void)showInitialView;
 - (void)showProgressViewWithText:(NSString *)theString;
 + (NSArray *)filteredBundleNames;
