@@ -659,6 +659,19 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event) {
 	[instructionImage setImage:[self imageForMode:kSPATVRestoreImage]];
 		//[theImage release];
 	while(pois0n_is_ready()) {
+		if (self.deviceClass == nil)
+		{
+			[self _fetchDeviceInfo];
+			sleep(5);
+		}
+			if ([self isAppleTV3])
+			{
+				[self hideProgress];
+					//pois0n_exit();
+				self.poisoning = FALSE;
+				[pool release];
+				return -1;
+			}
 		sleep(1);
 	}
 	
@@ -741,6 +754,20 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event) {
 
 	[instructionImage setImage:[self imageForMode:kSPATVRestoreImage]];
 	while(pois0n_is_ready()) {
+		if (self.deviceClass == nil)
+		{
+			[self _fetchDeviceInfo];
+			sleep(5);
+		}
+		
+		if ([self isAppleTV3])
+		{
+			[self hideProgress];
+			pois0n_exit();
+			self.poisoning = FALSE;
+			[pool release];
+			return -1;
+		}
 		sleep(1);
 	}
 	
@@ -1526,11 +1553,7 @@ static NSString *HexToDec(NSString *hexValue)
 	NSString *osVersion = [[self currentBundle] osVersion];
 	NSString *fourPointThree = @"4.3";
 	
-	if ([signableVersions containsObject:buildNumber])
-	{
-		NSLog(@"apple is still signing %@ dont do anything special: kRestoreDefaultMode", buildNumber);
-		return kRestoreDefaultMode;
-	}
+	
 	
 	if (ecid == nil)
 	{
@@ -1579,6 +1602,12 @@ static NSString *HexToDec(NSString *hexValue)
 	if ([self.deviceClass isEqualToString:APPLETV_31_DEVICE_CLASS])
 	{
 		return kRestoreUnsupportedDevice;
+	}
+	
+	if ([signableVersions containsObject:buildNumber])
+	{
+		NSLog(@"apple is still signing %@ dont do anything special: kRestoreDefaultMode", buildNumber);
+		return kRestoreDefaultMode;
 	}
 	
 	NSLog(@"apple is not signing, check what blobs cydia has for %@", ecid);
@@ -1831,26 +1860,25 @@ static NSString *HexToDec(NSString *hexValue)
 
 	self.currentBundle = [FWBundle bundleWithName:CURRENT_BUNDLE];
 	
-	NSString *fullDeviceType = [self.currentBundle fullDeviceType];
+	//NSString *fullDeviceType = [self.currentBundle fullDeviceType];
+//	
+//	NSLog(@"fullDeviceType: %@", fullDeviceType);
+//	
+//	if ([fullDeviceType isEqualToString:@"AppleTV3,1"]) //not going to happen, there are no built in bundles with appletv3,1
+//	{
+//		NSLog(@"BAIL! AppleTV3,1 not supported!");
+//		
+//		return;
+//	}
 	
-	NSLog(@"fullDeviceType: %@", fullDeviceType);
 	
-	if ([fullDeviceType isEqualToString:@"AppleTV3,1"]) //not going to happen, there are no built in bundles with appletv3,1
-	{
-		NSLog(@"BAIL! AppleTV3,1 not supported!");
-		
-		return;
-	}
-	
-	
-	if (![self.deviceClass isEqualToString:APPLETV_21_DEVICE_CLASS])
-	{
-		
-		NSLog(@"only AppleTV2,1 / k66ap is supported in default mode!");
-		NSAlert *errorAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"Unsupported Device!", @"Unsupported Device!") defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedString(@"The third generation Apple TV is not compatible with Seas0nPass.", @"The third generation Apple TV is not compatible with Seas0nPass.")];
-		[errorAlert runModal];
-		return;
-	}
+	//if (![self.deviceClass isEqualToString:APPLETV_21_DEVICE_CLASS])
+//	{
+//		
+//		NSLog(@"only AppleTV2,1 / k66ap is supported in default mode!");
+//		[self showIncompatDeviceAlert];
+//		return;
+//	}
 	
 	
 
@@ -1944,7 +1972,7 @@ static NSString *HexToDec(NSString *hexValue)
 				break;
 		}
 		
-		
+	
 		
 		NSLog(@"Seas0nPass: Software payload: %@ (option key)", [self.currentBundle bundleName]);
 		
@@ -1962,6 +1990,11 @@ static NSString *HexToDec(NSString *hexValue)
 		return;
 	} //end option key down if / custom payload selection
 	
+	if ([self isAppleTV3])
+	{
+		[self showIncompatDeviceAlert];
+		return;
+	}
 	[window setContentView:self.secondView];
 	[window display];
 	
@@ -2259,15 +2292,48 @@ static NSString *HexToDec(NSString *hexValue)
 		[self hideProgress];
 		[self killiTunes];
 		
+		[self _fetchDeviceInfo];
+		
+		if ([self isAppleTV3])
+		{
+			[self showInitialView];
+			[self hideProgress];
+			[self showIncompatDeviceAlert];
+			
+			return;
+		}
+		int dfuStatus = 0;
+		
 		if (is44 == TRUE)
 		{
-
-			[self enterDFUNEW];
+			
+			dfuStatus = [self enterDFUNEW];
+			NSLog(@"dfu entered with status: %i", dfuStatus);
+			
 			
 		} else {
 			
-			[self enterDFU];
+			dfuStatus = [self enterDFU];
+			
+			NSLog(@"dfu entered with status: %i", dfuStatus);
 		}
+		
+		if (dfuStatus != 0)
+		{
+			NSLog(@"failed to enter dfu, bail!");
+			
+		}
+		
+
+		if ([self isAppleTV3])
+		{
+			[self showInitialView];
+			[self hideProgress];
+			[self showIncompatDeviceAlert];
+			
+			return;
+		}
+		
 		
 		if ([self scriptingEnabled])
 		{
@@ -2813,7 +2879,7 @@ static NSString *HexToDec(NSString *hexValue)
 }
 
 - (BOOL)isAppleTV3
-{
+{ 
 	if ([self.deviceClass isEqualToString:APPLETV_31_DEVICE_CLASS])
 	{
 		return (TRUE);
@@ -2960,9 +3026,10 @@ static NSString *HexToDec(NSString *hexValue)
 			
 		case kRestoreFirmwareIneligible:
 			
-			[self showDeviceIneligibleAlert];
 			[self showInitialView];
 			[self hideProgress];
+			[self showDeviceIneligibleAlert];
+			
 			return;
 			
 			

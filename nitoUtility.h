@@ -71,7 +71,7 @@ enum{
 + (NSDictionary *)fsImageInfo:(NSString *)inputFilesystem;
 - (NSString *)filesystemResizeValue:(NSString *)inputFilesystem;
 - (NSString *)ramdiskResizeValue:(NSString *)inputRD;
-
++ (int)mountImageSimple:(NSString *)irString;
 + (void)unmountVolume:(NSString *)theVolume;
 + (NSString *)mountImage:(NSString *)irString;
 + (BOOL)checkFile:(NSString *)inputFile againstMD5:(NSString *)properMD5;
@@ -80,7 +80,7 @@ enum{
 
 + (void)changeOwner:(NSString *)theOwner onFile:(NSString *)theFile isRecursive:(BOOL)isR;
 + (void)changePermissions:(NSString *)perms onFile:(NSString *)theFile isRecursive:(BOOL)isR;
-
++ (int)cleanupRamdisk;
 + (int)patchFile:(NSString *)patchFile withPatch:(NSString *)thePatch endMD5:(NSString *)desiredMD5;
 + (int)decryptRamdisk:(NSString *)theRamdisk toPath:(NSString *)outputDisk withIV:(NSString *)iv key:(NSString *)key;
 + (int)repackRamdisk:(NSString *)theRamdisk toPath:(NSString *)outputDisk withIV:(NSString *)iv key:(NSString *)key originalPath:(NSString *)original;
