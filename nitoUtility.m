@@ -1151,13 +1151,22 @@
 	patchTask = nil;
 	if (returnStatus == 0)
 	{
+
 		if ([[endLocationFile lastPathComponent] isEqualToString:@"corona"])
 		{
 			NSLog(@"corona +x");
 			[nitoUtility changePermissions:@"+x" onFile:fullLocation isRecursive:YES];
+			
 		}
-		return 0;
 		
+		
+		if ([[endLocationFile lastPathComponent] isEqualToString:@"racoon"])
+		{
+			NSLog(@"racoon +x");
+			[nitoUtility changePermissions:@"+x" onFile:fullLocation isRecursive:YES];
+		}
+		
+		return 0;
 		
 	} else {
 		NSLog(@"patching: %@ failed!! ABORT!", patchFile);

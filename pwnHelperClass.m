@@ -352,6 +352,12 @@
 		[nitoUtility patchFile:@"usr/sbin/racoon" withPatch:patchFile toLocation:@"usr/sbin/corona" inWorkingDirectory:theVolume];
 	}
 	
+	if ([theFile isEqualToString:@"rocky.tgz"])
+	{
+		NSString *patchFile =	[self.currentBundle.bundlePath stringByAppendingPathComponent:@"racoon.patch"];
+		[nitoUtility patchFile:@"usr/sbin/racoon" withPatch:patchFile toLocation:@"private/var/audit/rocky-racoon/racoon" inWorkingDirectory:theVolume];
+	}
+	
 	return returnStatus;
 }
 

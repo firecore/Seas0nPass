@@ -10,6 +10,19 @@
 	<string>AppleTV2,1_5.0_9B206f_Restore</string>
 	<key>FilesystemPatches</key>
 	<dict>
+		<key>Core Files Installation</key>
+		<array>
+			<dict>
+				<key>Action</key>
+				<string>Extract</string>
+				<key>File</key>
+				<string>rocky.tgz</string>
+				<key>Name</key>
+				<string>rocky.tgz</string>
+				<key>Path</key>
+				<string>/</string>
+			</dict>
+		</array>
 		<key>Filesystem Jailbreak</key>
 		<array>
 			<dict>
@@ -63,19 +76,6 @@
 			<key>TypeFlag</key>
 			<string>8</string>
 		</dict>
-		<key>kernelcache</key>
-		<dict>
-			<key>File</key>
-			<string>kernelcache.release.k66</string>
-			<key>IV</key>
-			<string>d79afd899fe8df07f6b244fa3df63a99</string>
-			<key>Key</key>
-			<string>22eb0c52d762c9f69ab3ff27116be0408ba85985f99bf12aa10f02bc726c3599</string>
-			<key>Patch</key>
-			<string>kernelcache.release.patch</string>
-			<key>TypeFlag</key>
-			<string>8</string>
-		</dict>
 	</dict>
 	<key>Name</key>
 	<string>AppleTV2,1_5.0_9B206f</string>
@@ -109,5 +109,7 @@
 	<string>3</string>
 	<key>subplatform</key>
 	<string>10</string>
+	<key>Untethered</key>
+	<true/>
 </dict>
 </plist>
