@@ -465,6 +465,9 @@
     }
     
 	NSString *outputPath = [rootPath stringByAppendingPathComponent:@"var/root/Media/Cydia/AutoInstall"];
+	if (![[NSFileManager defaultManager] fileExistsAtPath:outputPath])
+		[[NSFileManager defaultManager] createDirectoryAtPath:outputPath withIntermediateDirectories:TRUE attributes:nil error:nil];
+		
 	
 	NSDirectoryEnumerator *files = [[NSFileManager defaultManager] enumeratorAtPath:debPath];
 	while (theDeb = [files nextObject]) 

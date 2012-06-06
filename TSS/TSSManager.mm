@@ -127,7 +127,7 @@ static NSString *myChipID_ = nil;
 	return [[TSSCommon stringReturnForProcess:@"/usr/sbin/sysctl -n hw.model"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
-+ (TSSDeviceID)currentDevice
++ (TSSDeviceID)currentDevice //wont work for atv3 u dunce!! FIXME
 {
 	return DeviceIDMake(16, 35120);
 	
@@ -137,7 +137,7 @@ static NSString *myChipID_ = nil;
 	//NSLog(@"theDevice: -%@-", theDevice);
 	
 	if ([theDevice isEqualToString:@"AppleTV3,1"])
-		return DeviceIDMake(8, 35138);
+		return DeviceIDMake(8, 35138);//0x8942
 	
 	if ([theDevice isEqualToString:@"AppleTV2,1"])
 		return DeviceIDMake(16, 35120);
@@ -486,7 +486,7 @@ static NSString *myChipID_ = nil;
 	{
 		if ([[[blob pathExtension] lowercaseString] isEqualToString:@"shsh"])
 		{
-			if ([blob rangeOfString:@"appletv2,1"].length > 0) {
+			if (([blob rangeOfString:@"appletv2,1"].length > 0) ||  ([blob rangeOfString:@"appletv3,1"].length > 0)){
 				
 					//96655119119-appletv2,1-4.1.shsh
 				NSArray *components = [blob componentsSeparatedByString:@"-"];
