@@ -99,10 +99,12 @@
 	[irTask setStandardOutput:hdip];
 		//NSLog(@"hdiutil %@", [[irTask arguments] componentsJoinedByString:@" "]);
 	[irTask launch];
+	
+		NSData *outData = [hdih readDataToEndOfFile];
+	
 	[irTask waitUntilExit];
 	
-	NSData *outData;
-	outData = [hdih readDataToEndOfFile];
+
 	NSString *the_error;
 	NSPropertyListFormat format;
 	id plist;
@@ -185,10 +187,12 @@
 	[irTask setStandardOutput:hdip];
 	//NSLog(@"hdiutil %@", [[irTask arguments] componentsJoinedByString:@" "]);
 	[irTask launch];
+	
+	NSData *outData = [hdih readDataToEndOfFile]; //FIX_ME: DO THIS TO ALL READDATATOENDOFFILES
+	
 	[irTask waitUntilExit];
 	
-	NSData *outData;
-	outData = [hdih readDataToEndOfFile];
+	
 	NSString *the_error;
 	NSPropertyListFormat format;
 	id plist;
@@ -286,8 +290,11 @@
 	[sslTask setStandardOutput:sspipe];
 	[sslTask setStandardError:sspipe];
 	[sslTask launch];
-	[sslTask waitUntilExit];
+	
 	NSData *outData = [ssh readDataToEndOfFile];
+	
+	[sslTask waitUntilExit];
+	
 	NSString *outputString = [[[NSString alloc] initWithData:outData 
 													encoding:NSASCIIStringEncoding] 
 							  stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -331,9 +338,12 @@
 	[mdTask setStandardOutput:mdip];
 	[mdTask setStandardError:mdip];
 	[mdTask launch];
-	[mdTask waitUntilExit];
+	
 	NSData *outData;
 	outData = [mdih readDataToEndOfFile];
+	
+	[mdTask waitUntilExit];
+
 	NSString *temp = [[NSString alloc] initWithData:outData encoding:NSASCIIStringEncoding];
 	temp = [temp stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	//int theTerm = [mdTask terminationStatus];
@@ -739,10 +749,13 @@
 	[irTask setStandardOutput:hdip];
 		//NSLog(@"hdiutil %@", [[irTask arguments] componentsJoinedByString:@" "]);
 	[irTask launch];
-	[irTask waitUntilExit];
 	
 	NSData *outData;
 	outData = [hdih readDataToEndOfFile];
+	
+	[irTask waitUntilExit];
+	
+	
 	NSString *the_error;
 	NSPropertyListFormat format;
 	id plist;
@@ -838,6 +851,7 @@
 	
 }
 
+#pragma mark this is where all the cleanup would need to occur.
 
 - (void)patchFilesystem:(NSString *)inputFilesystem
 {

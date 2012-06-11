@@ -1842,6 +1842,7 @@ static NSString *HexToDec(NSString *hexValue)
 		[window display];
 }
 
+#pragma mark we start here
 
 - (IBAction)processOne:(id)sender //download and modify ipsw
 {
@@ -2026,7 +2027,7 @@ static NSString *HexToDec(NSString *hexValue)
 	
 }
 
-- (void)customFW:(NSDictionary *)theDict
+- (void)customFW:(NSDictionary *)theDict //called inside process one
 {
 	
 		//LOG_SELF;
