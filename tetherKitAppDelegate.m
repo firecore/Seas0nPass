@@ -31,7 +31,7 @@
 //previous @"AppleTV2,1_4.4.4_9A406a"
 
 
-#define CURRENT_BUNDLE @"AppleTV2,1_5.0_9B206f"
+#define CURRENT_BUNDLE @"AppleTV2,1_5.0.2_9B830"
 #define CURRENT_IPSW [NSString stringWithFormat:@"%@_Restore.ipsw", CURRENT_BUNDLE]
 #define DL [tetherKitAppDelegate downloadLocation]
 #define KCACHE @"kernelcache.release.k66"
@@ -1842,6 +1842,7 @@ static NSString *HexToDec(NSString *hexValue)
 		[window display];
 }
 
+#pragma mark we start here
 
 - (IBAction)processOne:(id)sender //download and modify ipsw
 {
@@ -2026,7 +2027,7 @@ static NSString *HexToDec(NSString *hexValue)
 	
 }
 
-- (void)customFW:(NSDictionary *)theDict
+- (void)customFW:(NSDictionary *)theDict //called inside process one
 {
 	
 		//LOG_SELF;
