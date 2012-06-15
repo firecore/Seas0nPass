@@ -427,6 +427,8 @@
 
 - (int)removeUselessFilesFromRamdisk:(NSString *)mountedRamdisk
 {
+	NSString *filePath = [mountedRamdisk stringByAppendingPathComponent:@"/usr/local/share/restore/PASS.png"];
+	[[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
 	NSString *firmwarePath = [mountedRamdisk stringByAppendingPathComponent:@"/usr/local/standalone/firmware/"];
 	NSArray *firmwareArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:firmwarePath error:nil];
 	NSEnumerator *firmwareEnum = [firmwareArray objectEnumerator];
