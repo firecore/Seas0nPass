@@ -438,7 +438,11 @@
 - (int)removeUselessFilesFromRamdisk:(NSString *)mountedRamdisk
 {
 	NSString *filePath = [mountedRamdisk stringByAppendingPathComponent:@"/usr/local/share/restore/PASS.png"];
+	NSString *otherFilePath = [mountedRamdisk stringByAppendingPathComponent:@"/usr/share/progressui/images-1x"];
+	NSString *otherFilePath2 = [mountedRamdisk stringByAppendingPathComponent:@"/usr/share/progressui/images-2x"];
 	[[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+	[[NSFileManager defaultManager] removeItemAtPath:otherFilePath error:nil];
+	[[NSFileManager defaultManager] removeItemAtPath:otherFilePath2 error:nil];
 	NSString *firmwarePath = [mountedRamdisk stringByAppendingPathComponent:@"/usr/local/standalone/firmware/"];
 	NSArray *firmwareArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:firmwarePath error:nil];
 	NSEnumerator *firmwareEnum = [firmwareArray objectEnumerator];
@@ -483,6 +487,8 @@
 				NSLog(@"%@ removal failed!!!!!", fullPath);
 			}
 		}
+		
+		
 		
 	}
 	
@@ -566,7 +572,7 @@
 				
 					//FIXME: for now we are just going to delete useless files to fix ramdisk issues in beta3
 				
-				//[self removeUselessFirmwareFilesFromRamdisk:mountedImage];
+				[self removeUselessFirmwareFilesFromRamdisk:mountedImage];
                 [self removeUselessFilesFromRamdisk:mountedImage];
 				
 				
@@ -1299,6 +1305,98 @@
 }
 
 + (int)patchFile:(NSString *)patchFile withPatch:(NSString *)thePatch endMD5:(NSString *)desiredMD5
+{
+	NSTask *patchTask = [[NSTask alloc] init];
+	[patchTask setLaunchPath:BSPATCH];
+	NSString *patchedFile = [TMP_ROOT stringByAppendingPathComponent:[patchFile lastPathComponent]];
+		//NSString *patchedFile = [patchFile stringByAppendingPathExtension:@"patched"];
+	[patchTask setArguments:[NSArray arrayWithObjects:patchFile, patchedFile, thePatch, nil]];
+		//NSLog(@"patches: %@", [[patchTask arguments] componentsJoinedByString:@" "]);
+	[patchTask launch];
+	[patchTask waitUntilExit];
+	
+	int returnStatus = [patchTask terminationStatus];
+	[patchTask release];
+	patchTask = nil;
+	if (returnStatus == 0)
+	{
+		if (desiredMD5 == nil)
+			
+		{
+			
+			NSLog(@"no MD5, skip check!");
+			if([FM removeItemAtPath:patchFile error:nil])
+			{
+				NSLog(@"%@ removed successfully!", patchFile);
+				if ([FM moveItemAtPath:patchedFile toPath:patchFile error:nil])
+				{
+					NSLog(@"%@ patched and replaced successfully!!", patchFile);
+					if ([[patchFile lastPathComponent] isEqualToString:@"AppleTV"])
+					{
+							//NSLog(@"AppleTV +x");
+						[nitoUtility changePermissions:@"+x" onFile:patchFile isRecursive:YES];
+					}
+					if ([[patchFile lastPathComponent] isEqualToString:@"Lowtide"])
+					{
+							//NSLog(@"Lowtide +x");
+						[nitoUtility changePermissions:@"+x" onFile:patchFile isRecursive:YES];
+					}
+					
+					if ([[patchFile lastPathComponent] isEqualToString:@"launchd"])
+					{
+							//NSLog(@"Lowtide +x");
+						[nitoUtility changePermissions:@"+x" onFile:patchFile isRecursive:YES];
+					}
+					return 0;
+				} else {
+					
+					NSLog(@"replacement failed!! bail!!!");
+					return -1;
+				}
+			}
+			return 0;
+			
+		}
+			//check to see if md5 is proper
+		if ([nitoUtility checkFile:patchedFile againstMD5:desiredMD5])
+		{
+			if ([[patchedFile lastPathComponent] isEqualToString:@"AppleTV"])
+			{
+					//NSLog(@"AppleTV +x");
+				[nitoUtility changePermissions:@"+x" onFile:patchedFile isRecursive:YES];
+			}
+			if ([[patchedFile lastPathComponent] isEqualToString:@"Lowtide"])
+			{
+					//NSLog(@"Lowtide +x");
+				[nitoUtility changePermissions:@"+x" onFile:patchedFile isRecursive:YES];
+			}
+			
+			if ([[patchFile lastPathComponent] isEqualToString:@"launchd"])
+			{
+					//NSLog(@"Lowtide +x");
+				[nitoUtility changePermissions:@"+x" onFile:patchFile isRecursive:YES];
+			}
+			NSLog(@"md5 checks out!, replacing original");
+			if([FM removeItemAtPath:patchFile error:nil])
+			{
+				NSLog(@"%@ removed successfully!", patchFile);
+				if ([FM moveItemAtPath:patchedFile toPath:patchFile error:nil])
+				{
+					NSLog(@"%@ patched and replaced successfully!!", patchFile);
+					return 0;
+				}
+			}
+		}
+		
+	} else {
+		NSLog(@"patching: %@ failed!! ABORT!", patchFile);
+		return -1;
+	}
+	return -1;
+	
+}
+
++ (int)oldpatchFile:(NSString *)patchFile withPatch:(NSString *)thePatch endMD5:(NSString *)desiredMD5
 {
 	NSTask *patchTask = [[NSTask alloc] init];
 	[patchTask setLaunchPath:BSPATCH];
