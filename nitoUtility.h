@@ -54,6 +54,7 @@ enum{
 @property (nonatomic, assign) FWBundle *currentBundle;
 
 
+- (void)failedWithReason:(NSString *)theReason;
 + (int)patchFile:(NSString *)patchFile withPatch:(NSString *)thePatch toLocation:(NSString *)endLocationFile inWorkingDirectory:(NSString *)theDir;
 + (int)gunzip:(NSString *)inputFile;
 + (BOOL)hasFirmware;
@@ -88,7 +89,7 @@ enum{
 + (NSString *)convertImage:(NSString *)irString toFile:(NSString *)outputFile toMode:(int)theMode;
 + (int)patchIBSS:(NSString *)ibssFile;
 - (void)patchFilesystem:(NSString *)inputFilesystem;
-- (NSString *)pwnctionaryFromPath:(NSString *)mountedPath original:(NSString *)original withBundle:(NSString *)theBundle;
+- (NSString *)pwnctionaryFromPath:(NSString *)mountedPath original:(NSString *)original withBundle:(FWBundle *)theBundle;
 - (void)permissionedPatch:(NSString *)theFile withOriginal:(NSString *)originalDMG;
 + (int)migrateFiles:(NSArray *)migration toPath:(NSString *)finalPath;
 + (void)createTempSetup;

@@ -640,20 +640,20 @@
 	}
 	
 		[self changeStatus:@"Stash it away man!..."];
-		NSLog(@"Stash it away man!...");
-		[self stash:[[self processDict] valueForKey:@"stash"] withRoot:mountImage];
 	
-	//NSDictionary *ep = [currentBundle extraPatch];
-//	if (ep != nil)
-//	{
-//		NSLog(@"4.3 detected, installing extra status patch");
-//		NSString *target = [mountImage stringByAppendingPathComponent:[ep valueForKey:@"Target"]];
-//		NSString *patch = [ep valueForKey:@"Patch"];
-//		NSString *md5 = [ep valueForKey:@"md5"];
-//		[nitoUtility patchFile:target withPatch:patch endMD5:md5];
-//		
-//		
-//	}
+	//FIXME: RETURN THE STASH!!!
+	
+	
+	NSString *stash = [[self processDict] valueForKey:@"stash"];
+	
+	if (stash != nil)
+	{
+		NSLog(@"Stash it away man!...");
+		
+		[self stash:stash withRoot:mountImage];
+		
+	}
+	
 	
 	[self disableBetaExpiry:mountImage];
 	

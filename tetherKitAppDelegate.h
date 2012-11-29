@@ -83,6 +83,7 @@ enum {
 @property (readwrite, assign) int downloadIndex;
 @property (readwrite, assign) int counter;
 
+- (void)failedWithReason:(NSString *)theReason;
 - (void)showIncompatDeviceAlert;
 - (BOOL)isAppleTV3;
 - (void)showInitialView;

@@ -288,6 +288,35 @@ void LogIt (NSString *format, ...)
 	
 } // LogIt
 
+- (BOOL)isMountainLion 
+{
+	unsigned major, minor, bugFix;
+    [[NSApplication sharedApplication] getSystemVersionMajor:&major minor:&minor bugFix:&bugFix];
+	NSString *comparisonVersion = @"10.8.0"; 
+	NSString *osVersion = [NSString stringWithFormat:@"%u.%u.%u", major, minor, bugFix];
+
+	NSComparisonResult theResult = [osVersion compare:comparisonVersion options:NSNumericSearch];
+	//NSLog(@"theversion: %@  installed version %@", theVersion, installedVersion);
+	if ( theResult == NSOrderedDescending )
+	{
+			//NSLog(@"%@ is greater than %@", osVersion, comparisonVersion);
+		
+		return YES;
+		
+	} else if ( theResult == NSOrderedAscending ){
+		
+			//NSLog(@"%@ is greater than %@", comparisonVersion, osVersion);
+		return NO;
+		
+	} else if ( theResult == NSOrderedSame ) {
+		
+		//	NSLog(@"%@ is equal to %@", osVersion, comparisonVersion);
+		return YES;
+	}
+	
+	return NO;
+}
+
 - (void)printEnvironment
 {
 
@@ -633,6 +662,23 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event) {
 	NSString *logLocation = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/SP_Debug.log"];
 	[workspace selectFile:logLocation inFileViewerRootedAtPath:[logLocation stringByDeletingLastPathComponent]];
 }
+
+
+#pragma mark •• a note about libsyringe
+
+/*
+ 
+ 
+ in the version of syringe used there was changes to irecv_open_*_old, i assume i just changed _open_ to the old code, and then all the 
+ other functions just changed to call the new version. i reference the old a few times in here. needed to update limera1n for 6.x, lost
+ the source code to the version of syringe i changed that actually works in here. dont remember if i changed anything else to make it work
+ initially, hope i didnt. if i compile from scratch of other copies iTunes always gets 2001 error upon trying to restore.
+ 
+ ended up just replacing the limera1n.o file in the static library, thankfully that works, hacky, but it works.
+ 
+ */
+
+
 
 - (int)enterDFUNEW
 {
@@ -1553,7 +1599,11 @@ static NSString *HexToDec(NSString *hexValue)
 	NSString *osVersion = [[self currentBundle] osVersion];
 	NSString *fourPointThree = @"4.3";
 	
-	
+	if ([signableVersions containsObject:buildNumber])
+	{
+		NSLog(@"apple is still signing %@ dont do anything special: kRestoreDefaultMode", buildNumber);
+		return kRestoreDefaultMode;
+	}
 	
 	if (ecid == nil)
 	{
@@ -1604,11 +1654,7 @@ static NSString *HexToDec(NSString *hexValue)
 		return kRestoreUnsupportedDevice;
 	}
 	
-	if ([signableVersions containsObject:buildNumber])
-	{
-		NSLog(@"apple is still signing %@ dont do anything special: kRestoreDefaultMode", buildNumber);
-		return kRestoreDefaultMode;
-	}
+	
 	
 	NSLog(@"apple is not signing, check what blobs cydia has for %@", ecid);
 	
@@ -1814,6 +1860,13 @@ static NSString *HexToDec(NSString *hexValue)
 
 	}
 
+}
+
+- (void)failedWithReason:(NSString *)theReason
+{
+	
+	NSDictionary *failDict = [NSDictionary dictionaryWithObject:theReason forKey:@"AbortReason"];
+	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"pwnFailed" object:nil userInfo:failDict deliverImmediately:YES];
 }
 
 - (void)showInitialView
@@ -2076,6 +2129,12 @@ static NSString *HexToDec(NSString *hexValue)
 			NSLog(@"firmware patches successful!");
 			[self setDownloadText:NSLocalizedString(@"Patching filesystem...", @"Patching filesystem...")];
 			[nu patchFilesystem:[TMP_ROOT stringByAppendingPathComponent:fileSystemFile]];
+		} else {
+			
+			NSLog(@"firmware patches failed!!");
+			
+			[self failedWithReason:@"Firmware patches failed!"];
+			
 		}
 		
 	}
@@ -2540,6 +2599,10 @@ static NSString *HexToDec(NSString *hexValue)
 
 - (BOOL)iTunesScriptReady
 {
+	//if ([self isMountainLion])
+	//{
+	//	return (TRUE);//mountain lion scripting actually works in full screen.
+	//}
 	//use applescript to launch the app and give it ample time to do full screen animation just in case it is full screen
 	
 	NSDictionary *theError = nil;
@@ -2616,7 +2679,7 @@ static NSString *HexToDec(NSString *hexValue)
 		}
     } else {
 		NSLog(@"Cant determine iTunes bounds");
-		return FALSE;
+		return TRUE;
     }
 	
 	return TRUE; //default to it not being full screen, may not be idiot proof enough if something goes awry
@@ -3004,7 +3067,8 @@ static NSString *HexToDec(NSString *hexValue)
 		[self showProgressViewWithText:NSLocalizedString(@"Checking firmware compatibility...",@"Checking firmware compatibility..." )];
 	int theRestoreMode = [self restoreMode];
 	
-	if (![self.deviceClass isEqualToString:APPLETV_21_DEVICE_CLASS])
+		//if (![self.deviceClass isEqualToString:APPLETV_21_DEVICE_CLASS])
+	if ([self isAppleTV3])
 	{
 		[self hideProgress];
 		[self showInitialView];

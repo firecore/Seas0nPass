@@ -898,6 +898,7 @@
 	 
 	 */
 	int status = 0;
+	NSLog(@"Decrypting Filesystem...");
 		//	NSString *finalFS = [IPSW_TMP stringByAppendingPathComponent:[inputFilesystem lastPathComponent]];
 	NSString *decryptFS = [inputFilesystem stringByAppendingPathExtension:@"decrypt"];
 	NSString *rwFS = [TMP_ROOT stringByAppendingPathComponent:@"rw.dmg"];
@@ -905,6 +906,7 @@
 	if (status == 0)
 	{
 		NSLog(@"Decrypted Filesystem successfully!");
+		NSLog(@"Converting Filesystem to read-write...");
 		NSString *convertImage = [nitoUtility convertImage:decryptFS toFile:rwFS toMode:kDMGReadWrite]; //2
 		if (convertImage != nil)
 		{
@@ -932,12 +934,34 @@
 			
 			[self permissionedPatch:rwFS withOriginal:inputFilesystem];
 			
+		} else {
+			
+			NSLog(@"converting to read-write failed!");
+			[self failedWithReason:@"Failed to convert filesystem to read-write!"];
+			
+			
 		}
-	} 
-	
+		
+		
+	} else {
+		
+		NSLog(@"filesystem decryption failed!");
+		[self failedWithReason:@"Filesystem failed to decrypt!"];
+		
+		
+		
+	}
 	
 	
 }
+
+- (void)failedWithReason:(NSString *)theReason
+{
+	
+	NSDictionary *failDict = [NSDictionary dictionaryWithObject:theReason forKey:@"AbortReason"];
+	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"pwnFailed" object:nil userInfo:failDict deliverImmediately:YES];
+}
+
 
 - (void)oldpatchFilesystem:(NSString *)inputFilesystem
 {
@@ -999,7 +1023,7 @@
 - (void)permissionedPatch:(NSString *)theFile withOriginal:(NSString *)originalDMG
 {
 	
-	NSString *theDict = [self pwnctionaryFromPath:theFile original:originalDMG withBundle:self.currentBundle.bundlePath];
+	NSString *theDict = [self pwnctionaryFromPath:theFile original:originalDMG withBundle:self.currentBundle];
 	
 		// NSLog(@"pwnctionary: %@", theDict);
     
@@ -1094,7 +1118,7 @@
 	
 }
 
-- (NSString *)pwnctionaryFromPath:(NSString *)mountedPath original:(NSString *)original withBundle:(NSString *)theBundle
+- (NSString *)pwnctionaryFromPath:(NSString *)mountedPath original:(NSString *)original withBundle:(FWBundle *)theBundle
 {
 	NSString *es = [NSString stringWithFormat:@"%i", (int)[self enableScripting]];
 	NSString *resMode = [NSString stringWithFormat:@"%i",[self restoreMode]];
@@ -1131,8 +1155,9 @@
 	}
 	[bundleDict setObject:CYDIA_TAR forKey:@"cydia"];
 	[bundleDict setObject:DEB_PATH forKey:@"debs"];
-	[bundleDict setObject:SPACE_SCRIPT forKey:@"stash"];
-	[bundleDict setObject:theBundle	forKey:@"bundle"];
+	if (![theBundle fivePointOnePlus])
+		[bundleDict setObject:SPACE_SCRIPT forKey:@"stash"];
+	[bundleDict setObject:[theBundle bundlePath] forKey:@"bundle"];
 		//TODO: custom bundles
 	NSString *cliPath = @"/tmp/031231";
 	[bundleDict writeToFile:cliPath atomically:YES];
@@ -1483,8 +1508,22 @@
 	
 }
 
+
 + (NSString *)convertImage:(NSString *)irString toFile:(NSString *)outputFile toMode:(int)theMode
 {
+	NSFileManager *man = [NSFileManager defaultManager];
+	if ([man fileExistsAtPath:outputFile])
+	{
+		NSLog(@"file already exists? thats not right!");
+		[man removeItemAtPath:outputFile error:nil];
+	}
+	NSPipe *hdpipe = [[NSPipe alloc] init];
+	NSFileHandle *hdhandle = [hdpipe fileHandleForReading];
+	NSString *logPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/SP_Debug.log"];
+		//if (![man fileExistsAtPath:logPath])
+		//[man createFileAtPath:logPath contents:nil attributes:nil];
+		//NSLog(@"logpath: %@", logPath);
+		//NSFileHandle *logHandle = [NSFileHandle fileHandleForWritingAtPath:logPath];
 	NSString *outputName = outputFile;
 	NSString *modeString = nil;
 	switch (theMode)
@@ -1515,7 +1554,91 @@
 	[irArgs addObject:outputFile];
 	
 	[irTask setLaunchPath:HDIUTIL];
+		//[irTask setStandardError:logHandle];
+		//[irTask setStandardOutput:logHandle];
+	[irTask setArguments:irArgs];
 	
+	[irArgs release];
+	
+	
+		//NSLog(@"hdiutil %@", [[irTask arguments] componentsJoinedByString:@" "]);
+	
+	
+	
+	[irTask setStandardOutput:hdpipe];
+	[irTask setStandardError:hdpipe];
+	[irTask launch];
+	
+	NSData *outData = [hdhandle readDataToEndOfFile];
+	
+	
+	[irTask waitUntilExit];
+	
+	
+	NSFileHandle *aFileHandle = [NSFileHandle fileHandleForWritingAtPath:logPath];            //telling aFilehandle what file write to
+	[aFileHandle truncateFileAtOffset:[aFileHandle seekToEndOfFile]];          //setting aFileHandle to write at the end of the file
+	
+	[aFileHandle writeData:outData];                        //actually write the data
+	
+	[aFileHandle synchronizeFile];
+	
+	[aFileHandle closeFile];
+	
+	
+	[irTask release];
+	irTask = nil;
+	[hdpipe release];
+	hdpipe = nil;
+	
+	return outputName;
+	
+}
+
++ (NSString *)oldconvertImage:(NSString *)irString toFile:(NSString *)outputFile toMode:(int)theMode
+{
+	NSFileManager *man = [NSFileManager defaultManager];
+	if ([man fileExistsAtPath:outputFile])
+	{
+		NSLog(@"file already exists? thats not right!");
+		[man removeItemAtPath:outputFile error:nil];
+	}
+	NSString *logPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/SP_Debug2.log"];
+	if (![man fileExistsAtPath:logPath])
+		[man createFileAtPath:logPath contents:nil attributes:nil];
+		//NSLog(@"logpath: %@", logPath);
+	NSFileHandle *logHandle = [NSFileHandle fileHandleForWritingAtPath:logPath];
+	NSString *outputName = outputFile;
+	NSString *modeString = nil;
+	switch (theMode)
+	{
+		case kDMGReadWrite: //UDRW
+			modeString = @"UDRW";
+			break;
+			
+		case kDMGReadOnly: //UDZO
+			modeString = @"UDZO";
+			break;
+	}
+	NSTask *irTask = [[NSTask alloc] init];
+	
+	
+	NSMutableArray *irArgs = [[NSMutableArray alloc] init];
+	
+	[irArgs addObject:@"convert"];
+	
+	[irArgs addObject:irString];
+	
+	[irArgs addObject:@"-format"];
+	
+	[irArgs addObject:modeString];
+	
+	[irArgs addObject:@"-o"];
+	
+	[irArgs addObject:outputFile];
+	
+	[irTask setLaunchPath:HDIUTIL];
+		//[irTask setStandardError:logHandle];
+	[irTask setStandardOutput:logHandle];
 	[irTask setArguments:irArgs];
 	
 	[irArgs release];
@@ -1524,6 +1647,10 @@
 		//NSLog(@"hdiutil %@", [[irTask arguments] componentsJoinedByString:@" "]);
 	[irTask launch];
 	[irTask waitUntilExit];
+	
+	[irTask release];
+	irTask = nil;
+	
 	return outputName;
 	
 }
@@ -1548,8 +1675,8 @@
 	[vfTask setLaunchPath:VFDECRYPT];
 	NSString *decrypted = [fileSystem stringByAppendingPathExtension:@"decrypt"];
 	[vfTask setArguments:[NSArray arrayWithObjects:@"-i", fileSystem, @"-k", fileSystemKey, @"-o", decrypted, nil]];
-	[vfTask setStandardError:NULLOUT];
-	[vfTask setStandardOutput:NULLOUT];
+		//[vfTask setStandardError:NULLOUT];
+		//[vfTask setStandardOutput:NULLOUT];
 	[vfTask launch];
 	[vfTask waitUntilExit];
 	

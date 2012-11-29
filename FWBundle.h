@@ -55,6 +55,7 @@ enum {
 
 @property (nonatomic, retain) NSString *fwRoot;
 
+- (BOOL)fivePointOnePlus;
 - (NSString *)fullDeviceType;
 - (NSString *)allFlashLocation;
 - (NSString *)unzippedPathForFirmwareKey:(NSString *)firmwareKey;
