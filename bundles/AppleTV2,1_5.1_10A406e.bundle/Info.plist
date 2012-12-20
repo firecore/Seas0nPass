@@ -5,24 +5,11 @@
 	<key>DeleteBuildManifest</key>
 	<false/>
 	<key>DownloadUrl</key>
-	<string>http://appldnld.apple.com/AppleTV/041-4362.20120605.t8i4U/AppleTV2,1_5.0.2_9B830_Restore.ipsw</string>
+	<string>http://appldnld.apple.com/AppleTV/041-0803.20120924.LOop5/AppleTV2,1_5.1_10A406e_Restore.ipsw</string>
 	<key>Filename</key>
-	<string>AppleTV2,1_5.0.2_9B830_Restore.ipsw</string>
+	<string>AppleTV2,1_5.1_10A406e_Restore.ipsw</string>
 	<key>FilesystemPatches</key>
 	<dict>
-		<key>Core Files Installation</key>
-		<array>
-			<dict>
-				<key>Action</key>
-				<string>Extract</string>
-				<key>File</key>
-				<string>rocky.tgz</string>
-				<key>Name</key>
-				<string>rocky.tgz</string>
-				<key>Path</key>
-				<string>/</string>
-			</dict>
-		</array>
 		<key>Filesystem Jailbreak</key>
 		<array>
 			<dict>
@@ -42,11 +29,11 @@
 		<key>Restore Ramdisk</key>
 		<dict>
 			<key>File</key>
-			<string>038-4379-031.dmg</string>
+			<string>038-6513-011.dmg</string>
 			<key>IV</key>
-			<string>2125250914722704700cc735cbe4a3ae</string>
+			<string>a6aac3af81e234cadf46b56905eca484</string>
 			<key>Key</key>
-			<string>9f0a7066672af338ae182f0e4885097e83331004fdbca9d3915fa043b781d935</string>
+			<string>5513783229d943c744f7c15efdddc5431caf0e38eb5b2e35ba617ac053247710</string>
 			<key>TypeFlag</key>
 			<string>8</string>
 		</dict>
@@ -55,9 +42,9 @@
 			<key>File</key>
 			<string>Firmware/dfu/iBEC.k66ap.RELEASE.dfu</string>
 			<key>IV</key>
-			<string>d12f8e04287683c4e2b67feb5fa6e308</string>
+			<string>4c6dde5eabbbd39870c9a922513af94c</string>
 			<key>Key</key>
-			<string>975cf31cc14d83389e8136f68f0c26303d7d1db4b197c5f0a3c12b152cde626f</string>
+			<string>ddf3fc5a6394ad7c5781d2c613bd54d0ee84f0b9c39a2c4ba857f7ef19bbd72a</string>
 			<key>Patch</key>
 			<string>iBEC.k66ap.RELEASE.patch</string>
 			<key>TypeFlag</key>
@@ -68,9 +55,9 @@
 			<key>File</key>
 			<string>Firmware/dfu/iBSS.k66ap.RELEASE.dfu</string>
 			<key>IV</key>
-			<string>67b821977559b8035887d46d68eb5b7b</string>
+			<string>03c4fb6ab4104c693bd52991cea35dea</string>
 			<key>Key</key>
-			<string>2f442e98254dde0a75ca8d35ea48644bce9efdeb34332e0ec730e848539acead</string>
+			<string>1b081d4ea8f29d4535726c4a5fbf284d77484f25fc145c446d7e9e8acffbcf7e</string>
 			<key>Patch</key>
 			<string>iBSS.k66ap.RELEASE.patch</string>
 			<key>TypeFlag</key>
@@ -78,7 +65,7 @@
 		</dict>
 	</dict>
 	<key>Name</key>
-	<string>AppleTV2,1_5.0.2_9B830</string>
+	<string>AppleTV2,1_5.1_10A406e</string>
 	<key>PreInstalledPackages</key>
 	<array>
 		<string>org.saurik.cydia</string>
@@ -96,20 +83,20 @@
 	<key>RestoreRamdiskMountVolume</key>
 	<string>ramdisk</string>
 	<key>RootFilesystem</key>
-	<string>038-4405-031.dmg</string>
+	<string>038-1170-323.dmg</string>
 	<key>RootFilesystemKey</key>
-	<string>edb697411e210af363ec602d27e73745e86b426c8f710d0b63efeb5e609072e7920c3846</string>
+	<string>18354ead5a9e133c5979be55211c73d45cbdd36d6bd959386e2010093256e454459587d3</string>
 	<key>RootFilesystemMountVolume</key>
-	<string>HoodooTide9B830.K66OS</string>
+	<string>Sundance10A406e.K66OS</string>
 	<key>RootFilesystemSize</key>
 	<string>1024</string>
 	<key>SHA1</key>
-	<string>bdf2a296dc5fdc215e8d756b99d2a0984e814b86</string>
+	<string>a3f8e3955f460786d88b879f10be69a9858f1688</string>
 	<key>platform</key>
 	<string>3</string>
 	<key>subplatform</key>
 	<string>10</string>
 	<key>Untethered</key>
-	<true/>
+	<false/>
 </dict>
 </plist>

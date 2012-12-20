@@ -64,6 +64,10 @@ enum {
 	int _downloadRetries;
 	TSSDeviceID currentDevice;
 	
+	BOOL itunesFullScreen;
+	BOOL itunesShowingSideBar;
+	
+	
 }
 @property (nonatomic, retain) NSString *theEcid;
 @property (nonatomic, retain) NSString *deviceClass;
@@ -127,6 +131,8 @@ enum {
 - (IBAction)bootTethered:(id)sender;
 - (IBAction)dfuMode:(id)sender;
 - (BOOL)loadItunesWithIPSW:(NSString *)ipswString;
+- (BOOL)loadiTunes11WithIPSW:(NSString *)ipsw;
+- (BOOL)iTunesIsElevenPlus;
 - (IBAction)itunesRestore:(id)sender;
 - (void)setInstructionText:(NSString *)instructions;
 - (NSImage *)imageForMode:(int)inputMode;

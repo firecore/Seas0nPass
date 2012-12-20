@@ -1964,6 +1964,8 @@ static NSString *HexToDec(NSString *hexValue)
 		NSString *sha = [[self currentBundle] SHA];
 		NSString *downloadLink = [[self currentBundle] downloadURL];
 		
+		sleep(2);
+		
 		[self showProgressViewWithText:NSLocalizedString(@"Validating IPSW...", @"Validating IPSW...")];
 		BOOL isValid = [nitoUtility validateFile:ipsw withChecksum:sha];
 		
@@ -2078,7 +2080,7 @@ static NSString *HexToDec(NSString *hexValue)
 		[NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:customFwDict];
 	}
 	
-}
+} //end process one
 
 - (void)customFW:(NSDictionary *)theDict //called inside process one
 {
@@ -2557,6 +2559,37 @@ static NSString *HexToDec(NSString *hexValue)
 	
 }
 
+	//click button 1 of scroll area 1 of splitter group 1 of window 1
+
+
+- (BOOL)iTunesIsElevenPlus
+{
+	NSBundle *itunesBundle = [NSBundle bundleWithPath:@"/Applications/iTunes.app"];
+	NSDictionary *itunesDict = [itunesBundle infoDictionary];
+	NSString *versionNumber = [itunesDict valueForKey:@"CFBundleShortVersionString"];
+	NSComparisonResult theResult = [versionNumber compare:@"11" options:NSNumericSearch];
+	NSLog(@"iTunes version: %@", versionNumber);
+		//NSLog(@"theversion: %@  installed version %@", theVersion, installedVersion);
+	if ( theResult == NSOrderedDescending )
+	{
+			//NSLog(@"%@ is greater than %@", versionNumber, @"10.4");
+		
+		return YES;
+		
+	} else if ( theResult == NSOrderedAscending ){
+		
+			//NSLog(@"%@ is greater than %@", @"10.4", versionNumber);
+		return NO;
+		
+	} else if ( theResult == NSOrderedSame ) {
+		
+			//NSLog(@"%@ is equal to %@", versionNumber, @"10.4");
+		return YES;
+	}
+	
+	return NO;
+}
+
 - (BOOL)iTunesIsTenFourPlus
 {
 	NSBundle *itunesBundle = [NSBundle bundleWithPath:@"/Applications/iTunes.app"];
@@ -2599,6 +2632,68 @@ static NSString *HexToDec(NSString *hexValue)
 
 - (BOOL)iTunesScriptReady
 {
+	
+	NSDictionary *theError = nil;
+	NSMutableString *asString = [[NSMutableString alloc] init];
+	
+	[asString appendString:@"activate application \"iTunes\"\n"];
+		//[asString appendString:@"tell application \"System Events\"\n"];
+		//[asString appendString:@"tell Process \"iTunes\"\n"];
+		//[asString appendString:@"delay 5\n"];
+		//[asString appendString:@"end tell\n"];
+		//[asString appendString:@"end tell\n"];
+	
+	NSAppleScript *as = [[NSAppleScript alloc] initWithSource:asString];
+	[as executeAndReturnError:&theError];
+	[asString release];
+	asString = nil;
+	[as release];
+	
+		//use AXUI shit to get the bounds, much more elegant than doing it with applescript, should be more reliable / less error prone.
+	
+	AXUIElementRef _systemWideElement;
+    AXUIElementRef _focusedApp;
+    CFTypeRef _focusedWindow;
+		// CFTypeRef _position;
+    CFTypeRef _size;
+	CFStringRef _name;
+	CFNumberRef _fullScreen;
+	
+    _systemWideElement = AXUIElementCreateSystemWide();
+	
+		//Get the app that has the focus
+    AXUIElementCopyAttributeValue(_systemWideElement,
+								  (CFStringRef)kAXFocusedApplicationAttribute,
+								  (CFTypeRef*)&_focusedApp);
+	
+		//Get the window that has the focus
+    if(AXUIElementCopyAttributeValue((AXUIElementRef)_focusedApp,
+									 (CFStringRef)NSAccessibilityFocusedWindowAttribute,
+									 (CFTypeRef*)&_focusedWindow) == kAXErrorSuccess) {
+		
+		if(CFGetTypeID(_focusedWindow) == AXUIElementGetTypeID()) {
+			
+			AXUIElementCopyAttributeValue((AXUIElementRef)_focusedWindow, (CFStringRef)CFSTR("AXFullScreen"), (CFTypeRef *)&_fullScreen);
+			
+			NSLog(@"is full screen: %@", _fullScreen);
+				//return (![_fullScreen boolValue]); //if its full screen we want to return false
+		if ([_fullScreen intValue] == 1)
+		{
+			NSLog(@"full screen, return false");
+			return (FALSE);
+		}
+			
+		}
+    } else {
+		NSLog(@"Cant determine iTunes bounds");
+		return TRUE;
+    }
+	
+	return TRUE; //default to it not being full screen, may not be idiot proof enough if something goes awry
+}
+
+- (BOOL)iTunesScriptReadyold
+{
 	//if ([self isMountainLion])
 	//{
 	//	return (TRUE);//mountain lion scripting actually works in full screen.
@@ -2611,7 +2706,7 @@ static NSString *HexToDec(NSString *hexValue)
 	[asString appendString:@"activate application \"iTunes\"\n"];
 	[asString appendString:@"tell application \"System Events\"\n"];
 	[asString appendString:@"tell Process \"iTunes\"\n"];
-	[asString appendString:@"delay 3\n"];
+	[asString appendString:@"delay 5\n"];
 	[asString appendString:@"end tell\n"];
 	[asString appendString:@"end tell\n"];
 	
@@ -2628,6 +2723,7 @@ static NSString *HexToDec(NSString *hexValue)
     CFTypeRef _focusedWindow;
    // CFTypeRef _position;
     CFTypeRef _size;
+	CFStringRef _name;
 	
     _systemWideElement = AXUIElementCreateSystemWide();
 	
@@ -2642,24 +2738,19 @@ static NSString *HexToDec(NSString *hexValue)
 									 (CFTypeRef*)&_focusedWindow) == kAXErrorSuccess) {
 		
 		if(CFGetTypeID(_focusedWindow) == AXUIElementGetTypeID()) {
-			//Get the Window's Current Position
-			//if(AXUIElementCopyAttributeValue((AXUIElementRef)_focusedWindow,
-//											 (CFStringRef)NSAccessibilityPositionAttribute,
-//											 (CFTypeRef*)&_position) != kAXErrorSuccess) {
-//				NSLog(@"Can't Retrieve Window Position");
-//			}
-			//Get the Window's Current Size
+	
 			if(AXUIElementCopyAttributeValue((AXUIElementRef)_focusedWindow,
 											 (CFStringRef)NSAccessibilitySizeAttribute,
 											 (CFTypeRef*)&_size) != kAXErrorSuccess) {
 				NSLog(@"Can't Retrieve Window Size");
+		
 			} else {
 				NSSize size;
 				
 				
 				if(AXValueGetType(_size) == kAXValueCGSizeType) {
 					AXValueGetValue(_size, kAXValueCGSizeType, (void*)&size);
-						//NSLog(@"itunes window size: %@", NSStringFromSize(size));
+						NSLog(@"itunes window size: %@", NSStringFromSize(size));
 					
 					
 					
@@ -2695,14 +2786,210 @@ static NSString *HexToDec(NSString *hexValue)
 	
 }
 
+- (void)analyzeiTunes
+{
+	NSDictionary *theError = nil;
+	NSMutableString *asString = [[NSMutableString alloc] init];
+	[asString appendString:@"activate application \"iTunes\"\n"];
+	NSAppleScript *as = [[NSAppleScript alloc] initWithSource:asString];
+	[as executeAndReturnError:&theError];
+	[asString release];
+	asString = nil;
+	[as release];
+	
+	AXUIElementRef _systemWideElement;
+    AXUIElementRef _focusedApp;
+    CFTypeRef _focusedWindow;
+	
+	CFNumberRef _fullScreen;
+	CFArrayRef _children;
+	CFArrayRef _splitterChildren;
 
+	
+    _systemWideElement = AXUIElementCreateSystemWide();
+	
+		//Get the app that has the focus
+    AXUIElementCopyAttributeValue(_systemWideElement,
+								  (CFStringRef)kAXFocusedApplicationAttribute,
+								  (CFTypeRef*)&_focusedApp);
+	
+		//Get the window that has the focus
+    if(AXUIElementCopyAttributeValue((AXUIElementRef)_focusedApp,
+									 (CFStringRef)NSAccessibilityFocusedWindowAttribute,
+									 (CFTypeRef*)&_focusedWindow) == kAXErrorSuccess) {
+		
+		if(CFGetTypeID(_focusedWindow) == AXUIElementGetTypeID()) {
+			
+		
+			AXUIElementCopyAttributeValue((AXUIElementRef)_focusedWindow, (CFStringRef)CFSTR("AXFullScreen"), (CFTypeRef *)&_fullScreen);
+			
+			NSLog(@"is full screen: %i", [_fullScreen intValue]);
+			
+			itunesFullScreen = [_fullScreen boolValue];
+			
+			AXUIElementCopyAttributeValue((AXUIElementRef)_focusedWindow, (CFStringRef)kAXChildrenAttribute, (CFTypeRef *)&_children);
+			
+			if ([_children count] < 13)
+			{
+				AXUIElementCopyAttributeValue((AXUIElementRef)_focusedWindow, (CFStringRef)kAXChildrenAttribute, (CFTypeRef *)&_children);
+			}
+		
+			AXUIElementRef splitter = [_children objectAtIndex:13]; //if our children count is more than 1 (probably 6) we are showing sidebar
+			
+			AXUIElementCopyAttributeValue((AXUIElementRef)splitter, (CFStringRef)kAXChildrenAttribute, (CFTypeRef *)&_splitterChildren);
+			
+			if ([_splitterChildren count] > 1)
+			{
+				NSLog(@"showing sidebar!");
+			
+				itunesShowingSideBar = TRUE;
+			
+				/*
+				CFArrayRef _splitterChildren2;
+				CFArrayRef _scrollViewChildren;
+				CFTypeRef _role;
+				AXUIElementRef splitter2 = [_splitterChildren objectAtIndex:4]; //splitter group 1 again
+				AXUIElementCopyAttributeValue((AXUIElementRef)splitter2, (CFStringRef)CFSTR("AXChildren"), (CFTypeRef *)&_splitterChildren2);
+				AXUIElementRef scrollView = [_splitterChildren2 objectAtIndex:0]; //scroll view 1
+				AXUIElementCopyAttributeValue((AXUIElementRef)scrollView, (CFStringRef)CFSTR("AXChildren"), (CFTypeRef *)&_scrollViewChildren);
+				AXUIElementRef buttonView = [_scrollViewChildren lastObject]; //AXButton?
+				AXUIElementCopyAttributeValue((AXUIElementRef)buttonView,
+											  (CFStringRef)CFSTR("AXRole"),
+											  (CFTypeRef*)&_role);
+				
+				NSLog(@"know your role! %@", _role);
+				 
+				 */
+				
+					//found restore button, side bar is showing as expected
+				
+			} else { //not showing sidebar
+				
+				NSLog(@"not showing sidebar!");
+				
+				itunesShowingSideBar = FALSE;
+				
+				
+				/*
+				AXUIElementRef scrollView = [_splitterChildren objectAtIndex:0]; //scroll view 1
+				
+				
+				AXUIElementCopyAttributeValue((AXUIElementRef)scrollView, (CFStringRef)CFSTR("AXChildren"), (CFTypeRef *)&_scrollViewChildren);
+				
+				AXUIElementRef buttonView = [_scrollViewChildren lastObject]; //AXButton?
+				
+				AXUIElementCopyAttributeValue((AXUIElementRef)buttonView,
+											  (CFStringRef)CFSTR("AXRole"),
+											  (CFTypeRef*)&_role);
+				
+				NSLog(@"know your role! %@", _role);
+				
+				 //want to figure out how to press the button here but dont know how to modify with option key
+				 
+				*/
+			}
+			
+			
+		}
+		
+	
+	}	
+}
+
+- (BOOL)loadiTunes11WithIPSW:(NSString *)ipsw
+{
+	[self analyzeiTunes];
+	
+	NSDictionary *theError = nil;
+	
+	NSString *ipswString = [NSString stringWithFormat:@"set value of text field 1 of sheet 1 of window 1 to \"%@\"\n", ipsw];
+	
+	NSMutableString *asString = [[NSMutableString alloc] init];
+	
+	[asString appendString:@"activate application \"iTunes\"\n"];
+	[asString appendString:@"tell application \"System Events\"\n"];
+	[asString appendString:@"tell Process \"iTunes\"\n"];
+	
+		//if (![self iTunesScriptReady])
+	if(itunesFullScreen == TRUE)
+	{
+		NSLog(@"iTunes fullscreen?");
+		[asString appendString:@"delay 5\n"];
+		[asString appendString:@"key code 3 using {command down, control down}\n"];
+		[asString appendString:@"delay 5\n"];
+		
+	}
+	
+	[asString appendString:@"repeat until window 1 is not equal to null\n"];
+	[asString appendString:@"end repeat\n"];
+	[asString appendString:@"end tell\n"];
+	[asString appendString:@"end tell\n"];
+	
+	
+	[asString appendString:@"activate application \"iTunes\"\n"];
+	[asString appendString:@"tell application \"System Events\"\n"];
+	[asString appendString:@"tell Process \"iTunes\"\n"];
+	[asString appendString:@"key down option\n"]; //holding down option for option mouse down on restore button
+	
+	if (itunesShowingSideBar == TRUE)
+	{
+		
+		[asString appendString:@"click button 1 of scroll area 1 of splitter group 1 of splitter group 1 of window 1\n"];
+		
+	} else {
+		
+		[asString appendString:@"click button 1 of scroll area 1 of splitter group 1 of window 1\n"];
+	}
+	
+	
+	
+		//button 1 of scroll area 1 of splitter group 1 of splitter group 1 of window 1
+	[asString appendString:@"key up option\n"];
+	[asString appendString:@"end tell\n"];
+	[asString appendString:@"end tell\n"];
+	
+	[asString appendString:@"activate application \"iTunes\"\n"];
+	[asString appendString:@"tell application \"System Events\"\n"];
+	[asString appendString:@"tell Process \"iTunes\"\n"];
+	[asString appendString:@"key code 5 using {command down, shift down}\n"];
+	[asString appendString:ipswString];
+		//[asString appendString:@"click button 1 of sheet 1 of window 1\n"];
+	[asString appendString:@"key code 36\n"];
+	
+	[asString appendString:@"delay 3\n"];
+	[asString appendString:@"key code 36\n"];
+	[asString appendString:@"delay 3\n"];
+	[asString appendString:@"key code 36\n"];
+	[asString appendString:@"delay 3\n"];
+		//[asString appendString:@"click button 4 of window 1\n"];
+		//[asString appendString:@"click button 2 of window 1\n"];
+	[asString appendString:@"end tell\n"];
+	[asString appendString:@"end tell\n"];
+	
+	NSAppleScript *as = [[NSAppleScript alloc] initWithSource:asString];
+		//NSLog(@"applescript: %@", asString);
+	[as executeAndReturnError:&theError];
+	[asString release];
+	asString = nil;
+	[as release];
+	if (theError != nil)
+	{
+		NSLog(@"iTunes Scripting failed with error: %@", theError);
+		[self fixScript:self];
+		return FALSE;
+	}
+	return TRUE;
+}
 
 	//restore button for other devices: click button 2 of scroll area 3 of window 1
 
 - (BOOL)loadItunesWithIPSW:(NSString *)ipsw
 {
 	
-	
+	if ([self iTunesIsElevenPlus])
+	{
+		return [self loadiTunes11WithIPSW:ipsw];
+	}
 	
 	
 	
