@@ -431,7 +431,7 @@ void LogIt (NSString *format, ...)
 	
 }
 
-- (BOOL)filesToDownload
+- (BOOL)filesToDownload //deprecated pre threaded throwback
 {
 	NSFileManager *man = [NSFileManager defaultManager];
 	NSString *ipsw = [tetherKitAppDelegate ipswFile];
@@ -1800,6 +1800,8 @@ static NSString *HexToDec(NSString *hexValue)
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(pwnFailed:) name:@"pwnFailed" object:nil];
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(blobsFinished:) name:@"blobsFinished" object:nil];
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(statusChanged:) name:@"statusChanged" object:nil];
+	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(checksumFinished:) name:@"checksumFinished" object:nil];
+	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(shouldDownloadFinished:) name:@"shouldDownloadFinish" object:nil];
 		//[self startupAlert];
 	
 	//check the ownership to make sure we can continue on our merry way
@@ -1860,6 +1862,7 @@ static NSString *HexToDec(NSString *hexValue)
 
 	}
 
+
 }
 
 - (void)failedWithReason:(NSString *)theReason
@@ -1895,6 +1898,15 @@ static NSString *HexToDec(NSString *hexValue)
 		[window display];
 }
 
+- (void)validateFileThreaded:(NSString *)ipsw
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	FWBundle *ourBundle = [FWBundle bundleForFile:ipsw];
+	NSString *sha = [ourBundle SHA];
+	[nitoUtility altValidateFile:ipsw withChecksum:sha];
+	[pool release];
+}
+
 #pragma mark we start here
 
 - (IBAction)processOne:(id)sender //download and modify ipsw
@@ -1913,27 +1925,6 @@ static NSString *HexToDec(NSString *hexValue)
 		//current bundle may be set by default, but we never want to assume the default processOne ipsw to be anything but the latest- which is still hardcoded to 4.2.1.
 
 	self.currentBundle = [FWBundle bundleWithName:CURRENT_BUNDLE];
-	
-	//NSString *fullDeviceType = [self.currentBundle fullDeviceType];
-//	
-//	NSLog(@"fullDeviceType: %@", fullDeviceType);
-//	
-//	if ([fullDeviceType isEqualToString:@"AppleTV3,1"]) //not going to happen, there are no built in bundles with appletv3,1
-//	{
-//		NSLog(@"BAIL! AppleTV3,1 not supported!");
-//		
-//		return;
-//	}
-	
-	
-	//if (![self.deviceClass isEqualToString:APPLETV_21_DEVICE_CLASS])
-//	{
-//		
-//		NSLog(@"only AppleTV2,1 / k66ap is supported in default mode!");
-//		[self showIncompatDeviceAlert];
-//		return;
-//	}
-	
 	
 
 	
@@ -1958,91 +1949,18 @@ static NSString *HexToDec(NSString *hexValue)
 			return;
 		}
 		self.currentBundle = ourBundle;
-		
-		//okay we need a way to validate this shit without holding up the woodworks
-		
-		NSString *sha = [[self currentBundle] SHA];
-		NSString *downloadLink = [[self currentBundle] downloadURL];
-		
-		sleep(2);
+	
+		/*
+		 
+		 no more lock ups when option clicking to choose a bundle, also happens to validate much quicker now too, only 3 more places to thread!
+		 
+		 
+		 */
 		
 		[self showProgressViewWithText:NSLocalizedString(@"Validating IPSW...", @"Validating IPSW...")];
-		BOOL isValid = [nitoUtility validateFile:ipsw withChecksum:sha];
 		
-		if (!isValid)
-		{
-			NSLog(@"invalid file: %@, redownloading...", ipsw);
-			if([downloadLink length] > 2)
-			{
-				[downloadFiles addObject:downloadLink];
-				[window setContentView:self.secondView];
-				[window display];
-				
-				self.processing = TRUE;
-				[buttonOne setEnabled:FALSE];
-				[bootButton setEnabled:FALSE];
-				[instructionImage setImage:[self imageForMode:kSPIPSWImage]];
-				[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
-				[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
-				[self downloadTheFiles];
-			}
-			return;
-			
-		}
-		[self showProgressViewWithText:NSLocalizedString(@"Checking firmware compatibility...",@"Checking firmware compatibility..." )];
-		theRestoreMode = [self restoreMode];
-		_restoreMode = theRestoreMode;
+		[NSThread detachNewThreadSelector:@selector(validateFileThreaded:) toTarget:self withObject:ipsw];
 		
-		NSLog(@"restoreMode: %i", theRestoreMode);
-		id object = nil;
-		switch (theRestoreMode) {
-				
-			case -1:
-			case kRestoreUnavailableMode: //shouldn't get this anymore. deprecated
-				NSLog(@"bailing!!!!");
-				object = [NSAlert alertWithMessageText:NSLocalizedString(@"Unspecified Error", @"Unspecified Error") defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedString(@"The firmware %@ is either not being signed by Apple anymore, not backed up to cydia, or the device cannot be detected: kRestoreUnavailableMode.", @"The firmware %@ is either not being signed by Apple anymore, not backed up to cydia, or the device cannot be detected: kRestoreUnavailableMode."), [ipsw lastPathComponent]];
-				[object runModal];
-				return;
-				
-			case kRestoreNoDevice: //already showed alert, just bail
-				[self showInitialView];
-				[self hideProgress];
-				return;
-				
-				
-			case kRestoreFirmwareIneligible:
-				[self showInitialView];
-				[self hideProgress];
-				[self showDeviceIneligibleAlert];
-				return;
-				
-				
-			case kRestoreUnsupportedDevice:
-				[self showInitialView];
-				[self hideProgress];
-				[self showIncompatDeviceAlert];
-				
-				return;
-				
-			default:
-				break;
-		}
-		
-	
-		
-		NSLog(@"Seas0nPass: Software payload: %@ (option key)", [self.currentBundle bundleName]);
-		
-		[window setContentView:self.secondView];
-		[window display];
-		
-		self.processing = TRUE;
-		[buttonOne setEnabled:FALSE];
-		[bootButton setEnabled:FALSE];
-		[instructionImage setImage:[self imageForMode:kSPIPSWImage]];
-		
-		NSDictionary *customFwDict = [NSDictionary dictionaryWithObjectsAndKeys:ipsw, @"file", [NSString stringWithFormat:@"%i", theRestoreMode], @"restoreMode", nil];
-		[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
-        [NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:customFwDict];
 		return;
 	} //end option key down if / custom payload selection
 	
@@ -2058,7 +1976,15 @@ static NSString *HexToDec(NSString *hexValue)
 	[buttonOne setEnabled:FALSE];
 	[bootButton setEnabled:FALSE];
 	[instructionImage setImage:[self imageForMode:kSPIPSWImage]];
+
+	/*
+	 
+	 one more instance of validating the file with 'proper' threading
+	 
+	 */
 	
+	[NSThread detachNewThreadSelector:@selector(checkFileDownload:) toTarget:self withObject:self.currentBundle];
+	/*
 	BOOL download = [self filesToDownload];
 	
 	theRestoreMode = 0;
@@ -2079,8 +2005,95 @@ static NSString *HexToDec(NSString *hexValue)
 		NSDictionary *customFwDict = [NSDictionary dictionaryWithObjectsAndKeys:HCIPSW, @"file", [NSString stringWithFormat:@"%i", theRestoreMode], @"restoreMode", nil];
 		[NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:customFwDict];
 	}
+	 
+	 */
 	
 } //end process one
+
+- (void)checkFileDownload:(FWBundle *)theBundle
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	NSFileManager *man = [NSFileManager defaultManager];
+	NSString *ipsw = [tetherKitAppDelegate ipswFile];
+	NSString *sha = [theBundle SHA];
+	NSString *downloadLink = [theBundle downloadURL];
+	NSLog(@"ipsw: %@", ipsw);
+	if ([man fileExistsAtPath:ipsw])
+	{
+		NSLog(@"validating file: %@", ipsw);
+		[self showProgressViewWithText:NSLocalizedString(@"Validating IPSW...", @"Validating IPSW...")];
+		if ([nitoUtility validateFile:ipsw withChecksum:sha] == FALSE) 
+		{
+			NSLog(@"ipsw SHA Invalid, not removing file (for now, need to make sure its not a beta)");
+			if (downloadLink != nil)
+			{
+				NSLog(@"there is a download url!, we can safely delete and then re-download");
+				[ man removeItemAtPath:ipsw error:nil];
+			}
+			
+		} else {
+			
+			NSLog(@"Seas0nPass: Software payload: %@", [theBundle bundleName]);
+			[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+			
+			NSDictionary *customFwDict = [NSDictionary dictionaryWithObjectsAndKeys:HCIPSW, @"file", [NSString stringWithFormat:@"%i", 0], @"restoreMode", nil];
+			[self customFW:customFwDict];
+			[pool release];
+			return;
+		}
+		
+	}
+	
+	NSDictionary *userInfo = [NSDictionary dictionaryWithObject:ipsw forKey:@"file"];
+	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"shouldDownloadFinish" object:nil userInfo:userInfo deliverImmediately:YES];
+	
+	
+	
+	[pool release];
+}
+
+/*
+
+ //thoughts of disabling keyboard / mouse when running applescript
+ 
+bool dontForwardTap = false;
+
+CGEventRef myCGEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refcon) {
+	
+	
+		//NSLog(@"Event Tap: %d", (int) CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode));
+	
+    if (dontForwardTap)
+        return nil;
+    else
+        return event;
+}
+
+void tap_keyboard(void) {
+    CFRunLoopSourceRef runLoopSource;
+	
+    CGEventMask mask = kCGEventMaskForAllEvents;
+		//CGEventMask mask = CGEventMaskBit(kCGEventKeyUp) | CGEventMaskBit(kCGEventKeyDown);
+	
+    CFMachPortRef eventTap = CGEventTapCreate(kCGHIDEventTap, kCGHeadInsertEventTap, kCGEventTapOptionDefault, mask, myCGEventCallback, NULL);
+	
+    if (!eventTap) { 
+        NSLog(@"Couldn't create event tap!");
+        exit(1);
+    }
+	
+    runLoopSource = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, eventTap, 0);
+	
+    CFRunLoopAddSource(CFRunLoopGetCurrent(), runLoopSource, kCFRunLoopCommonModes);
+	
+    CGEventTapEnable(eventTap, true);
+	
+    CFRelease(eventTap);
+    CFRelease(runLoopSource);
+	
+}
+ 
+ */
 
 - (void)customFW:(NSDictionary *)theDict //called inside process one
 {
@@ -2786,10 +2799,24 @@ static NSString *HexToDec(NSString *hexValue)
 	
 }
 
+/*
+ 
+ this method first gets iTunes up and running, then uses AXUIElement interaction from ApplicationServices/HIServices to anaylze itunes for full screen / sidebar visibility
+ 
+ fortunately the splitter is always item 13, we check the count of the children of the AXSplitGroup, if its 1, then we know we dont have a sidebar, if its greater than 1 we do!
+ 
+ 
+ 
+ 
+ */
+
+
 - (void)analyzeiTunes
 {
+	
 	NSDictionary *theError = nil;
 	NSMutableString *asString = [[NSMutableString alloc] init];
+	[asString appendString:@"activate application \"iTunes\"\n"];
 	[asString appendString:@"activate application \"iTunes\"\n"];
 	NSAppleScript *as = [[NSAppleScript alloc] initWithSource:asString];
 	[as executeAndReturnError:&theError];
@@ -2829,11 +2856,20 @@ static NSString *HexToDec(NSString *hexValue)
 			
 			AXUIElementCopyAttributeValue((AXUIElementRef)_focusedWindow, (CFStringRef)kAXChildrenAttribute, (CFTypeRef *)&_children);
 			
-			if ([_children count] < 13)
+			while ([_children count] < 14)
 			{
+				NSLog(@"iTunes window children count was less than 14, looping until 14 is reached."); //item count is 14 WITH sidebar and 17 without
 				AXUIElementCopyAttributeValue((AXUIElementRef)_focusedWindow, (CFStringRef)kAXChildrenAttribute, (CFTypeRef *)&_children);
 			}
-		
+			
+				/* 
+				 
+				another thought here because while investigating this issue... again.. the child item count WITH sidebar APPEARS to always be 14. so if the count is greater than 14 
+				we should be able to assume that the sidebar is showing, without an appletv connected the code below creates a false positive. hence the concern.
+
+				 
+				*/
+			
 			AXUIElementRef splitter = [_children objectAtIndex:13]; //if our children count is more than 1 (probably 6) we are showing sidebar
 			
 			AXUIElementCopyAttributeValue((AXUIElementRef)splitter, (CFStringRef)kAXChildrenAttribute, (CFTypeRef *)&_splitterChildren);
@@ -2899,6 +2935,8 @@ static NSString *HexToDec(NSString *hexValue)
 - (BOOL)loadiTunes11WithIPSW:(NSString *)ipsw
 {
 	[self analyzeiTunes];
+		//[self analyzeiTunes];
+	
 	
 	NSDictionary *theError = nil;
 	
@@ -2958,7 +2996,7 @@ static NSString *HexToDec(NSString *hexValue)
 	
 	[asString appendString:@"delay 3\n"];
 	[asString appendString:@"key code 36\n"];
-	[asString appendString:@"delay 3\n"];
+	[asString appendString:@"delay 5\n"];
 	[asString appendString:@"key code 36\n"];
 	[asString appendString:@"delay 3\n"];
 		//[asString appendString:@"click button 4 of window 1\n"];
@@ -3175,7 +3213,7 @@ static NSString *HexToDec(NSString *hexValue)
 
 + (NSArray *)filteredBundleNames
 {
-	NSArray *betaBundles = [NSArray arrayWithObjects:@"AppleTV2,1_5.0_9B5127c.bundle", @"AppleTV2,1_5.0_9B5141a.bundle", nil];
+	NSArray *betaBundles = [NSArray arrayWithObjects:@"AppleTV2,1_5.0_9B5127c.bundle", @"AppleTV2,1_5.0_9B5141a.bundle", @"AppleTV2,1_5.2_10B5105c.bundle", @"AppleTV2,1_5.2_10B5126b.bundle",  nil];
 	NSMutableArray *finalArray = [[NSMutableArray alloc] init];
 	
 	for (id object in BUNDLES)
@@ -3309,9 +3347,33 @@ static NSString *HexToDec(NSString *hexValue)
 }
 
 
+- (NSString *)threadedBundleFirmware:(FWBundle *)theBundle
+{
+	NSString *theFirmwareDownload = [DL stringByAppendingPathComponent:[theBundle filename]];
+	NSLog(@"theFirmwareDownload: %@", theFirmwareDownload);
+	NSString *sha = [theBundle SHA];
+	if ([FM fileExistsAtPath:theFirmwareDownload])
+	{
+		[self showProgressViewWithText:NSLocalizedString(@"Validating IPSW...", @"Validating IPSW...")];
+		if([nitoUtility validateFile:theFirmwareDownload withChecksum:sha] == FALSE)
+		{
+			NSLog(@"failed to validate file, delete file and continue to new download");
+			[FM removeItemAtPath:theFirmwareDownload error:nil];
+			return nil;
+		} else {
+			
+			NSLog(@"firmware exists, no need to download!");
+			
+			return theFirmwareDownload;
+			
+		}
+	}
+	
+	return nil; //default to nil right?
+	
+}
 
-
-- (NSString *)currentBundleFirmware
+- (NSString *)currentBundleFirmware //deprecated
 {
 	NSString *theFirmwareDownload = [DL stringByAppendingPathComponent:[[self currentBundle] filename]];
 	NSLog(@"theFirmwareDownload: %@", theFirmwareDownload);
@@ -3337,11 +3399,79 @@ static NSString *HexToDec(NSString *hexValue)
 	
 }
 
+- (void)shouldDownloadFinished:(NSNotification *)n
+{
+	id userInfo = [n userInfo];
+	NSString *theFile = [userInfo valueForKey:@"file"];
+	FWBundle *ourBundle = [FWBundle bundleForFile:theFile];
+	
+	NSString *downloadLink = [ourBundle downloadURL];
+	
+	if([downloadLink length] > 2)
+	{
+		[downloadFiles addObject:downloadLink];
+		[window setContentView:self.secondView];
+		[window display];
+		
+		self.processing = TRUE;
+		[buttonOne setEnabled:FALSE];
+		[bootButton setEnabled:FALSE];
+		[instructionImage setImage:[self imageForMode:kSPIPSWImage]];
+		[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+		[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+		[self downloadTheFiles];
+	}
+	
+}
+
+- (void)shouldDownloadThreaded:(NSString *)theFile
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	FWBundle *ourBundle = [FWBundle bundleForFile:theFile];
+	if (ourBundle == nil)
+	{
+		NSLog(@"nil bundle??: %@", theFile);
+		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:theFile forKey:@"file"];
+		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"shouldDownloadFinish" object:nil userInfo:userInfo deliverImmediately:YES];
+		return;
+		
+	}
+	
+	
+	NSString *cbf = [self threadedBundleFirmware:ourBundle];
+	if (cbf != nil)
+	{
+		NSLog(@"we already have the firmware, no need to download!");
+		[FM removeItemAtPath:TMP_ROOT error:nil];
+		[window setContentView:self.secondView];
+		[window display];
+		
+		self.processing = TRUE;
+		[buttonOne setEnabled:FALSE];
+		[bootButton setEnabled:FALSE];
+		[instructionImage setImage:[self imageForMode:kSPIPSWImage]];
+		
+		NSDictionary *customFwDict = [NSDictionary dictionaryWithObjectsAndKeys:cbf, @"file", [NSString stringWithFormat:@"%i", _restoreMode], @"restoreMode", nil];
+			//[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+			//[NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:customFwDict];
+		[self customFW:customFwDict];
+		return;
+	} else {
+
+		NSDictionary *userInfo = [NSDictionary dictionaryWithObject:theFile forKey:@"file"];
+		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"shouldDownloadFinish" object:nil userInfo:userInfo deliverImmediately:YES];
+		
+		
+	}
+	
+	[pool release];
+}
+
 - (void)downloadBundle:(NSString *)theFile
 {	
 	
 	NSString *bundleName = [tetherKitAppDelegate bundleNameFromLabel:theFile];
-		//	NSLog(@"bundleName: %@", bundleName);
+		//NSLog(@"bundleName: %@", bundleName);
 	self.currentBundle = [FWBundle bundleForFile:bundleName];
 		//NSLog(@"currentBundle: %@", self.currentBundle);
 	
@@ -3397,6 +3527,16 @@ static NSString *HexToDec(NSString *hexValue)
 			break;
 	}
 	
+	[NSThread detachNewThreadSelector:@selector(shouldDownloadThreaded:) toTarget:self withObject:bundleName];
+	
+	/*
+	
+	 fixed the lockup in two places now when validating files.
+	 
+	 */
+	
+	
+	/*
 	NSString *cbf = [self currentBundleFirmware];
 	
 		//NSLog(@"cbf: %@", cbf);
@@ -3435,6 +3575,7 @@ static NSString *HexToDec(NSString *hexValue)
 			[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 			[self downloadTheFiles];
 		}
+	 */
 }
 
 - (void)downloadTheFiles
@@ -3447,11 +3588,7 @@ static NSString *HexToDec(NSString *hexValue)
 	[downloadFile setHandler:self];
 	[downloadFile setDownloadLocation:ptFile];
 	[downloadFile downloadFile:currentDownload];
-		//[downloadFile autorelease];
-		//if ([downloadFiles count] > 1)
-		//{
-		downloadIndex = 1;
-		//}
+	downloadIndex = 1;
 	
 }
 
@@ -3488,9 +3625,69 @@ static NSString *HexToDec(NSString *hexValue)
 	[self hideProgress];
 }
 
+	//FIXME: the last place i need to make sure we properly thread when validating the file to prevent UI lockup
+
+- (void)threadedDownloadFinished:(NSString *)adownloadFile
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	NSString *sha = [[self currentBundle] SHA];
+	[self showProgressViewWithText:NSLocalizedString(@"Validating IPSW...", @"Validating IPSW...")];
+	if ([nitoUtility validateFile:adownloadFile withChecksum:sha] == FALSE)
+	{
+		if (_downloadRetries > 0)
+		{
+			NSLog(@"already tried to redownload, still corrupt, bail!");
+			[self setDownloadText:NSLocalizedString(@"Firmware download corrupt upon two tries, failed!",@"Firmware download corrupt upon two tries, failed!") ];
+			[self hideProgress];
+			_downloadRetries = 0;
+			[pool release];
+			return;
+			
+		} else { //we downloaded once, and it was corrupt, trying again.
+			
+			self.downloadIndex = 0;
+			NSLog(@"download corrupt on first try, trying once more!");
+			[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+			[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+			NSDictionary *userInfo = [NSDictionary dictionaryWithObject:adownloadFile forKey:@"file"];
+			[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"shouldDownloadFinish" object:nil userInfo:userInfo deliverImmediately:YES];
+				//[self downloadTheFiles];
+			_downloadRetries++;
+			return;
+		}
+		
+	}
+	_downloadRetries = 0;
+	
+	[FM removeItemAtPath:TMP_ROOT error:nil];
+	NSLog(@"download complete: %@", adownloadFile);
+	[downloadBar stopAnimation:self];
+	[downloadBar setHidden:YES];
+	[downloadBar setNeedsDisplay:YES];
+	[downloadFile release];
+	downloadFile = nil;
+	if (downloadIndex == 1)
+	{
+		
+		
+		[self setDownloadText:NSLocalizedString(@"Downloads complete", @"Downloads complete")];
+		NSLog(@"downloads complete!!");
+		[self setDownloadProgress:0];
+		NSLog(@"_restoreMode: %i", _restoreMode);
+		NSDictionary *customFwDict = [NSDictionary dictionaryWithObjectsAndKeys:adownloadFile, @"file", [NSString stringWithFormat:@"%i", _restoreMode], @"restoreMode", nil];
+			//	[NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:customFwDict];
+		[self customFW:customFwDict];
+		
+	}
+	
+	[pool release];
+}
+
 - (void)downloadFinished:(NSString *)adownloadFile
 {
-
+	[NSThread detachNewThreadSelector:@selector(threadedDownloadFinished:) toTarget:self withObject:adownloadFile];
+	return;
 	
 	NSString *sha = [[self currentBundle] SHA];
 	[self showProgressViewWithText:NSLocalizedString(@"Validating IPSW...", @"Validating IPSW...")];
@@ -3643,6 +3840,103 @@ static NSString *HexToDec(NSString *hexValue)
 {
 	id userI = [n userInfo];
 	[self setDownloadText:[userI valueForKey:@"Status"]];
+	
+}
+
+- (void)checksumFinished:(NSNotification *)n
+{
+	NSLog(@"checksumFinished: %@", n);
+	
+	int status = [[[n userInfo] objectForKey:@"status"] intValue];
+	
+	NSString *ipsw = [[n userInfo] objectForKey:@"file"];
+	
+	NSLog(@"ipsw: %@ status: %i", ipsw, status);
+	
+	FWBundle *ourBundle = [FWBundle bundleForFile:ipsw];
+	NSString *downloadLink = [ourBundle downloadURL];
+	
+	if (status == 0)
+	{
+		NSLog(@"checksum failed!, do somethin!");
+		NSLog(@"invalid file: %@, redownloading...", ipsw);
+		if([downloadLink length] > 2)
+		{
+			[downloadFiles addObject:downloadLink];
+			[window setContentView:self.secondView];
+			[window display];
+			
+			self.processing = TRUE;
+			[buttonOne setEnabled:FALSE];
+			[bootButton setEnabled:FALSE];
+			[instructionImage setImage:[self imageForMode:kSPIPSWImage]];
+			[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+			[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+			[self downloadTheFiles];
+		}
+		return;
+		
+	} else {
+		
+		[self showProgressViewWithText:NSLocalizedString(@"Checking firmware compatibility...",@"Checking firmware compatibility..." )];
+		int theRestoreMode = [self restoreMode];
+		_restoreMode = theRestoreMode;
+		
+		NSLog(@"restoreMode: %i", theRestoreMode);
+		id object = nil;
+		switch (theRestoreMode) {
+				
+			case -1:
+			case kRestoreUnavailableMode: //shouldn't get this anymore. deprecated
+				NSLog(@"bailing!!!!");
+				object = [NSAlert alertWithMessageText:NSLocalizedString(@"Unspecified Error", @"Unspecified Error") defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedString(@"The firmware %@ is either not being signed by Apple anymore, not backed up to cydia, or the device cannot be detected: kRestoreUnavailableMode.", @"The firmware %@ is either not being signed by Apple anymore, not backed up to cydia, or the device cannot be detected: kRestoreUnavailableMode."), [ipsw lastPathComponent]];
+				[object runModal];
+				return;
+				
+			case kRestoreNoDevice: //already showed alert, just bail
+				[self showInitialView];
+				[self hideProgress];
+				return;
+				
+				
+			case kRestoreFirmwareIneligible:
+				[self showInitialView];
+				[self hideProgress];
+				[self showDeviceIneligibleAlert];
+				return;
+				
+				
+			case kRestoreUnsupportedDevice:
+				[self showInitialView];
+				[self hideProgress];
+				[self showIncompatDeviceAlert];
+				
+				return;
+				
+			default:
+				break;
+		}
+		
+		
+		
+		NSLog(@"Seas0nPass: Software payload: %@ (option key)", [self.currentBundle bundleName]);
+		
+		[window setContentView:self.secondView];
+		[window display];
+		
+		self.processing = TRUE;
+		[buttonOne setEnabled:FALSE];
+		[bootButton setEnabled:FALSE];
+		[instructionImage setImage:[self imageForMode:kSPIPSWImage]];
+		
+		NSDictionary *customFwDict = [NSDictionary dictionaryWithObjectsAndKeys:ipsw, @"file", [NSString stringWithFormat:@"%i", theRestoreMode], @"restoreMode", nil];
+		[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+        [NSThread detachNewThreadSelector:@selector(customFW:) toTarget:self withObject:customFwDict];
+		return;
+		
+	}
+
+		//	[self setDownloadText:[userI valueForKey:@"Status"]];
 	
 }
 

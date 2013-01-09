@@ -95,7 +95,7 @@
 	
 	[irArgs release];
 	
-	[irTask setStandardError:hdip];
+		//[irTask setStandardError:hdip];
 	[irTask setStandardOutput:hdip];
 		//NSLog(@"hdiutil %@", [[irTask arguments] componentsJoinedByString:@" "]);
 	[irTask launch];
@@ -183,7 +183,7 @@
 	
 	[irArgs release];
 	
-	[irTask setStandardError:hdip];
+		//[irTask setStandardError:hdip];
 	[irTask setStandardOutput:hdip];
 	//NSLog(@"hdiutil %@", [[irTask arguments] componentsJoinedByString:@" "]);
 	[irTask launch];
@@ -276,9 +276,68 @@
 	return termStatus;
 }
 
++ (void)altValidateFile:(NSString *)inputFile withChecksum:(NSString *)checksum
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	NSTask *sslTask = [[NSTask alloc] init];
+	NSPipe *sspipe = [[NSPipe alloc] init];
+	NSFileHandle *ssh = [sspipe fileHandleForReading];
+	
+	[sslTask setLaunchPath:@"/usr/bin/openssl"];
+	
+	[sslTask setArguments:[NSArray arrayWithObjects:@"sha1", inputFile, nil]];
+	[sslTask setStandardOutput:sspipe];
+	[sslTask setStandardError:sspipe];
+	[sslTask launch];
+	
+	NSData *outData = [ssh readDataToEndOfFile];
+	
+	[sslTask waitUntilExit];
+	
+	NSString *outputString = [[[NSString alloc] initWithData:outData 
+													encoding:NSASCIIStringEncoding] 
+							  stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	
+		//example outputString: SHA1(~/Documents/Tether/AppleTV2,1_4.3_8F455_Restore.ipsw)= b6a2b0baae79daf95f75044c12946839c662d01d
+	
+		//b6a2b0baae79daf95f75044c12946839c662d01d cleaned up
+	NSString *outputSHA = [[[outputString componentsSeparatedByString:@"="] lastObject] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	
+	
+	
+	NSLog(@"sha1: %@ against: %@", outputSHA, checksum);
+	if ([outputSHA isEqualToString:checksum])
+	{
+		[sslTask release];
+		sslTask = nil;
+		[sspipe release];
+		sspipe = nil;
+		NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:inputFile, @"file", @"1", @"status", nil];
+			//return YES;
+		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"checksumFinished" object:nil userInfo:userInfo deliverImmediately:YES];
+		[pool release];
+		return;
+	} 
+	[sslTask release];
+	sslTask = nil;
+	[sspipe release];
+	sspipe = nil;
+		//return NO;
+	
+	NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:inputFile, @"file", @"0", @"status", nil];
+		//return YES;
+	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"checksumFinished" object:nil userInfo:userInfo deliverImmediately:YES];
+	
+	[pool release];
+
+}
+
+	
+
+
 + (BOOL)validateFile:(NSString *)inputFile withChecksum:(NSString *)checksum
 {
-	
+		//LOG_SELF;
 	
 	NSTask *sslTask = [[NSTask alloc] init];
 	NSPipe *sspipe = [[NSPipe alloc] init];
