@@ -10,6 +10,19 @@
 	<string>AppleTV2,1_5.1_10A406e_Restore.ipsw</string>
 	<key>FilesystemPatches</key>
 	<dict>
+		<key>Core Files Installation</key>
+		<array>
+			<dict>
+				<key>Action</key>
+				<string>Extract</string>
+				<key>File</key>
+				<string>evasi0n.tgz</string>
+				<key>Name</key>
+				<string>evasi0n.tgz</string>
+				<key>Path</key>
+				<string>/</string>
+			</dict>
+		</array>
 		<key>Filesystem Jailbreak</key>
 		<array>
 			<dict>
@@ -97,6 +110,6 @@
 	<key>subplatform</key>
 	<string>10</string>
 	<key>Untethered</key>
-	<false/>
+	<true/>
 </dict>
 </plist>

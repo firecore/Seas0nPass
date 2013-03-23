@@ -26,7 +26,8 @@
 	NSString *versionNumber = [%c(ATVVersionInfo) currentOSVersion];
 	NSComparisonResult theResult = [versionNumber compare:@"5.1" options:NSNumericSearch];
 	float currentVersion = [[%c(ATVVersionInfo) currentOSVersion] floatValue];
-	NSString *spFile = @"/var/mobile/Media/Photos/spicon.png";
+//	NSString *spFile = @"/var/mobile/Media/Photos/spicon.png";
+	NSString *spFile = @"/var/mobile/Library/Preferences/spicon.png";
 	NSFileManager *man = [NSFileManager defaultManager];
 	if ( theResult == NSOrderedAscending ){ return %orig; }
 

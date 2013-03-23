@@ -1214,7 +1214,7 @@
 	}
 	[bundleDict setObject:CYDIA_TAR forKey:@"cydia"];
 	[bundleDict setObject:DEB_PATH forKey:@"debs"];
-	if (![theBundle fivePointOnePlus])
+		//if (![theBundle fivePointOnePlus])
 		[bundleDict setObject:SPACE_SCRIPT forKey:@"stash"];
 	[bundleDict setObject:[theBundle bundlePath] forKey:@"bundle"];
 		//TODO: custom bundles

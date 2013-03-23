@@ -28,10 +28,10 @@
 
 	//CURRENT_BUNDLE is the finally the only place that the bundle name needs to be replaced to change default version for future versions.
 
-//previous @"AppleTV2,1_4.4.4_9A406a"
+//previous @"AppleTV2,1_5.0.2_9B830"
+//AppleTV2,1_5.2_10B144b
 
-
-#define CURRENT_BUNDLE @"AppleTV2,1_5.0.2_9B830"
+#define CURRENT_BUNDLE @"AppleTV2,1_5.2_10B144b"
 #define CURRENT_IPSW [NSString stringWithFormat:@"%@_Restore.ipsw", CURRENT_BUNDLE]
 #define DL [tetherKitAppDelegate downloadLocation]
 #define KCACHE @"kernelcache.release.k66"
@@ -431,45 +431,6 @@ void LogIt (NSString *format, ...)
 	
 }
 
-- (BOOL)filesToDownload //deprecated pre threaded throwback
-{
-	NSFileManager *man = [NSFileManager defaultManager];
-	NSString *ipsw = [tetherKitAppDelegate ipswFile];
-	NSString *sha = [[self currentBundle] SHA];
-	NSString *downloadLink = [[self currentBundle] downloadURL];
-	NSLog(@"ipsw: %@", ipsw);
-	if ([man fileExistsAtPath:ipsw])
-	{
-		NSLog(@"validating file: %@", ipsw);
-		[self showProgressViewWithText:NSLocalizedString(@"Validating IPSW...", @"Validating IPSW...")];
-		if ([nitoUtility validateFile:ipsw withChecksum:sha] == FALSE) 
-		{
-			NSLog(@"ipsw SHA Invalid, not removing file (for now, need to make sure its not a beta)");
-			if (downloadLink != nil)
-			{
-				NSLog(@"there is a download url!, we can safely delete and then re-download");
-				[ man removeItemAtPath:ipsw error:nil];
-			}
-				
-		}
-		
-	}
-	
-	
-	if (![man fileExistsAtPath:ipsw])
-	{
-		[downloadFiles addObject:downloadLink];
-	}
-	if ([downloadFiles count] > 0)
-	{
-		return TRUE;
-	} else {
-		return FALSE;
-	}
-	
-	return FALSE;
-	
-}
 
 
 - (void)showProgress
@@ -608,53 +569,6 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event) {
 }
 
 
-- (int)inject
-{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	[self killiTunes];
-	self.poisoning = TRUE;
-	[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
-	int result = 0;
-	//irecv_error_t ir_error = IRECV_E_SUCCESS;
-	
-	pois0n_init();
-	pois0n_set_callback(&print_progress, self);
-	[self setDownloadText:NSLocalizedString(@"Waiting for device to enter DFU mode...", @"Waiting for device to enter DFU mode...")];
-	[self setInstructionText:NSLocalizedString(@"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.", @"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.")];
-	[instructionImage setImage:[self imageForMode:kSPATVRestoreImage]];
-	while(pois0n_is_ready()) {
-		sleep(1);
-	}
-	irecv_event_subscribe(client, IRECV_RECEIVED, &print_progress, NULL);
-	[self setDownloadText:NSLocalizedString(@"Found device in DFU mode", @"Found device in DFU mode")];
-	[self setInstructionText:@""];
-	
-	result = pois0n_is_compatible();
-	if (result < 0) {
-		[self setDownloadText:NSLocalizedString(@"Your device is not compatible with this exploit!", @"Your device is not compatible with this exploit!")];
-		return result;
-	}
-	[self setDownloadText:NSLocalizedString(@"Injecting Pois0n", @"Injecting Pois0n")];
-		result = pois0n_inject();
-	if (result < 0) {
-		[self setDownloadText:NSLocalizedString(@"Exploit injection failed!", @"Exploit injection failed!")];
-		[self hideProgress];
-		pois0n_exit();
-		self.poisoning = FALSE;
-		[pool release];
-		return result;
-	}
-	[self setDownloadText:@"pois0n successfully administered"];
-	NSString *command = [commandTextField stringValue];
-	irecv_send_command(client, [command UTF8String]);
-	[self hideProgress];
-	[cancelButton setTitle:@"Done"];
-	[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
-	pois0n_exit();
-	self.poisoning = FALSE;
-	[pool release];
-	return 0;
-}
 
 - (IBAction)showHelpLog:(id)sender;
 {
