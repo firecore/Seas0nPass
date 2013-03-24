@@ -526,6 +526,58 @@
     return NO;
 }
 
+- (BOOL)sixtyPlus
+{
+	NSString *comparisonVersion = @"5.1"; //yes pandering to appletv2, what of it? ;-P
+	
+	NSString *clippedPath = nil;
+	int deviceInteger = [self deviceInt];
+	
+	switch (deviceInteger) {
+			
+			
+		case kAppleTVDevice:
+			
+			clippedPath = [[self bundleName] substringWithRange:NSMakeRange(11, 3)];
+			break;
+			
+		case kiPadDevice:
+		case kiPodDevice:
+				//iPad1,1_4.3.1_8G4_Restore.ipsw
+			clippedPath = [[self bundleName] substringWithRange:NSMakeRange(8, 3)];
+			comparisonVersion = @"6.0";
+			break;
+			
+		case kiPhoneDevice:
+			
+			clippedPath = [[self bundleName] substringWithRange:NSMakeRange(10, 3)];
+			comparisonVersion = @"6.0";
+			break;
+			
+	}
+	
+	NSComparisonResult theResult = [clippedPath compare:comparisonVersion options:NSNumericSearch];
+		//NSLog(@"theversion: %@  installed version %@", theVersion, installedVersion);
+	if ( theResult == NSOrderedDescending )
+	{
+			//	NSLog(@"%@ is greater than %@", clippedPath, @"4.4");
+		
+		return YES;
+		
+	} else if ( theResult == NSOrderedAscending ){
+		
+			//	NSLog(@"%@ is greater than %@", @"4.4", clippedPath);
+		return NO;
+		
+	} else if ( theResult == NSOrderedSame ) {
+		
+			//	NSLog(@"%@ is equal to %@", clippedPath, @"4.4");
+		return YES;
+	}
+	
+	return NO;
+}
+
 - (BOOL)is4point4 //5.0 for other, 4.4 for AppleTV 2
 {
 	NSString *comparisonVersion = @"4.4"; //yes pandering to appletv2, what of it? ;-P

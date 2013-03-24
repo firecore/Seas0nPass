@@ -499,6 +499,7 @@
 	NSString *filePath = [mountedRamdisk stringByAppendingPathComponent:@"/usr/local/share/restore/PASS.png"];
 	NSString *otherFilePath = [mountedRamdisk stringByAppendingPathComponent:@"/usr/share/progressui/images-1x"];
 	NSString *otherFilePath2 = [mountedRamdisk stringByAppendingPathComponent:@"/usr/share/progressui/images-2x"];
+	
 	[[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
 	[[NSFileManager defaultManager] removeItemAtPath:otherFilePath error:nil];
 	[[NSFileManager defaultManager] removeItemAtPath:otherFilePath2 error:nil];
@@ -577,12 +578,13 @@
 		NSLog(@"decrypted %@ successfully!", theRamdisk);
 		NSString *ramdiskSize = [self ramdiskResizeValue:decryptRam];
 		
-        if (![theBundle is4point4])
+        if (![theBundle is4point4] || [theBundle fivePointOnePlus]) //is less than 4.4 or greater than 5.1
         {
             status = [nitoUtility resizeVolume:decryptRam toSize:ramdiskSize]; //2
         } else {
             //dont resize ramdisk for 4.4, fucks up in beta 3+
             status = 0; //hopefully the removeUselessFirmwareFiles function works!!
+						
         }
         
 		

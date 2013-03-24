@@ -1,12 +1,12 @@
-//
-//  TSSManager.mm
-//  TSSAgent
-//
-//  Created by Kevin Bradley on 1/16/12.
-//  Copyright 2012 nito, LLC. All rights reserved.
-//
+	//
+	//  TSSManager.mm
+	//  TSSAgent
+	//
+	//  Created by Kevin Bradley on 1/16/12.
+	//  Copyright 2012 nito, LLC. All rights reserved.
+	//
 
-//#import "MSettingsController.h"
+	//#import "MSettingsController.h"
 
 #import "TSSManager.h"
 #import <IOKit/IOKitLib.h>
@@ -134,7 +134,7 @@ static NSString *myChipID_ = nil;
 	NSString *theDevice = [[TSSCommon stringReturnForProcess:@"/usr/sbin/sysctl -n hw.machine"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 		//NSString *theDevice = [rawDevice stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 	
-	//NSLog(@"theDevice: -%@-", theDevice);
+		//NSLog(@"theDevice: -%@-", theDevice);
 	
 	if ([theDevice isEqualToString:@"AppleTV3,1"])
 		return DeviceIDMake(8, 35138);//0x8942
@@ -144,10 +144,10 @@ static NSString *myChipID_ = nil;
 	
 	if ([theDevice isEqualToString:@"iPad1,1"])
 		return DeviceIDMake(2, 35120);
-		
+	
 	if ([theDevice isEqualToString:@"iPad2,1"])
 		return DeviceIDMake(4, 35136);
-
+	
 	if ([theDevice isEqualToString:@"iPad2,2"])
 		return DeviceIDMake(6, 35136);
 	
@@ -177,7 +177,7 @@ static NSString *myChipID_ = nil;
 	
 	if ([theDevice isEqualToString:@"iPod2,1"])
 		return DeviceIDMake(0, 34592);
-
+	
 	if ([theDevice isEqualToString:@"iPod3,1"])
 		return DeviceIDMake(2, 35106);
 	
@@ -188,7 +188,7 @@ static NSString *myChipID_ = nil;
 	
 	/*
 	 
-
+	 
 	 "appletv2,1": (35120, 16, 'AppleTV2,1'),
 	 
 	 "ipad1,1": (35120, 2, 'iPad1,1'),
@@ -212,11 +212,11 @@ static NSString *myChipID_ = nil;
 
 + (NSString *)rawBlobFromResponse:(NSString *)inputString
 {
-
+	
 	NSArray *componentArray = [inputString componentsSeparatedByString:@"&"];
 	int count = [componentArray count];
-//	int status = [[[[componentArray objectAtIndex:0] componentsSeparatedByString:@"="] lastObject] intValue];
-//	NSString *message = [[[componentArray objectAtIndex:1] componentsSeparatedByString:@"="] lastObject];
+		//	int status = [[[[componentArray objectAtIndex:0] componentsSeparatedByString:@"="] lastObject] intValue];
+		//	NSString *message = [[[componentArray objectAtIndex:1] componentsSeparatedByString:@"="] lastObject];
 	if (count >= 3)
 	{
 		NSString *plist = [[componentArray objectAtIndex:2] substringFromIndex:15];
@@ -238,17 +238,17 @@ static NSString *myChipID_ = nil;
     return h ;  
 }
 
-	/* 
-	 
-	 the request we send to get the list of SHSH blobs for the current device 
-
-	 NOTE: this is all requisite on saurik updating the BuildManifest info on his servers to reflect new versions.
-*/
+/* 
+ 
+ the request we send to get the list of SHSH blobs for the current device 
+ 
+ NOTE: this is all requisite on saurik updating the BuildManifest info on his servers to reflect new versions.
+ */
 
 
 - (NSMutableURLRequest *)requestForList
 {
-
+	
 	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
 	[request setURL:[NSURL URLWithString:baseUrlString]];
 	[request setHTTPMethod:@"POST"];
@@ -269,7 +269,7 @@ static NSString *myChipID_ = nil;
 
 - (NSMutableURLRequest *)requestForBlob:(NSString *)post
 {
-
+	
 	NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
 	
 	NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
@@ -292,9 +292,9 @@ static NSString *myChipID_ = nil;
 	NSPropertyListFormat format;
 	NSData *theData = [theString dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
 	id theDict = [NSPropertyListSerialization propertyListFromData:theData
-											 mutabilityOption:NSPropertyListImmutable 
-													   format:&format
-											 errorDescription:&error];
+												  mutabilityOption:NSPropertyListImmutable 
+															format:&format
+												  errorDescription:&error];
 	return theDict;
 }
 
@@ -320,13 +320,13 @@ static NSString *myChipID_ = nil;
 
 - (NSMutableURLRequest *)postRequestFromVersion:(NSString *)theVersion
 {
-
+	
 	NSDictionary *theDict = [self tssDictFromVersion:theVersion]; //create a dict based on buildmanifest, we want to read this dictionary from a server in the future.
 	self.ecid = [theDict valueForKey:@"ApECID"];
 		//NSLog(@"self.ecid: %@", self.ecid);
 	[ecid retain];
-
-
+	
+	
 	NSString *post = [self stringFromDictionary:theDict]; //convert the nsdictionary into a string we can submit
 	
 	NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES]; //this might actually need to be NSUTF8StringEncoding, but it works.
@@ -342,7 +342,7 @@ static NSString *myChipID_ = nil;
 	[request setHTTPBody:postData];
 	
 	return request;
-	//return request;
+		//return request;
 }
 
 + (NSArray *)signableVersionsFromModel:(NSString *)theModel
@@ -351,7 +351,7 @@ static NSString *myChipID_ = nil;
 	if ([[TSSManager supportedDevices] containsObject:theModel])
 	{
 		NSString *theURL = [BLOB_PLIST_BASE_URL stringByAppendingFormat:@"/%@.plist", theModel];
-		//NSLog(@"url: %@", theURL);
+			//NSLog(@"url: %@", theURL);
 		NSDictionary *blobDict = [NSDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:theURL]];
 		return [blobDict valueForKey:@"openVersions"];
 	}
@@ -382,7 +382,7 @@ static NSString *myChipID_ = nil;
 - (NSDictionary *)tssDictFromVersion:(NSString *)versionNumber //ie 9A406a
 {
 	TSSDeviceID cd = self.theDevice;
-	//[self logDevice:cd];
+		//[self logDevice:cd];
 	
 	NSString *theModel = self.deviceModel;
 	if (theModel == nil) theModel = @"k66ap";
@@ -393,21 +393,21 @@ static NSString *myChipID_ = nil;
 	
 	NSDictionary *k66 = [NSDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:theURL]];
 		//NSDictionary *k66 = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle bundleForClass:[TSSManager class]] pathForResource:@"k66ap" ofType:@"plist"]];
-	//NSLog(@"k66: %@", k66);
+		//NSLog(@"k66: %@", k66);
 	NSDictionary *versionDict = [k66 valueForKey:versionNumber];
 	
 	NSMutableDictionary *theDict = [[NSMutableDictionary alloc] initWithDictionary:versionDict];
-
+	
 	[theDict setObject:[NSNumber numberWithBool:YES] forKey:@"@APTicket"];
 	[theDict setObject:[TSSManager ipAddress] forKey:@"@HostIpAddress"];
 	[theDict setObject:@"mac" forKey:@"@HostPlatformInfo"];
-	//[theDict setObject:[TSSManager uuidFormatted] forKey:@"@UUID"];
+		//[theDict setObject:[TSSManager uuidFormatted] forKey:@"@UUID"];
 	[theDict setObject:[NSNumber numberWithInt:cd.boardID] forKey:@"ApBoardID"];
 	[theDict setObject:[NSNumber numberWithInt:cd.chipID] forKey:@"ApChipID"];
 	[theDict setObject:@"libauthinstall-107" forKey:@"@VersionInfo"];
 	[theDict setObject:myChipID_ forKey:@"ApECID"];
 	
-	//FIXME: STILL NEED ApNonce?
+		//FIXME: STILL NEED ApNonce?
 	
 	[theDict setObject:[NSNumber numberWithBool:YES] forKey:@"ApProductionMode"];
 	[theDict setObject:[NSNumber numberWithInt:1] forKey:@"ApSecurityDomain"];
@@ -447,8 +447,8 @@ static NSString *myChipID_ = nil;
 		
 		myChipID_ = theEcid;
 		theDevice = [TSSManager currentDevice];
-
-			
+		
+		
 		
 		return (self);
 		
@@ -530,7 +530,7 @@ static NSString *myChipID_ = nil;
 		if (![man fileExistsAtPath:tmpPath])
 		{
 			[man createDirectoryAtPath:tmpPath withIntermediateDirectories:TRUE attributes:nil error:nil];
-				
+			
 		}
 		
 		NSString *newName = [[[oldPath lastPathComponent] stringByDeletingPathExtension] stringByAppendingPathExtension:@"gz"];
@@ -563,7 +563,7 @@ static NSString *myChipID_ = nil;
 
 - (void)_sendLocalBlobs
 {
-
+	
 	NSArray *blobs = [TSSManager localAppleTVBlobs];
 	[self _sendBlobs:blobs];
 	
@@ -581,21 +581,21 @@ static NSString *myChipID_ = nil;
     NSURL *             url;
     NSMutableURLRequest *      request;
     
-	// First get and check the URL.
+		// First get and check the URL.
     
 	baseUrlString = [NSString stringWithFormat:@"http://cydia.saurik.com/tss@home/api/check/%@", myChipID_];
 	
-	//baseUrlString = @"http://cydia.saurik.com/TSS/controller?action=2";
+		//baseUrlString = @"http://cydia.saurik.com/TSS/controller?action=2";
 	
 	
 	url = [NSURL URLWithString:baseUrlString];
 	
     success = (url != nil);
 	
-	//NSLog(@"URL: %@", url);
+		//NSLog(@"URL: %@", url);
 	
 	
-	// If the URL is bogus, let the user know.  Otherwise kick off the connection.
+		// If the URL is bogus, let the user know.  Otherwise kick off the connection.
     
     if ( ! success) {
 		assert(!success);
@@ -603,13 +603,13 @@ static NSString *myChipID_ = nil;
     } else {
 		
 		
-		// Open a connection for the URL.
+			// Open a connection for the URL.
 		
         request = [self requestForList];
 		
         assert(request != nil);
         
-	
+		
 		NSURLResponse *theResponse = nil;
 		NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:&theResponse error:nil];
 		
@@ -620,7 +620,7 @@ static NSString *myChipID_ = nil;
 		[datString release];
 		
 		return blobArray;
-	
+		
     }
 	
 	return nil;
@@ -691,56 +691,56 @@ static NSString *myChipID_ = nil;
 - (NSString *)_synchronousPushBlob:(NSString *)theBlob
 {
 	
-	//NSLog(@"pushingBlob: %@", theBlob);
+		//NSLog(@"pushingBlob: %@", theBlob);
     BOOL                success;
     NSURL *             url;
     NSMutableURLRequest *      request;
     
 	TSSDeviceID cd = self.theDevice;
 	
-	//[self logDevice:cd];
-	// First get and check the URL.
+		//[self logDevice:cd];
+		// First get and check the URL.
     
-
+	
 	baseUrlString = [NSString stringWithFormat:@"http://cydia.saurik.com/tss@home/api/store/%i/%i/%@", cd.chipID, cd.boardID, myChipID_];
 	
-	//baseUrlString = @"http://cydia.saurik.com/TSS/controller?action=2";
+		//baseUrlString = @"http://cydia.saurik.com/TSS/controller?action=2";
 	
 	
 	url = [NSURL URLWithString:baseUrlString];
 	
     success = (url != nil);
 	
-	//NSLog(@"URL: %@", url);
+		//NSLog(@"URL: %@", url);
 	
 	
-	// If the URL is bogus, let the user know.  Otherwise kick off the connection.
+		// If the URL is bogus, let the user know.  Otherwise kick off the connection.
     
     if ( ! success) {
 		assert(!success);
 		
-		//self.statusLabel.text = @"Invalid URL";
+			//self.statusLabel.text = @"Invalid URL";
     } else {
 		
 		
-		// Open a connection for the URL.
+			// Open a connection for the URL.
 		
         request = [self requestForBlob:theBlob];
 		assert(request != nil);
-   
-		//NSURLResponse *theResponse = nil;
+		
+			//NSURLResponse *theResponse = nil;
 		NSHTTPURLResponse * theResponse = nil;
 		[NSURLConnection sendSynchronousRequest:request returningResponse:&theResponse error:nil];
 		
-		//NSString *datString = [[NSString alloc] initWithData:returnData  encoding:NSUTF8StringEncoding];
+			//NSString *datString = [[NSString alloc] initWithData:returnData  encoding:NSUTF8StringEncoding];
 		
-		//NSLog(@"DatString: %@", datString);
+			//NSLog(@"DatString: %@", datString);
 		NSString *returnString = [NSString stringWithFormat:@"Request returned with response: \"%@\" with status code: %i",[NSHTTPURLResponse localizedStringForStatusCode:theResponse.statusCode], theResponse.statusCode ];
 		
-		//NSLog(@"didReceiveResponse: %@ statusCode: %i", [NSHTTPURLResponse localizedStringForStatusCode:theResponse.statusCode], theResponse.statusCode);
-		//NSString *outString = [TSSManager rawBlobFromResponse:datString]; 
+			//NSLog(@"didReceiveResponse: %@ statusCode: %i", [NSHTTPURLResponse localizedStringForStatusCode:theResponse.statusCode], theResponse.statusCode);
+			//NSString *outString = [TSSManager rawBlobFromResponse:datString]; 
 		
-		//[datString release];
+			//[datString release];
 		
 		return returnString;
 		
@@ -756,9 +756,9 @@ static NSString *myChipID_ = nil;
     BOOL                success;
     NSURL *             url;
     NSMutableURLRequest *      request;
-
 	
-		baseUrlString = @"http://cydia.saurik.com/TSS/controller?action=2";
+	
+	baseUrlString = @"http://cydia.saurik.com/TSS/controller?action=2";
 	
 	
 	url = [NSURL URLWithString:baseUrlString];
@@ -777,7 +777,7 @@ static NSString *myChipID_ = nil;
 		
 			// Open a connection for the URL.
         request = [self postRequestFromVersion:theVersion];
-
+		
 		
 		
 		NSURLResponse *theResponse = nil;
@@ -797,16 +797,90 @@ static NSString *myChipID_ = nil;
 }
 
 + (NSData *)ticketHeader
-{
+{						 //"33676D49AAAAAAAABBBBBBBB0000000042414353455059542000000004000000424143530000000000000000000000000000000041544144CCCCCCCCDDDDDDDD"
 	NSString *headerHex = @"33676D49000C0000EC0B0000000000004241435345505954200000000400000042414353000000000000000000000000312F736F41544144AC0A00009A0A0000";
 	return [NSData dataFromStringHex:headerHex];
 }
 
++ (NSData *)apTicketHeader
+{
+	NSString *headerHex = @"33676D49AAAAAAAABBBBBBBB0000000042414353455059542000000004000000424143530000000000000000000000000000000041544144CCCCCCCCDDDDDDDD";
+	return [NSData dataFromStringHex:headerHex];
+}
 
-#define TICKET_FULLSIZE_RANGE NSMakeRange(0x0003C, 4)
-#define TICKET_SIZE_RANGE NSMakeRange(0x00038, 4)
+	//#define TICKET_FULLSIZE_RANGE NSMakeRange(0x0003C, 4)
+	//#define TICKET_SIZE_RANGE NSMakeRange(0x00038, 4)
+
+#define TICKET_SIZE_RANGE NSMakeRange(0x0003C, 4)
+#define TICKET_FULLSIZE_RANGE NSMakeRange(0x00038, 4)
+
+#define FULL_SIZE_RANGE NSMakeRange(0x00004, 4)
+#define SIZE_RANGE NSMakeRange(0x00008, 4)
 
 
+	//0x3C 2682
+	//changing 9A 0A 00 00 to AA A0 00 00	
+
+	//0x38
+	//changing AC 0A 00 00 to 7A 0A 00 00 
+
+	//2746 is final size == 0A BA
+
+	//0x04
+	//changing AA AA AA AA to BA 0A 00 00
+
+	//0x08 2726
+	//changing BB BB BB BB to A6 0A 00 00
+
++(NSData *)newApTicketFromDictionary:(NSDictionary *)thePlist
+{
+	id theData = nil;
+	NSData *apTicket = [thePlist valueForKey:@"APTicket"];
+	if (apTicket !=nil)
+	{
+		theData = [[NSMutableData alloc] initWithData:[TSSManager apTicketHeader]];
+		
+		int size = [apTicket length];
+		
+		NSString *sizeString = [NSString stringWithFormat:@"%.8x",size ];
+		NSString *fullSizeString = [NSString stringWithFormat:@"%.8x",(size+0xC) ];
+		
+		NSLog(@"size: %@ fullSize: %@", sizeString, fullSizeString);
+		
+		NSData *newLengthHex = [[NSData dataFromStringHex:sizeString] reverse];
+		NSData *newFullLengthHex = [[NSData dataFromStringHex:fullSizeString] reverse];
+		
+		NSLog(@"newLengthHex: %@ newFullLengthHex: %@", newLengthHex, newFullLengthHex);
+		
+		[theData replaceBytesInRange:TICKET_FULLSIZE_RANGE withBytes:[newFullLengthHex bytes]];
+		[theData replaceBytesInRange:TICKET_SIZE_RANGE withBytes:[newLengthHex bytes]];
+		
+		[theData appendData:apTicket];
+		
+			//get our length of the final data
+		
+		int dataLength = [theData length];
+		
+			//time to adjust the header - the full file size is at 0x00004 and is 4 bytes long. take the new length (dataLength) and convert it to hex properly to replace the current value
+		
+		NSString *newLengthHexString = [NSString stringWithFormat:@"%.8x",dataLength ]; //converted back to hex
+		NSString *newHeaderlessLengthHexString = [NSString stringWithFormat:@"%.8x",dataLength-0x14 ]; //converted back to hex - the second header replacement without the header size factored in
+		newLengthHex = [[NSData dataFromStringHex:newLengthHexString] reverse]; //reversed as necessary for re-adding to the file
+		
+		NSData *newLengthHeaderlessHex = [[NSData dataFromStringHex:newHeaderlessLengthHexString] reverse]; //reversed as necessary for re-adding to the file (no header size)
+		[theData replaceBytesInRange:FULL_SIZE_RANGE withBytes:[newLengthHex bytes]]; //actually replace the new proper full size
+		[theData replaceBytesInRange:SIZE_RANGE withBytes:[newLengthHeaderlessHex bytes]]; //replace the new proper headerless size.
+		
+	} else {
+		
+		return nil;
+	}
+	return [theData autorelease];
+}
+
+	//2682 + 12 = 0A86 86 0A
+	//00000a7a = 2682 = size + 00000aaa = 2730
+	//7a0a0000				   aaa00000
 
 + (NSData *)apTicketFromDictionary:(NSDictionary *)thePlist
 {
@@ -852,55 +926,55 @@ static NSString *myChipID_ = nil;
 		
 		return nil;
 	}
-
+	
 	return [theData autorelease];
 }
 
 + (NSString *)apTicketFileFromDictionary:(NSDictionary *)thePlist
 {
-	id theData = [TSSManager apTicketFromDictionary:thePlist];
+	id theData = [TSSManager newApTicketFromDictionary:thePlist];
 	
 	NSString *outputFile = @"/private/tmp/apticket";
 	[theData writeToFile:outputFile options:NSDataWritingAtomic error:nil];
 	[theData release];
 	return outputFile;
 }
-   
+
 - (NSString *)_synchronousReceiveVersion:(NSString *)theVersion
 {
-	//NSLog(@"receivingVersion: %@", theVersion);
+		//NSLog(@"receivingVersion: %@", theVersion);
     BOOL                success;
     NSURL *             url;
     NSMutableURLRequest *      request;
- 
-	// First get and check the URL.
+	
+		// First get and check the URL.
     
 	baseUrlString = @"http://gs.apple.com/TSS/controller?action=2";
 	
-	//baseUrlString = @"http://cydia.saurik.com/TSS/controller?action=2";
+		//baseUrlString = @"http://cydia.saurik.com/TSS/controller?action=2";
 	
 	
 	url = [NSURL URLWithString:baseUrlString];
 	
     success = (url != nil);
 	
-	//NSLog(@"URL: %@", url);
-	//LocationLog(@"URL: %@", url);
+		//NSLog(@"URL: %@", url);
+		//LocationLog(@"URL: %@", url);
 	
 	
-	// If the URL is bogus, let the user know.  Otherwise kick off the connection.
+		// If the URL is bogus, let the user know.  Otherwise kick off the connection.
     
     if ( ! success) {
 		assert(!success);
 		
-		//self.statusLabel.text = @"Invalid URL";
+			//self.statusLabel.text = @"Invalid URL";
     } else {
 		
 		
-		// Open a connection for the URL.
+			// Open a connection for the URL.
 		
         request = [self postRequestFromVersion:theVersion];
-		//[request setHTTPMethod:@"POST"];
+			//[request setHTTPMethod:@"POST"];
 		
 		
 		NSURLResponse *theResponse = nil;
@@ -913,14 +987,14 @@ static NSString *myChipID_ = nil;
 		[datString release];
 		
 		return outString;
-      
+		
     }
 	
 	return nil;
 }
 
 	//http://cydia.saurik.com/tss@home/api/check/%llu <--ecid
-		
+
 /*
  
  moving all the stiching / signing code into here in an effort to be better organized.
@@ -957,7 +1031,7 @@ static NSString *myChipID_ = nil;
 	
 		//take the apticket and make it into an img3 file
 	
-	NSData *apTicketFull = [TSSManager apTicketFromDictionary:blobDict];
+	NSData *apTicketFull = [TSSManager newApTicketFromDictionary:blobDict];
 	NSString *allFlash = [theBundle allFlashLocation];
 	NSString *apTicketFile = [allFlash stringByAppendingPathComponent:@"apticket.img3"];
 	[apTicketFull writeToFile:apTicketFile options:NSDataWritingAtomic error:nil];
@@ -982,7 +1056,7 @@ static NSString *myChipID_ = nil;
 		} else {
 			
 			NSLog(@"sign file: %@ fail!", fwFile);
-		
+			
 			return -1;
 			
 		}
@@ -994,16 +1068,14 @@ static NSString *myChipID_ = nil;
 	
 	
 	NSLog(@"files signed successfully, firmware stitched: %@", buildNumber);
-
+	
 	
 	return 0;
 }
 
 
-#define FULL_SIZE_RANGE NSMakeRange(0x00004, 4)
-#define SIZE_RANGE NSMakeRange(0x00008, 4)
-#define BLOB_RANGE NSMakeRange(0x0000C, 4)
 
+#define BLOB_RANGE NSMakeRange(0x0000C, 4)
 
 - (BOOL)signFile:(NSString *)inputFile withBlob:(NSData *)blobData
 {
@@ -1105,7 +1177,7 @@ static NSString *myChipID_ = nil;
 
 
 - (void)dealloc {
-
+	
 	
 	[deviceModel release];
     [super dealloc];

@@ -102,6 +102,13 @@
 			<key>Patch</key>
 			<string>asr.patch</string>
 		</dict>
+		<key>restored_external</key>
+		<dict>
+			<key>File</key>
+			<string>usr/local/bin/restored_external</string>
+			<key>Patch</key>
+			<string>restored_external.patch</string>
+		</dict>
 	</dict>
 	<key>RestoreRamdiskMountVolume</key>
 	<string>ramdisk</string>
