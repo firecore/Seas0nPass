@@ -5,6 +5,10 @@
 #ifdef __OBJC__
     #import <Cocoa/Cocoa.h>
 	#import "PatchedFile.h"
+#import "NSString+Extensions.h"
+#import "TSSManager.h"
 	#import "NSApplication+SystemVersion.h"
 	#import "NSData+Flip.h"
+	
+
 #endif

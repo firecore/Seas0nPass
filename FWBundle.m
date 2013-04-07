@@ -498,6 +498,14 @@
 	
 }
 
+- (NSString *)iFaithBuildVersion
+{
+		//AppleTV2,1_5.2.1_10B329a.bundle
+	NSString *name = [self bundleName];
+	NSArray *objects = [name componentsSeparatedByString:@"_"];
+	return [NSString stringWithFormat:@"%@ (%@)", [objects objectAtIndex:1], [objects lastObject]];
+}
+
 - (NSString *)buildVersion
 {
 	NSString *name = [self bundleName];

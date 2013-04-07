@@ -86,7 +86,7 @@ enum {
 @property (readwrite, assign) BOOL enableScripting;
 @property (readwrite, assign) int downloadIndex;
 @property (readwrite, assign) int counter;
-
+- (IBAction)ifaithPayloadDump:(id)sender;
 - (void)failedWithReason:(NSString *)theReason;
 - (void)showIncompatDeviceAlert;
 - (BOOL)isAppleTV3;

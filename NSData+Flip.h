@@ -7,7 +7,6 @@
 //
 
 
-
 @interface NSData (myAdditions)
 
 - (NSData *)byteFlipped;

@@ -30,8 +30,9 @@
 
 //previous @"AppleTV2,1_5.0.2_9B830"
 //AppleTV2,1_5.2_10B144b
+//AppleTV2,1_5.2.1_10B329a
 
-#define CURRENT_BUNDLE @"AppleTV2,1_5.2_10B144b"
+#define CURRENT_BUNDLE @"AppleTV2,1_5.2.1_10B329a"
 #define CURRENT_IPSW [NSString stringWithFormat:@"%@_Restore.ipsw", CURRENT_BUNDLE]
 #define DL [tetherKitAppDelegate downloadLocation]
 #define KCACHE @"kernelcache.release.k66"
@@ -47,11 +48,12 @@
 #define KILL_ITUNES [[NSUserDefaults standardUserDefaults] boolForKey:@"killiTunes"]
 #define DEFAULTS [NSUserDefaults standardUserDefaults]
 
+#define IFAITH_BLOB_DONE @"iFaithBlobFinished"
+
 int received_cb(irecv_client_t client, const irecv_event_t* event);
 int progress_cb(irecv_client_t client, const irecv_event_t* event);
 
 static NSString *ChipID_ = nil;
-
 
 
 @implementation tetherKitAppDelegate
@@ -578,6 +580,287 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event) {
 }
 
 
+- (int)fetch_image:(const char *) path toFile:(const char*) output {
+	debug("Fetching %s...\n", path);
+	if (download_file_from_zip(device->url, path, output, NULL)
+		!= 0) {
+		error("Unable to fetch %s\n", path);
+		return -1;
+	}
+	
+	return 0;
+}
+
+- (int)fetch_dfu_image:(const char*) type toFile:(const char*) output {
+	char name[64];
+	char path[255];
+	
+	memset(name, '\0', 64);
+	memset(path, '\0', 255);
+	snprintf(name, 63, "%s.%s.RELEASE.dfu", type, device->model);
+	snprintf(path, 254, "Firmware/dfu/%s", name);
+	
+	debug("Preparing to fetch DFU image from Apple's servers\n");
+	if ([self fetch_image:path toFile:output] < 0 ){
+		
+		//if (fetch_image(path, output) < 0) {
+		error("Unable to fetch DFU image from Apple's servers\n");
+		return -1;
+	}
+	
+	return 0;
+}
+
+- (int)dumpiFaithPayload
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	NSString *ifaithDir = @"/private/tmp/ifaith";
+	
+	if ([FM fileExistsAtPath:ifaithDir])
+	{
+		[FM removeItemAtPath:ifaithDir error:nil];
+		[FM createDirectoryAtPath:ifaithDir withIntermediateDirectories:YES attributes:nil error:nil];
+	} else {
+		[FM createDirectoryAtPath:ifaithDir withIntermediateDirectories:YES attributes:nil error:nil];
+	}
+	
+	int result = 0;
+	char iBSSFile[255];
+	char iBECFile[255];
+	char* boardType = NULL;
+	char* outputStatus = NULL;
+	char* xmlOutput = NULL;
+	irecv_error_t error = IRECV_E_SUCCESS;
+	irecv_error_t ir_error = IRECV_E_SUCCESS;
+	pois0n_init();
+	pois0n_set_callback(&print_progress, self);
+		//printf("Waiting for device to enter DFU mode\n");
+	[self setDownloadText:NSLocalizedString(@"Waiting for device to enter DFU mode...", @"Waiting for device to enter DFU mode...")];
+	[self setInstructionText:NSLocalizedString(@"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.", @"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.")];
+		//NSImage *theImage = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tether" ofType:@"png"]];
+		//NSImage *theImage = [NSImage imageNamed:@"tether"];
+	[instructionImage setImage:[self imageForMode:kSPATVRestoreImage]];
+		//[theImage release];
+	while(pois0n_is_ready()) {
+		if (self.deviceClass == nil)
+		{
+			[self _fetchDeviceInfo];
+			sleep(5);
+		}
+		if ([self isAppleTV3])
+		{
+			[self hideProgress];
+				//pois0n_exit();
+			self.poisoning = FALSE;
+			[pool release];
+			return -1;
+		}
+		sleep(1);
+	}
+	
+	[self setDownloadText:NSLocalizedString(@"Found device in DFU mode", @"Found device in DFU mode")];
+	[self setInstructionText:@""];
+	
+	result = pois0n_is_compatible();
+	if (result < 0) {
+		[self setDownloadText:NSLocalizedString(@"Your device is not compatible with this exploit!", @"Your device is not compatible with this exploit!")];
+		return result;
+	}
+	
+	result = ifaith_inject_only();
+	if (result < 0) {
+		[self setDownloadText:NSLocalizedString(@"Exploit injection failed!", @"Exploit injection failed!")];
+		
+		return result;
+	}
+	
+	memset(iBSSFile, '\0', 255);
+	snprintf(iBSSFile, 254, "/private/tmp/ifaith/%s.%s", "iBSS", device->model);
+	memset(iBECFile, '\0', 255);
+	snprintf(iBECFile, 254, "/private/tmp/ifaith/%s.%s", "iBEC", device->model);	
+	printf("Checking if %s already exists\n", iBSSFile);
+	
+	[self setDownloadText:(@"Fetching iBSS file...", @"Fetching iBSS file...")];
+	
+	if ([self fetch_dfu_image:"iBSS" toFile:iBSSFile] < 0){
+		
+		error("Unable to download DFU image\n");
+		return -1;
+	}
+	
+	printf("Checking if %s already exists\n", iBECFile);
+	
+	[self setDownloadText:(@"Fetching iBEC file...", @"Fetching iBSS file...")];
+	
+	if ([self fetch_dfu_image:"iBEC" toFile:iBECFile] < 0){
+		
+		error("Unable to download DFU image\n");
+		return -1;
+	}
+	
+		//got iBSS and iBEC files, now read payload.bin into a file and append iBEC
+	
+	NSString *payload = [[NSBundle mainBundle] pathForResource:@"payload" ofType:@"bin"];
+	NSMutableData *payloadData = [[NSMutableData alloc] initWithContentsOfMappedFile:payload];
+	NSData *ibecData = [NSData dataWithContentsOfFile:[NSString stringWithUTF8String:iBECFile]];
+	[payloadData appendData:ibecData];
+	NSString *outputFile = @"/private/tmp/ifaith/output.bin";
+	[payloadData writeToFile:outputFile atomically:YES];
+	
+	[self setDownloadText:[NSString stringWithFormat:@"Uploading %@ to device...", [NSString stringWithUTF8String:iBSSFile]]];
+	ir_error = irecv_send_file(client, iBSSFile, 1);
+	if(ir_error != IRECV_E_SUCCESS) {
+		[self setDownloadText:NSLocalizedString(@"Unable to upload iBSS!", @"Unable to upload iBSS!")];
+		debug("%s\n", irecv_strerror(ir_error));
+		return -1;
+	}
+	[self setDownloadText:NSLocalizedString(@"iBSS upload successful! Reconnecting in 10 seconds...", @"iBSS upload successful! Reconnecting in 10 seconds...")];
+	
+	
+	client = irecv_reconnect(client, 10);
+	
+	[self setDownloadText:[NSString stringWithFormat:@"Uploading %@ to device...", outputFile]];
+	ir_error = irecv_send_file(client, [outputFile UTF8String], 1);
+	if(ir_error != IRECV_E_SUCCESS) {
+		[self setDownloadText:NSLocalizedString(@"Unable to upload iBSS!", @"Unable to upload iBSS!")];
+		debug("%s\n", irecv_strerror(ir_error));
+		return -1;
+	}
+	[self setDownloadProgress:0];
+	[self setDownloadText:NSLocalizedString(@"iFaith payload upload successful! Reconnecting in 10 seconds...", @"iFaith payload upload successful! Reconnecting in 10 seconds...")];
+	client = irecv_reconnect(client, 10);
+	irecv_getenv(client, "config_board", &boardType);
+	
+		//printf("boardType: %s\n", boardType);
+	[self setDownloadText:NSLocalizedString(@"Verifying Board Type...", @"Verifying Board Type...")];
+	if ([[NSString stringWithUTF8String:boardType] isEqualToString:@"k66ap"])
+	{
+		NSString *outputBlob = @"/private/tmp/ifaith/ifaith.blob";
+			//NSString *ifaithOutput = @"/private/tmp/ifaith/ifaith.xml";
+		
+		
+		
+		[self setDownloadText:NSLocalizedString(@"Creating iFaith SHSH blob...", @"Creating iFaith SHSH blob...")];
+		FILE* file = freopen([outputBlob fileSystemRepresentation], "a", stdout);
+		irecv_set_configuration(client, 1);
+		
+		irecv_set_interface(client, 0, 0);
+		irecv_set_interface(client, 1, 1);
+		error = irecv_receive(client);
+		
+		
+		irecv_send_command(client, "go ready");
+		irecv_getenv(client, "status", &outputStatus);
+		
+		NSString *stringStatus = [NSString stringWithUTF8String:outputStatus];
+		
+		NSLog(@"status: %@", stringStatus);	
+		
+		if (![stringStatus isEqualToString:@"ready"])
+		{
+			NSLog(@"failed with status: %@", stringStatus);
+			fclose(file);
+			[self setDownloadText:NSLocalizedString(@"Failed!", @"Failed!")];
+			
+			poisoning = FALSE;
+			pois0n_exit();
+			
+			[[NSNotificationCenter defaultCenter] postNotificationName:IFAITH_BLOB_DONE object:nil];
+			[pool release];
+			return -1;
+		}
+		
+			//printf("status: %s\n", outputStatus);
+		irecv_getenv_sn0w(client, "effyocouch", &xmlOutput ,1);
+		fclose(file);
+		
+		NSString *ifaithSupport = [[tetherKitAppDelegate applicationSupportFolder] stringByAppendingPathComponent:@"iFaith"];
+		if (![FM fileExistsAtPath:ifaithSupport])
+		{
+			[FM createDirectoryAtPath:ifaithSupport withIntermediateDirectories:YES attributes:nil error:nil];
+		}
+		
+		NSString *decimalString = [[NSString stringWithContentsOfFile:outputBlob] hexToString];
+			//NSLog(@"decimalString: %@", decimalString);
+		NSDictionary *ifaithDict = [[[NSXMLDocument alloc] initWithXMLString:decimalString options:NSXMLDocumentTidyXML error:nil]  iFaithDictionaryRepresentation];
+		
+		NSString *ifaithXMLOutput = [ifaithSupport stringByAppendingFormat:@"/%@_%@.xml", [ifaithDict objectForKey:@"ecid"], [ifaithDict objectForKey:@"ios"]];
+		
+		NSData *blob = [[NSString stringWithContentsOfFile:outputBlob] stringToHexData];
+		[blob writeToFile:ifaithXMLOutput atomically:YES];
+	
+		
+		TSSManager *tss = nil;
+		
+		if (!DeviceIDEqualToDevice(currentDevice, TSSNullDevice))
+		{
+			tss = [[TSSManager alloc] initWithECID:ChipID_ device:currentDevice];
+		} else {
+			
+			tss = [[TSSManager alloc] initWithECID:ChipID_];
+		}
+		
+		NSString *response = [tss _synchronousPushiFaithBlob:decimalString withiOSVersion:[ifaithDict objectForKey:@"ios"]];
+		
+		
+			//printf("output: %s", xmlOutput);
+			//NSLog(@"ifaithDict: %@", ifaithDict);
+		[self setDownloadText:NSLocalizedString(@"Finished!", @"Finished!")];
+		
+		poisoning = FALSE;
+		pois0n_exit();
+		
+		[[NSNotificationCenter defaultCenter] postNotificationName:IFAITH_BLOB_DONE object:ifaithDict];
+		[pool release];
+		
+		return 0;	
+		
+	}
+	
+	
+	pois0n_exit();
+	[pool release];
+	return -1;
+	
+}
+
+//- (NSDictionary *)ifaithBlobToDictionary:(NSXMLDocument *)rootElt
+//{
+//	
+//    NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
+//    NSArray *val=[rootElt nodesForXPath:@"./iFaith/name" error:nil];
+//	if ([val count]!=0)
+//	{
+//		NSArray *children = [[val objectAtIndex:0] children];
+//		for (NSXMLNode *child in children)
+//		{
+//			NSLog(@"name: %@, stringVal: %@", [child name], [child stringValue]);
+//				//	[dict setObject:[child stringValue] forKey:[child name]];
+//		}
+//	}
+//		//NSLog(@"dict: %@",dict);
+//    return [dict autorelease];
+//}
+
++ (NSString *) stringToHex:(NSString *)str
+{   
+    NSUInteger len = [str length];
+    unichar *chars = malloc(len * sizeof(unichar));
+    [str getCharacters:chars];
+	
+    NSMutableString *hexString = [[NSMutableString alloc] init];
+	
+    for(NSUInteger i = 0; i < len; i++ )
+    {
+			// [hexString [NSString stringWithFormat:@"%02x", chars[i]]]; /*previous input*/
+        [hexString appendFormat:@"%02x", chars[i]]; /*EDITED PER COMMENT BELOW*/
+    }
+    free(chars);
+	
+    return [hexString autorelease];
+}
+
 #pragma mark •• a note about libsyringe
 
 /*
@@ -740,7 +1023,7 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event) {
 		return result;
 	}
 	
-	result = pois0n_injectonly();
+	result = pois0n_injectonly_old();
 	if (result < 0) {
 		[self setDownloadText:NSLocalizedString(@"Exploit injection failed!", @"Exploit injection failed!")];
 		
@@ -1345,10 +1628,14 @@ static NSString *HexToDec(NSString *hexValue)
 	unsigned long long ecid;
 	ret = irecv_get_ecid(client, &ecid);
 	if(ret == IRECV_E_SUCCESS) {
-		//	printf("ECID: %lld\n", ecid);
+			printf("ECID: %lld\n", ecid);
 	}
 	irecv_close(client);
 	irecv_exit();
+	
+	NSString *ecidHex = [NSString stringWithFormat:@"%lld", ecid];
+	
+	NSLog(@"ecidHex: %@", [ecidHex stringToPaddedHex]);
 	
 	NSString *cpidDecimal = HexToDec([NSString stringWithFormat:@"0x%llu", cpid]);
 	NSString *bpidDecimal = HexToDec([NSString stringWithFormat:@"0x%llu", bdid]);
@@ -1509,9 +1796,11 @@ static NSString *HexToDec(NSString *hexValue)
 		//NSLog(@"chipID: %@ ecid: %@", ChipID_, self.theEcid);
 	
 	NSArray *signableVersions = [TSSManager signableVersionsFromModel:self.deviceClass]; //check what versions apple is still signing
-	NSString *buildNumber = [[self currentBundle] buildVersion]; //
+	NSString *buildNumber = [[self currentBundle] buildVersion]; //ie 8C154
 	NSString *osVersion = [[self currentBundle] osVersion];
 	NSString *fourPointThree = @"4.3";
+	
+	//FIXME: REMEMBER TO COMMENT THIS BACK IN!!!!!!!!!
 	
 	if ([signableVersions containsObject:buildNumber])
 	{
@@ -1519,6 +1808,7 @@ static NSString *HexToDec(NSString *hexValue)
 		return kRestoreDefaultMode;
 	}
 	
+
 	if (ecid == nil)
 	{
 		[self _fetchDeviceInfo];
@@ -1575,11 +1865,14 @@ static NSString *HexToDec(NSString *hexValue)
 	TSSManager *tss = [[TSSManager alloc] initWithECID:ecid device:currentDevice];
 	//TSSManager *tss = [[TSSManager alloc] initWithECID:ecid];
 	NSArray *cydiaBlobs = [tss _simpleSynchronousBlobCheck];
+	NSArray *ifaithBlobs = [tss _simpleiFaithSynchronousBlobCheck];
+		//NSLog(@"cydiaBlobs: %@", cydiaBlobs);
+	
 	[tss release];
 	tss = nil;
 	
 	BOOL cydiaRescue = [cydiaBlobs containsObject:buildNumber];
-	
+	BOOL ifaithRescue = [ifaithBlobs containsObject:buildNumber];
 	NSComparisonResult theResult = [osVersion compare:fourPointThree options:NSNumericSearch];
 		//NSLog(@"theversion: %@  installed version %@", theVersion, installedVersion);
 	if ( theResult == NSOrderedDescending )
@@ -1595,8 +1888,16 @@ static NSString *HexToDec(NSString *hexValue)
 			return kRestoreStitchMode;
 		} else {
 			
-			NSLog(@"no blobs for %@! no soup for you!!!", buildNumber);
+			NSLog(@"no blobs for %@! checking iFaith servers!", buildNumber);
 			
+			if (ifaithRescue == TRUE)
+			{
+				NSLog(@"found blob on iFaith servers!!");
+				return kRestoreiFaithStitchMode;
+			}
+			
+			
+			NSLog(@"not on sauriks server or ih8sn0ws server... no soup for you: %@", buildNumber);
 			return kRestoreFirmwareIneligible;
 			
 		}
@@ -1614,8 +1915,16 @@ static NSString *HexToDec(NSString *hexValue)
 			return kRestoreCydiaRedirectMode;
 		} else {
 			
-			NSLog(@"no blobs for %@! no soup for you!!!", buildNumber);
+			NSLog(@"no blobs for %@! checking iFaith servers!", buildNumber);
 			
+			if (ifaithRescue == TRUE)
+			{
+				NSLog(@"found blob on iFaith servers!!");
+				return kRestoreiFaithStitchMode;
+			}
+			
+			
+			NSLog(@"not on sauriks server or ih8sn0ws server... no soup for you: %@", buildNumber);
 			return kRestoreFirmwareIneligible;
 			
 		}
@@ -1632,8 +1941,16 @@ static NSString *HexToDec(NSString *hexValue)
 			return kRestoreCydiaRedirectMode;
 		} else {
 			
-			NSLog(@"no blobs for %@! no soup for you!!!", buildNumber);
+			NSLog(@"no blobs for %@! checking iFaith servers!", buildNumber);
 			
+			if (ifaithRescue == TRUE)
+			{
+				NSLog(@"found blob on iFaith servers!!");
+				return kRestoreiFaithStitchMode;
+			}
+			
+			
+			NSLog(@"not on sauriks server or ih8sn0ws server... no soup for you: %@", buildNumber);
 			return kRestoreFirmwareIneligible;
 			
 		}
@@ -1660,8 +1977,150 @@ static NSString *HexToDec(NSString *hexValue)
 	return (FALSE);
 }
 
+- (IBAction)ifaithPayloadDump:(id)sender
+{
+	[window setContentView:self.secondView];
+	[window display];
+	
+	self.processing = TRUE;
+	[buttonOne setEnabled:FALSE];
+	[bootButton setEnabled:FALSE];
+	[instructionImage setImage:[self imageForMode:kSPIPSWImage]];
+	[self showProgress];
+	[NSThread detachNewThreadSelector:@selector(dumpiFaithPayload) toTarget:self withObject:nil];
+}
+
+- (void)ifaithBlobDone:(NSNotification *)n
+{
+	NSDictionary *ifaithBlob = [n object];
+
+	if (ifaithBlob == nil)
+	{
+		NSLog(@"epic fail :(");
+		return;
+	}
+	
+	NSLog(@"ifaith blob dumped and submitted!");
+		//NSLog(@"ifaithBlobTake2: %@", ifaithBlob);
+		//NSString *outputiFaith = [NSHomeDirectory() stringByAppendingPathComponent:@"outputfile.plist"];
+		//[ifaithBlob writeToFile:outputiFaith atomically:YES];
+		//[[NSWorkspace sharedWorkspace] openFile:outputiFaith];
+		//NSLog(@"ifaithblob: %@", ifaithBlob);
+	[self showInitialView];
+	[self hideProgress];
+}
+
+
+//- (NSString *)convertHex
+//{
+//	
+//	NSString *dec = @"2932088167695";
+//	;
+//	NSString *hex = [NSString stringWithFormat:@"%.016lX", [dec integerValue]];
+//	NSMutableString *finalString;
+//	NSLog(@"%@", hex);
+//}
+
+- (void)testRecieveBlob
+{
+		//4.3 (8F455).xml
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	NSError *error = nil;
+	NSString *testBlobVersion = @"4.3 (8F455)";
+	
+	
+	TSSManager *tss = nil;
+	
+	if (!DeviceIDEqualToDevice(currentDevice, TSSNullDevice))
+	{
+		tss = [[TSSManager alloc] initWithECID:ChipID_ device:currentDevice];
+	} else {
+		
+		tss = [[TSSManager alloc] initWithECID:ChipID_];
+	}
+	
+	NSString *response = [tss _synchronousiFaithReceiveVersion:testBlobVersion];
+	
+	NSLog(@"response: %@", response);
+	
+	[tss release];
+	
+	tss = nil;
+	[pool release];
+}
+
+- (void)testSendBlob
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	NSError *error = nil;
+	NSString *testBlobPath = [[tetherKitAppDelegate applicationSupportFolder] stringByAppendingPathComponent:@"iFaith/000000B5AE1065CE_5.1.1 (10A831).xml"];
+	NSString *blobString = [NSString stringWithContentsOfFile:testBlobPath encoding:NSUTF8StringEncoding error:&error];
+	if (error!= nil)
+	{
+		NSLog(@"error: %@", error);
+		blobString = [NSString stringWithContentsOfFile:testBlobPath encoding:NSASCIIStringEncoding error:&error];
+		if (error != nil)
+		{
+			NSLog(@"both utf8 and ascii failed!! bail!");
+			return;
+		}
+	}
+	
+	NSLog(@"blobString: %@", blobString);
+	
+	TSSManager *tss = nil;
+	
+	if (!DeviceIDEqualToDevice(currentDevice, TSSNullDevice))
+	{
+		tss = [[TSSManager alloc] initWithECID:ChipID_ device:currentDevice];
+	} else {
+		
+		tss = [[TSSManager alloc] initWithECID:ChipID_];
+	}
+	
+	NSString *response = [tss _synchronousPushiFaithBlob:blobString withiOSVersion:@"5.1.1 (10A831)"];
+	
+	NSLog(@"response: %@", response);
+	
+	[tss release];
+	
+	tss = nil;
+	[pool release];
+	
+}
+
+- (void)getiFaithBlobArrayTest
+{
+		//4.3 (8F455).xml
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	
+	TSSManager *tss = nil;
+	
+	if (!DeviceIDEqualToDevice(currentDevice, TSSNullDevice))
+	{
+		tss = [[TSSManager alloc] initWithECID:ChipID_ device:currentDevice];
+	} else {
+		
+		tss = [[TSSManager alloc] initWithECID:ChipID_];
+	}
+	
+	NSString *response = [tss _simpleiFaithSynchronousBlobCheck];
+	
+	NSLog(@"response: %@", response);
+	
+	[tss release];
+	
+	tss = nil;
+	[pool release];
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
+	
+		//	NSArray *testArray = [TSSManager ifaithBlobArrayFromString:[TSSManager testString]];
+		//NSLog(@"testArray: %@", testArray);
+		//unsigned long long ecid = 
 	
 	[self printEnvironment];
 	
@@ -1716,6 +2175,7 @@ static NSString *HexToDec(NSString *hexValue)
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(statusChanged:) name:@"statusChanged" object:nil];
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(checksumFinished:) name:@"checksumFinished" object:nil];
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(shouldDownloadFinished:) name:@"shouldDownloadFinish" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ifaithBlobDone:) name:IFAITH_BLOB_DONE object:nil];
 		//[self startupAlert];
 	
 	//check the ownership to make sure we can continue on our merry way
@@ -1776,7 +2236,8 @@ static NSString *HexToDec(NSString *hexValue)
 
 	}
 
-
+		[NSThread detachNewThreadSelector:@selector(getiFaithBlobArrayTest) toTarget:self withObject:nil];
+		//[self ifaithPayloadDump];
 }
 
 - (void)failedWithReason:(NSString *)theReason
@@ -2252,7 +2713,32 @@ void tap_keyboard(void) {
 		tss	= nil;
 		
 		[nitoUtility migrateFiles:[self ipswContentsNoManifest] toPath:IPSW_TMP];
-	} else {
+	} else if (myRestoreMode == kRestoreiFaithStitchMode){
+		
+		NSLog(@"stitch it up! ifaith style");
+		
+		
+		TSSManager *tss = nil;
+		
+		if (!DeviceIDEqualToDevice(currentDevice, TSSNullDevice))
+		{
+			tss = [[TSSManager alloc] initWithECID:ChipID_ device:currentDevice];
+		} else {
+			
+			tss = [[TSSManager alloc] initWithECID:ChipID_];
+		}
+		
+		
+		[tss stitchFirmwareForiFaith:[self currentBundle]];
+		
+		[tss release];
+		
+		tss	= nil;
+		
+		[nitoUtility migrateFiles:[self ipswContentsNoManifest] toPath:IPSW_TMP];
+	
+		
+	} else{
 		
 		[nitoUtility migrateFiles:[self ipswContents] toPath:IPSW_TMP];
 		

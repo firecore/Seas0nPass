@@ -23,6 +23,7 @@
 
 static NSString *myChipID_ = nil;
 
+#define IFAITH_USERAGENT @"iacqua-1.5-941"
 
 @implementation TSSManager
 
@@ -238,6 +239,40 @@ static NSString *myChipID_ = nil;
     return h ;  
 }
 
+- (NSMutableURLRequest *)requestForiFaithList
+{
+	
+	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+	[request setURL:[NSURL URLWithString:baseUrlString]];
+	[request setHTTPMethod:@"GET"];
+	[request setValue:@"text/html" forHTTPHeaderField:@"Content-Type"];
+	[request setValue:IFAITH_USERAGENT forHTTPHeaderField:@"User-Agent"];
+	[request setValue:nil forHTTPHeaderField:@"X-User-Agent"];
+	
+	return request;
+		//return request;
+}
+
+
+- (NSMutableURLRequest *)requestForiFaithBlob:(NSString *)post
+{
+	
+	NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+	
+	NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
+	
+	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+	[request setURL:[NSURL URLWithString:baseUrlString]];
+	[request setHTTPMethod:@"POST"];
+	[request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+	[request setValue:@"text/xml" forHTTPHeaderField:@"Content-Type"];
+	[request setValue:IFAITH_USERAGENT forHTTPHeaderField:@"User-Agent"];
+	[request setValue:nil forHTTPHeaderField:@"X-User-Agent"];
+	[request setHTTPBody:postData];
+	
+	return request;
+}
+
 /* 
  
  the request we send to get the list of SHSH blobs for the current device 
@@ -311,6 +346,19 @@ static NSString *myChipID_ = nil;
 	NSString *s=[[NSString alloc] initWithData:xmlData encoding: NSUTF8StringEncoding];
 	return [s autorelease];
 }
+
+- (NSMutableURLRequest *)getiFaithRequestFromVersion:(NSString *)theVersion
+{	
+	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+	[request setURL:[NSURL URLWithString:baseUrlString]];
+	[request setHTTPMethod:@"GET"];
+	[request setValue:@"text/html" forHTTPHeaderField:@"Content-Type"];
+	[request setValue:IFAITH_USERAGENT forHTTPHeaderField:@"User-Agent"];
+	[request setValue:nil forHTTPHeaderField:@"X-User-Agent"];
+	return request;
+
+}
+
 
 /*
  
@@ -569,10 +617,159 @@ static NSString *myChipID_ = nil;
 	
 }
 
+- (NSArray *)_simpleiFaithSynchronousBlobCheck
+{
+	NSArray *complexBlobArray = [self _synchronousiFaithBlobCheck];
+	return [TSSWorker buildsFromiFaithList:complexBlobArray];
+}
+
 - (NSArray *)_simpleSynchronousBlobCheck
 {
 	NSArray *complexBlobArray = [self _synchronousBlobCheck];
 	return [TSSWorker buildsFromList:complexBlobArray];
+}
+
+- (NSString *)_synchronousiFaithReceiveVersion:(NSString *)theVersion
+{
+		//NSLog(@"receivingVersion: %@", theVersion);
+    BOOL                success;
+    NSURL *             url;
+    NSMutableURLRequest *      request;
+	
+	
+	baseUrlString = [[NSString stringWithFormat:@"http://iacqua.ih8sn0w.com/submit.php?ecid=%@&board=k66ap&ios=%@", [myChipID_ stringToPaddedHex], theVersion] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	
+	
+	url = baseUrlString;
+	
+    success = (url != nil);
+	
+	NSLog(@"URL: %@", url);
+	
+	
+	if ( ! success) {
+		assert(!success);
+		
+	} else {
+		
+		
+		request = [self getiFaithRequestFromVersion:theVersion];
+		
+		NSURLResponse *theResponse = nil;
+		
+		NSError *theError = nil;
+		
+		NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:&theResponse error:&theError];
+		
+		
+		NSString *datString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+		
+			//		NSLog(@"datString: %@", datString);
+		
+			//NSString *outString = [TSSManager rawBlobFromResponse:datString]; 
+		
+			//[datString release];
+		
+		return [datString autorelease];
+		
+    }
+	return nil;
+}
+
+- (NSArray *)_synchronousiFaithBlobCheck
+{
+    BOOL                success;
+    NSURL *             url;
+    NSMutableURLRequest *      request;
+    
+		// First get and check the URL.
+    
+	baseUrlString = [NSString stringWithFormat:@"http://iacqua.ih8sn0w.com/submit.php?ecid=%@&board=k66ap", [myChipID_ stringToPaddedHex]];
+	
+	url = [NSURL URLWithString:baseUrlString];
+	
+    success = (url != nil);
+	
+    if ( ! success) {
+		assert(!success);
+		
+    } else {
+		
+			// Open a connection for the URL.
+        request = [self requestForiFaithList];
+        assert(request != nil);
+		NSURLResponse *theResponse = nil;
+		NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:&theResponse error:nil];
+		
+		NSString *datString = [[NSString alloc] initWithData:returnData  encoding:NSUTF8StringEncoding];
+		
+		NSArray *blobArray = [TSSManager ifaithBlobArrayFromString:datString]; 
+		
+		[datString release];
+		
+		return blobArray;
+		
+    }
+	
+	return nil;
+}
+
+- (NSString *)_synchronousPushiFaithBlob:(NSString *)theBlob withiOSVersion:(NSString *)iosVersion
+{
+	
+		//NSLog(@"pushingBlob: %@", theBlob);
+    BOOL                success;
+    NSURL *             url;
+    NSMutableURLRequest *      request;
+    
+	TSSDeviceID cd = self.theDevice;
+	
+	baseUrlString = [[NSString stringWithFormat:@"http://iacqua.ih8sn0w.com/submit.php?ecid=%@&board=k66ap&ios=%@", [myChipID_ stringToPaddedHex], iosVersion] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
+	
+	url = baseUrlString;
+	
+	NSLog(@"URL: %@", baseUrlString);
+	
+    success = (url != nil);
+ 
+    if ( ! success) {
+		assert(!success);
+		
+			//self.statusLabel.text = @"Invalid URL";
+    } else {
+		
+        request = [self requestForiFaithBlob:theBlob];
+		assert(request != nil);
+
+		NSHTTPURLResponse * theResponse = nil;
+		[NSURLConnection sendSynchronousRequest:request returningResponse:&theResponse error:nil];
+
+		NSString *returnString = [NSString stringWithFormat:@"Request returned with response: \"%@\" with status code: %i",[NSHTTPURLResponse localizedStringForStatusCode:theResponse.statusCode], theResponse.statusCode ];
+		
+		return returnString;
+		
+	}
+	
+	return nil;
+}
+
++ (NSString *)testString
+{
+	return @"4.1 (8B117).shsh4.1 (8B118).shsh4.2.1 (8C148).shsh4.3 (8F190).shsh4.3.1 (8G4).shsh4.3.2 (8H7).shsh4.3.3 (8J2).shsh4.3.4 (8K2).shsh4.3.5 (8L1).shsh5.0.1 (9A405).shsh5.1.1 (9B206).shsh6.0 (10A403).shsh6.1 (10B144).shsh6.1.2 (10B146).shsh6.1.3 (10B329).shsh";
+}
+
++ (NSArray *)ifaithBlobArrayFromString:(NSString *)inputString
+{
+	/*
+	 
+	 4.1 (8B117).shsh4.1 (8B118).shsh4.2.1 (8C148).shsh4.3 (8F190).shsh4.3.1 (8G4).shsh4.3.2 (8H7).shsh4.3.3 (8J2).shsh4.3.4 (8K2).shsh4.3.5 (8L1).shsh5.0.1 (9A405).shsh5.1.1 (9B206).shsh6.0 (10A403).shsh6.1 (10B144).shsh6.1.2 (10B146).shsh6.1.3 (10B329).shsh
+	 */
+	
+	NSArray *seperateStrings = [inputString componentsSeparatedByString:@".shsh"];
+	int sepCount = [seperateStrings count]-1;
+	return [seperateStrings subarrayWithRange:NSMakeRange(0, sepCount)];
+	
 }
 
 - (NSArray *)_synchronousBlobCheck
@@ -796,7 +993,8 @@ static NSString *myChipID_ = nil;
 	return nil;
 }
 
-+ (NSData *)ticketHeader
++ (NSData *)ticketHeader //obsolete
+
 {						 //"33676D49AAAAAAAABBBBBBBB0000000042414353455059542000000004000000424143530000000000000000000000000000000041544144CCCCCCCCDDDDDDDD"
 	NSString *headerHex = @"33676D49000C0000EC0B0000000000004241435345505954200000000400000042414353000000000000000000000000312F736F41544144AC0A00009A0A0000";
 	return [NSData dataFromStringHex:headerHex];
@@ -818,18 +1016,18 @@ static NSString *myChipID_ = nil;
 #define SIZE_RANGE NSMakeRange(0x00008, 4)
 
 
-	//0x3C 2682
-	//changing 9A 0A 00 00 to AA A0 00 00	
+	//0x38 2682
+	//changing CC CC CC CC to 86 0A 00 00 
 
-	//0x38
-	//changing AC 0A 00 00 to 7A 0A 00 00 
+	//0x3C 2694
+	//changing DD DD DD DD to 7A 0A 00 00	
 
 	//2746 is final size == 0A BA
 
 	//0x04
 	//changing AA AA AA AA to BA 0A 00 00
 
-	//0x08 2726
+	//0x08
 	//changing BB BB BB BB to A6 0A 00 00
 
 +(NSData *)newApTicketFromDictionary:(NSDictionary *)thePlist
@@ -852,7 +1050,11 @@ static NSString *myChipID_ = nil;
 		
 		NSLog(@"newLengthHex: %@ newFullLengthHex: %@", newLengthHex, newFullLengthHex);
 		
+			//ticket size + 0xC at 0x38: 2682 + 12 = 2694 = 0x0A86 = 860A (for my example ticket)
+		
 		[theData replaceBytesInRange:TICKET_FULLSIZE_RANGE withBytes:[newFullLengthHex bytes]];
+		
+			//ticket size 2682 at 0x3C: 2682 = 0x0A7A = 7A 0A (for my example ticket)
 		[theData replaceBytesInRange:TICKET_SIZE_RANGE withBytes:[newLengthHex bytes]];
 		
 		[theData appendData:apTicket];
@@ -882,7 +1084,7 @@ static NSString *myChipID_ = nil;
 	//00000a7a = 2682 = size + 00000aaa = 2730
 	//7a0a0000				   aaa00000
 
-+ (NSData *)apTicketFromDictionary:(NSDictionary *)thePlist
++ (NSData *)apTicketFromDictionary:(NSDictionary *)thePlist //obsolete
 {
 	id theData = nil;
 	NSData *apTicket = [thePlist valueForKey:@"APTicket"];
@@ -997,6 +1199,118 @@ static NSString *myChipID_ = nil;
 
 /*
  
+ 2013-04-06 21:27:35.012 TestApp[5393:f0b] ifaith keys: (
+ bat1,
+ isEncrypted,
+ recm,
+ cert,
+ "ipsw_md5",
+ glyp,
+ chg0,
+ ibot,
+ dtre,
+ bat0,
+ model,
+ board,
+ logo,
+ ios,
+ revision,
+ chg1,
+ md5,
+ glyc,
+ illb,
+ batf,
+ krnl,
+ ecid
+ )
+ 
+ -- in the ifaith xml, look at cert
+ -- 0x1 == DataCenter
+ -- 0x2 == Factory
+ -- so when you add an SHSH blob to an img3, simply add the SHSH blob first from the XML
+ -- (convert from hex string to data)
+ --  then append whether the s5l8930x_datacenter.bin or s5l8930x_factory.bin cert after the blob
+ --  0x1/0x2 determines which cert to use
+ -- just remember to fixup the img3 header
+ -- the apticket ifaith dumps is in img3 format already
+ -- no need to put it in a container and such
+ 
+ */
+
+
++ (NSString *)manifestKeyFromiFaithKey:(NSString *)key
+{
+	if ([key isEqualToString:@"bat1"]) return @"BatteryLow1";
+	if ([key isEqualToString:@"recm"]) return @"RecoveryMode";
+	if ([key isEqualToString:@"glyp"]) return @"BatteryPlugin";	
+	if ([key isEqualToString:@"chg0"]) return @"BatteryCharging0";
+	if ([key isEqualToString:@"ibot"]) return @"iBoot";
+	if ([key isEqualToString:@"dtre"]) return @"DeviceTree";
+	if ([key isEqualToString:@"bat0"]) return @"BatteryLow0";
+	if ([key isEqualToString:@"logo"]) return @"AppleLogo";
+	if ([key isEqualToString:@"chg1"]) return @"BatteryCharging";
+	if ([key isEqualToString:@"glyc"]) return @"BatteryCharging0";
+	if ([key isEqualToString:@"illb"]) return @"LLB";
+	if ([key isEqualToString:@"batf"]) return @"BatteryFull";
+	if ([key isEqualToString:@"krnl"]) return @"KernelCache";
+	
+	return nil;
+}
+
+- (NSArray *)ifaithSignKeys
+{
+	return [NSArray arrayWithObjects:@"bat1", @"recm", @"glyp", @"chg0", @"ibot", @"dtre", @"bat0", @"logo", @"chg1", @"glyc", @"illb", @"batf", @"krnl", @"apticket",nil];
+}
+
+
+
+- (int)stitchFirmwareForiFaith:(FWBundle *)theBundle
+{
+		//s5l8930x_DataCenter.bin
+		//s5l8930x_Factory.bin
+
+	NSString *buildNumber = [theBundle iFaithBuildVersion];
+	
+	if (myChipID_ == nil)
+		myChipID_ = [[[NSApplication sharedApplication] delegate] theEcid];
+	
+	NSLog(@"chipID_: %@", myChipID_);
+	
+	NSString *blob = [self _synchronousiFaithReceiveVersion:buildNumber];
+	NSDictionary *ifaithDict = [[[NSXMLDocument alloc] initWithXMLString:blob options:NSXMLDocumentTidyXML error:nil] iFaithDictionaryRepresentation];
+	NSArray *keyArray = [ifaithDict objectForKey:@"ifaithSigned"]; //array of keys that needs to be signed
+	NSString *allFlash = [theBundle allFlashLocation];
+	NSString *apTicketFile = [allFlash stringByAppendingPathComponent:@"apticket.img3"];
+	NSData *apTicketFull = [ifaithDict valueForKey:@"apticket"];
+	[apTicketFull writeToFile:apTicketFile options:NSDataWritingAtomic error:nil];
+	[self updateManifestFile:[allFlash stringByAppendingPathComponent:@"manifest"]];
+	int certValue = [[ifaithDict objectForKey:@"cert"] intValue];
+	for (id fwKey in keyArray)
+	{
+			//first get the blob
+		
+		NSLog(@"fwKey: %@", fwKey);
+		
+		NSData *theBlob = [ifaithDict valueForKey:fwKey];
+		NSString *fwFile = [theBundle unzippedPathForFirmwareKey:fwKey];
+		
+		if ([self signFileForiFaith:fwFile withBlob:theBlob withCert:certValue])
+		{
+			NSLog(@"signed file: %@ successfully!", fwFile);
+			
+		} else {
+			
+			NSLog(@"sign file: %@ fail!", fwFile);
+			
+			return -1;
+			
+		}
+		
+	}
+}
+
+/*
+ 
  moving all the stiching / signing code into here in an effort to be better organized.
  
  
@@ -1076,6 +1390,96 @@ static NSString *myChipID_ = nil;
 
 
 #define BLOB_RANGE NSMakeRange(0x0000C, 4)
+
+/*
+ 
+ -- 0x1 == DataCenter
+ -- 0x2 == Factory
+ -- so when you add an SHSH blob to an img3, simply add the SHSH blob first from the XML
+ -- (convert from hex string to data)
+ --  then append whether the s5l8930x_datacenter.bin or s5l8930x_factory.bin cert after the blob
+ --  0x1/0x2 determines which cert to use
+ -- just remember to fixup the img3 header
+ 
+ */
+
+- (NSData *)dataForiFaithCert:(int)certValue
+{
+	NSData *myData = nil;
+	switch (certValue) {
+		
+		case 0x1:
+		
+			myData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"s5l8930x_DataCenter" ofType:@"bin" inDirectory:@"iFaith-Certs"]];
+			break;
+			
+		case 0x2:
+			myData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"s5l8930x_Factory" ofType:@"bin" inDirectory:@"iFaith-Certs"]];
+			break;
+	}
+	
+	return myData;
+}
+
+- (BOOL)signFileForiFaith:(NSString *)inputFile withBlob:(NSData *)blobData withCert:(int)certValue
+{
+		//	NSLog(@"signing file: %@", inputFile);
+	
+		//thanks ih8sn0w for information on this!!
+	
+	
+	NSString *newFile = [inputFile stringByAppendingString:@"_patched"];
+	NSMutableData *myData = [[NSMutableData alloc] initWithContentsOfMappedFile:inputFile];
+	NSData *blobOffsetData = [myData subdataWithRange:BLOB_RANGE];
+	
+	NSString *converted = [blobOffsetData decimalString]; //take raw NSData, flip the bytes and make it a decimal string.
+	NSUInteger offset = [converted intValue]+0x14; //take the intValue and add 14 for the address of where the SHSH blob will be added.
+	NSRange blobRange = NSMakeRange(offset, [myData length]-offset); //we create the full range of the bytes we will replace with the blob we retreive from plist
+	
+		//offset is where we start, then we take the full length and delete the offset for the properly adjustsed range.
+	
+	
+	NSString *replacementString = [NSString stringWithFormat:@"%.8x",([converted longLongValue]+0x40) ]; //flipped string that we replace in the header
+	
+	NSData *replacementData = [[NSData dataFromStringHex:replacementString] reverse]; //the actual data we use to replace the blob range in the header. take the hex string from above- reverse and datafy it.
+	
+	[myData replaceBytesInRange:BLOB_RANGE withBytes:[replacementData bytes]]; //changing the blob offset as necessary for signature
+	
+	[myData replaceBytesInRange:blobRange withBytes:[blobData bytes] length:[blobData length]]; //inserting the blob from the plist
+	
+	[myData appendData:[self dataForiFaithCert:certValue]];
+	
+	int dataLength = [myData length];
+	
+	
+		//time to adjust the header - the full file size is at 0x00004 and is 4 bytes long. take the new length (dataLength) and convert it to hex properly to replace the current value
+	
+	NSString *newLengthHexString = [NSString stringWithFormat:@"%.8x",dataLength ]; //converted back to hex
+	NSString *newHeaderlessLengthHexString = [NSString stringWithFormat:@"%.8x",dataLength-0x14 ]; //converted back to hex - the second header replacement without the header size factored in
+	NSData *newLengthHex = [[NSData dataFromStringHex:newLengthHexString] reverse]; //reversed as necessary for re-adding to the file
+	
+	NSData *newLengthHeaderlessHex = [[NSData dataFromStringHex:newHeaderlessLengthHexString] reverse]; //reversed as necessary for re-adding to the file (no header size)
+	[myData replaceBytesInRange:FULL_SIZE_RANGE withBytes:[newLengthHex bytes]]; //actually replace the new proper full size
+	[myData replaceBytesInRange:SIZE_RANGE withBytes:[newLengthHeaderlessHex bytes]]; //replace the new proper headerless size.
+	
+	if ([myData writeToFile:newFile atomically:YES])
+	{
+			//NSLog(@"newFile: %@", newFile);
+		
+			//everything should have been a success! time to remove the old file and replace it with the new.
+		
+		[[NSFileManager defaultManager] removeItemAtPath:inputFile error:nil];
+		[[NSFileManager defaultManager] moveItemAtPath:newFile toPath:inputFile error:nil];
+		[myData release];
+		
+		return TRUE;
+	}
+	
+	
+	[myData release];
+	return FALSE;
+	
+}
 
 - (BOOL)signFile:(NSString *)inputFile withBlob:(NSData *)blobData
 {

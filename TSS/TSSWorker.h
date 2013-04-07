@@ -27,6 +27,8 @@
 @property (readwrite, assign) int queueNumber;
 @property (readwrite, assign) int currentIndex;
 
+
++ (NSArray *)buildsFromiFaithList:(NSArray *)ifaithList;
 - (NSString *)getVersionTicket:(NSString *)theVersion;
 - (void)theWholeShebang;
 - (NSArray *)filteredList:(NSArray *)signedFW;

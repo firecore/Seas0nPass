@@ -42,6 +42,7 @@ enum {
 	kRestoreDefaultMode,
 	kRestoreCydiaRedirectMode,
 	kRestoreStitchMode,
+	kRestoreiFaithStitchMode,
 	kRestoreUnavailableMode,
 	kRestoreFirmwareIneligible,
 	kRestoreNoDevice,
@@ -55,6 +56,7 @@ enum {
 
 @property (nonatomic, retain) NSString *fwRoot;
 
+- (NSString *)iFaithBuildVersion;
 - (BOOL)fivePointOnePlus;
 - (NSString *)fullDeviceType;
 - (NSString *)allFlashLocation;

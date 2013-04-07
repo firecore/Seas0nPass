@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "FWBundle.h"
 
-#define BLOB_PLIST_BASE_URL @"https://dl.dropbox.com/u/16129573/FW"
-	//#define BLOB_PLIST_BASE_URL @"http://files.firecore.com/FW"
+	//#define BLOB_PLIST_BASE_URL @"https://dl.dropbox.com/u/16129573/FW"
+#define BLOB_PLIST_BASE_URL @"http://files.firecore.com/FW"
 #define BLOB_PLIST_URL @"http://files.firecore.com/FW/k66ap.plist"
 
 enum {
@@ -70,6 +70,8 @@ static inline bool DeviceIDEqualToDevice(TSSDeviceID device1, TSSDeviceID device
 @property (nonatomic, assign) NSString *ecid;
 @property (nonatomic, retain) id delegate;
 
+- (NSArray *)_simpleiFaithSynchronousBlobCheck;
+- (int)stitchFirmwareForiFaith:(FWBundle *)theBundle;
 + (NSArray *)signableVersionsFromModel:(NSString *)theModel;
 + (NSArray *)supportedDevices;
 - (id)initWithECID:(NSString *)theEcid device:(TSSDeviceID)myDevice;

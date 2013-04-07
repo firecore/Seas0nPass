@@ -119,6 +119,21 @@ void WorkLog (NSString *format, ...)
 
 
 
++ (NSArray *)buildsFromiFaithList:(NSArray *)ifaithList
+{
+	NSMutableArray *newArray = [[NSMutableArray alloc] init];
+	for (NSString *theFw in ifaithList)
+	{//4.1 (8B117)
+		NSArray *newSplit = [theFw componentsSeparatedByString:@"("]; //@"4.1 ", @"8B117)"
+		NSString *buildPre = [newSplit lastObject];
+		NSString *buildClip = [buildPre substringToIndex:([buildPre length]-1)];
+		NSLog(@"buildClip %@", buildClip);
+		[newArray addObject:buildClip];
+	}
+	
+	return [newArray autorelease];
+}
+
 
 /*
  

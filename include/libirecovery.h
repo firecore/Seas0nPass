@@ -231,6 +231,7 @@ LIBIRECOVERY_EXPORT irecv_error_t irecv_get_cpid(irecv_client_t client, unsigned
 LIBIRECOVERY_EXPORT irecv_error_t irecv_get_bdid(irecv_client_t client, unsigned int* bdid);
 LIBIRECOVERY_EXPORT irecv_error_t irecv_get_ecid(irecv_client_t client, unsigned long long* ecid);
 LIBIRECOVERY_EXPORT void irecv_hexdump(unsigned char* buf, unsigned int len, unsigned int addr);
+	LIBIRECOVERY_EXPORT irecv_error_t irecv_getenv_sn0w(irecv_client_t client, const char* variable, char** value,int dumptilNull);
 
 LIBIRECOVERY_EXPORT void irecv_init();
 LIBIRECOVERY_EXPORT void irecv_exit();

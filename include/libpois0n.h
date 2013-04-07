@@ -35,8 +35,12 @@ LIBSYRINGE_EXPORT int pois0n_is_ready_old();
 LIBSYRINGE_EXPORT int pois0n_is_compatible();
 LIBSYRINGE_EXPORT int pois0n_inject();
 LIBSYRINGE_EXPORT int pois0n_injectonly();
+LIBSYRINGE_EXPORT int pois0n_injectonly_old();
 LIBSYRINGE_EXPORT void pois0n_exit();
 LIBSYRINGE_EXPORT int boot_iboot();
+LIBSYRINGE_EXPORT int ifaith_inject();
+LIBSYRINGE_EXPORT int ifaith_inject_only();
+LIBSYRINGE_EXPORT int fetch_dfu_image();
 
 #ifdef __cplusplus
 }

@@ -54,6 +54,9 @@
 		3285ACA014E350EA00677CC3 /* TSSCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 327E65C914CF481B0058D651 /* TSSCommon.m */; };
 		3285ACA214E350EB00677CC3 /* TSSManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */; };
 		3285ACA314E350EC00677CC3 /* TSSWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = 327E65CE14CF481B0058D651 /* TSSWorker.m */; };
+		32A5282F170821650009A99A /* payload.bin in Resources */ = {isa = PBXBuildFile; fileRef = 32A5282E170821650009A99A /* payload.bin */; };
+		32A52E031710D8440009A99A /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A52E021710D8440009A99A /* NSString+Extensions.m */; };
+		32A52E6F171127720009A99A /* iFaith-Certs in Resources */ = {isa = PBXBuildFile; fileRef = 32A52E6B171127720009A99A /* iFaith-Certs */; };
 		32D954D7131237CA007B5BE3 /* untethered.png in Resources */ = {isa = PBXBuildFile; fileRef = 32D954D6131237CA007B5BE3 /* untethered.png */; };
 		32DF4A3A12DC2905002916D5 /* tetheredRemote.png in Resources */ = {isa = PBXBuildFile; fileRef = 32DF4A3912DC2905002916D5 /* tetheredRemote.png */; };
 		32DF57BD12DD6E74002916D5 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32DF57BC12DD6E74002916D5 /* Sparkle.framework */; };
@@ -181,6 +184,10 @@
 		327E917014D1E1040058D651 /* NSData+Flip.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSData+Flip.mm"; sourceTree = "<group>"; };
 		327EB38714D5F0140058D651 /* SPFWButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPFWButton.h; sourceTree = "<group>"; };
 		327EB38814D5F0140058D651 /* SPFWButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPFWButton.m; sourceTree = "<group>"; };
+		32A5282E170821650009A99A /* payload.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = payload.bin; sourceTree = "<group>"; };
+		32A52E011710D8440009A99A /* NSString+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Extensions.h"; sourceTree = "<group>"; };
+		32A52E021710D8440009A99A /* NSString+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extensions.m"; sourceTree = "<group>"; };
+		32A52E6B171127720009A99A /* iFaith-Certs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "iFaith-Certs"; sourceTree = "<group>"; };
 		32D954D6131237CA007B5BE3 /* untethered.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = untethered.png; sourceTree = "<group>"; };
 		32DF4A3912DC2905002916D5 /* tetheredRemote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tetheredRemote.png; sourceTree = "<group>"; };
 		32DF57BC12DD6E74002916D5 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
@@ -234,6 +241,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				32A52E011710D8440009A99A /* NSString+Extensions.h */,
+				32A52E021710D8440009A99A /* NSString+Extensions.m */,
 				327E65C714CF481B0058D651 /* TSS */,
 				324FF2EA12F8CC690039310E /* NSApplication+SystemVersion.h */,
 				324FF2EB12F8CC690039310E /* NSApplication+SystemVersion.m */,
@@ -319,6 +328,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				32A52E6B171127720009A99A /* iFaith-Certs */,
+				32A5282E170821650009A99A /* payload.bin */,
 				32D954D6131237CA007B5BE3 /* untethered.png */,
 				32045133130DE20E0057C8B0 /* debs */,
 				32DF734512E0578A002916D5 /* bundles */,
@@ -549,6 +560,8 @@
 				3204513C130DE20E0057C8B0 /* debs in Resources */,
 				32D954D7131237CA007B5BE3 /* untethered.png in Resources */,
 				32624B3D1442242400E1B9DB /* dbHelper in Resources */,
+				32A5282F170821650009A99A /* payload.bin in Resources */,
+				32A52E6F171127720009A99A /* iFaith-Certs in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -590,6 +603,7 @@
 				327E65D214CF481B0058D651 /* TSSWorker.m in Sources */,
 				327E917114D1E1040058D651 /* NSData+Flip.mm in Sources */,
 				327EB38914D5F0140058D651 /* SPFWButton.m in Sources */,
+				32A52E031710D8440009A99A /* NSString+Extensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
