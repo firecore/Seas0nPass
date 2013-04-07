@@ -1284,7 +1284,8 @@ static NSString *myChipID_ = nil;
 	NSData *apTicketFull = [ifaithDict valueForKey:@"apticket"];
 	[apTicketFull writeToFile:apTicketFile options:NSDataWritingAtomic error:nil];
 	[self updateManifestFile:[allFlash stringByAppendingPathComponent:@"manifest"]];
-	int certValue = [[ifaithDict objectForKey:@"cert"] intValue];
+	NSString* certValue = [ifaithDict objectForKey:@"cert"];
+	NSLog(@"certValue: %@", certValue);
 	for (id fwKey in keyArray)
 	{
 			//first get the blob
@@ -1403,25 +1404,16 @@ static NSString *myChipID_ = nil;
  
  */
 
-- (NSData *)dataForiFaithCert:(int)certValue
++ (NSData *)dataForiFaithCert:(NSString *)certValue
 {
 	NSData *myData = nil;
-	switch (certValue) {
-		
-		case 0x1:
-		
-			myData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"s5l8930x_DataCenter" ofType:@"bin" inDirectory:@"iFaith-Certs"]];
-			break;
-			
-		case 0x2:
-			myData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"s5l8930x_Factory" ofType:@"bin" inDirectory:@"iFaith-Certs"]];
-			break;
-	}
-	
+	if ([certValue isEqualToString:@"0x1"]) myData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"s5l8930x_DataCenter" ofType:@"bin" inDirectory:@"iFaith-Certs"]];
+	if ([certValue isEqualToString:@"0x2"]) myData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"s5l8930x_Factory" ofType:@"bin" inDirectory:@"iFaith-Certs"]];
+
 	return myData;
 }
 
-- (BOOL)signFileForiFaith:(NSString *)inputFile withBlob:(NSData *)blobData withCert:(int)certValue
+- (BOOL)signFileForiFaith:(NSString *)inputFile withBlob:(NSData *)blobData withCert:(NSString *)certValue
 {
 		//	NSLog(@"signing file: %@", inputFile);
 	
@@ -1447,7 +1439,7 @@ static NSString *myChipID_ = nil;
 	
 	[myData replaceBytesInRange:blobRange withBytes:[blobData bytes] length:[blobData length]]; //inserting the blob from the plist
 	
-	[myData appendData:[self dataForiFaithCert:certValue]];
+	[myData appendData:[TSSManager dataForiFaithCert:certValue]];
 	
 	int dataLength = [myData length];
 	

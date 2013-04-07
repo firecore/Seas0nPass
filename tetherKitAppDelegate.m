@@ -782,7 +782,7 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event) {
 		}
 		
 		NSString *decimalString = [[NSString stringWithContentsOfFile:outputBlob] hexToString];
-			//NSLog(@"decimalString: %@", decimalString);
+			//	NSLog(@"decimalString: %@", decimalString);
 		NSDictionary *ifaithDict = [[[NSXMLDocument alloc] initWithXMLString:decimalString options:NSXMLDocumentTidyXML error:nil]  iFaithDictionaryRepresentation];
 		
 		NSString *ifaithXMLOutput = [ifaithSupport stringByAppendingFormat:@"/%@_%@.xml", [ifaithDict objectForKey:@"ecid"], [ifaithDict objectForKey:@"ios"]];
@@ -803,6 +803,7 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event) {
 		
 		NSString *response = [tss _synchronousPushiFaithBlob:decimalString withiOSVersion:[ifaithDict objectForKey:@"ios"]];
 		
+		NSLog(@"response: %@", response);
 		
 			//printf("output: %s", xmlOutput);
 			//NSLog(@"ifaithDict: %@", ifaithDict);
@@ -1801,14 +1802,13 @@ static NSString *HexToDec(NSString *hexValue)
 	NSString *fourPointThree = @"4.3";
 	
 	//FIXME: REMEMBER TO COMMENT THIS BACK IN!!!!!!!!!
-	
+
 	if ([signableVersions containsObject:buildNumber])
 	{
 		NSLog(@"apple is still signing %@ dont do anything special: kRestoreDefaultMode", buildNumber);
 		return kRestoreDefaultMode;
 	}
 	
-
 	if (ecid == nil)
 	{
 		[self _fetchDeviceInfo];
@@ -2118,6 +2118,8 @@ static NSString *HexToDec(NSString *hexValue)
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
 	
+	
+	
 		//	NSArray *testArray = [TSSManager ifaithBlobArrayFromString:[TSSManager testString]];
 		//NSLog(@"testArray: %@", testArray);
 		//unsigned long long ecid = 
@@ -2236,7 +2238,7 @@ static NSString *HexToDec(NSString *hexValue)
 
 	}
 
-		[NSThread detachNewThreadSelector:@selector(getiFaithBlobArrayTest) toTarget:self withObject:nil];
+		//	[NSThread detachNewThreadSelector:@selector(getiFaithBlobArrayTest) toTarget:self withObject:nil];
 		//[self ifaithPayloadDump];
 }
 
