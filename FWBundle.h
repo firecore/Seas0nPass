@@ -52,9 +52,11 @@ enum {
 @interface FWBundle : NSBundle	{
 
 	NSString *fwRoot;
+	int restoreMode;
 }
 
 @property (nonatomic, retain) NSString *fwRoot;
+@property (readwrite, assign) int restoreMode;
 
 - (NSString *)iFaithBuildVersion;
 - (BOOL)fivePointOnePlus;

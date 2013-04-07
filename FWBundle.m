@@ -13,7 +13,7 @@
 
 @implementation FWBundle
 
-@synthesize fwRoot;
+@synthesize fwRoot, restoreMode;
 
 
 

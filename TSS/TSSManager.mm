@@ -1282,8 +1282,13 @@ static NSString *myChipID_ = nil;
 	NSString *allFlash = [theBundle allFlashLocation];
 	NSString *apTicketFile = [allFlash stringByAppendingPathComponent:@"apticket.img3"];
 	NSData *apTicketFull = [ifaithDict valueForKey:@"apticket"];
-	[apTicketFull writeToFile:apTicketFile options:NSDataWritingAtomic error:nil];
-	[self updateManifestFile:[allFlash stringByAppendingPathComponent:@"manifest"]];
+	if (apTicketFull != nil)
+	{
+		NSLog(@"writing apticket");
+		[apTicketFull writeToFile:apTicketFile options:NSDataWritingAtomic error:nil];
+		[self updateManifestFile:[allFlash stringByAppendingPathComponent:@"manifest"]];
+	}
+	
 	NSString* certValue = [ifaithDict objectForKey:@"cert"];
 	NSLog(@"certValue: %@", certValue);
 	for (id fwKey in keyArray)
@@ -1308,6 +1313,11 @@ static NSString *myChipID_ = nil;
 		}
 		
 	}
+	
+	NSLog(@"files signed successfully, firmware stitched: %@", buildNumber);
+	
+	
+	return 0;
 }
 
 /*

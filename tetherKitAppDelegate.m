@@ -791,20 +791,57 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event) {
 		[blob writeToFile:ifaithXMLOutput atomically:YES];
 	
 		
-		TSSManager *tss = nil;
+			//make sure if its greater than 4.3 to make sure there is an apticket there.
 		
-		if (!DeviceIDEqualToDevice(currentDevice, TSSNullDevice))
+		BOOL shouldSendBlob = YES;
+		NSString *comparisonVersion = @"4.4";
+		
+		NSString *iosVersion = [ifaithDict objectForKey:@"ios"];
+		NSString *apticket = [ifaithDict objectForKey:@"apticket"];
+		NSString *clippedPath = [[iosVersion componentsSeparatedByString:@" "] objectAtIndex:0];
+		NSComparisonResult theResult = [clippedPath compare:comparisonVersion options:NSNumericSearch];
+			//NSLog(@"theversion: %@  installed version %@", theVersion, installedVersion);
+		if ( theResult == NSOrderedDescending )
 		{
-			tss = [[TSSManager alloc] initWithECID:ChipID_ device:currentDevice];
-		} else {
+			NSLog(@"%@ is greater than %@", clippedPath, comparisonVersion);
+			if (apticket != nil) {	
+				shouldSendBlob = YES;
+			} else {
+				NSLog(@"no apticket, invalid blob!! not submitting");
+				shouldSendBlob = NO;
+			}
 			
-			tss = [[TSSManager alloc] initWithECID:ChipID_];
+		} else if ( theResult == NSOrderedAscending ){
+			
+			NSLog(@"%@ is greater than %@", comparisonVersion, clippedPath);
+			NSLog(@"no apticket needed, below 4.4");
+			shouldSendBlob = YES;
+			
+		} else if ( theResult == NSOrderedSame ) {
+			
+			NSLog(@"%@ is equal to %@", clippedPath, comparisonVersion);
+			if (apticket != nil) {	
+				shouldSendBlob = YES;
+			} else {
+				NSLog(@"no apticket, invalid blob!! not submitting");
+				shouldSendBlob = NO;
+			}
 		}
 		
-		NSString *response = [tss _synchronousPushiFaithBlob:decimalString withiOSVersion:[ifaithDict objectForKey:@"ios"]];
-		
-		NSLog(@"response: %@", response);
-		
+		if (shouldSendBlob == YES)
+		{
+			TSSManager *tss = nil;
+			if (!DeviceIDEqualToDevice(currentDevice, TSSNullDevice))
+			{
+				tss = [[TSSManager alloc] initWithECID:ChipID_ device:currentDevice];
+			} else {
+				
+				tss = [[TSSManager alloc] initWithECID:ChipID_];
+			}
+			NSString *response = [tss _synchronousPushiFaithBlob:decimalString withiOSVersion:iosVersion];
+			
+			NSLog(@"response: %@", response);
+		}
 			//printf("output: %s", xmlOutput);
 			//NSLog(@"ifaithDict: %@", ifaithDict);
 		[self setDownloadText:NSLocalizedString(@"Finished!", @"Finished!")];
@@ -1808,6 +1845,7 @@ static NSString *HexToDec(NSString *hexValue)
 		NSLog(@"apple is still signing %@ dont do anything special: kRestoreDefaultMode", buildNumber);
 		return kRestoreDefaultMode;
 	}
+	
 	
 	if (ecid == nil)
 	{
@@ -3886,6 +3924,7 @@ void tap_keyboard(void) {
 		[self showProgressViewWithText:NSLocalizedString(@"Checking firmware compatibility...",@"Checking firmware compatibility..." )];
 	int theRestoreMode = [self restoreMode];
 	
+	[self.currentBundle setRestoreMode:theRestoreMode];
 		//if (![self.deviceClass isEqualToString:APPLETV_21_DEVICE_CLASS])
 	if ([self isAppleTV3])
 	{
@@ -4283,7 +4322,7 @@ void tap_keyboard(void) {
 		[self showProgressViewWithText:NSLocalizedString(@"Checking firmware compatibility...",@"Checking firmware compatibility..." )];
 		int theRestoreMode = [self restoreMode];
 		_restoreMode = theRestoreMode;
-		
+		[self.currentBundle setRestoreMode:theRestoreMode];
 		NSLog(@"restoreMode: %i", theRestoreMode);
 		id object = nil;
 		switch (theRestoreMode) {

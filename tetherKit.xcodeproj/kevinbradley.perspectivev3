@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>ActivePerspectiveName</key>
-	<string>Project</string>
+	<string>Debug</string>
 	<key>AllowedModules</key>
 	<array>
 		<dict>
@@ -237,7 +237,7 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
-				<string>32A530AC17117A790009A99A</string>
+				<string>32A5325617122A780009A99A</string>
 				<key>PBXProjectModuleLabel</key>
 				<string>tetherKitAppDelegate.m</string>
 				<key>PBXSplitModuleInNavigatorKey</key>
@@ -245,16 +245,16 @@
 					<key>Split0</key>
 					<dict>
 						<key>PBXProjectModuleGUID</key>
-						<string>32A530AD17117A790009A99A</string>
+						<string>32A5325717122A780009A99A</string>
 						<key>PBXProjectModuleLabel</key>
 						<string>tetherKitAppDelegate.m</string>
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>32A5310817117F300009A99A</string>
+						<string>32A5325817122A780009A99A</string>
 						<key>history</key>
 						<array>
-							<string>32A530DA17117C530009A99A</string>
+							<string>32A5325417122A640009A99A</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -277,167 +277,7 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
-				<string>32A530E617117C8D0009A99A</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>TSSManager.mm</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>32A530E717117C8D0009A99A</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>TSSManager.mm</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>32A5310917117F300009A99A</string>
-						<key>history</key>
-						<array>
-							<string>32A530E817117C8D0009A99A</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {1567, 1321}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>87 56 1567 1362 0 0 2560 1418 </string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>32A530BD17117AC70009A99A</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>NSString+Extensions.m</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>32A530BE17117AC70009A99A</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>NSString+Extensions.m</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>32A5310A17117F300009A99A</string>
-						<key>history</key>
-						<array>
-							<string>32A530DC17117C530009A99A</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {1555, 1321}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>15 56 1555 1362 0 0 2560 1418 </string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>32A5309E171179640009A99A</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>NSData+Flip.mm</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>32A5309F171179640009A99A</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>NSData+Flip.mm</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>32A5310B17117F300009A99A</string>
-						<key>history</key>
-						<array>
-							<string>32A530A0171179640009A99A</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {2305, 1272}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>61 58 2305 1313 0 0 2560 1418 </string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>32A530B017117A790009A99A</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>stdlib.h</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>32A530B117117A790009A99A</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>stdlib.h</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>32A5310C17117F300009A99A</string>
-						<key>history</key>
-						<array>
-							<string>32A530B217117A790009A99A</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {1555, 1321}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>15 56 1555 1362 0 0 2560 1418 </string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>32A5302017115D610009A99A</string>
+				<string>32A531BB171216900009A99A</string>
 				<key>PBXProjectModuleLabel</key>
 				<string>FWBundle.m</string>
 				<key>PBXSplitModuleInNavigatorKey</key>
@@ -445,16 +285,17 @@
 					<key>Split0</key>
 					<dict>
 						<key>PBXProjectModuleGUID</key>
-						<string>32A5302117115D610009A99A</string>
+						<string>32A531BC171216900009A99A</string>
 						<key>PBXProjectModuleLabel</key>
 						<string>FWBundle.m</string>
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>32A5310D17117F300009A99A</string>
+						<string>32A5325917122A780009A99A</string>
 						<key>history</key>
 						<array>
-							<string>32A5302217115D610009A99A</string>
+							<string>32A531EC17121ACD0009A99A</string>
+							<string>32A53231171226740009A99A</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -470,7 +311,47 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>350 557 1760 607 0 0 2560 1418 </string>
+				<string>623 533 1760 607 0 0 2560 1418 </string>
+			</dict>
+		</dict>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
+				<string>32A531D6171219A50009A99A</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>nitoUtility.m</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>32A531D7171219A50009A99A</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>nitoUtility.m</string>
+						<key>_historyCapacity</key>
+						<integer>0</integer>
+						<key>bookmark</key>
+						<string>32A5325A17122A780009A99A</string>
+						<key>history</key>
+						<array>
+							<string>32A531D1171219820009A99A</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {1496, 781}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>51 596 1496 822 0 0 2560 1418 </string>
 			</dict>
 		</dict>
 		<dict>
@@ -491,7 +372,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>32A5310E17117F300009A99A</string>
+						<string>32A5325B17122A780009A99A</string>
 						<key>history</key>
 						<array>
 							<string>32A52F9D1711509E0009A99A</string>
@@ -532,7 +413,7 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>32A5310F17117F300009A99A</string>
+						<string>32A5325C17122A780009A99A</string>
 						<key>history</key>
 						<array>
 							<string>32A52F3D171148340009A99A</string>
@@ -612,7 +493,7 @@
 						<dict>
 							<key>PBXSmartGroupTreeModuleColumnWidthsKey</key>
 							<array>
-								<real>332</real>
+								<real>317</real>
 							</array>
 							<key>PBXSmartGroupTreeModuleColumnsKey_v4</key>
 							<array>
@@ -627,18 +508,19 @@
 								<string>080E96DDFE201D6D7F000001</string>
 								<string>327E65C714CF481B0058D651</string>
 								<string>29B97317FDCFA39411CA2CEA</string>
+								<string>32DF734512E0578A002916D5</string>
 								<string>1C37FBAC04509CD000000102</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>6</integer>
+									<integer>28</integer>
 									<integer>4</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 0}, {332, 1096}}</string>
+							<string>{{0, 0}, {317, 1096}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -652,10 +534,8 @@
 						<key>GroupTreeTableConfiguration</key>
 						<array>
 							<string>MainColumn</string>
-							<real>332</real>
+							<real>317</real>
 						</array>
-						<key>RubberWindowFrame</key>
-						<string>161 217 2161 1177 0 0 2560 1418 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -666,14 +546,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>327203A712C942470054F4B0</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>TSSManager.mm</string>
+								<string>tetherKitAppDelegate.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -681,11 +559,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>327203A812C942470054F4B0</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>TSSManager.mm</string>
+										<string>tetherKitAppDelegate.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>32A5310717117F300009A99A</string>
+										<string>32A5325517122A780009A99A</string>
 										<key>history</key>
 										<array>
 											<string>32720A2412CAD5020054F4B0</string>
@@ -780,7 +658,6 @@
 											<string>3285B48214E48E0600677CC3</string>
 											<string>3285B48414E48E0600677CC3</string>
 											<string>3285B48514E48E0600677CC3</string>
-											<string>3285B48814E48E0600677CC3</string>
 											<string>325E601914F2211E00907BBF</string>
 											<string>325E777715087A7100907BBF</string>
 											<string>325E78B4151998E200907BBF</string>
@@ -802,14 +679,15 @@
 											<string>32A52DD91710D2440009A99A</string>
 											<string>32A52DDA1710D2440009A99A</string>
 											<string>32A52E131710D96D0009A99A</string>
-											<string>32A52ED2171133600009A99A</string>
 											<string>32A52F27171137970009A99A</string>
-											<string>32A52F5317114ABF0009A99A</string>
 											<string>32A52F5517114ABF0009A99A</string>
-											<string>32A52F981711509E0009A99A</string>
 											<string>32A52FE6171157950009A99A</string>
 											<string>32A5301A17115D610009A99A</string>
-											<string>32A5304E17116CBE0009A99A</string>
+											<string>32A531B6171216900009A99A</string>
+											<string>32A531E917121ACD0009A99A</string>
+											<string>32A5322A171226740009A99A</string>
+											<string>32A5323D171226BD0009A99A</string>
+											<string>32A5323E171226BD0009A99A</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -824,8 +702,6 @@
 							<dict>
 								<key>Frame</key>
 								<string>{{0, 0}, {1822, 384}}</string>
-								<key>RubberWindowFrame</key>
-								<string>161 217 2161 1177 0 0 2560 1418 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -903,8 +779,6 @@
 									<dict>
 										<key>Frame</key>
 										<string>{{10, 27}, {1822, 698}}</string>
-										<key>RubberWindowFrame</key>
-										<string>161 217 2161 1177 0 0 2560 1418 </string>
 									</dict>
 									<key>Module</key>
 									<string>PBXBuildResultsModule</string>
@@ -987,6 +861,8 @@
 					<dict>
 						<key>Frame</key>
 						<string>{{0, 0}, {2161, 663}}</string>
+						<key>RubberWindowFrame</key>
+						<string>161 217 2161 1177 0 0 2560 1418 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXDebugCLIModule</string>
@@ -1061,7 +937,11 @@
 							</array>
 							<key>Frame</key>
 							<string>{{1055, 0}, {1106, 218}}</string>
+							<key>RubberWindowFrame</key>
+							<string>161 217 2161 1177 0 0 2560 1418 </string>
 						</dict>
+						<key>RubberWindowFrame</key>
+						<string>161 217 2161 1177 0 0 2560 1418 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXDebugSessionModule</string>
@@ -1125,17 +1005,15 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>32A5325D17122A780009A99A</string>
 		<string>32A52BE71708E7790009A99A</string>
 		<string>32A52BE81708E7790009A99A</string>
 		<string>32A52F3B171148340009A99A</string>
 		<string>32A52F9B1711509E0009A99A</string>
-		<string>32A5302017115D610009A99A</string>
-		<string>32A530B017117A790009A99A</string>
-		<string>32A5309E171179640009A99A</string>
+		<string>32A531D6171219A50009A99A</string>
+		<string>32A531BB171216900009A99A</string>
+		<string>32A5325617122A780009A99A</string>
 		<string>/Users/kevinbradley/Projects/Seas0nPass/tetherKit.xcodeproj</string>
-		<string>32A530BD17117AC70009A99A</string>
-		<string>32A530E617117C8D0009A99A</string>
-		<string>32A530AC17117A790009A99A</string>
 	</array>
 	<key>WindowString</key>
 	<string>161 217 2161 1177 0 0 2560 1418 </string>

@@ -18,9 +18,9 @@
 	};
 	256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {2246, 70576}}";
-			sepNavSelRange = "{53789, 0}";
-			sepNavVisRange = "{51975, 2319}";
+			sepNavIntBoundsRect = "{{0, 0}, {2246, 71184}}";
+			sepNavSelRange = "{56581, 0}";
+			sepNavVisRange = "{55397, 2195}";
 			sepNavWindowFrame = "{{205, 0}, {2305, 1418}}";
 		};
 	};
@@ -799,6 +799,114 @@
 			32A5310D17117F300009A99A /* PBXTextBookmark */ = 32A5310D17117F300009A99A /* PBXTextBookmark */;
 			32A5310E17117F300009A99A /* PBXTextBookmark */ = 32A5310E17117F300009A99A /* PBXTextBookmark */;
 			32A5310F17117F300009A99A /* PBXTextBookmark */ = 32A5310F17117F300009A99A /* PBXTextBookmark */;
+			32A531B0171213920009A99A /* PBXBookmark */ = 32A531B0171213920009A99A /* PBXBookmark */;
+			32A531B4171214B90009A99A /* PBXTextBookmark */ = 32A531B4171214B90009A99A /* PBXTextBookmark */;
+			32A531B6171216900009A99A /* PBXTextBookmark */ = 32A531B6171216900009A99A /* PBXTextBookmark */;
+			32A531B7171216900009A99A /* PBXTextBookmark */ = 32A531B7171216900009A99A /* PBXTextBookmark */;
+			32A531B8171216900009A99A /* PBXTextBookmark */ = 32A531B8171216900009A99A /* PBXTextBookmark */;
+			32A531B9171216900009A99A /* PBXTextBookmark */ = 32A531B9171216900009A99A /* PBXTextBookmark */;
+			32A531BA171216900009A99A /* PBXTextBookmark */ = 32A531BA171216900009A99A /* PBXTextBookmark */;
+			32A531BD171216900009A99A /* PBXTextBookmark */ = 32A531BD171216900009A99A /* PBXTextBookmark */;
+			32A531BE171216900009A99A /* PBXTextBookmark */ = 32A531BE171216900009A99A /* PBXTextBookmark */;
+			32A531BF171216900009A99A /* PBXTextBookmark */ = 32A531BF171216900009A99A /* PBXTextBookmark */;
+			32A531C0171216900009A99A /* PBXTextBookmark */ = 32A531C0171216900009A99A /* PBXTextBookmark */;
+			32A531C1171216900009A99A /* PBXTextBookmark */ = 32A531C1171216900009A99A /* PBXTextBookmark */;
+			32A531C2171216900009A99A /* PBXTextBookmark */ = 32A531C2171216900009A99A /* PBXTextBookmark */;
+			32A531C4171216AC0009A99A /* PBXBookmark */ = 32A531C4171216AC0009A99A /* PBXBookmark */;
+			32A531C51712177A0009A99A /* PBXTextBookmark */ = 32A531C51712177A0009A99A /* PBXTextBookmark */;
+			32A531C81712177A0009A99A /* PBXTextBookmark */ = 32A531C81712177A0009A99A /* PBXTextBookmark */;
+			32A531C91712177A0009A99A /* PBXTextBookmark */ = 32A531C91712177A0009A99A /* PBXTextBookmark */;
+			32A531CA1712177A0009A99A /* PBXTextBookmark */ = 32A531CA1712177A0009A99A /* PBXTextBookmark */;
+			32A531CB1712177A0009A99A /* PBXTextBookmark */ = 32A531CB1712177A0009A99A /* PBXTextBookmark */;
+			32A531CC1712177A0009A99A /* PBXTextBookmark */ = 32A531CC1712177A0009A99A /* PBXTextBookmark */;
+			32A531CD1712177A0009A99A /* PBXTextBookmark */ = 32A531CD1712177A0009A99A /* PBXTextBookmark */;
+			32A531CE171219560009A99A /* PBXBookmark */ = 32A531CE171219560009A99A /* PBXBookmark */;
+			32A531D1171219820009A99A /* XCBuildMessageTextBookmark */ = 32A531D1171219820009A99A /* XCBuildMessageTextBookmark */;
+			32A531D4171219A50009A99A /* XCBuildMessageTextBookmark */ = 32A531D4171219A50009A99A /* XCBuildMessageTextBookmark */;
+			32A531D5171219A50009A99A /* PBXTextBookmark */ = 32A531D5171219A50009A99A /* PBXTextBookmark */;
+			32A531D8171219A50009A99A /* PBXTextBookmark */ = 32A531D8171219A50009A99A /* PBXTextBookmark */;
+			32A531DB171219A50009A99A /* PBXTextBookmark */ = 32A531DB171219A50009A99A /* PBXTextBookmark */;
+			32A531DC171219A50009A99A /* PBXTextBookmark */ = 32A531DC171219A50009A99A /* PBXTextBookmark */;
+			32A531DD171219A50009A99A /* PBXTextBookmark */ = 32A531DD171219A50009A99A /* PBXTextBookmark */;
+			32A531DE171219A50009A99A /* PBXTextBookmark */ = 32A531DE171219A50009A99A /* PBXTextBookmark */;
+			32A531DF171219A50009A99A /* PBXTextBookmark */ = 32A531DF171219A50009A99A /* PBXTextBookmark */;
+			32A531E0171219A50009A99A /* PBXTextBookmark */ = 32A531E0171219A50009A99A /* PBXTextBookmark */;
+			32A531E917121ACD0009A99A /* PBXTextBookmark */ = 32A531E917121ACD0009A99A /* PBXTextBookmark */;
+			32A531EA17121ACD0009A99A /* PBXTextBookmark */ = 32A531EA17121ACD0009A99A /* PBXTextBookmark */;
+			32A531EB17121ACD0009A99A /* PBXTextBookmark */ = 32A531EB17121ACD0009A99A /* PBXTextBookmark */;
+			32A531EC17121ACD0009A99A /* PBXTextBookmark */ = 32A531EC17121ACD0009A99A /* PBXTextBookmark */;
+			32A531ED17121ACD0009A99A /* PBXTextBookmark */ = 32A531ED17121ACD0009A99A /* PBXTextBookmark */;
+			32A531EE17121ACD0009A99A /* PBXTextBookmark */ = 32A531EE17121ACD0009A99A /* PBXTextBookmark */;
+			32A531EF17121ACD0009A99A /* PBXTextBookmark */ = 32A531EF17121ACD0009A99A /* PBXTextBookmark */;
+			32A531F017121ACD0009A99A /* PBXTextBookmark */ = 32A531F017121ACD0009A99A /* PBXTextBookmark */;
+			32A531F117121ACD0009A99A /* PBXTextBookmark */ = 32A531F117121ACD0009A99A /* PBXTextBookmark */;
+			32A531F217121ACD0009A99A /* PBXTextBookmark */ = 32A531F217121ACD0009A99A /* PBXTextBookmark */;
+			32A531F317121ACD0009A99A /* PBXTextBookmark */ = 32A531F317121ACD0009A99A /* PBXTextBookmark */;
+			32A531F517121DCB0009A99A /* PBXTextBookmark */ = 32A531F517121DCB0009A99A /* PBXTextBookmark */;
+			32A531F617121DDE0009A99A /* PBXTextBookmark */ = 32A531F617121DDE0009A99A /* PBXTextBookmark */;
+			32A531F717121DDE0009A99A /* PBXTextBookmark */ = 32A531F717121DDE0009A99A /* PBXTextBookmark */;
+			32A531F817121DDE0009A99A /* PBXTextBookmark */ = 32A531F817121DDE0009A99A /* PBXTextBookmark */;
+			32A531F917121DDE0009A99A /* PBXTextBookmark */ = 32A531F917121DDE0009A99A /* PBXTextBookmark */;
+			32A531FA17121DDE0009A99A /* PBXTextBookmark */ = 32A531FA17121DDE0009A99A /* PBXTextBookmark */;
+			32A531FB17121DDE0009A99A /* PBXTextBookmark */ = 32A531FB17121DDE0009A99A /* PBXTextBookmark */;
+			32A531FC17121DDE0009A99A /* PBXTextBookmark */ = 32A531FC17121DDE0009A99A /* PBXTextBookmark */;
+			32A531FD17121DDE0009A99A /* PBXTextBookmark */ = 32A531FD17121DDE0009A99A /* PBXTextBookmark */;
+			32A5320217121E2B0009A99A /* PBXTextBookmark */ = 32A5320217121E2B0009A99A /* PBXTextBookmark */;
+			32A5320317121E2B0009A99A /* PBXTextBookmark */ = 32A5320317121E2B0009A99A /* PBXTextBookmark */;
+			32A5320417121E2B0009A99A /* PBXTextBookmark */ = 32A5320417121E2B0009A99A /* PBXTextBookmark */;
+			32A5320517121E2B0009A99A /* PBXTextBookmark */ = 32A5320517121E2B0009A99A /* PBXTextBookmark */;
+			32A5320617121E2B0009A99A /* PBXTextBookmark */ = 32A5320617121E2B0009A99A /* PBXTextBookmark */;
+			32A5320717121E2B0009A99A /* PBXTextBookmark */ = 32A5320717121E2B0009A99A /* PBXTextBookmark */;
+			32A5320817121E2B0009A99A /* PBXTextBookmark */ = 32A5320817121E2B0009A99A /* PBXTextBookmark */;
+			32A5320917121E2B0009A99A /* PBXTextBookmark */ = 32A5320917121E2B0009A99A /* PBXTextBookmark */;
+			32A5320E171221F90009A99A /* PBXTextBookmark */ = 32A5320E171221F90009A99A /* PBXTextBookmark */;
+			32A5320F171221F90009A99A /* PBXTextBookmark */ = 32A5320F171221F90009A99A /* PBXTextBookmark */;
+			32A53210171221F90009A99A /* PBXTextBookmark */ = 32A53210171221F90009A99A /* PBXTextBookmark */;
+			32A53211171221F90009A99A /* PBXTextBookmark */ = 32A53211171221F90009A99A /* PBXTextBookmark */;
+			32A53212171221F90009A99A /* PBXTextBookmark */ = 32A53212171221F90009A99A /* PBXTextBookmark */;
+			32A53213171221F90009A99A /* PBXTextBookmark */ = 32A53213171221F90009A99A /* PBXTextBookmark */;
+			32A53214171221F90009A99A /* PBXTextBookmark */ = 32A53214171221F90009A99A /* PBXTextBookmark */;
+			32A53215171221F90009A99A /* PBXTextBookmark */ = 32A53215171221F90009A99A /* PBXTextBookmark */;
+			32A53216171222F00009A99A /* PBXTextBookmark */ = 32A53216171222F00009A99A /* PBXTextBookmark */;
+			32A53217171222F00009A99A /* PBXTextBookmark */ = 32A53217171222F00009A99A /* PBXTextBookmark */;
+			32A53218171222FD0009A99A /* PBXTextBookmark */ = 32A53218171222FD0009A99A /* PBXTextBookmark */;
+			32A53219171222FD0009A99A /* PBXTextBookmark */ = 32A53219171222FD0009A99A /* PBXTextBookmark */;
+			32A5321A171222FD0009A99A /* PBXTextBookmark */ = 32A5321A171222FD0009A99A /* PBXTextBookmark */;
+			32A5321B171222FD0009A99A /* PBXTextBookmark */ = 32A5321B171222FD0009A99A /* PBXTextBookmark */;
+			32A5321C171222FD0009A99A /* PBXTextBookmark */ = 32A5321C171222FD0009A99A /* PBXTextBookmark */;
+			32A5322A171226740009A99A /* PBXTextBookmark */ = 32A5322A171226740009A99A /* PBXTextBookmark */;
+			32A5322B171226740009A99A /* PBXTextBookmark */ = 32A5322B171226740009A99A /* PBXTextBookmark */;
+			32A5322C171226740009A99A /* PBXTextBookmark */ = 32A5322C171226740009A99A /* PBXTextBookmark */;
+			32A5322F171226740009A99A /* PBXTextBookmark */ = 32A5322F171226740009A99A /* PBXTextBookmark */;
+			32A53230171226740009A99A /* PBXTextBookmark */ = 32A53230171226740009A99A /* PBXTextBookmark */;
+			32A53231171226740009A99A /* PBXTextBookmark */ = 32A53231171226740009A99A /* PBXTextBookmark */;
+			32A53232171226740009A99A /* PBXTextBookmark */ = 32A53232171226740009A99A /* PBXTextBookmark */;
+			32A53233171226740009A99A /* PBXTextBookmark */ = 32A53233171226740009A99A /* PBXTextBookmark */;
+			32A53234171226740009A99A /* PBXTextBookmark */ = 32A53234171226740009A99A /* PBXTextBookmark */;
+			32A53235171226740009A99A /* PBXTextBookmark */ = 32A53235171226740009A99A /* PBXTextBookmark */;
+			32A5323A171226A80009A99A /* XCBuildMessageTextBookmark */ = 32A5323A171226A80009A99A /* XCBuildMessageTextBookmark */;
+			32A5323D171226BD0009A99A /* PBXTextBookmark */ = 32A5323D171226BD0009A99A /* PBXTextBookmark */;
+			32A5323E171226BD0009A99A /* XCBuildMessageTextBookmark */ = 32A5323E171226BD0009A99A /* XCBuildMessageTextBookmark */;
+			32A5323F171226BD0009A99A /* PBXTextBookmark */ = 32A5323F171226BD0009A99A /* PBXTextBookmark */;
+			32A53240171226BD0009A99A /* PBXTextBookmark */ = 32A53240171226BD0009A99A /* PBXTextBookmark */;
+			32A53241171226BD0009A99A /* PBXTextBookmark */ = 32A53241171226BD0009A99A /* PBXTextBookmark */;
+			32A53242171226BD0009A99A /* PBXTextBookmark */ = 32A53242171226BD0009A99A /* PBXTextBookmark */;
+			32A53243171226BD0009A99A /* PBXTextBookmark */ = 32A53243171226BD0009A99A /* PBXTextBookmark */;
+			32A53244171226BD0009A99A /* PBXTextBookmark */ = 32A53244171226BD0009A99A /* PBXTextBookmark */;
+			32A532461712293D0009A99A /* PBXTextBookmark */ = 32A532461712293D0009A99A /* PBXTextBookmark */;
+			32A53249171229510009A99A /* PBXTextBookmark */ = 32A53249171229510009A99A /* PBXTextBookmark */;
+			32A5324A171229510009A99A /* PBXTextBookmark */ = 32A5324A171229510009A99A /* PBXTextBookmark */;
+			32A5324B171229510009A99A /* PBXTextBookmark */ = 32A5324B171229510009A99A /* PBXTextBookmark */;
+			32A5324C171229510009A99A /* PBXTextBookmark */ = 32A5324C171229510009A99A /* PBXTextBookmark */;
+			32A5324D171229510009A99A /* PBXTextBookmark */ = 32A5324D171229510009A99A /* PBXTextBookmark */;
+			32A5324E171229510009A99A /* PBXTextBookmark */ = 32A5324E171229510009A99A /* PBXTextBookmark */;
+			32A5325417122A640009A99A /* PBXBookmark */ = 32A5325417122A640009A99A /* PBXBookmark */;
+			32A5325517122A780009A99A /* PBXTextBookmark */ = 32A5325517122A780009A99A /* PBXTextBookmark */;
+			32A5325817122A780009A99A /* PBXTextBookmark */ = 32A5325817122A780009A99A /* PBXTextBookmark */;
+			32A5325917122A780009A99A /* PBXTextBookmark */ = 32A5325917122A780009A99A /* PBXTextBookmark */;
+			32A5325A17122A780009A99A /* PBXTextBookmark */ = 32A5325A17122A780009A99A /* PBXTextBookmark */;
+			32A5325B17122A780009A99A /* PBXTextBookmark */ = 32A5325B17122A780009A99A /* PBXTextBookmark */;
+			32A5325C17122A780009A99A /* PBXTextBookmark */ = 32A5325C17122A780009A99A /* PBXTextBookmark */;
 			32C86FE0157EB499007C737B = 32C86FE0157EB499007C737B /* PBXTextBookmark */;
 			32C86FE2157EB499007C737B = 32C86FE2157EB499007C737B /* PBXTextBookmark */;
 			32C86FE4157EB499007C737B = 32C86FE4157EB499007C737B /* PBXTextBookmark */;
@@ -1558,7 +1666,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 443";
 		rLen = 30;
-		rLoc = 10495;
+		rLoc = 10508;
 		rType = 0;
 		vrLen = 128;
 		vrLoc = 9905;
@@ -1889,9 +1997,9 @@
 	};
 	327206A912C9C32A0054F4B0 /* nitoUtility.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1761, 34784}}";
-			sepNavSelRange = "{64616, 0}";
-			sepNavVisRange = "{64013, 608}";
+			sepNavIntBoundsRect = "{{0, 0}, {1437, 34272}}";
+			sepNavSelRange = "{18526, 0}";
+			sepNavVisRange = "{17493, 1641}";
 			sepNavWindowFrame = "{{51, 540}, {1496, 878}}";
 		};
 	};
@@ -2083,17 +2191,17 @@
 	327E65CB14CF481B0058D651 /* TSSManager.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1508, 1728}}";
-			sepNavSelRange = "{1789, 33}";
-			sepNavVisRange = "{521, 2823}";
-			sepNavWindowFrame = "{{87, 0}, {1567, 1418}}";
+			sepNavSelRange = "{1883, 0}";
+			sepNavVisRange = "{521, 2926}";
+			sepNavWindowFrame = "{{272, 0}, {1567, 1418}}";
 		};
 	};
 	327E65CC14CF481B0058D651 /* TSSManager.mm */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1508, 25280}}";
-			sepNavSelRange = "{42022, 0}";
-			sepNavVisRange = "{41148, 3959}";
-			sepNavWindowFrame = "{{87, 0}, {1567, 1418}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1508, 26432}}";
+			sepNavSelRange = "{8963, 39}";
+			sepNavVisRange = "{7697, 2771}";
+			sepNavWindowFrame = "{{271, 0}, {1567, 1418}}";
 		};
 	};
 	327E65CD14CF481B0058D651 /* TSSWorker.h */ = {
@@ -2108,7 +2216,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1507, 2688}}";
 			sepNavSelRange = "{2672, 0}";
-			sepNavVisRange = "{2498, 884}";
+			sepNavVisRange = "{2498, 852}";
 			sepNavWindowFrame = "{{28, 230}, {1566, 856}}";
 		};
 	};
@@ -2293,7 +2401,7 @@
 		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
 		name = "FWBundle.h: 57";
 		rLen = 0;
-		rLoc = 1322;
+		rLoc = 1387;
 		rType = 0;
 		vrLen = 977;
 		vrLoc = 932;
@@ -2323,7 +2431,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1519;
 		vrLoc = 25298;
@@ -2343,7 +2451,7 @@
 		fRef = 327E65CB14CF481B0058D651 /* TSSManager.h */;
 		name = "TSSManager.h: 98";
 		rLen = 6;
-		rLoc = 3182;
+		rLoc = 3290;
 		rType = 0;
 		vrLen = 1050;
 		vrLoc = 2194;
@@ -2687,7 +2795,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 840";
 		rLen = 0;
-		rLoc = 23728;
+		rLoc = 25031;
 		rType = 0;
 		vrLen = 2962;
 		vrLoc = 22101;
@@ -2756,7 +2864,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2022";
 		rLen = 0;
-		rLoc = 58700;
+		rLoc = 60005;
 		rType = 0;
 		vrLen = 2412;
 		vrLoc = 57269;
@@ -2776,7 +2884,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2022";
 		rLen = 0;
-		rLoc = 58658;
+		rLoc = 59963;
 		rType = 0;
 		vrLen = 2415;
 		vrLoc = 57269;
@@ -2823,7 +2931,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2023";
 		rLen = 0;
-		rLoc = 58658;
+		rLoc = 59963;
 		rType = 0;
 		vrLen = 2448;
 		vrLoc = 57276;
@@ -2853,7 +2961,7 @@
 		isa = PBXTextBookmark;
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		rLen = 0;
-		rLoc = 812;
+		rLoc = 849;
 		rType = 1;
 	};
 	32A52C7F170D663B0009A99A /* PBXTextBookmark */ = {
@@ -2891,7 +2999,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2023";
 		rLen = 0;
-		rLoc = 58658;
+		rLoc = 59963;
 		rType = 0;
 		vrLen = 2439;
 		vrLoc = 57385;
@@ -2911,7 +3019,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 865";
 		rLen = 0;
-		rLoc = 23536;
+		rLoc = 24878;
 		rType = 0;
 		vrLen = 2838;
 		vrLoc = 22401;
@@ -2931,7 +3039,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 865";
 		rLen = 0;
-		rLoc = 23536;
+		rLoc = 24878;
 		rType = 0;
 		vrLen = 2842;
 		vrLoc = 22401;
@@ -2951,7 +3059,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 871";
 		rLen = 0;
-		rLoc = 23536;
+		rLoc = 24878;
 		rType = 0;
 		vrLen = 2908;
 		vrLoc = 22432;
@@ -3046,7 +3154,7 @@
 		fRef = 327E65CB14CF481B0058D651 /* TSSManager.h */;
 		name = "TSSManager.h: 98";
 		rLen = 6;
-		rLoc = 3182;
+		rLoc = 3290;
 		rType = 0;
 		vrLen = 1049;
 		vrLoc = 2194;
@@ -3056,7 +3164,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3066,7 +3174,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3076,7 +3184,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 1708";
 		rLen = 0;
-		rLoc = 48498;
+		rLoc = 49801;
 		rType = 0;
 		vrLen = 2050;
 		vrLoc = 48749;
@@ -3096,7 +3204,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1489;
 		vrLoc = 25298;
@@ -3106,7 +3214,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 1701";
 		rLen = 0;
-		rLoc = 48307;
+		rLoc = 49610;
 		rType = 0;
 		vrLen = 2064;
 		vrLoc = 48778;
@@ -3126,7 +3234,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3136,7 +3244,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 1706";
 		rLen = 0;
-		rLoc = 48442;
+		rLoc = 49745;
 		rType = 0;
 		vrLen = 2063;
 		vrLoc = 48815;
@@ -3156,7 +3264,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3166,7 +3274,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 1706";
 		rLen = 0;
-		rLoc = 48441;
+		rLoc = 49744;
 		rType = 0;
 		vrLen = 2063;
 		vrLoc = 48815;
@@ -3186,7 +3294,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3196,7 +3304,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 1706";
 		rLen = 0;
-		rLoc = 48434;
+		rLoc = 49737;
 		rType = 0;
 		vrLen = 2061;
 		vrLoc = 48815;
@@ -3216,7 +3324,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3226,7 +3334,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2057";
 		rLen = 0;
-		rLoc = 59012;
+		rLoc = 60317;
 		rType = 0;
 		vrLen = 2304;
 		vrLoc = 58273;
@@ -3253,7 +3361,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3263,7 +3371,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2063";
 		rLen = 0;
-		rLoc = 61478;
+		rLoc = 62783;
 		rType = 0;
 		vrLen = 2335;
 		vrLoc = 58273;
@@ -3283,7 +3391,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3293,7 +3401,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2056";
 		rLen = 0;
-		rLoc = 59012;
+		rLoc = 60317;
 		rType = 0;
 		vrLen = 2198;
 		vrLoc = 58526;
@@ -3313,7 +3421,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3323,7 +3431,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2056";
 		rLen = 0;
-		rLoc = 59012;
+		rLoc = 60317;
 		rType = 0;
 		vrLen = 2219;
 		vrLoc = 58546;
@@ -3343,7 +3451,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3353,7 +3461,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2056";
 		rLen = 0;
-		rLoc = 59012;
+		rLoc = 60317;
 		rType = 0;
 		vrLen = 2179;
 		vrLoc = 58587;
@@ -3373,7 +3481,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3383,7 +3491,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2056";
 		rLen = 0;
-		rLoc = 59012;
+		rLoc = 60317;
 		rType = 0;
 		vrLen = 2179;
 		vrLoc = 58631;
@@ -3403,7 +3511,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3413,7 +3521,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2056";
 		rLen = 0;
-		rLoc = 59012;
+		rLoc = 60317;
 		rType = 0;
 		vrLen = 2182;
 		vrLoc = 58677;
@@ -3433,7 +3541,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3443,7 +3551,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2056";
 		rLen = 0;
-		rLoc = 59012;
+		rLoc = 60317;
 		rType = 0;
 		vrLen = 2123;
 		vrLoc = 58740;
@@ -3453,7 +3561,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2057";
 		rLen = 0;
-		rLoc = 59012;
+		rLoc = 60317;
 		rType = 0;
 		vrLen = 2122;
 		vrLoc = 58740;
@@ -3473,7 +3581,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3483,7 +3591,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2058";
 		rLen = 0;
-		rLoc = 59012;
+		rLoc = 60317;
 		rType = 0;
 		vrLen = 2374;
 		vrLoc = 58302;
@@ -3503,7 +3611,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3513,7 +3621,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2057";
 		rLen = 0;
-		rLoc = 59012;
+		rLoc = 60317;
 		rType = 0;
 		vrLen = 2366;
 		vrLoc = 58304;
@@ -3533,7 +3641,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3543,7 +3651,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2057";
 		rLen = 0;
-		rLoc = 59012;
+		rLoc = 60317;
 		rType = 0;
 		vrLen = 2171;
 		vrLoc = 58507;
@@ -3563,7 +3671,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3573,7 +3681,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2058";
 		rLen = 0;
-		rLoc = 59012;
+		rLoc = 60317;
 		rType = 0;
 		vrLen = 2192;
 		vrLoc = 58526;
@@ -3593,7 +3701,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3603,7 +3711,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2057";
 		rLen = 0;
-		rLoc = 59012;
+		rLoc = 60317;
 		rType = 0;
 		vrLen = 2187;
 		vrLoc = 58524;
@@ -3623,7 +3731,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3633,7 +3741,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2057";
 		rLen = 0;
-		rLoc = 59012;
+		rLoc = 60317;
 		rType = 0;
 		vrLen = 2196;
 		vrLoc = 58526;
@@ -3661,7 +3769,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3671,7 +3779,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2073";
 		rLen = 0;
-		rLoc = 61478;
+		rLoc = 62783;
 		rType = 0;
 		vrLen = 2241;
 		vrLoc = 58791;
@@ -3691,7 +3799,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1194";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 1492;
 		vrLoc = 25298;
@@ -3701,7 +3809,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2073";
 		rLen = 0;
-		rLoc = 61478;
+		rLoc = 62783;
 		rType = 0;
 		vrLen = 2194;
 		vrLoc = 58813;
@@ -3721,7 +3829,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1245";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 444;
 		vrLoc = 25436;
@@ -3748,7 +3856,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2073";
 		rLen = 0;
-		rLoc = 61478;
+		rLoc = 62783;
 		rType = 0;
 		vrLen = 2172;
 		vrLoc = 58838;
@@ -3758,7 +3866,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1242";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 479;
 		vrLoc = 25434;
@@ -3778,7 +3886,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2073";
 		rLen = 0;
-		rLoc = 61478;
+		rLoc = 62783;
 		rType = 0;
 		vrLen = 2172;
 		vrLoc = 58838;
@@ -3788,7 +3896,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1242";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 479;
 		vrLoc = 25434;
@@ -3808,7 +3916,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1247";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 506;
 		vrLoc = 25498;
@@ -3832,7 +3940,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1264";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 823;
 		vrLoc = 25579;
@@ -3842,7 +3950,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2074";
 		rLen = 0;
-		rLoc = 61478;
+		rLoc = 62783;
 		rType = 0;
 		vrLen = 2373;
 		vrLoc = 58707;
@@ -3862,7 +3970,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1264";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 773;
 		vrLoc = 25580;
@@ -3882,7 +3990,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2074";
 		rLen = 0;
-		rLoc = 61478;
+		rLoc = 62783;
 		rType = 0;
 		vrLen = 2336;
 		vrLoc = 58707;
@@ -3892,7 +4000,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1265";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 776;
 		vrLoc = 25664;
@@ -3912,7 +4020,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2074";
 		rLen = 0;
-		rLoc = 61478;
+		rLoc = 62783;
 		rType = 0;
 		vrLen = 2373;
 		vrLoc = 58707;
@@ -3922,7 +4030,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1265";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 775;
 		vrLoc = 25665;
@@ -3942,7 +4050,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2074";
 		rLen = 0;
-		rLoc = 61478;
+		rLoc = 62783;
 		rType = 0;
 		vrLen = 2336;
 		vrLoc = 58707;
@@ -3952,7 +4060,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1265";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 776;
 		vrLoc = 25671;
@@ -4211,7 +4319,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2618";
 		rLen = 14;
-		rLoc = 82348;
+		rLoc = 83653;
 		rType = 0;
 		vrLen = 2063;
 		vrLoc = 78577;
@@ -4285,7 +4393,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2618";
 		rLen = 14;
-		rLoc = 82348;
+		rLoc = 83653;
 		rType = 0;
 		vrLen = 2063;
 		vrLoc = 78577;
@@ -4335,7 +4443,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2618";
 		rLen = 14;
-		rLoc = 82348;
+		rLoc = 83653;
 		rType = 0;
 		vrLen = 2063;
 		vrLoc = 78577;
@@ -4392,7 +4500,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2056";
 		rLen = 26;
-		rLoc = 60731;
+		rLoc = 62036;
 		rType = 0;
 		vrLen = 2389;
 		vrLoc = 58685;
@@ -4459,7 +4567,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		fallbackIsa = XCBuildMessageTextBookmark;
 		rLen = 1;
-		rLoc = 2065;
+		rLoc = 2103;
 		rType = 1;
 	};
 	32A52E151710D96D0009A99A /* PBXTextBookmark */ = {
@@ -4467,7 +4575,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2040";
 		rLen = 0;
-		rLoc = 60424;
+		rLoc = 61729;
 		rType = 0;
 		vrLen = 816;
 		vrLoc = 58852;
@@ -4477,7 +4585,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2056";
 		rLen = 26;
-		rLoc = 60731;
+		rLoc = 62036;
 		rType = 0;
 		vrLen = 2830;
 		vrLoc = 3;
@@ -4517,7 +4625,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2040";
 		rLen = 0;
-		rLoc = 60424;
+		rLoc = 61729;
 		rType = 0;
 		vrLen = 819;
 		vrLoc = 58852;
@@ -4547,7 +4655,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2056";
 		rLen = 26;
-		rLoc = 60731;
+		rLoc = 62036;
 		rType = 0;
 		vrLen = 2943;
 		vrLoc = 3;
@@ -4567,7 +4675,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2040";
 		rLen = 0;
-		rLoc = 60424;
+		rLoc = 61729;
 		rType = 0;
 		vrLen = 816;
 		vrLoc = 58852;
@@ -4587,7 +4695,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2056";
 		rLen = 26;
-		rLoc = 60731;
+		rLoc = 62036;
 		rType = 0;
 		vrLen = 2916;
 		vrLoc = 30;
@@ -4607,7 +4715,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2068";
 		rLen = 0;
-		rLoc = 60424;
+		rLoc = 61729;
 		rType = 0;
 		vrLen = 445;
 		vrLoc = 58959;
@@ -4617,7 +4725,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2216";
 		rLen = 0;
-		rLoc = 65707;
+		rLoc = 67012;
 		rType = 0;
 		vrLen = 2366;
 		vrLoc = 63562;
@@ -4654,7 +4762,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2068";
 		rLen = 0;
-		rLoc = 60424;
+		rLoc = 61729;
 		rType = 0;
 		vrLen = 445;
 		vrLoc = 58959;
@@ -4680,7 +4788,7 @@
 		isa = PBXTextBookmark;
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		rLen = 1;
-		rLoc = 2023;
+		rLoc = 2061;
 		rType = 1;
 	};
 	32A52E3C1710DC620009A99A /* PBXTextBookmark */ = {
@@ -4688,7 +4796,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2045";
 		rLen = 32;
-		rLoc = 59663;
+		rLoc = 60968;
 		rType = 0;
 		vrLen = 2083;
 		vrLoc = 58014;
@@ -4708,7 +4816,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2068";
 		rLen = 0;
-		rLoc = 60424;
+		rLoc = 61729;
 		rType = 0;
 		vrLen = 445;
 		vrLoc = 58959;
@@ -4735,7 +4843,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2045";
 		rLen = 32;
-		rLoc = 59663;
+		rLoc = 60968;
 		rType = 0;
 		vrLen = 1988;
 		vrLoc = 58111;
@@ -4755,7 +4863,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2068";
 		rLen = 0;
-		rLoc = 60424;
+		rLoc = 61729;
 		rType = 0;
 		vrLen = 445;
 		vrLoc = 58959;
@@ -4775,7 +4883,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2045";
 		rLen = 32;
-		rLoc = 59663;
+		rLoc = 60968;
 		rType = 0;
 		vrLen = 2049;
 		vrLoc = 58112;
@@ -4795,7 +4903,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2068";
 		rLen = 0;
-		rLoc = 60424;
+		rLoc = 61729;
 		rType = 0;
 		vrLen = 466;
 		vrLoc = 58959;
@@ -4822,7 +4930,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2045";
 		rLen = 32;
-		rLoc = 59663;
+		rLoc = 60968;
 		rType = 0;
 		vrLen = 2121;
 		vrLoc = 58112;
@@ -4842,7 +4950,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2068";
 		rLen = 0;
-		rLoc = 60424;
+		rLoc = 61729;
 		rType = 0;
 		vrLen = 466;
 		vrLoc = 58959;
@@ -4869,7 +4977,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2045";
 		rLen = 32;
-		rLoc = 59663;
+		rLoc = 60968;
 		rType = 0;
 		vrLen = 2089;
 		vrLoc = 58157;
@@ -4889,7 +4997,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2068";
 		rLen = 0;
-		rLoc = 60424;
+		rLoc = 61729;
 		rType = 0;
 		vrLen = 445;
 		vrLoc = 58959;
@@ -4899,7 +5007,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2244";
 		rLen = 0;
-		rLoc = 65641;
+		rLoc = 66946;
 		rType = 0;
 		vrLen = 2486;
 		vrLoc = 64240;
@@ -4923,7 +5031,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2068";
 		rLen = 0;
-		rLoc = 60424;
+		rLoc = 61729;
 		rType = 0;
 		vrLen = 466;
 		vrLoc = 58959;
@@ -4933,7 +5041,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2068";
 		rLen = 0;
-		rLoc = 60424;
+		rLoc = 61729;
 		rType = 0;
 		vrLen = 466;
 		vrLoc = 58959;
@@ -4943,7 +5051,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1198";
 		rLen = 0;
-		rLoc = 39330;
+		rLoc = 39487;
 		rType = 0;
 		vrLen = 1785;
 		vrLoc = 34914;
@@ -4953,7 +5061,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2244";
 		rLen = 0;
-		rLoc = 65641;
+		rLoc = 66946;
 		rType = 0;
 		vrLen = 2511;
 		vrLoc = 64198;
@@ -4973,7 +5081,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2068";
 		rLen = 0;
-		rLoc = 60424;
+		rLoc = 61729;
 		rType = 0;
 		vrLen = 466;
 		vrLoc = 58959;
@@ -4983,7 +5091,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1198";
 		rLen = 0;
-		rLoc = 39330;
+		rLoc = 39487;
 		rType = 0;
 		vrLen = 1782;
 		vrLoc = 34914;
@@ -4993,7 +5101,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2244";
 		rLen = 0;
-		rLoc = 65641;
+		rLoc = 66946;
 		rType = 0;
 		vrLen = 2511;
 		vrLoc = 64198;
@@ -5013,7 +5121,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2068";
 		rLen = 0;
-		rLoc = 60424;
+		rLoc = 61729;
 		rType = 0;
 		vrLen = 466;
 		vrLoc = 58959;
@@ -5033,7 +5141,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2244";
 		rLen = 0;
-		rLoc = 65641;
+		rLoc = 66946;
 		rType = 0;
 		vrLen = 2511;
 		vrLoc = 64198;
@@ -5061,7 +5169,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2068";
 		rLen = 0;
-		rLoc = 60424;
+		rLoc = 61729;
 		rType = 0;
 		vrLen = 466;
 		vrLoc = 58959;
@@ -5081,7 +5189,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1409";
 		rLen = 0;
-		rLoc = 49959;
+		rLoc = 50116;
 		rType = 0;
 		vrLen = 769;
 		vrLoc = 25715;
@@ -5128,7 +5236,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 879";
 		rLen = 263;
-		rLoc = 21356;
+		rLoc = 21369;
 		rType = 0;
 		vrLen = 822;
 		vrLoc = 20877;
@@ -5138,7 +5246,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2244";
 		rLen = 0;
-		rLoc = 65641;
+		rLoc = 66946;
 		rType = 0;
 		vrLen = 2511;
 		vrLoc = 64198;
@@ -5158,7 +5266,7 @@
 		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
 		name = "nitoUtility.m: 1753";
 		rLen = 20;
-		rLoc = 51385;
+		rLoc = 51869;
 		rType = 0;
 		vrLen = 1644;
 		vrLoc = 50751;
@@ -5195,7 +5303,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 501";
 		rLen = 32;
-		rLoc = 12077;
+		rLoc = 12090;
 		rType = 0;
 		vrLen = 897;
 		vrLoc = 11885;
@@ -5204,7 +5312,7 @@
 		isa = PBXTextBookmark;
 		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
 		rLen = 0;
-		rLoc = 9223372036854775868;
+		rLoc = 9223372036854775933;
 		rType = 0;
 	};
 	32A52EEC171133600009A99A /* PBXTextBookmark */ = {
@@ -5212,7 +5320,7 @@
 		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
 		name = "FWBundle.h: 58";
 		rLen = 18;
-		rLoc = 1299;
+		rLoc = 1364;
 		rType = 0;
 		vrLen = 836;
 		vrLoc = 946;
@@ -5283,7 +5391,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 879";
 		rLen = 263;
-		rLoc = 21356;
+		rLoc = 21369;
 		rType = 0;
 		vrLen = 822;
 		vrLoc = 20877;
@@ -5293,7 +5401,7 @@
 		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
 		name = "nitoUtility.m: 1753";
 		rLen = 20;
-		rLoc = 51385;
+		rLoc = 51869;
 		rType = 0;
 		vrLen = 1644;
 		vrLoc = 50751;
@@ -5313,7 +5421,7 @@
 		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
 		name = "FWBundle.h: 58";
 		rLen = 18;
-		rLoc = 1299;
+		rLoc = 1364;
 		rType = 0;
 		vrLen = 836;
 		vrLoc = 946;
@@ -5332,7 +5440,7 @@
 		isa = PBXTextBookmark;
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		rLen = 6;
-		rLoc = 39496;
+		rLoc = 39653;
 		rType = 0;
 	};
 	32A52F27171137970009A99A /* PBXTextBookmark */ = {
@@ -5350,7 +5458,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 395";
 		rLen = 1;
-		rLoc = 9771;
+		rLoc = 9784;
 		rType = 0;
 		vrLen = 721;
 		vrLoc = 9514;
@@ -5360,7 +5468,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1278";
 		rLen = 0;
-		rLoc = 38716;
+		rLoc = 38864;
 		rType = 0;
 		vrLen = 2359;
 		vrLoc = 37416;
@@ -5380,7 +5488,7 @@
 		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
 		name = "FWBundle.h: 58";
 		rLen = 18;
-		rLoc = 1299;
+		rLoc = 1364;
 		rType = 0;
 		vrLen = 836;
 		vrLoc = 946;
@@ -5394,7 +5502,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 395";
 		rLen = 1;
-		rLoc = 9771;
+		rLoc = 9784;
 		rType = 0;
 		vrLen = 721;
 		vrLoc = 9514;
@@ -5414,7 +5522,7 @@
 		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
 		name = "FWBundle.h: 58";
 		rLen = 18;
-		rLoc = 1299;
+		rLoc = 1364;
 		rType = 0;
 		vrLen = 836;
 		vrLoc = 946;
@@ -5424,7 +5532,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 395";
 		rLen = 1;
-		rLoc = 9771;
+		rLoc = 9784;
 		rType = 0;
 		vrLen = 699;
 		vrLoc = 9550;
@@ -5433,7 +5541,7 @@
 		isa = PBXTextBookmark;
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		rLen = 1;
-		rLoc = 1475;
+		rLoc = 1485;
 		rType = 1;
 	};
 	32A52F3A171148340009A99A /* PBXTextBookmark */ = {
@@ -5441,7 +5549,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1404";
 		rLen = 0;
-		rLoc = 42022;
+		rLoc = 42179;
 		rType = 0;
 		vrLen = 3535;
 		vrLoc = 40736;
@@ -5476,7 +5584,7 @@
 		path = "/Users/kevinbradley/Dropbox/bile+iH8sn0w/00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c";
 		sourceTree = "<absolute>";
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1496, 1305}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1496, 1282}}";
 			sepNavSelRange = "{0, 0}";
 			sepNavVisRange = "{0, 7404}";
 		};
@@ -5486,7 +5594,7 @@
 		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
 		name = "FWBundle.h: 58";
 		rLen = 18;
-		rLoc = 1299;
+		rLoc = 1364;
 		rType = 0;
 		vrLen = 836;
 		vrLoc = 946;
@@ -5496,7 +5604,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 395";
 		rLen = 1;
-		rLoc = 9771;
+		rLoc = 9784;
 		rType = 0;
 		vrLen = 699;
 		vrLoc = 9550;
@@ -5506,7 +5614,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1412";
 		rLen = 0;
-		rLoc = 42038;
+		rLoc = 42195;
 		rType = 0;
 		vrLen = 3605;
 		vrLoc = 40736;
@@ -5526,7 +5634,7 @@
 		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
 		name = "FWBundle.h: 58";
 		rLen = 18;
-		rLoc = 1299;
+		rLoc = 1364;
 		rType = 0;
 		vrLen = 836;
 		vrLoc = 946;
@@ -5536,7 +5644,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 395";
 		rLen = 1;
-		rLoc = 9771;
+		rLoc = 9784;
 		rType = 0;
 		vrLen = 699;
 		vrLoc = 9550;
@@ -5546,7 +5654,7 @@
 		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
 		name = "nitoUtility.m: 2184";
 		rLen = 0;
-		rLoc = 64616;
+		rLoc = 65100;
 		rType = 0;
 		vrLen = 608;
 		vrLoc = 64013;
@@ -5566,7 +5674,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1286";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 919;
 		vrLoc = 38157;
@@ -5576,7 +5684,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1286";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 905;
 		vrLoc = 38157;
@@ -5633,7 +5741,7 @@
 		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
 		name = "FWBundle.h: 58";
 		rLen = 18;
-		rLoc = 1299;
+		rLoc = 1364;
 		rType = 0;
 		vrLen = 787;
 		vrLoc = 946;
@@ -5647,7 +5755,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1286";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 919;
 		vrLoc = 38157;
@@ -5658,7 +5766,7 @@
 		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
 		fallbackIsa = XCBuildMessageTextBookmark;
 		rLen = 1;
-		rLoc = 2183;
+		rLoc = 2203;
 		rType = 1;
 	};
 	32A52F6B17114AEE0009A99A /* PBXTextBookmark */ = {
@@ -5666,7 +5774,7 @@
 		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
 		name = "nitoUtility.m: 2184";
 		rLen = 0;
-		rLoc = 64616;
+		rLoc = 65100;
 		rType = 0;
 		vrLen = 603;
 		vrLoc = 64013;
@@ -5743,7 +5851,7 @@
 		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
 		name = "FWBundle.h: 58";
 		rLen = 18;
-		rLoc = 1299;
+		rLoc = 1364;
 		rType = 0;
 		vrLen = 787;
 		vrLoc = 946;
@@ -5753,7 +5861,7 @@
 		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
 		name = "nitoUtility.m: 2184";
 		rLen = 0;
-		rLoc = 64616;
+		rLoc = 65100;
 		rType = 0;
 		vrLen = 608;
 		vrLoc = 64013;
@@ -5780,7 +5888,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 1874";
 		rLen = 18;
-		rLoc = 55790;
+		rLoc = 57095;
 		rType = 0;
 		vrLen = 2027;
 		vrLoc = 53901;
@@ -5871,7 +5979,7 @@
 		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
 		name = "nitoUtility.m: 2184";
 		rLen = 0;
-		rLoc = 64616;
+		rLoc = 65100;
 		rType = 0;
 		vrLen = 608;
 		vrLoc = 64013;
@@ -5895,7 +6003,7 @@
 		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
 		name = "nitoUtility.m: 2184";
 		rLen = 0;
-		rLoc = 64616;
+		rLoc = 65100;
 		rType = 0;
 		vrLen = 608;
 		vrLoc = 64013;
@@ -5951,7 +6059,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2094";
 		rLen = 0;
-		rLoc = 61302;
+		rLoc = 62607;
 		rType = 0;
 		vrLen = 2100;
 		vrLoc = 60046;
@@ -5981,7 +6089,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2094";
 		rLen = 0;
-		rLoc = 61302;
+		rLoc = 62607;
 		rType = 0;
 		vrLen = 2109;
 		vrLoc = 60046;
@@ -5991,7 +6099,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2225";
 		rLen = 0;
-		rLoc = 65707;
+		rLoc = 67012;
 		rType = 0;
 		vrLen = 2589;
 		vrLoc = 64031;
@@ -6041,7 +6149,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2225";
 		rLen = 0;
-		rLoc = 65707;
+		rLoc = 67012;
 		rType = 0;
 		vrLen = 2518;
 		vrLoc = 64031;
@@ -6081,7 +6189,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2225";
 		rLen = 0;
-		rLoc = 65707;
+		rLoc = 67012;
 		rType = 0;
 		vrLen = 2518;
 		vrLoc = 64031;
@@ -6091,7 +6199,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2079";
 		rLen = 0;
-		rLoc = 61008;
+		rLoc = 62313;
 		rType = 0;
 		vrLen = 1827;
 		vrLoc = 59053;
@@ -6131,7 +6239,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2223";
 		rLen = 0;
-		rLoc = 65707;
+		rLoc = 67012;
 		rType = 0;
 		vrLen = 2520;
 		vrLoc = 64027;
@@ -6171,7 +6279,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2223";
 		rLen = 22;
-		rLoc = 65685;
+		rLoc = 66990;
 		rType = 0;
 		vrLen = 3091;
 		vrLoc = 62562;
@@ -6211,7 +6319,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2223";
 		rLen = 22;
-		rLoc = 65685;
+		rLoc = 66990;
 		rType = 0;
 		vrLen = 3091;
 		vrLoc = 62562;
@@ -6221,7 +6329,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 804";
 		rLen = 0;
-		rLoc = 23533;
+		rLoc = 24878;
 		rType = 0;
 		vrLen = 2653;
 		vrLoc = 21255;
@@ -6260,7 +6368,7 @@
 		isa = PBXTextBookmark;
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 615";
-		rLen = 7662;
+		rLen = 8965;
 		rLoc = 16301;
 		rType = 0;
 		vrLen = 2470;
@@ -6347,7 +6455,7 @@
 		isa = PBXTextBookmark;
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 615";
-		rLen = 7662;
+		rLen = 8965;
 		rLoc = 16301;
 		rType = 0;
 		vrLen = 2535;
@@ -6358,7 +6466,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2115";
 		rLen = 4307;
-		rLoc = 61464;
+		rLoc = 62769;
 		rType = 0;
 		vrLen = 2510;
 		vrLoc = 64446;
@@ -6398,7 +6506,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 1869";
 		rLen = 0;
-		rLoc = 55137;
+		rLoc = 56442;
 		rType = 0;
 		vrLen = 2257;
 		vrLoc = 54661;
@@ -6438,7 +6546,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 1811";
 		rLen = 0;
-		rLoc = 53789;
+		rLoc = 55094;
 		rType = 0;
 		vrLen = 1917;
 		vrLoc = 52738;
@@ -6502,7 +6610,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 874";
 		rLen = 65;
-		rLoc = 21144;
+		rLoc = 21157;
 		rType = 0;
 		vrLen = 866;
 		vrLoc = 20773;
@@ -6512,7 +6620,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2733";
 		rLen = 23;
-		rLoc = 82855;
+		rLoc = 84160;
 		rType = 0;
 		vrLen = 1898;
 		vrLoc = 81824;
@@ -6552,7 +6660,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 1811";
 		rLen = 0;
-		rLoc = 53789;
+		rLoc = 55094;
 		rType = 0;
 		vrLen = 2184;
 		vrLoc = 52062;
@@ -6596,7 +6704,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1294";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 1077;
 		vrLoc = 38077;
@@ -6606,7 +6714,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1294";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 1077;
 		vrLoc = 38077;
@@ -6616,7 +6724,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1295";
 		rLen = 26;
-		rLoc = 39069;
+		rLoc = 39135;
 		rType = 0;
 		vrLen = 2746;
 		vrLoc = 36144;
@@ -6633,7 +6741,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 811;
 		vrLoc = 1373;
@@ -6663,7 +6771,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1294";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 1133;
 		vrLoc = 38077;
@@ -6673,7 +6781,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1295";
 		rLen = 26;
-		rLoc = 39069;
+		rLoc = 39135;
 		rType = 0;
 		vrLen = 2773;
 		vrLoc = 36144;
@@ -6683,7 +6791,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 831;
 		vrLoc = 1373;
@@ -6713,7 +6821,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1294";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 1133;
 		vrLoc = 38077;
@@ -6740,7 +6848,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 781;
 		vrLoc = 1426;
@@ -6770,7 +6878,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1294";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 1077;
 		vrLoc = 38077;
@@ -6780,7 +6888,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1294";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 1077;
 		vrLoc = 38077;
@@ -6800,7 +6908,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 778;
 		vrLoc = 1429;
@@ -6830,7 +6938,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1294";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 845;
 		vrLoc = 38075;
@@ -6850,7 +6958,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 806";
 		rLen = 0;
-		rLoc = 23572;
+		rLoc = 24878;
 		rType = 0;
 		vrLen = 2476;
 		vrLoc = 21485;
@@ -6860,7 +6968,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 781;
 		vrLoc = 1429;
@@ -6900,7 +7008,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1294";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 517;
 		vrLoc = 38637;
@@ -6914,7 +7022,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1294";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 892;
 		vrLoc = 38333;
@@ -6924,7 +7032,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 806";
 		rLen = 0;
-		rLoc = 23572;
+		rLoc = 24878;
 		rType = 0;
 		vrLen = 2868;
 		vrLoc = 25036;
@@ -6944,7 +7052,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1294";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 2351;
 		vrLoc = 37640;
@@ -6954,7 +7062,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 761;
 		vrLoc = 1464;
@@ -6984,7 +7092,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1294";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 892;
 		vrLoc = 38333;
@@ -7021,7 +7129,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1294";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 2351;
 		vrLoc = 37640;
@@ -7031,7 +7139,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 761;
 		vrLoc = 1464;
@@ -7061,7 +7169,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1294";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 892;
 		vrLoc = 38333;
@@ -7071,7 +7179,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 1811";
 		rLen = 0;
-		rLoc = 53789;
+		rLoc = 55094;
 		rType = 0;
 		vrLen = 2115;
 		vrLoc = 52394;
@@ -7081,7 +7189,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1294";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 2351;
 		vrLoc = 37640;
@@ -7091,7 +7199,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 679;
 		vrLoc = 1547;
@@ -7121,7 +7229,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1294";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 938;
 		vrLoc = 38333;
@@ -7131,7 +7239,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 1811";
 		rLen = 0;
-		rLoc = 53789;
+		rLoc = 55094;
 		rType = 0;
 		vrLen = 2170;
 		vrLoc = 52394;
@@ -7141,7 +7249,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2122";
 		rLen = 0;
-		rLoc = 61472;
+		rLoc = 62777;
 		rType = 0;
 		vrLen = 2186;
 		vrLoc = 60420;
@@ -7150,7 +7258,7 @@
 		isa = PBXTextBookmark;
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		rLen = 1;
-		rLoc = 1415;
+		rLoc = 1425;
 		rType = 1;
 	};
 	32A5307D1711768D0009A99A /* PBXTextBookmark */ = {
@@ -7158,7 +7266,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1389";
 		rLen = 0;
-		rLoc = 41163;
+		rLoc = 41320;
 		rType = 0;
 		vrLen = 3667;
 		vrLoc = 41129;
@@ -7168,7 +7276,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 717;
 		vrLoc = 1547;
@@ -7198,7 +7306,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1295";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 825;
 		vrLoc = 38437;
@@ -7207,7 +7315,7 @@
 		isa = PBXTextBookmark;
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		rLen = 1;
-		rLoc = 1415;
+		rLoc = 1425;
 		rType = 1;
 	};
 	32A53088171177720009A99A /* PBXTextBookmark */ = {
@@ -7215,7 +7323,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1422";
 		rLen = 0;
-		rLoc = 42022;
+		rLoc = 42179;
 		rType = 0;
 		vrLen = 3864;
 		vrLoc = 41261;
@@ -7225,7 +7333,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 706;
 		vrLoc = 1639;
@@ -7255,7 +7363,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1295";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 841;
 		vrLoc = 38437;
@@ -7265,7 +7373,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1287";
 		rLen = 0;
-		rLoc = 38854;
+		rLoc = 38920;
 		rType = 0;
 		vrLen = 2635;
 		vrLoc = 36824;
@@ -7275,7 +7383,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 743;
 		vrLoc = 1641;
@@ -7305,7 +7413,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1295";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 839;
 		vrLoc = 38437;
@@ -7332,7 +7440,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 730;
 		vrLoc = 1672;
@@ -7366,7 +7474,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1295";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 885;
 		vrLoc = 38437;
@@ -7376,7 +7484,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2123";
 		rLen = 0;
-		rLoc = 61470;
+		rLoc = 62775;
 		rType = 0;
 		vrLen = 2126;
 		vrLoc = 60435;
@@ -7417,6 +7525,7 @@
 	};
 	32A530B517117A790009A99A /* stdlib.h */ = {
 		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
 		name = stdlib.h;
 		path = /Developer/SDKs/MacOSX10.6.sdk/usr/include/stdlib.h;
 		sourceTree = "<absolute>";
@@ -7424,6 +7533,7 @@
 			sepNavIntBoundsRect = "{{0, 0}, {1496, 5712}}";
 			sepNavSelRange = "{6025, 6}";
 			sepNavVisRange = "{4600, 2744}";
+			sepNavWindowFrame = "{{15, 0}, {1555, 1418}}";
 		};
 	};
 	32A530B617117A790009A99A /* PBXTextBookmark */ = {
@@ -7431,7 +7541,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 733;
 		vrLoc = 1672;
@@ -7461,7 +7571,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1295";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 885;
 		vrLoc = 38437;
@@ -7471,7 +7581,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2122";
 		rLen = 0;
-		rLoc = 61470;
+		rLoc = 62775;
 		rType = 0;
 		vrLen = 2118;
 		vrLoc = 60505;
@@ -7518,7 +7628,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 747;
 		vrLoc = 1674;
@@ -7548,7 +7658,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1295";
 		rLen = 0;
-		rLoc = 38985;
+		rLoc = 39051;
 		rType = 0;
 		vrLen = 885;
 		vrLoc = 38437;
@@ -7558,7 +7668,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2123";
 		rLen = 0;
-		rLoc = 61470;
+		rLoc = 62775;
 		rType = 0;
 		vrLen = 2117;
 		vrLoc = 60505;
@@ -7598,7 +7708,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 644;
 		vrLoc = 1779;
@@ -7628,7 +7738,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1304";
 		rLen = 1;
-		rLoc = 39298;
+		rLoc = 39364;
 		rType = 0;
 		vrLen = 477;
 		vrLoc = 38949;
@@ -7638,7 +7748,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2123";
 		rLen = 0;
-		rLoc = 61470;
+		rLoc = 62775;
 		rType = 0;
 		vrLen = 2117;
 		vrLoc = 60479;
@@ -7648,7 +7758,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2122";
 		rLen = 0;
-		rLoc = 61470;
+		rLoc = 62775;
 		rType = 0;
 		vrLen = 2035;
 		vrLoc = 60710;
@@ -7695,7 +7805,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 691;
 		vrLoc = 1901;
@@ -7725,7 +7835,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1304";
 		rLen = 1;
-		rLoc = 39298;
+		rLoc = 39364;
 		rType = 0;
 		vrLen = 388;
 		vrLoc = 38949;
@@ -7734,7 +7844,7 @@
 		isa = PBXTextBookmark;
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		rLen = 1;
-		rLoc = 1406;
+		rLoc = 1416;
 		rType = 1;
 	};
 	32A530E917117C8D0009A99A /* PBXTextBookmark */ = {
@@ -7742,7 +7852,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1445";
 		rLen = 0;
-		rLoc = 43654;
+		rLoc = 43811;
 		rType = 0;
 		vrLen = 3768;
 		vrLoc = 41072;
@@ -7752,7 +7862,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2122";
 		rLen = 0;
-		rLoc = 61470;
+		rLoc = 62775;
 		rType = 0;
 		vrLen = 1942;
 		vrLoc = 60849;
@@ -7792,7 +7902,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 690;
 		vrLoc = 1905;
@@ -7822,7 +7932,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1304";
 		rLen = 1;
-		rLoc = 39298;
+		rLoc = 39364;
 		rType = 0;
 		vrLen = 388;
 		vrLoc = 38949;
@@ -7832,7 +7942,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2123";
 		rLen = 0;
-		rLoc = 61472;
+		rLoc = 62777;
 		rType = 0;
 		vrLen = 1875;
 		vrLoc = 60867;
@@ -7842,7 +7952,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1412";
 		rLen = 0;
-		rLoc = 42022;
+		rLoc = 42179;
 		rType = 0;
 		vrLen = 3800;
 		vrLoc = 41148;
@@ -7882,7 +7992,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 799;
 		vrLoc = 1928;
@@ -7912,7 +8022,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1304";
 		rLen = 1;
-		rLoc = 39298;
+		rLoc = 39364;
 		rType = 0;
 		vrLen = 388;
 		vrLoc = 38949;
@@ -7922,7 +8032,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 2242";
 		rLen = 0;
-		rLoc = 65640;
+		rLoc = 66945;
 		rType = 0;
 		vrLen = 2445;
 		vrLoc = 64668;
@@ -7932,7 +8042,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1412";
 		rLen = 0;
-		rLoc = 42022;
+		rLoc = 42179;
 		rType = 0;
 		vrLen = 3800;
 		vrLoc = 41148;
@@ -7972,7 +8082,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 799;
 		vrLoc = 1928;
@@ -8002,7 +8112,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1304";
 		rLen = 1;
-		rLoc = 39298;
+		rLoc = 39364;
 		rType = 0;
 		vrLen = 477;
 		vrLoc = 38949;
@@ -8012,7 +8122,7 @@
 		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
 		name = "tetherKitAppDelegate.m: 1811";
 		rLen = 0;
-		rLoc = 53789;
+		rLoc = 55094;
 		rType = 0;
 		vrLen = 2319;
 		vrLoc = 51975;
@@ -8022,7 +8132,7 @@
 		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
 		name = "TSSManager.mm: 1412";
 		rLen = 0;
-		rLoc = 42022;
+		rLoc = 42179;
 		rType = 0;
 		vrLen = 3959;
 		vrLoc = 41148;
@@ -8062,7 +8172,7 @@
 		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
 		name = "FWBundle.m: 66";
 		rLen = 13;
-		rLoc = 1448;
+		rLoc = 1461;
 		rType = 0;
 		vrLen = 802;
 		vrLoc = 1928;
@@ -8078,6 +8188,1049 @@
 		vrLoc = 2498;
 	};
 	32A5310F17117F300009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A52F40171148340009A99A /* 00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c */;
+		name = "00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 7404;
+		vrLoc = 0;
+	};
+	32A531B0171213920009A99A /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
+	};
+	32A531B4171214B90009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		rLen = 19;
+		rLoc = 7282;
+		rType = 0;
+	};
+	32A531B6171216900009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
+		name = "TSSManager.mm: 1267";
+		rLen = 23;
+		rLoc = 37821;
+		rType = 0;
+		vrLen = 880;
+		vrLoc = 37609;
+	};
+	32A531B7171216900009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		name = "nitoUtility.m: 317";
+		rLen = 19;
+		rLoc = 7282;
+		rType = 0;
+		vrLen = 744;
+		vrLoc = 6731;
+	};
+	32A531B8171216900009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
+		name = "FWBundle.h: 55";
+		rLen = 0;
+		rLoc = 1250;
+		rType = 0;
+		vrLen = 714;
+		vrLoc = 932;
+	};
+	32A531B9171216900009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		name = "FWBundle.m: 66";
+		rLen = 13;
+		rLoc = 1461;
+		rType = 0;
+		vrLen = 737;
+		vrLoc = 0;
+	};
+	32A531BA171216900009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		name = "FWBundle.m: 66";
+		rLen = 13;
+		rLoc = 1461;
+		rType = 0;
+		vrLen = 737;
+		vrLoc = 0;
+	};
+	32A531BD171216900009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
+		name = "FWBundle.h: 54";
+		rLen = 6;
+		rLoc = 1225;
+		rType = 0;
+		vrLen = 953;
+		vrLoc = 976;
+	};
+	32A531BE171216900009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A52E021710D8440009A99A /* NSString+Extensions.m */;
+		name = "NSString+Extensions.m: 18";
+		rLen = 26;
+		rLoc = 324;
+		rType = 0;
+		vrLen = 2201;
+		vrLoc = 0;
+	};
+	32A531BF171216900009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327E917014D1E1040058D651 /* NSData+Flip.mm */;
+		name = "NSData+Flip.mm: 82";
+		rLen = 6;
+		rLoc = 2039;
+		rType = 0;
+		vrLen = 1854;
+		vrLoc = 787;
+	};
+	32A531C0171216900009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A530B517117A790009A99A /* stdlib.h */;
+		name = "stdlib.h: 181";
+		rLen = 6;
+		rLoc = 6025;
+		rType = 0;
+		vrLen = 2744;
+		vrLoc = 4600;
+	};
+	32A531C1171216900009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327E65CE14CF481B0058D651 /* TSSWorker.m */;
+		name = "TSSWorker.m: 122";
+		rLen = 0;
+		rLoc = 2672;
+		rType = 0;
+		vrLen = 884;
+		vrLoc = 2498;
+	};
+	32A531C2171216900009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A52F40171148340009A99A /* 00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c */;
+		name = "00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 7404;
+		vrLoc = 0;
+	};
+	32A531C4171216AC0009A99A /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+	};
+	32A531C51712177A0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		name = "nitoUtility.m: 317";
+		rLen = 19;
+		rLoc = 7282;
+		rType = 0;
+		vrLen = 744;
+		vrLoc = 6731;
+	};
+	32A531C81712177A0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		name = "nitoUtility.m: 651";
+		rLen = 0;
+		rLoc = 18875;
+		rType = 0;
+		vrLen = 1741;
+		vrLoc = 17478;
+	};
+	32A531C91712177A0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		name = "FWBundle.m: 66";
+		rLen = 13;
+		rLoc = 1461;
+		rType = 0;
+		vrLen = 737;
+		vrLoc = 0;
+	};
+	32A531CA1712177A0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
+		name = "FWBundle.h: 54";
+		rLen = 6;
+		rLoc = 1225;
+		rType = 0;
+		vrLen = 953;
+		vrLoc = 976;
+	};
+	32A531CB1712177A0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A530B517117A790009A99A /* stdlib.h */;
+		name = "stdlib.h: 181";
+		rLen = 6;
+		rLoc = 6025;
+		rType = 0;
+		vrLen = 2744;
+		vrLoc = 4600;
+	};
+	32A531CC1712177A0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327E65CE14CF481B0058D651 /* TSSWorker.m */;
+		name = "TSSWorker.m: 122";
+		rLen = 0;
+		rLoc = 2672;
+		rType = 0;
+		vrLen = 884;
+		vrLoc = 2498;
+	};
+	32A531CD1712177A0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A52F40171148340009A99A /* 00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c */;
+		name = "00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 7404;
+		vrLoc = 0;
+	};
+	32A531CE171219560009A99A /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+	};
+	32A531D1171219820009A99A /* XCBuildMessageTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "Expected ';' before '}' token";
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		fallbackIsa = XCBuildMessageTextBookmark;
+		rLen = 1;
+		rLoc = 656;
+		rType = 1;
+	};
+	32A531D4171219A50009A99A /* XCBuildMessageTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "Expected ';' before '}' token";
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		fallbackIsa = XCBuildMessageTextBookmark;
+		rLen = 1;
+		rLoc = 656;
+		rType = 1;
+	};
+	32A531D5171219A50009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		name = "nitoUtility.m: 657";
+		rLen = 0;
+		rLoc = 18527;
+		rType = 0;
+		vrLen = 802;
+		vrLoc = 18074;
+	};
+	32A531D8171219A50009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		name = "nitoUtility.m: 656";
+		rLen = 0;
+		rLoc = 18526;
+		rType = 0;
+		vrLen = 1641;
+		vrLoc = 17493;
+	};
+	32A531DB171219A50009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		name = "tetherKitAppDelegate.m: 2118";
+		rLen = 4307;
+		rLoc = 62769;
+		rType = 0;
+		vrLen = 2195;
+		vrLoc = 52099;
+	};
+	32A531DC171219A50009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		name = "FWBundle.m: 66";
+		rLen = 13;
+		rLoc = 1461;
+		rType = 0;
+		vrLen = 734;
+		vrLoc = 3;
+	};
+	32A531DD171219A50009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
+		name = "FWBundle.h: 54";
+		rLen = 6;
+		rLoc = 1225;
+		rType = 0;
+		vrLen = 916;
+		vrLoc = 976;
+	};
+	32A531DE171219A50009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A530B517117A790009A99A /* stdlib.h */;
+		name = "stdlib.h: 181";
+		rLen = 6;
+		rLoc = 6025;
+		rType = 0;
+		vrLen = 2722;
+		vrLoc = 4600;
+	};
+	32A531DF171219A50009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327E65CE14CF481B0058D651 /* TSSWorker.m */;
+		name = "TSSWorker.m: 122";
+		rLen = 0;
+		rLoc = 2672;
+		rType = 0;
+		vrLen = 852;
+		vrLoc = 2498;
+	};
+	32A531E0171219A50009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A52F40171148340009A99A /* 00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c */;
+		name = "00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 7404;
+		vrLoc = 0;
+	};
+	32A531E917121ACD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		name = "nitoUtility.m: 651";
+		rLen = 0;
+		rLoc = 18227;
+		rType = 0;
+		vrLen = 808;
+		vrLoc = 18074;
+	};
+	32A531EA17121ACD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
+		name = "FWBundle.h: 61";
+		rLen = 0;
+		rLoc = 1387;
+		rType = 0;
+		vrLen = 515;
+		vrLoc = 976;
+	};
+	32A531EB17121ACD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
+		name = "FWBundle.h: 62";
+		rLen = 0;
+		rLoc = 1387;
+		rType = 0;
+		vrLen = 471;
+		vrLoc = 677;
+	};
+	32A531EC17121ACD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
+		name = "FWBundle.h: 59";
+		rLen = 11;
+		rLoc = 1336;
+		rType = 0;
+		vrLen = 963;
+		vrLoc = 976;
+	};
+	32A531ED17121ACD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		rLen = 0;
+		rLoc = 9223372036854775820;
+		rType = 0;
+	};
+	32A531EE17121ACD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		name = "FWBundle.m: 16";
+		rLen = 0;
+		rLoc = 262;
+		rType = 0;
+		vrLen = 882;
+		vrLoc = 0;
+	};
+	32A531EF17121ACD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		name = "nitoUtility.m: 656";
+		rLen = 0;
+		rLoc = 18526;
+		rType = 0;
+		vrLen = 1773;
+		vrLoc = 17493;
+	};
+	32A531F017121ACD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		name = "tetherKitAppDelegate.m: 2118";
+		rLen = 4307;
+		rLoc = 62769;
+		rType = 0;
+		vrLen = 2274;
+		vrLoc = 52099;
+	};
+	32A531F117121ACD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A530B517117A790009A99A /* stdlib.h */;
+		name = "stdlib.h: 181";
+		rLen = 6;
+		rLoc = 6025;
+		rType = 0;
+		vrLen = 2744;
+		vrLoc = 4600;
+	};
+	32A531F217121ACD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327E65CE14CF481B0058D651 /* TSSWorker.m */;
+		name = "TSSWorker.m: 122";
+		rLen = 0;
+		rLoc = 2672;
+		rType = 0;
+		vrLen = 884;
+		vrLoc = 2498;
+	};
+	32A531F317121ACD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A52F40171148340009A99A /* 00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c */;
+		name = "00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 7404;
+		vrLoc = 0;
+	};
+	32A531F517121DCB0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
+		name = "FWBundle.h: 62";
+		rLen = 0;
+		rLoc = 1387;
+		rType = 0;
+		vrLen = 423;
+		vrLoc = 677;
+	};
+	32A531F617121DDE0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
+		name = "FWBundle.h: 62";
+		rLen = 0;
+		rLoc = 1387;
+		rType = 0;
+		vrLen = 423;
+		vrLoc = 677;
+	};
+	32A531F717121DDE0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		name = "tetherKitAppDelegate.m: 2118";
+		rLen = 4307;
+		rLoc = 62769;
+		rType = 0;
+		vrLen = 2227;
+		vrLoc = 52146;
+	};
+	32A531F817121DDE0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		name = "tetherKitAppDelegate.m: 2118";
+		rLen = 4307;
+		rLoc = 62769;
+		rType = 0;
+		vrLen = 2227;
+		vrLoc = 52146;
+	};
+	32A531F917121DDE0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		name = "FWBundle.m: 16";
+		rLen = 0;
+		rLoc = 262;
+		rType = 0;
+		vrLen = 750;
+		vrLoc = 0;
+	};
+	32A531FA17121DDE0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		name = "nitoUtility.m: 656";
+		rLen = 0;
+		rLoc = 18526;
+		rType = 0;
+		vrLen = 1641;
+		vrLoc = 17493;
+	};
+	32A531FB17121DDE0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A530B517117A790009A99A /* stdlib.h */;
+		name = "stdlib.h: 181";
+		rLen = 6;
+		rLoc = 6025;
+		rType = 0;
+		vrLen = 2722;
+		vrLoc = 4600;
+	};
+	32A531FC17121DDE0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327E65CE14CF481B0058D651 /* TSSWorker.m */;
+		name = "TSSWorker.m: 122";
+		rLen = 0;
+		rLoc = 2672;
+		rType = 0;
+		vrLen = 852;
+		vrLoc = 2498;
+	};
+	32A531FD17121DDE0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A52F40171148340009A99A /* 00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c */;
+		name = "00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 7404;
+		vrLoc = 0;
+	};
+	32A5320217121E2B0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
+		name = "FWBundle.h: 62";
+		rLen = 0;
+		rLoc = 1387;
+		rType = 0;
+		vrLen = 423;
+		vrLoc = 677;
+	};
+	32A5320317121E2B0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		name = "tetherKitAppDelegate.m: 2118";
+		rLen = 4307;
+		rLoc = 62769;
+		rType = 0;
+		vrLen = 2233;
+		vrLoc = 52146;
+	};
+	32A5320417121E2B0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		name = "tetherKitAppDelegate.m: 1812";
+		rLen = 0;
+		rLoc = 55094;
+		rType = 0;
+		vrLen = 2101;
+		vrLoc = 52278;
+	};
+	32A5320517121E2B0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		name = "FWBundle.m: 16";
+		rLen = 0;
+		rLoc = 262;
+		rType = 0;
+		vrLen = 750;
+		vrLoc = 0;
+	};
+	32A5320617121E2B0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		name = "nitoUtility.m: 656";
+		rLen = 0;
+		rLoc = 18526;
+		rType = 0;
+		vrLen = 1641;
+		vrLoc = 17493;
+	};
+	32A5320717121E2B0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A530B517117A790009A99A /* stdlib.h */;
+		name = "stdlib.h: 181";
+		rLen = 6;
+		rLoc = 6025;
+		rType = 0;
+		vrLen = 2722;
+		vrLoc = 4600;
+	};
+	32A5320817121E2B0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327E65CE14CF481B0058D651 /* TSSWorker.m */;
+		name = "TSSWorker.m: 122";
+		rLen = 0;
+		rLoc = 2672;
+		rType = 0;
+		vrLen = 852;
+		vrLoc = 2498;
+	};
+	32A5320917121E2B0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A52F40171148340009A99A /* 00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c */;
+		name = "00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 7404;
+		vrLoc = 0;
+	};
+	32A5320E171221F90009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
+		name = "FWBundle.h: 62";
+		rLen = 0;
+		rLoc = 1387;
+		rType = 0;
+		vrLen = 423;
+		vrLoc = 677;
+	};
+	32A5320F171221F90009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		name = "tetherKitAppDelegate.m: 1812";
+		rLen = 0;
+		rLoc = 55094;
+		rType = 0;
+		vrLen = 2154;
+		vrLoc = 52146;
+	};
+	32A53210171221F90009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		name = "tetherKitAppDelegate.m: 1811";
+		rLen = 0;
+		rLoc = 55092;
+		rType = 0;
+		vrLen = 2101;
+		vrLoc = 52280;
+	};
+	32A53211171221F90009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		name = "FWBundle.m: 16";
+		rLen = 0;
+		rLoc = 262;
+		rType = 0;
+		vrLen = 750;
+		vrLoc = 0;
+	};
+	32A53212171221F90009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		name = "nitoUtility.m: 656";
+		rLen = 0;
+		rLoc = 18526;
+		rType = 0;
+		vrLen = 1641;
+		vrLoc = 17493;
+	};
+	32A53213171221F90009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A530B517117A790009A99A /* stdlib.h */;
+		name = "stdlib.h: 181";
+		rLen = 6;
+		rLoc = 6025;
+		rType = 0;
+		vrLen = 2722;
+		vrLoc = 4600;
+	};
+	32A53214171221F90009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327E65CE14CF481B0058D651 /* TSSWorker.m */;
+		name = "TSSWorker.m: 122";
+		rLen = 0;
+		rLoc = 2672;
+		rType = 0;
+		vrLen = 852;
+		vrLoc = 2498;
+	};
+	32A53215171221F90009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A52F40171148340009A99A /* 00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c */;
+		name = "00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 7404;
+		vrLoc = 0;
+	};
+	32A53216171222F00009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327E65CC14CF481B0058D651 /* TSSManager.mm */;
+		name = "TSSManager.mm: 1295";
+		rLen = 0;
+		rLoc = 39051;
+		rType = 0;
+		vrLen = 652;
+		vrLoc = 38333;
+	};
+	32A53217171222F00009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
+		name = "FWBundle.h: 62";
+		rLen = 0;
+		rLoc = 1387;
+		rType = 0;
+		vrLen = 373;
+		vrLoc = 2529;
+	};
+	32A53218171222FD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
+		name = "FWBundle.h: 62";
+		rLen = 0;
+		rLoc = 1387;
+		rType = 0;
+		vrLen = 670;
+		vrLoc = 2387;
+	};
+	32A53219171222FD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		name = "nitoUtility.m: 656";
+		rLen = 0;
+		rLoc = 18526;
+		rType = 0;
+		vrLen = 1773;
+		vrLoc = 17493;
+	};
+	32A5321A171222FD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		name = "FWBundle.m: 16";
+		rLen = 0;
+		rLoc = 262;
+		rType = 0;
+		vrLen = 882;
+		vrLoc = 0;
+	};
+	32A5321B171222FD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327E65CE14CF481B0058D651 /* TSSWorker.m */;
+		name = "TSSWorker.m: 122";
+		rLen = 0;
+		rLoc = 2672;
+		rType = 0;
+		vrLen = 884;
+		vrLoc = 2498;
+	};
+	32A5321C171222FD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A52F40171148340009A99A /* 00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c */;
+		name = "00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 7404;
+		vrLoc = 0;
+	};
+	32A5322A171226740009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741712E17498002916D5 /* FWBundle.h */;
+		name = "FWBundle.h: 62";
+		rLen = 0;
+		rLoc = 1387;
+		rType = 0;
+		vrLen = 678;
+		vrLoc = 2351;
+	};
+	32A5322B171226740009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		name = "FWBundle.m: 395";
+		rLen = 1;
+		rLoc = 9784;
+		rType = 0;
+		vrLen = 660;
+		vrLoc = 9527;
+	};
+	32A5322C171226740009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		name = "FWBundle.m: 395";
+		rLen = 1;
+		rLoc = 9784;
+		rType = 0;
+		vrLen = 660;
+		vrLoc = 9527;
+	};
+	32A5322F171226740009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		rLen = 1;
+		rLoc = 613;
+		rType = 1;
+	};
+	32A53230171226740009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		name = "tetherKitAppDelegate.m: 820";
+		rLen = 0;
+		rLoc = 24233;
+		rType = 0;
+		vrLen = 2898;
+		vrLoc = 22299;
+	};
+	32A53231171226740009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		name = "FWBundle.m: 589";
+		rLen = 53;
+		rLoc = 14160;
+		rType = 0;
+		vrLen = 795;
+		vrLoc = 13947;
+	};
+	32A53232171226740009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		name = "FWBundle.m: 591";
+		rLen = 36;
+		rLoc = 14216;
+		rType = 0;
+		vrLen = 829;
+		vrLoc = 14140;
+	};
+	32A53233171226740009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		name = "nitoUtility.m: 656";
+		rLen = 0;
+		rLoc = 18526;
+		rType = 0;
+		vrLen = 1773;
+		vrLoc = 17493;
+	};
+	32A53234171226740009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327E65CE14CF481B0058D651 /* TSSWorker.m */;
+		name = "TSSWorker.m: 122";
+		rLen = 0;
+		rLoc = 2672;
+		rType = 0;
+		vrLen = 884;
+		vrLoc = 2498;
+	};
+	32A53235171226740009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A52F40171148340009A99A /* 00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c */;
+		name = "00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 7404;
+		vrLoc = 0;
+	};
+	32A5323A171226A80009A99A /* XCBuildMessageTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "'options' undeclared (first use in this function)";
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		fallbackIsa = XCBuildMessageTextBookmark;
+		rLen = 1;
+		rLoc = 801;
+		rType = 1;
+	};
+	32A5323D171226BD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		name = "FWBundle.m: 395";
+		rLen = 1;
+		rLoc = 9784;
+		rType = 0;
+		vrLen = 660;
+		vrLoc = 9527;
+	};
+	32A5323E171226BD0009A99A /* XCBuildMessageTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "'options' undeclared (first use in this function)";
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		fallbackIsa = XCBuildMessageTextBookmark;
+		rLen = 1;
+		rLoc = 801;
+		rType = 1;
+	};
+	32A5323F171226BD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		name = "tetherKitAppDelegate.m: 802";
+		rLen = 0;
+		rLoc = 23543;
+		rType = 0;
+		vrLen = 873;
+		vrLoc = 23118;
+	};
+	32A53240171226BD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		name = "tetherKitAppDelegate.m: 802";
+		rLen = 0;
+		rLoc = 23614;
+		rType = 0;
+		vrLen = 2797;
+		vrLoc = 22419;
+	};
+	32A53241171226BD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		name = "FWBundle.m: 591";
+		rLen = 36;
+		rLoc = 14216;
+		rType = 0;
+		vrLen = 730;
+		vrLoc = 14140;
+	};
+	32A53242171226BD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		name = "nitoUtility.m: 656";
+		rLen = 0;
+		rLoc = 18526;
+		rType = 0;
+		vrLen = 1641;
+		vrLoc = 17493;
+	};
+	32A53243171226BD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327E65CE14CF481B0058D651 /* TSSWorker.m */;
+		name = "TSSWorker.m: 122";
+		rLen = 0;
+		rLoc = 2672;
+		rType = 0;
+		vrLen = 852;
+		vrLoc = 2498;
+	};
+	32A53244171226BD0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A52F40171148340009A99A /* 00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c */;
+		name = "00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 7404;
+		vrLoc = 0;
+	};
+	32A532461712293D0009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		name = "tetherKitAppDelegate.m: 802";
+		rLen = 0;
+		rLoc = 23543;
+		rType = 0;
+		vrLen = 873;
+		vrLoc = 23118;
+	};
+	32A53249171229510009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		name = "tetherKitAppDelegate.m: 802";
+		rLen = 0;
+		rLoc = 23543;
+		rType = 0;
+		vrLen = 859;
+		vrLoc = 23032;
+	};
+	32A5324A171229510009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		name = "tetherKitAppDelegate.m: 802";
+		rLen = 0;
+		rLoc = 23614;
+		rType = 0;
+		vrLen = 2751;
+		vrLoc = 22467;
+	};
+	32A5324B171229510009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		name = "FWBundle.m: 591";
+		rLen = 36;
+		rLoc = 14216;
+		rType = 0;
+		vrLen = 730;
+		vrLoc = 14140;
+	};
+	32A5324C171229510009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		name = "nitoUtility.m: 656";
+		rLen = 0;
+		rLoc = 18526;
+		rType = 0;
+		vrLen = 1641;
+		vrLoc = 17493;
+	};
+	32A5324D171229510009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327E65CE14CF481B0058D651 /* TSSWorker.m */;
+		name = "TSSWorker.m: 122";
+		rLen = 0;
+		rLoc = 2672;
+		rType = 0;
+		vrLen = 852;
+		vrLoc = 2498;
+	};
+	32A5324E171229510009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32A52F40171148340009A99A /* 00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c */;
+		name = "00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 7404;
+		vrLoc = 0;
+	};
+	32A5325417122A640009A99A /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+	};
+	32A5325517122A780009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		name = "tetherKitAppDelegate.m: 802";
+		rLen = 0;
+		rLoc = 23543;
+		rType = 0;
+		vrLen = 682;
+		vrLoc = 22785;
+	};
+	32A5325817122A780009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */;
+		name = "tetherKitAppDelegate.m: 1913";
+		rLen = 0;
+		rLoc = 56581;
+		rType = 0;
+		vrLen = 2195;
+		vrLoc = 55397;
+	};
+	32A5325917122A780009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DF741812E17498002916D5 /* FWBundle.m */;
+		name = "FWBundle.m: 591";
+		rLen = 36;
+		rLoc = 14216;
+		rType = 0;
+		vrLen = 730;
+		vrLoc = 14140;
+	};
+	32A5325A17122A780009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
+		name = "nitoUtility.m: 656";
+		rLen = 0;
+		rLoc = 18526;
+		rType = 0;
+		vrLen = 1641;
+		vrLoc = 17493;
+	};
+	32A5325B17122A780009A99A /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 327E65CE14CF481B0058D651 /* TSSWorker.m */;
+		name = "TSSWorker.m: 122";
+		rLen = 0;
+		rLoc = 2672;
+		rType = 0;
+		vrLen = 852;
+		vrLoc = 2498;
+	};
+	32A5325C17122A780009A99A /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 32A52F40171148340009A99A /* 00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c */;
 		name = "00000236A10AED0D_Apple_TV_2-5.2_(10B144b)-blobs.c: 1";
@@ -8282,18 +9435,18 @@
 	};
 	32DF741712E17498002916D5 /* FWBundle.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1701, 3952}}";
-			sepNavSelRange = "{1048, 24}";
-			sepNavVisRange = "{467, 747}";
+			sepNavIntBoundsRect = "{{0, 0}, {2100, 3984}}";
+			sepNavSelRange = "{1387, 0}";
+			sepNavVisRange = "{2529, 373}";
 			sepNavWindowFrame = "{{623, 477}, {1760, 663}}";
 		};
 	};
 	32DF741812E17498002916D5 /* FWBundle.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1701, 14880}}";
-			sepNavSelRange = "{1448, 13}";
-			sepNavVisRange = "{1928, 802}";
-			sepNavWindowFrame = "{{350, 501}, {1760, 663}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1701, 14560}}";
+			sepNavSelRange = "{14216, 36}";
+			sepNavVisRange = "{14140, 730}";
+			sepNavWindowFrame = "{{375, 570}, {1760, 663}}";
 		};
 	};
 	32DF742A12E17F21002916D5 /* PBXTextBookmark */ = {
@@ -8554,7 +9707,7 @@
 		fRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */;
 		name = "nitoUtility.m: 1997";
 		rLen = 0;
-		rLoc = 58999;
+		rLoc = 59483;
 		rType = 0;
 		vrLen = 351;
 		vrLoc = 10106;

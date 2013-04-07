@@ -647,8 +647,28 @@
 					NSString *patchFile = [thePatch valueForKey:@"Patch"];
 					NSString *md5 = [thePatch valueForKey:@"MD5"];
 					NSString *patchPath = [[theBundle bundlePath] stringByAppendingPathComponent:patchFile];
-						//NSLog(@"patching: %@ withPatch: %@", file, patchFile);
-					status = [nitoUtility patchFile:[mountedImage stringByAppendingPathComponent:file] withPatch:patchPath endMD5:md5];
+						
+					NSLog(@"restoreMode: %i", [theBundle restoreMode]);
+					if ([patchFile isEqualToString:@"restored_external.patch"])
+					{
+						if ([theBundle restoreMode] != 0)
+						{
+							status = [nitoUtility patchFile:[mountedImage stringByAppendingPathComponent:file] withPatch:patchPath endMD5:md5];
+						} else {
+							
+							NSLog(@"recovery status 0, skip restored_external.patch");
+							
+							status = 0;
+							
+						}
+						
+					} else {
+					
+						NSLog(@"patching: %@ withPatch: %@", file, patchFile);
+						status = [nitoUtility patchFile:[mountedImage stringByAppendingPathComponent:file] withPatch:patchPath endMD5:md5];
+					}
+					
+					
 					if (status == 0)
 					{
 						NSLog(@"patched %@ successfully!", file);
