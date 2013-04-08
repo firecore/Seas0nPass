@@ -1840,13 +1840,14 @@ static NSString *HexToDec(NSString *hexValue)
 	
 	//FIXME: REMEMBER TO COMMENT THIS BACK IN!!!!!!!!!
 
+	
 	if ([signableVersions containsObject:buildNumber])
 	{
 		NSLog(@"apple is still signing %@ dont do anything special: kRestoreDefaultMode", buildNumber);
 		return kRestoreDefaultMode;
 	}
 	
-	
+
 	if (ecid == nil)
 	{
 		[self _fetchDeviceInfo];
@@ -2035,6 +2036,10 @@ static NSString *HexToDec(NSString *hexValue)
 	if (ifaithBlob == nil)
 	{
 		NSLog(@"epic fail :(");
+		[self hideProgress];
+		[self setDownloadText:@"Blob dump / submit failed!"];
+		[cancelButton setTitle:@"Done"];
+		 //[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
 		return;
 	}
 	
@@ -2044,8 +2049,11 @@ static NSString *HexToDec(NSString *hexValue)
 		//[ifaithBlob writeToFile:outputiFaith atomically:YES];
 		//[[NSWorkspace sharedWorkspace] openFile:outputiFaith];
 		//NSLog(@"ifaithblob: %@", ifaithBlob);
-	[self showInitialView];
+		//[self showInitialView];
 	[self hideProgress];
+	
+	[cancelButton setTitle:@"Done"];
+	[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
 }
 
 
