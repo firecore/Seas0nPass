@@ -640,7 +640,7 @@ static NSString *myChipID_ = nil;
 	baseUrlString = [[NSString stringWithFormat:@"http://iacqua.ih8sn0w.com/submit.php?ecid=%@&board=k66ap&ios=%@", [myChipID_ stringToPaddedHex], theVersion] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 	
 	
-	url = baseUrlString;
+	url = [NSURL URLWithString:baseUrlString];
 	
     success = (url != nil);
 	
@@ -727,7 +727,7 @@ static NSString *myChipID_ = nil;
 	baseUrlString = [[NSString stringWithFormat:@"http://iacqua.ih8sn0w.com/submit.php?ecid=%@&board=k66ap&ios=%@", [myChipID_ stringToPaddedHex], iosVersion] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 
 	
-	url = baseUrlString;
+	url = [NSURL URLWithString:baseUrlString];
 	
 	NSLog(@"URL: %@", baseUrlString);
 	
