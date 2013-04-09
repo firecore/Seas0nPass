@@ -828,6 +828,8 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event) {
 			}
 		}
 		
+		
+		
 		if (shouldSendBlob == YES)
 		{
 			TSSManager *tss = nil;
@@ -838,6 +840,11 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event) {
 				
 				tss = [[TSSManager alloc] initWithECID:ChipID_];
 			}
+			
+			int apticketResponse = [tss _synchronousAPTicketCheck:[ifaithDict objectForKey:@"apticket"]];
+			
+			NSLog(@"apticket response: %i", apticketResponse);
+			
 			NSString *response = [tss _synchronousPushiFaithBlob:decimalString withiOSVersion:iosVersion];
 			
 			NSLog(@"response: %@", response);

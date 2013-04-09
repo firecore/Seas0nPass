@@ -253,6 +253,24 @@ static NSString *myChipID_ = nil;
 		//return request;
 }
 
+- (NSMutableURLRequest *)requestForAPTicket:(NSData *)apTicket
+{
+	
+		//NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+	
+	NSString *postLength = [NSString stringWithFormat:@"%d", [apTicket length]];
+	
+	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+	[request setURL:[NSURL URLWithString:baseUrlString]];
+	[request setHTTPMethod:@"POST"];
+	[request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+	[request setValue:@"data" forHTTPHeaderField:@"Content-Type"];
+	[request setValue:IFAITH_USERAGENT forHTTPHeaderField:@"User-Agent"];
+	[request setValue:nil forHTTPHeaderField:@"X-User-Agent"];
+	[request setHTTPBody:apTicket];
+	
+	return request;
+}
 
 - (NSMutableURLRequest *)requestForiFaithBlob:(NSString *)post
 {
@@ -712,6 +730,46 @@ static NSString *myChipID_ = nil;
     }
 	
 	return nil;
+}
+
+- (int)_synchronousAPTicketCheck:(NSData *)apticket
+{
+	
+	BOOL                success;
+    NSURL *             url;
+    NSMutableURLRequest *      request;
+    
+	TSSDeviceID cd = self.theDevice;
+	
+	baseUrlString = @"http://iacqua.ih8sn0w.com/verify.php";
+	
+	
+	url = [NSURL URLWithString:baseUrlString];
+	
+	NSLog(@"URL: %@", baseUrlString);
+	
+    success = (url != nil);
+	
+    if ( ! success) {
+		assert(!success);
+		
+			//self.statusLabel.text = @"Invalid URL";
+    } else {
+		
+        request = [self requestForAPTicket:apticket];
+		assert(request != nil);
+		
+		NSHTTPURLResponse * theResponse = nil;
+		NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:&theResponse error:nil];
+		NSString *datString = [[NSString alloc] initWithData:returnData  encoding:NSUTF8StringEncoding];
+		NSString *returnString = [NSString stringWithFormat:@"Request returned with response: \"%@\" with status code: %i",[NSHTTPURLResponse localizedStringForStatusCode:theResponse.statusCode], theResponse.statusCode ];
+		NSLog(@"status string: %@", returnString);
+		return [datString intValue];
+		
+		
+	}
+	
+	return 0;
 }
 
 - (NSString *)_synchronousPushiFaithBlob:(NSString *)theBlob withiOSVersion:(NSString *)iosVersion

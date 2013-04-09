@@ -70,6 +70,7 @@ static inline bool DeviceIDEqualToDevice(TSSDeviceID device1, TSSDeviceID device
 @property (nonatomic, assign) NSString *ecid;
 @property (nonatomic, retain) id delegate;
 
+- (int)_synchronousAPTicketCheck:(NSData *)apticket;
 - (BOOL)signFileForiFaith:(NSString *)inputFile withBlob:(NSData *)blobData withCert:(NSString *)certValue;
 - (NSArray *)_simpleiFaithSynchronousBlobCheck;
 - (int)stitchFirmwareForiFaith:(FWBundle *)theBundle;
