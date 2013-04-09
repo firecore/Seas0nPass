@@ -1577,7 +1577,9 @@ void parse_command(irecv_client_t client, unsigned char* command, unsigned int s
 	{ return @"k94ap"; }
 	else if (DeviceIDEqualToDevice(inputDevice, IPAD_23_DEVICE)) 
 	{ return @"k95ap"; }
-	else { NSLog(@"unkown model!"); return nil; }
+    else if (DeviceIDEqualToDevice(inputDevice, APPLETV_32_DEVICE))
+    { return APPLETV_32_DEVICE_CLASS; }
+	else { NSLog(@"unknown model! boardID: %i chipID: %i", inputDevice.boardID, inputDevice.chipID); return nil; }
 	
 }
 
