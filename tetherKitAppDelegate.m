@@ -1892,7 +1892,7 @@ static NSString *HexToDec(NSString *hexValue)
 		
 	}
 	
-	if ([self.deviceClass isEqualToString:APPLETV_31_DEVICE_CLASS])
+	if ([self.deviceClass isEqualToString:APPLETV_31_DEVICE_CLASS] || [self.deviceClass isEqualToString:APPLETV_32_DEVICE_CLASS])
 	{
 		return kRestoreUnsupportedDevice;
 	}
@@ -3717,7 +3717,7 @@ void tap_keyboard(void) {
 
 - (BOOL)isAppleTV3
 { 
-	if ([self.deviceClass isEqualToString:APPLETV_31_DEVICE_CLASS])
+	if ([self.deviceClass isEqualToString:APPLETV_31_DEVICE_CLASS] || [self.deviceClass isEqualToString:APPLETV_32_DEVICE_CLASS])
 	{
 		return (TRUE);
 	}
