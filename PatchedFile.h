@@ -19,6 +19,7 @@ QuietLog((format),##__VA_ARGS__); \
 #endif
 
 
+#define APPLETV_32_DEVICE DeviceIDMake(0, 35143)
 #define APPLETV_31_DEVICE DeviceIDMake(8, 35138)
 #define APPLETV_21_DEVICE DeviceIDMake(16, 35120)
 #define IPAD_11_DEVICE DeviceIDMake(2, 35120)
@@ -35,6 +36,7 @@ QuietLog((format),##__VA_ARGS__); \
 #define IPOD_31_DEVICE DeviceIDMake(2, 35106)
 #define IPOD_41_DEVICE DeviceIDMake(8, 35120)
 
+#define APPLETV_32_DEVICE_CLASS @"j33iap"
 #define APPLETV_31_DEVICE_CLASS @"j33ap"
 #define APPLETV_21_DEVICE_CLASS @"k66ap"
 
