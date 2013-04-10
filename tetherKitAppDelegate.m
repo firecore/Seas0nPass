@@ -800,15 +800,19 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event) {
 		NSString *apticket = [ifaithDict objectForKey:@"apticket"];
 		NSString *clippedPath = [[iosVersion componentsSeparatedByString:@" "] objectAtIndex:0];
 		NSComparisonResult theResult = [clippedPath compare:comparisonVersion options:NSNumericSearch];
+		NSString *errorString = nil;
 			//NSLog(@"theversion: %@  installed version %@", theVersion, installedVersion);
+		BOOL apticketCheck = NO;
 		if ( theResult == NSOrderedDescending )
 		{
 			NSLog(@"%@ is greater than %@", clippedPath, comparisonVersion);
 			if (apticket != nil) {	
 				shouldSendBlob = YES;
+				apticketCheck = YES;
 			} else {
 				NSLog(@"no apticket, invalid blob!! not submitting");
 				shouldSendBlob = NO;
+				errorString = @"The APTicket is missing!, invalid SHSH file!";
 			}
 			
 		} else if ( theResult == NSOrderedAscending ){
@@ -816,15 +820,19 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event) {
 			NSLog(@"%@ is greater than %@", comparisonVersion, clippedPath);
 			NSLog(@"no apticket needed, below 4.4");
 			shouldSendBlob = YES;
+			apticketCheck = NO;
 			
 		} else if ( theResult == NSOrderedSame ) {
 			
 			NSLog(@"%@ is equal to %@", clippedPath, comparisonVersion);
 			if (apticket != nil) {	
 				shouldSendBlob = YES;
+				apticketCheck = YES;
 			} else {
 				NSLog(@"no apticket, invalid blob!! not submitting");
+				errorString = @"The APTicket is missing!, invalid SHSH file!";
 				shouldSendBlob = NO;
+				apticketCheck = NO;
 			}
 		}
 		
@@ -841,13 +849,36 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event) {
 				tss = [[TSSManager alloc] initWithECID:ChipID_];
 			}
 			
-			int apticketResponse = [tss _synchronousAPTicketCheck:[ifaithDict objectForKey:@"apticket"]];
+			if (apticketCheck)
+			{
+				int apticketResponse = [tss _synchronousAPTicketCheck:[ifaithDict objectForKey:@"apticket"]];
+				
+				NSLog(@"apticket verify response: %i", apticketResponse);
+				if (apticketResponse == 0) 
+				{
+					errorString = @"Invalid APTicket! invalid SHSH files.";
+					poisoning = FALSE;
+					pois0n_exit();
+					
+					[[NSNotificationCenter defaultCenter] postNotificationName:IFAITH_BLOB_DONE object:[NSDictionary dictionaryWithObject:errorString forKey:@"error"]];
+					[pool release];
+				}
+			}
 			
-			NSLog(@"apticket response: %i", apticketResponse);
+			
 			
 			NSString *response = [tss _synchronousPushiFaithBlob:decimalString withiOSVersion:iosVersion];
 			
 			NSLog(@"response: %@", response);
+		} else {
+			poisoning = FALSE;
+			pois0n_exit();
+			
+			[[NSNotificationCenter defaultCenter] postNotificationName:IFAITH_BLOB_DONE object:[NSDictionary dictionaryWithObject:errorString forKey:@"error"]];
+			[pool release];
+			
+			return -1;	
+			
 		}
 			//printf("output: %s", xmlOutput);
 			//NSLog(@"ifaithDict: %@", ifaithDict);
@@ -2042,11 +2073,11 @@ static NSString *HexToDec(NSString *hexValue)
 {
 	NSDictionary *ifaithBlob = [n object];
 
-	if (ifaithBlob == nil)
+	if ([[ifaithBlob allKeys] containsObject:@"error"])
 	{
 		NSLog(@"epic fail :(");
 		[self hideProgress];
-		[self setDownloadText:@"Blob dump / submit failed!"];
+		[self setDownloadText:[ifaithBlob objectForKey:@"error"]];
 		[cancelButton setTitle:@"Done"];
 		 //[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
 		return;
