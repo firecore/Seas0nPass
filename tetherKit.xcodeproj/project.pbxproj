@@ -670,6 +670,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = dbHelper;
+				SDKROOT = macosx10.7;
 			};
 			name = Debug;
 		};
@@ -698,6 +699,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = dbHelper;
+				SDKROOT = macosx10.7;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -729,7 +731,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-lcurl";
 				PRODUCT_NAME = Seas0nPass;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.7;
 				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Debug;
@@ -767,7 +769,7 @@
 					dynamic_lookup,
 				);
 				PRODUCT_NAME = Seas0nPass;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.7;
 				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Release;

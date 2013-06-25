@@ -43,6 +43,7 @@ enum {
 	kRestoreCydiaRedirectMode,
 	kRestoreStitchMode,
 	kRestoreiFaithStitchMode,
+    kRestoreAppleStitchMode,
 	kRestoreUnavailableMode,
 	kRestoreFirmwareIneligible,
 	kRestoreNoDevice,

@@ -1881,11 +1881,7 @@ static NSString *HexToDec(NSString *hexValue)
 	//FIXME: REMEMBER TO COMMENT THIS BACK IN!!!!!!!!!
 
 	
-	if ([signableVersions containsObject:buildNumber])
-	{
-		NSLog(@"apple is still signing %@ dont do anything special: kRestoreDefaultMode", buildNumber);
-		return kRestoreDefaultMode;
-	}
+	
 	
 
 	if (ecid == nil)
@@ -1930,6 +1926,12 @@ static NSString *HexToDec(NSString *hexValue)
 		}
 		
 		
+	}
+    
+    if ([signableVersions containsObject:buildNumber])
+	{
+		NSLog(@"apple is still signing %@ dont do anything special: kRestoreDefaultMode", buildNumber);
+		return kRestoreAppleStitchMode;
 	}
 	
 	if ([self.deviceClass isEqualToString:APPLETV_31_DEVICE_CLASS] || [self.deviceClass isEqualToString:APPLETV_32_DEVICE_CLASS])
@@ -2781,8 +2783,7 @@ void tap_keyboard(void) {
 	if (myRestoreMode == kRestoreStitchMode)
 	{
 		NSLog(@"stitch it up!");
-		
-	
+    
 		TSSManager *tss = nil;
 		
 		if (!DeviceIDEqualToDevice(currentDevice, TSSNullDevice))
@@ -2801,6 +2802,7 @@ void tap_keyboard(void) {
 		tss	= nil;
 		
 		[nitoUtility migrateFiles:[self ipswContentsNoManifest] toPath:IPSW_TMP];
+        
 	} else if (myRestoreMode == kRestoreiFaithStitchMode){
 		
 		NSLog(@"stitch it up! ifaith style");
@@ -2826,9 +2828,33 @@ void tap_keyboard(void) {
 		[nitoUtility migrateFiles:[self ipswContentsNoManifest] toPath:IPSW_TMP];
 	
 		
-	} else{
+	} else if (myRestoreMode == kRestoreAppleStitchMode) {
+    
+        NSLog(@"stitch it up with apples blobs!");
+        
+		TSSManager *tss = nil;
 		
-		[nitoUtility migrateFiles:[self ipswContents] toPath:IPSW_TMP];
+		if (!DeviceIDEqualToDevice(currentDevice, TSSNullDevice))
+		{
+			tss = [[TSSManager alloc] initWithECID:ChipID_ device:currentDevice];
+		} else {
+            
+			tss = [[TSSManager alloc] initWithECID:ChipID_];
+		}
+		
+		
+		[tss openStitchFirmware:[self currentBundle]];
+		
+		[tss release];
+		
+		tss	= nil;
+		
+		[nitoUtility migrateFiles:[self ipswContentsNoManifest] toPath:IPSW_TMP];
+    
+    
+    } else {
+	
+        [nitoUtility migrateFiles:[self ipswContents] toPath:IPSW_TMP];
 		
 	}
 	

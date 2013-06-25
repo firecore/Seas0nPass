@@ -1456,7 +1456,82 @@ static NSString *myChipID_ = nil;
 	return 0;
 }
 
-
+- (int)openStitchFirmware:(FWBundle *)theBundle
+{
+	/*
+	 
+	 1. stitch it up, we shouldn't be called if its not possible.
+	 
+	 */
+	
+	
+	NSArray *keyArray = [FWBundle signKeyArray]; //array of keys that needs to be signed
+	NSString *buildNumber = [theBundle buildVersion];
+	
+	if (myChipID_ == nil)
+		myChipID_ = [[[NSApplication sharedApplication] delegate] theEcid];
+	
+	NSLog(@"chipID_: %@", myChipID_);
+	
+    NSString *blob = [self _synchronousReceiveVersion:buildNumber];
+	
+    if (blob == nil)
+    {
+        NSLog(@"fetching SHSH blob failed!!! bail!");
+        return -1;
+    }
+    
+    //okay we got a blob, lets make it a dictionary
+	
+	NSDictionary *blobDict = [self dictionaryFromString:blob];
+	
+    //[blobDict writeToFile:[NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/test.plist"] atomically:YES];
+    
+  //  NSLog(@"blobDict: %@", blobDict);
+	
+    //take the apticket and make it into an img3 file
+	
+	NSData *apTicketFull = [TSSManager newApTicketFromDictionary:blobDict];
+	NSString *allFlash = [theBundle allFlashLocation];
+	NSString *apTicketFile = [allFlash stringByAppendingPathComponent:@"apticket.img3"];
+	[apTicketFull writeToFile:apTicketFile options:NSDataWritingAtomic error:nil];
+	
+    //update manifest file to include apticket
+	
+	[self updateManifestFile:[allFlash stringByAppendingPathComponent:@"manifest"]];
+	
+    //start signin the files
+	
+	for (id fwKey in keyArray)
+	{
+        //first get the blob
+		
+		NSData *theBlob = [[blobDict valueForKey:fwKey] valueForKey:@"Blob"];
+		NSString *fwFile = [theBundle unzippedPathForFirmwareKey:fwKey];
+		
+		if ([self signFile:fwFile withBlob:theBlob])
+		{
+			NSLog(@"signed file: %@ successfully!", fwFile);
+			
+		} else {
+			
+			NSLog(@"sign file: %@ fail!", fwFile);
+			
+			return -1;
+			
+		}
+		
+	}
+	
+    //we got the apticket done and the files signed, what else is there? pretty sure we are golden!
+	
+	
+	
+	NSLog(@"files signed successfully, firmware stitched: %@", buildNumber);
+	
+	
+	return 0;
+}
 
 #define BLOB_RANGE NSMakeRange(0x0000C, 4)
 
