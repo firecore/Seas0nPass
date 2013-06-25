@@ -36,6 +36,11 @@
 	[[NSApp delegate] itunesRestore:sender];
 }
 
+- (IBAction)saveSignatures:(id)sender
+{
+	[[NSApp delegate] ifaithPayloadDump:sender];
+}
+
 - (IBAction)add:(id)sender
 {
 		//NSLog(@"add: %@", [sender title]);
@@ -67,11 +72,11 @@
 		//NSLog(@"appBundles: %@", appBundles);
 	NSEnumerator *bundleEnum = [appBundles objectEnumerator];
 	id currentObject = nil;
-	int i = 2;
+	int i = 4;
     NSMenu *menu = [[NSMenu alloc] init];
     
-		NSMenuItem *restoreLatest = [[NSMenuItem alloc] initWithTitle:@"Restore latest version in iTunes" action:@selector(restoreLatest:) keyEquivalent:@""];
-	
+	NSMenuItem *restoreLatest = [[NSMenuItem alloc] initWithTitle:@"Restore latest version in iTunes" action:@selector(restoreLatest:) keyEquivalent:@""];
+	NSMenuItem *saveSignatures = [[NSMenuItem alloc] initWithTitle:@"Save firmware signatures..." action:@selector(saveSignatures:) keyEquivalent:@""];
 	BOOL hasFirmware = [nitoUtility hasFirmware];
 	if (hasFirmware == TRUE)
 	{
@@ -93,6 +98,9 @@
 	
 	[menu insertItem:dividerItem atIndex:1];
 	
+	[menu insertItem:[saveSignatures autorelease] atIndex:2];
+	
+	[menu insertItem:[NSMenuItem separatorItem] atIndex:3];
 	
 	while (currentObject = [bundleEnum nextObject])
 	{
