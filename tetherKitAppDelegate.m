@@ -32,7 +32,7 @@
 //AppleTV2,1_5.2_10B144b
 //AppleTV2,1_5.2.1_10B329a
 
-#define CURRENT_BUNDLE @"AppleTV2,1_5.2.1_10B329a"
+#define CURRENT_BUNDLE @"AppleTV2,1_5.3_10B809"
 #define CURRENT_IPSW [NSString stringWithFormat:@"%@_Restore.ipsw", CURRENT_BUNDLE]
 #define DL [tetherKitAppDelegate downloadLocation]
 #define KCACHE @"kernelcache.release.k66"
@@ -611,6 +611,29 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event) {
 	return 0;
 }
 
+- (NSString *)errorDescriptionForStatus:(NSString *)stringStatus
+{
+    /*
+     --> If the response is... "failed-1" it means the kernel failed to load from the filesystem (probably due to incomplete restore).
+     --> If the response is... "failed-2" it means the kernel does not have a KBAG (only happens when someone with a 3GS old bootrom runs redsn0w and redsn0w doesn't bother to re-encrypt the kernel).
+     --> If the response is... "failed-3" it means One or more of the flashed images on the device do not contain an SHSH blob (usually happens when users find funky tutorials on the web to downgrade without blobs).
+     --> If the response is... "failed-4" it means an unknown iOS is detected. The payload maybe outdated or user is running a beta firmware.
+     --> If the response is... "failed-5" it means no valid block devices containing flash images were found (happens when the user's NAND/NOR chip goes).
+     --> If the response is... "failed-6" it means the user has 24kpwn applied (only occurs on iPhone 3GS old bootroms/iPod Touch 2G MB models). Devices with 24kpwn applied do not have any SHSH blobs applied and never need any.
+     
+     */
+    
+    if ([stringStatus isEqualToString:@"failed-1"]) return @"The kernel failed to load from the filesystem (probably due to incomplete restore).";
+    if ([stringStatus isEqualToString:@"failed-2"]) return @"The kernel does not have a KBAG (only happens when someone with a 3GS old bootrom runs redsn0w and redsn0w doesn't bother to re-encrypt the kernel).";
+    if ([stringStatus isEqualToString:@"failed-3"]) return @"One or more of the flashed images on the device do not contain an SHSH blob (usually happens when users find funky tutorials on the web to downgrade without blobs)";
+    if ([stringStatus isEqualToString:@"failed-4"]) return @"Unknown iOS is detected. iFaith payload might be outdated or you are running a beta firmware.";
+    if ([stringStatus isEqualToString:@"failed-5"]) return @"No valid block devices containing flash images were found (happens when the your NAND/NOR chip malfunctions).";
+    if ([stringStatus isEqualToString:@"failed-6"]) return @"You have 24kpwn applied (only occurs on iPhone 3GS old bootroms/iPod Touch 2G MB models). Devices with 24kpwn applied do not have any SHSH blobs applied and never need any.";
+
+
+return @"unknown error";
+}
+
 - (int)dumpiFaithPayload
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -759,14 +782,15 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event) {
 		
 		if (![stringStatus isEqualToString:@"ready"])
 		{
-			NSLog(@"failed with status: %@", stringStatus);
+            NSString *errorDescription = [self errorDescriptionForStatus:stringStatus];
+			NSLog(@"failed with status: %@ and description: %@", stringStatus, errorDescription);
 			fclose(file);
 			[self setDownloadText:NSLocalizedString(@"Failed!", @"Failed!")];
 			
 			poisoning = FALSE;
 			pois0n_exit();
 			
-			[[NSNotificationCenter defaultCenter] postNotificationName:IFAITH_BLOB_DONE object:nil];
+			[[NSNotificationCenter defaultCenter] postNotificationName:IFAITH_BLOB_DONE object:[NSDictionary dictionaryWithObject:errorDescription forKey:@"error"]];
 			[pool release];
 			return -1;
 		}
@@ -2079,8 +2103,10 @@ static NSString *HexToDec(NSString *hexValue)
 	{
 		NSLog(@"epic fail :(");
 		[self hideProgress];
-		[self setDownloadText:[ifaithBlob objectForKey:@"error"]];
+		[self setDownloadText:@"SHSH extraction Failed"];
 		[cancelButton setTitle:@"Done"];
+        NSAlert *errorAlert = [NSAlert alertWithMessageText:@"SHSH extraction failed" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:[ifaithBlob objectForKey:@"error"]];
+        [errorAlert runModal];
 		 //[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
 		return;
 	}
@@ -2095,6 +2121,7 @@ static NSString *HexToDec(NSString *hexValue)
 	[self hideProgress];
 	
 	[cancelButton setTitle:@"Done"];
+    [self setDownloadText:@"Success, please unplug your AppleTV from the computer now."];
 	[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
 }
 
@@ -2367,7 +2394,16 @@ static NSString *HexToDec(NSString *hexValue)
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	FWBundle *ourBundle = [FWBundle bundleForFile:ipsw];
+    NSLog(@"ourBundle: %@", ourBundle);
 	NSString *sha = [ourBundle SHA];
+    NSLog(@"sha: %@", sha);
+    if (sha == nil)
+    {
+        [pool release];
+        return;
+        
+    }
+    
 	[nitoUtility altValidateFile:ipsw withChecksum:sha];
 	[pool release];
 }
@@ -2500,8 +2536,9 @@ static NSString *HexToDec(NSString *hexValue)
 			
 			NSLog(@"Seas0nPass: Software payload: %@", [theBundle bundleName]);
 			[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
-			
-			NSDictionary *customFwDict = [NSDictionary dictionaryWithObjectsAndKeys:HCIPSW, @"file", [NSString stringWithFormat:@"%i", 0], @"restoreMode", nil];
+			_restoreMode = 4;
+            [self.currentBundle setRestoreMode:_restoreMode];
+			NSDictionary *customFwDict = [NSDictionary dictionaryWithObjectsAndKeys:HCIPSW, @"file", [NSString stringWithFormat:@"%i", 4], @"restoreMode", nil];
 			[self customFW:customFwDict];
 			[pool release];
 			return;

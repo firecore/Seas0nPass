@@ -455,7 +455,7 @@ static NSString *myChipID_ = nil;
 	
 	NSString *theURL = [BLOB_PLIST_BASE_URL stringByAppendingFormat:@"/%@.plist", theModel];
 	
-	NSLog(@"theURl: %@", theURL);
+//	NSLog(@"theURl: %@", theURL);
 	
 	NSDictionary *k66 = [NSDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:theURL]];
 		//NSDictionary *k66 = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle bundleForClass:[TSSManager class]] pathForResource:@"k66ap" ofType:@"plist"]];
