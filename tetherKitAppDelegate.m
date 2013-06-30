@@ -23,6 +23,7 @@
 #include <Security/AuthorizationTags.h>
 #import "tetherKitAppDelegate.h"
 #import "include/libpois0n.h"
+#import "include/libpartial.h"
 #import <Foundation/Foundation.h>
 
 
@@ -824,7 +825,20 @@ return @"unknown error";
 		
 		NSString *ifaithXMLOutput = [ifaithSupport stringByAppendingFormat:@"/%@_%@.xml", [ifaithDict objectForKey:@"ecid"], [ifaithDict objectForKey:@"ios"]];
 		
-		NSData *blob = [[NSString stringWithContentsOfFile:outputBlob] stringToHexData];
+		NSData *blob = [[NSString stringWithContentsOfFile:outputBlob encoding:NSUTF8StringEncoding error:&encodingError] stringToHexData];
+        
+        if (encodingError != nil)
+        {
+            NSLog(@"encoding error with UTF8, try ASCII!: %@", encodingError);
+            
+            blob = [[NSString stringWithContentsOfFile:outputBlob encoding:NSASCIIStringEncoding error:&encodingError] stringToHexData];
+        }
+        
+        
+        
+        //[[NSString stringWithContentsOfFile:outputBlob] stringToHexData];
+        
+        
 		[blob writeToFile:ifaithXMLOutput atomically:YES];
 	
 		
