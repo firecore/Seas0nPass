@@ -9,8 +9,9 @@
 #import <Cocoa/Cocoa.h>
 
 
-@interface NSString (specialData) 
+@interface NSString (specialData)
 
+- (NSString *)hexToString;
 - (NSData *) stringToHexData;
 - (NSString *)stringToPaddedHex;
 @end

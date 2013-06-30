@@ -82,7 +82,7 @@ void print_progress(double progress, void* data) {
 	if(progress > 100) {
 		progress = 100;
 	}
-	[data setDownloadProgress:progress];
+	[(id)data setDownloadProgress:progress];
 	printf("\r[");
 	for(i = 0; i < 50; i++) {
 		if(i < progress / 2) {
@@ -691,7 +691,8 @@ return @"unknown error";
 		return result;
 	}
 	
-	result = ifaith_inject_only();
+	result = ifaith_inject_only(); //iFaith specific payload
+    
 	if (result < 0) {
 		[self setDownloadText:NSLocalizedString(@"Exploit injection failed!", @"Exploit injection failed!")];
 		
@@ -699,12 +700,12 @@ return @"unknown error";
 	}
 	
 	memset(iBSSFile, '\0', 255);
-	snprintf(iBSSFile, 254, "/private/tmp/ifaith/%s.%s", "iBSS", device->model);
-	memset(iBECFile, '\0', 255);
-	snprintf(iBECFile, 254, "/private/tmp/ifaith/%s.%s", "iBEC", device->model);	
+	snprintf(iBSSFile, 254, "/private/tmp/ifaith/%s.%s", "iBSS", device->model); //tmp iBSS file downloaded
+	memset(iBECFile, '\0', 255); 
+	snprintf(iBECFile, 254, "/private/tmp/ifaith/%s.%s", "iBEC", device->model);	//tmp iBEC file downloaded
 	printf("Checking if %s already exists\n", iBSSFile);
 	
-	[self setDownloadText:(@"Fetching iBSS file...", @"Fetching iBSS file...")];
+	[self setDownloadText:NSLocalizedString(@"Fetching iBSS file...", @"Fetching iBSS file...")];
 	
 	if ([self fetch_dfu_image:"iBSS" toFile:iBSSFile] < 0){
 		
@@ -714,7 +715,7 @@ return @"unknown error";
 	
 	printf("Checking if %s already exists\n", iBECFile);
 	
-	[self setDownloadText:(@"Fetching iBEC file...", @"Fetching iBSS file...")];
+	[self setDownloadText:NSLocalizedString(@"Fetching iBEC file...", @"Fetching iBSS file...")];
 	
 	if ([self fetch_dfu_image:"iBEC" toFile:iBECFile] < 0){
 		
@@ -759,10 +760,8 @@ return @"unknown error";
 	[self setDownloadText:NSLocalizedString(@"Verifying Board Type...", @"Verifying Board Type...")];
 	if ([[NSString stringWithUTF8String:boardType] isEqualToString:@"k66ap"])
 	{
-		NSString *outputBlob = @"/private/tmp/ifaith/ifaith.blob";
+		NSString *outputBlob = @"/private/tmp/ifaith/ifaith.blob"; //raw blob in hex
 			//NSString *ifaithOutput = @"/private/tmp/ifaith/ifaith.xml";
-		
-		
 		
 		[self setDownloadText:NSLocalizedString(@"Creating iFaith SHSH blob...", @"Creating iFaith SHSH blob...")];
 		FILE* file = freopen([outputBlob fileSystemRepresentation], "a", stdout);
@@ -800,14 +799,28 @@ return @"unknown error";
 		fclose(file);
 		
 		NSString *ifaithSupport = [[tetherKitAppDelegate applicationSupportFolder] stringByAppendingPathComponent:@"iFaith"];
+        
 		if (![FM fileExistsAtPath:ifaithSupport])
 		{
 			[FM createDirectoryAtPath:ifaithSupport withIntermediateDirectories:YES attributes:nil error:nil];
 		}
 		
-		NSString *decimalString = [[NSString stringWithContentsOfFile:outputBlob] hexToString];
-			//	NSLog(@"decimalString: %@", decimalString);
-		NSDictionary *ifaithDict = [[[NSXMLDocument alloc] initWithXMLString:decimalString options:NSXMLDocumentTidyXML error:nil]  iFaithDictionaryRepresentation];
+	//	NSString *decimalString = [[NSString stringWithContentsOfFile:outputBlob] hexToString];
+	
+        NSError *encodingError = nil;
+        
+        NSString *decimalString = [[NSString stringWithContentsOfFile:outputBlob encoding:NSUTF8StringEncoding error:&encodingError] hexToString];
+        
+        if (encodingError != nil)
+        {
+            NSLog(@"encoding error with UTF8, try ASCII!: %@", encodingError);
+            decimalString = [[NSString stringWithContentsOfFile:outputBlob encoding:NSASCIIStringEncoding error:&encodingError] hexToString];
+        }
+        
+        //decimal string is in XML format, I import the XML and then convert it to a plist / NSDictionary
+        
+		//	NSLog(@"decimalString: %@", decimalString);
+		NSDictionary *ifaithDict = [[[NSXMLDocument alloc] initWithXMLString:decimalString options:NSXMLDocumentTidyXML error:nil]  iFaithDictionaryRepresentation]; 
 		
 		NSString *ifaithXMLOutput = [ifaithSupport stringByAppendingFormat:@"/%@_%@.xml", [ifaithDict objectForKey:@"ecid"], [ifaithDict objectForKey:@"ios"]];
 		
@@ -2140,7 +2153,7 @@ static NSString *HexToDec(NSString *hexValue)
 {
 		//4.3 (8F455).xml
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	NSError *error = nil;
+	//NSError *error = nil;
 	NSString *testBlobVersion = @"4.3 (8F455)";
 	
 	
@@ -2220,7 +2233,7 @@ static NSString *HexToDec(NSString *hexValue)
 		tss = [[TSSManager alloc] initWithECID:ChipID_];
 	}
 	
-	NSString *response = [tss _simpleiFaithSynchronousBlobCheck];
+	NSArray *response = [tss _simpleiFaithSynchronousBlobCheck];
 	
 	NSLog(@"response: %@", response);
 	
@@ -2414,7 +2427,7 @@ static NSString *HexToDec(NSString *hexValue)
 {
 		//LOG_SELF;
 	
-	int theRestoreMode = kRestoreUnavailableMode;
+	//int theRestoreMode = kRestoreUnavailableMode;
 	
 	if (![self sufficientSpaceOnDevice:NSHomeDirectory()])
 	{
@@ -2465,6 +2478,15 @@ static NSString *HexToDec(NSString *hexValue)
 		return;
 	} //end option key down if / custom payload selection
 	
+    _restoreMode = [self restoreMode];
+    
+    if (_restoreMode == kRestoreNoDevice)
+    {
+        return;
+    }
+    
+    [self.currentBundle setRestoreMode:_restoreMode];
+    
 	if ([self isAppleTV3])
 	{
 		[self showIncompatDeviceAlert];
@@ -2536,8 +2558,7 @@ static NSString *HexToDec(NSString *hexValue)
 			
 			NSLog(@"Seas0nPass: Software payload: %@", [theBundle bundleName]);
 			[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
-			_restoreMode = 4;
-            [self.currentBundle setRestoreMode:_restoreMode];
+		
 			NSDictionary *customFwDict = [NSDictionary dictionaryWithObjectsAndKeys:HCIPSW, @"file", [NSString stringWithFormat:@"%i", 4], @"restoreMode", nil];
 			[self customFW:customFwDict];
 			[pool release];
@@ -3219,8 +3240,8 @@ void tap_keyboard(void) {
     AXUIElementRef _focusedApp;
     CFTypeRef _focusedWindow;
 		// CFTypeRef _position;
-    CFTypeRef _size;
-	CFStringRef _name;
+  //  CFTypeRef _size;
+	//CFStringRef _name;
 	CFNumberRef _fullScreen;
 	
     _systemWideElement = AXUIElementCreateSystemWide();

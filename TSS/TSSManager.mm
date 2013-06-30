@@ -20,6 +20,8 @@
 #import "TSSWorker.h"
 #import "nitoUtility.h"
 #import "../include/libpois0n.h"
+#import "NSString+Extensions.h"
+#import "tetherKitAppDelegate.h"
 
 static NSString *myChipID_ = nil;
 
@@ -258,8 +260,10 @@ static NSString *myChipID_ = nil;
 	
 		//NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
 	
-	NSString *postLength = [NSString stringWithFormat:@"%d", [apTicket length]];
+	//NSString *postLength = [NSString stringWithFormat:@"%d", [apTicket length]];
 	
+    NSString *postLength = [[NSNumber numberWithUnsignedInteger:[apTicket length]] stringValue];
+    
 	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
 	[request setURL:[NSURL URLWithString:baseUrlString]];
 	[request setHTTPMethod:@"POST"];
@@ -277,8 +281,9 @@ static NSString *myChipID_ = nil;
 	
 	NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
 	
-	NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
-	
+//	NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
+	 NSString *postLength = [[NSNumber numberWithUnsignedInteger:[postData length]] stringValue];
+    
 	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
 	[request setURL:[NSURL URLWithString:baseUrlString]];
 	[request setHTTPMethod:@"POST"];
@@ -325,8 +330,9 @@ static NSString *myChipID_ = nil;
 	
 	NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
 	
-	NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
-	
+	//NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
+	 NSString *postLength = [[NSNumber numberWithUnsignedInteger:[postData length]] stringValue];
+    
 	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
 	[request setURL:[NSURL URLWithString:baseUrlString]];
 	[request setHTTPMethod:@"POST"];
@@ -397,8 +403,10 @@ static NSString *myChipID_ = nil;
 	
 	NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES]; //this might actually need to be NSUTF8StringEncoding, but it works.
 	
-	NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
-	
+	//NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
+    
+    NSString *postLength = [[NSNumber numberWithUnsignedInteger:[postData length]] stringValue];
+    
 	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
 	[request setURL:[NSURL URLWithString:baseUrlString]];
 	[request setHTTPMethod:@"POST"];
@@ -739,7 +747,7 @@ static NSString *myChipID_ = nil;
     NSURL *             url;
     NSMutableURLRequest *      request;
     
-	TSSDeviceID cd = self.theDevice;
+	//TSSDeviceID cd = self.theDevice;
 	
 	baseUrlString = @"http://iacqua.ih8sn0w.com/verify.php";
 	
@@ -762,7 +770,7 @@ static NSString *myChipID_ = nil;
 		NSHTTPURLResponse * theResponse = nil;
 		NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:&theResponse error:nil];
 		NSString *datString = [[NSString alloc] initWithData:returnData  encoding:NSUTF8StringEncoding];
-		NSString *returnString = [NSString stringWithFormat:@"Request returned with response: \"%@\" with status code: %i",[NSHTTPURLResponse localizedStringForStatusCode:theResponse.statusCode], theResponse.statusCode ];
+		NSString *returnString = [NSString stringWithFormat:@"Request returned with response: \"%@\" with status code: %ld",[NSHTTPURLResponse localizedStringForStatusCode:theResponse.statusCode], theResponse.statusCode ];
 		NSLog(@"status string: %@", returnString);
 		return [datString intValue];
 		
@@ -780,7 +788,7 @@ static NSString *myChipID_ = nil;
     NSURL *             url;
     NSMutableURLRequest *      request;
     
-	TSSDeviceID cd = self.theDevice;
+	//TSSDeviceID cd = self.theDevice;
 	
 	baseUrlString = [[NSString stringWithFormat:@"http://iacqua.ih8sn0w.com/submit.php?ecid=%@&board=k66ap&ios=%@", [myChipID_ stringToPaddedHex], iosVersion] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 
@@ -1330,7 +1338,7 @@ static NSString *myChipID_ = nil;
 	NSString *buildNumber = [theBundle iFaithBuildVersion];
 	
 	if (myChipID_ == nil)
-		myChipID_ = [[[NSApplication sharedApplication] delegate] theEcid];
+		myChipID_ = [(tetherKitAppDelegate *)[[NSApplication sharedApplication] delegate] theEcid];
 	
 	NSLog(@"chipID_: %@", myChipID_);
 	
@@ -1400,7 +1408,7 @@ static NSString *myChipID_ = nil;
 	NSString *buildNumber = [theBundle buildVersion];
 	
 	if (myChipID_ == nil)
-		myChipID_ = [[[NSApplication sharedApplication] delegate] theEcid];
+		myChipID_ = [(tetherKitAppDelegate *)[[NSApplication sharedApplication] delegate] theEcid];
 	
 	NSLog(@"chipID_: %@", myChipID_);
 	

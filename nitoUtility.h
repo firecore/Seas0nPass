@@ -78,10 +78,10 @@ enum{
 + (BOOL)checkFile:(NSString *)inputFile againstMD5:(NSString *)properMD5;
 + (int)scanForRestore:(NSString *)drivepath;
 + (int)resizeVolume:(NSString *)theVolume toSize:(NSString *)theSize;
-
++ (void)altValidateFile:(NSString *)inputFile withChecksum:(NSString *)checksum;
 + (void)changeOwner:(NSString *)theOwner onFile:(NSString *)theFile isRecursive:(BOOL)isR;
 + (void)changePermissions:(NSString *)perms onFile:(NSString *)theFile isRecursive:(BOOL)isR;
-+ (int)cleanupRamdisk;
+//+ (int)cleanupRamdisk;
 + (int)patchFile:(NSString *)patchFile withPatch:(NSString *)thePatch endMD5:(NSString *)desiredMD5;
 + (int)decryptRamdisk:(NSString *)theRamdisk toPath:(NSString *)outputDisk withIV:(NSString *)iv key:(NSString *)key;
 + (int)repackRamdisk:(NSString *)theRamdisk toPath:(NSString *)outputDisk withIV:(NSString *)iv key:(NSString *)key originalPath:(NSString *)original;

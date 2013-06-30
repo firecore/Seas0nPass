@@ -17,7 +17,7 @@
 @end
 
 
-@interface ripURL : NSObject {
+@interface ripURL : NSObject <NSURLDownloadDelegate> {
 	
 	NSURLDownload				*urlDownload;
     NSURLResponse				*myResponse;

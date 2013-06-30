@@ -70,6 +70,10 @@ static inline bool DeviceIDEqualToDevice(TSSDeviceID device1, TSSDeviceID device
 @property (nonatomic, assign) NSString *ecid;
 @property (nonatomic, retain) id delegate;
 
+- (int)openStitchFirmware:(FWBundle *)theBundle;
+- (NSString *)_synchronousiFaithReceiveVersion:(NSString *)theVersion;
+- (NSString *)_synchronousPushiFaithBlob:(NSString *)theBlob withiOSVersion:(NSString *)iosVersion;
++ (NSString *)manifestKeyFromiFaithKey:(NSString *)key;
 - (int)_synchronousAPTicketCheck:(NSData *)apticket;
 - (BOOL)signFileForiFaith:(NSString *)inputFile withBlob:(NSData *)blobData withCert:(NSString *)certValue;
 - (NSArray *)_simpleiFaithSynchronousBlobCheck;
