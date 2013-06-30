@@ -50,7 +50,7 @@
 
 #define IFAITH_BLOB_DONE @"iFaithBlobFinished"
 
-int received_cb(irecv_client_t client, const irecv_event_t* event);
+//int received_cb(irecv_client_t client, const irecv_event_t* event);
 int progress_cb(irecv_client_t client, const irecv_event_t* event);
 
 static NSString *ChipID_ = nil;
@@ -1167,6 +1167,8 @@ return @"unknown error";
 	
 }
 
+/*
+
 int received_cb(irecv_client_t client, const irecv_event_t* event) {
 		//NSLog(@"received_cb");
 	if (event->type == IRECV_RECEIVED) {
@@ -1221,7 +1223,7 @@ void parse_command(irecv_client_t client, unsigned char* command, unsigned int s
 	
 	free(action);
 }
-
+*/
 
 
 - (IBAction)poison:(id)sender
@@ -1678,7 +1680,7 @@ static NSString *HexToDec(NSString *hexValue)
 }
 
 
-+ (TSSDeviceID)_getConnectedDevice
++ (TSSDeviceID)_getConnectedDevice //unused
 {
 	
 	irecv_init();
@@ -1703,13 +1705,13 @@ static NSString *HexToDec(NSString *hexValue)
 	irecv_close(client);
 	irecv_exit();
 	
-	NSString *cpidDecimal = HexToDec([NSString stringWithFormat:@"0x%llu", cpid]);
-	NSString *bpidDecimal = HexToDec([NSString stringWithFormat:@"0x%llu", bdid]);
+	NSString *cpidDecimal = HexToDec([NSString stringWithFormat:@"0x%llu", (unsigned long long)cpid]);
+	NSString *bpidDecimal = HexToDec([NSString stringWithFormat:@"0x%llu", (unsigned long long)bdid]);
 
 	return DeviceIDMake([bpidDecimal longLongValue], [cpidDecimal longLongValue]);
 }
 
-+ (NSString *)_fetchDeviceModel
++ (NSString *)_fetchDeviceModel //unused
 {
 	TSSDeviceID connectedDevice = [tetherKitAppDelegate _getConnectedDevice];
 	
@@ -1736,10 +1738,14 @@ static NSString *HexToDec(NSString *hexValue)
 		NSLog(@"failed to get cpid!");
 	}
 	
+
+    
 	if (irecv_get_bdid(client, &bdid) < 0) {
 		NSLog(@"failed to get bdid!");
 	}
 	
+        //NSLog(@"bdid 0x%llu cpid: 0x%llu", (unsigned long long) bdid, (unsigned long long)cpid);
+    
 	unsigned long long ecid;
 	ret = irecv_get_ecid(client, &ecid);
 	if(ret == IRECV_E_SUCCESS) {
@@ -1752,8 +1758,8 @@ static NSString *HexToDec(NSString *hexValue)
 	
 	NSLog(@"ecidHex: %@", [ecidHex stringToPaddedHex]);
 	
-	NSString *cpidDecimal = HexToDec([NSString stringWithFormat:@"0x%llu", cpid]);
-	NSString *bpidDecimal = HexToDec([NSString stringWithFormat:@"0x%llu", bdid]);
+	NSString *cpidDecimal = HexToDec([NSString stringWithFormat:@"0x%llu", (unsigned long long)cpid]);
+	NSString *bpidDecimal = HexToDec([NSString stringWithFormat:@"0x%llu", (unsigned long long)bdid]);
 	currentDevice = DeviceIDMake([bpidDecimal longLongValue], [cpidDecimal longLongValue]);
 	self.deviceClass = [tetherKitAppDelegate modelFromDevice:currentDevice];
 	self.theEcid = [NSString stringWithFormat:@"%llu", ecid];
@@ -1835,7 +1841,7 @@ static NSString *HexToDec(NSString *hexValue)
 {
 	unsigned long long theSize = [[[[NSFileManager defaultManager] attributesOfItemAtPath:inputFile error:nil] objectForKey:NSFileSize] longLongValue];
 		//NSLog(@"thesize: %llu", theSize);
-	NSString *newString = [NSString stringWithFormat:@"%.8x", theSize];
+	NSString *newString = [NSString stringWithFormat:@"%.8x", (unsigned int)theSize];
 		//NSLog(@"newString: %@", newString);
 	return [[NSData dataFromStringHex:newString] reverse];
 	
@@ -2445,15 +2451,17 @@ static NSString *HexToDec(NSString *hexValue)
 	if ([self optionKeyIsDown]) //choose custom firmware version
 	{
 		NSOpenPanel *op = [NSOpenPanel openPanel];
+        [op setAllowedFileTypes:[NSArray arrayWithObject:@"ipsw"]];
 		[op setTitle:NSLocalizedString(@"Please select an Apple TV firmware image",@"Please select an Apple TV firmware image" )];
 		[op setCanChooseFiles:YES];
 		[op setCanCreateDirectories:NO];
-		int buttonPressed = [op runModalForTypes:[NSArray arrayWithObject:@"ipsw"]];
+		int buttonPressed = [op runModal];
 		if (buttonPressed != NSOKButton)
 		{
 			return;
 		}
-		NSString *ipsw = [op filename];
+      
+        NSString *ipsw = [[op URL] path]; //so stupid
 		FWBundle *ourBundle = [FWBundle bundleForFile:ipsw];
 		
 		if (ourBundle == nil)
@@ -3260,9 +3268,9 @@ void tap_keyboard(void) {
 			
 			AXUIElementCopyAttributeValue((AXUIElementRef)_focusedWindow, (CFStringRef)CFSTR("AXFullScreen"), (CFTypeRef *)&_fullScreen);
 			
-			NSLog(@"is full screen: %@", _fullScreen);
+			NSLog(@"is full screen: %@", (NSNumber *)_fullScreen);
 				//return (![_fullScreen boolValue]); //if its full screen we want to return false
-		if ([_fullScreen intValue] == 1)
+		if ([(NSNumber *)_fullScreen intValue] == 1)
 		{
 			NSLog(@"full screen, return false");
 			return (FALSE);
@@ -3308,7 +3316,7 @@ void tap_keyboard(void) {
     CFTypeRef _focusedWindow;
    // CFTypeRef _position;
     CFTypeRef _size;
-	CFStringRef _name;
+	//CFStringRef _name;
 	
     _systemWideElement = AXUIElementCreateSystemWide();
 	
@@ -3422,13 +3430,13 @@ void tap_keyboard(void) {
 		
 			AXUIElementCopyAttributeValue((AXUIElementRef)_focusedWindow, (CFStringRef)CFSTR("AXFullScreen"), (CFTypeRef *)&_fullScreen);
 			
-			NSLog(@"is full screen: %i", [_fullScreen intValue]);
+			NSLog(@"is full screen: %i", [(NSNumber *)_fullScreen intValue]);
 			
-			itunesFullScreen = [_fullScreen boolValue];
+			itunesFullScreen = [(NSNumber *)_fullScreen boolValue];
 			
 			AXUIElementCopyAttributeValue((AXUIElementRef)_focusedWindow, (CFStringRef)kAXChildrenAttribute, (CFTypeRef *)&_children);
 			
-			while ([_children count] < 14)
+			while ([(NSArray *)_children count] < 14)
 			{
 				NSLog(@"iTunes window children count was less than 14, looping until 14 is reached."); //item count is 14 WITH sidebar and 17 without
 				AXUIElementCopyAttributeValue((AXUIElementRef)_focusedWindow, (CFStringRef)kAXChildrenAttribute, (CFTypeRef *)&_children);
@@ -3442,11 +3450,11 @@ void tap_keyboard(void) {
 				 
 				*/
 			
-			AXUIElementRef splitter = [_children objectAtIndex:13]; //if our children count is more than 1 (probably 6) we are showing sidebar
+			AXUIElementRef splitter = (AXUIElementRef)[(NSArray *)_children objectAtIndex:13]; //if our children count is more than 1 (probably 6) we are showing sidebar
 			
 			AXUIElementCopyAttributeValue((AXUIElementRef)splitter, (CFStringRef)kAXChildrenAttribute, (CFTypeRef *)&_splitterChildren);
 			
-			if ([_splitterChildren count] > 1)
+			if ([(NSArray *)_splitterChildren count] > 1)
 			{
 				NSLog(@"showing sidebar!");
 			

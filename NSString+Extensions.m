@@ -12,7 +12,7 @@
 
 - (NSString *)stringToPaddedHex
 {
-	return [NSString stringWithFormat:@"%.016lX", [self integerValue]];
+	return [NSString stringWithFormat:@"%.016lX", (unsigned long)[self integerValue]];
 }
 
 - (NSString *)hexToString

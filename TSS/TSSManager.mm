@@ -770,7 +770,7 @@ static NSString *myChipID_ = nil;
 		NSHTTPURLResponse * theResponse = nil;
 		NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:&theResponse error:nil];
 		NSString *datString = [[NSString alloc] initWithData:returnData  encoding:NSUTF8StringEncoding];
-		NSString *returnString = [NSString stringWithFormat:@"Request returned with response: \"%@\" with status code: %ld",[NSHTTPURLResponse localizedStringForStatusCode:theResponse.statusCode], theResponse.statusCode ];
+		NSString *returnString = [NSString stringWithFormat:@"Request returned with response: \"%@\" with status code: %ld",[NSHTTPURLResponse localizedStringForStatusCode:theResponse.statusCode], (long)theResponse.statusCode ];
 		NSLog(@"status string: %@", returnString);
 		return [datString intValue];
 		
@@ -811,7 +811,7 @@ static NSString *myChipID_ = nil;
 		NSHTTPURLResponse * theResponse = nil;
 		[NSURLConnection sendSynchronousRequest:request returningResponse:&theResponse error:nil];
 
-		NSString *returnString = [NSString stringWithFormat:@"Request returned with response: \"%@\" with status code: %i",[NSHTTPURLResponse localizedStringForStatusCode:theResponse.statusCode], theResponse.statusCode ];
+		NSString *returnString = [NSString stringWithFormat:@"Request returned with response: \"%@\" with status code: %ld",[NSHTTPURLResponse localizedStringForStatusCode:theResponse.statusCode], (long)theResponse.statusCode ];
 		
 		return returnString;
 		
@@ -936,7 +936,7 @@ static NSString *myChipID_ = nil;
 			//NSString *datString = [[NSString alloc] initWithData:returnData  encoding:NSUTF8StringEncoding];
 		
 			//NSLog(@"DatString: %@", datString);
-		NSString *returnString = [NSString stringWithFormat:@"Request returned with response: \"%@\" with status code: %i",[NSHTTPURLResponse localizedStringForStatusCode:theResponse.statusCode], theResponse.statusCode ];
+		NSString *returnString = [NSString stringWithFormat:@"Request returned with response: \"%@\" with status code: %ld",[NSHTTPURLResponse localizedStringForStatusCode:theResponse.statusCode], (long)theResponse.statusCode ];
 		
 			//NSLog(@"didReceiveResponse: %@ statusCode: %i", [NSHTTPURLResponse localizedStringForStatusCode:theResponse.statusCode], theResponse.statusCode);
 			//NSString *outString = [TSSManager rawBlobFromResponse:datString]; 
@@ -998,7 +998,7 @@ static NSString *myChipID_ = nil;
 			//NSString *datString = [[NSString alloc] initWithData:returnData  encoding:NSUTF8StringEncoding];
 		
 			//NSLog(@"DatString: %@", datString);
-		NSString *returnString = [NSString stringWithFormat:@"Request returned with response: \"%@\" with status code: %i",[NSHTTPURLResponse localizedStringForStatusCode:theResponse.statusCode], theResponse.statusCode ];
+		NSString *returnString = [NSString stringWithFormat:@"Request returned with response: \"%@\" with status code: %ld",[NSHTTPURLResponse localizedStringForStatusCode:theResponse.statusCode], (long)theResponse.statusCode ];
 		
 			//NSLog(@"didReceiveResponse: %@ statusCode: %i", [NSHTTPURLResponse localizedStringForStatusCode:theResponse.statusCode], theResponse.statusCode);
 			//NSString *outString = [TSSManager rawBlobFromResponse:datString]; 
@@ -1477,7 +1477,7 @@ static NSString *myChipID_ = nil;
 	NSString *buildNumber = [theBundle buildVersion];
 	
 	if (myChipID_ == nil)
-		myChipID_ = [[[NSApplication sharedApplication] delegate] theEcid];
+		myChipID_ = [(tetherKitAppDelegate *)[[NSApplication sharedApplication] delegate] theEcid];
 	
 	NSLog(@"chipID_: %@", myChipID_);
 	
@@ -1582,7 +1582,7 @@ static NSString *myChipID_ = nil;
 		//offset is where we start, then we take the full length and delete the offset for the properly adjustsed range.
 	
 	
-	NSString *replacementString = [NSString stringWithFormat:@"%.8x",([converted longLongValue]+0x40) ]; //flipped string that we replace in the header
+	NSString *replacementString = [NSString stringWithFormat:@"%.8x",(unsigned int)([converted longLongValue]+0x40) ]; //flipped string that we replace in the header
 	
 	NSData *replacementData = [[NSData dataFromStringHex:replacementString] reverse]; //the actual data we use to replace the blob range in the header. take the hex string from above- reverse and datafy it.
 	
@@ -1641,7 +1641,7 @@ static NSString *myChipID_ = nil;
 		//offset is where we start, then we take the full length and delete the offset for the properly adjustsed range.
 	
 	
-	NSString *replacementString = [NSString stringWithFormat:@"%.8x",([converted longLongValue]+0x40) ]; //flipped string that we replace in the header
+	NSString *replacementString = [NSString stringWithFormat:@"%.8x",(unsigned int)([converted longLongValue]+0x40) ]; //flipped string that we replace in the header
 	
 	NSData *replacementData = [[NSData dataFromStringHex:replacementString] reverse]; //the actual data we use to replace the blob range in the header. take the hex string from above- reverse and datafy it.
 	

@@ -95,11 +95,11 @@ enum {
 + (NSArray *)filteredBundleNames;
 - (void)downloadBundle:(NSString *)theFile;
 - (BOOL)isFullScreen:(NSSize)theSize;
-- (void)updateManifestFile:(NSString *)manifest;
+//- (void)updateManifestFile:(NSString *)manifest;
 + (NSString *)bundleNameFromLabel:(NSString *)theBundle;
 + (NSString *)formattedStringFromBundle:(NSString *)theBundle;
 - (NSData *)hexFileSize:(NSString *)inputFile;
-- (BOOL)signFile:(NSString *)inputFile withBlob:(NSData *)blobData;
+//- (BOOL)signFile:(NSString *)inputFile withBlob:(NSData *)blobData;
 - (void)fetchBlobs:(NSString *)myEcid;
 - (int)showDeviceAlert;
 - (int)showDeviceFailedAlert;
