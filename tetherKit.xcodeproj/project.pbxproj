@@ -12,7 +12,6 @@
 		3200F1FB12D25226003EA66E /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3200F1F912D25226003EA66E /* libz.1.2.5.dylib */; };
 		3200F1FD12D25228003EA66E /* libz.1.2.5.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3200F1F912D25226003EA66E /* libz.1.2.5.dylib */; };
 		3200F42A12D3F07F003EA66E /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 3200F42912D3F07F003EA66E /* Credits.rtf */; };
-		3200F4FA12D4DDEB003EA66E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3200F4F812D4DDEB003EA66E /* Localizable.strings */; };
 		3200F54712D4E1FF003EA66E /* tether.png in Resources */ = {isa = PBXBuildFile; fileRef = 3200F54612D4E1FF003EA66E /* tether.png */; };
 		3200F54B12D4E2B7003EA66E /* ipsw.png in Resources */ = {isa = PBXBuildFile; fileRef = 3200F54A12D4E2B7003EA66E /* ipsw.png */; };
 		3204513C130DE20E0057C8B0 /* debs in Resources */ = {isa = PBXBuildFile; fileRef = 32045133130DE20E0057C8B0 /* debs */; };
@@ -67,6 +66,7 @@
 		32DF78CB12E2DEAB002916D5 /* FWBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DF741812E17498002916D5 /* FWBundle.m */; };
 		32DF825512E65280002916D5 /* SPButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DF825412E65280002916D5 /* SPButton.m */; };
 		32DF84CE12E6E426002916D5 /* SPMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DF84CD12E6E426002916D5 /* SPMenuItem.m */; };
+		89181C031780FBDC00A65C27 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 89181C011780FBDC00A65C27 /* Localizable.strings */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -110,7 +110,6 @@
 		3200F1F812D25226003EA66E /* libusb-1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libusb-1.0.0.dylib"; sourceTree = "<group>"; };
 		3200F1F912D25226003EA66E /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libz.1.2.5.dylib; sourceTree = "<group>"; };
 		3200F42912D3F07F003EA66E /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
-		3200F4F912D4DDEB003EA66E /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3200F54612D4E1FF003EA66E /* tether.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tether.png; sourceTree = "<group>"; };
 		3200F54A12D4E2B7003EA66E /* ipsw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ipsw.png; sourceTree = "<group>"; };
 		32045133130DE20E0057C8B0 /* debs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = debs; sourceTree = "<group>"; };
@@ -199,6 +198,7 @@
 		32DF825412E65280002916D5 /* SPButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPButton.m; sourceTree = "<group>"; };
 		32DF84CC12E6E426002916D5 /* SPMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPMenuItem.h; sourceTree = "<group>"; };
 		32DF84CD12E6E426002916D5 /* SPMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPMenuItem.m; sourceTree = "<group>"; };
+		89181C021780FBDC00A65C27 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		89D83C5E13E88E310077FC29 /* tests.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tests.c; path = ../../../../../../Users/kbradley/Desktop/tests.c; sourceTree = "<group>"; };
 		89F0B1EB13D4C44E009C794C /* Seas0nPass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Seas0nPass.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D1107310486CEB800E47090 /* tetherKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "tetherKit-Info.plist"; sourceTree = "<group>"; };
@@ -336,10 +336,10 @@
 				32DF4A3912DC2905002916D5 /* tetheredRemote.png */,
 				32799B3D12DBE35F0013860A /* success.png */,
 				32799B3B12DBE3490013860A /* restore.png */,
+				89181C011780FBDC00A65C27 /* Localizable.strings */,
 				32799AA612DBC25B0013860A /* Seas0nPass.icns */,
 				3200F54A12D4E2B7003EA66E /* ipsw.png */,
 				3200F54612D4E1FF003EA66E /* tether.png */,
-				3200F4F812D4DDEB003EA66E /* Localizable.strings */,
 				3200F42912D3F07F003EA66E /* Credits.rtf */,
 				327211BE12CC816D0054F4B0 /* scripts */,
 				3272119912CC80DC0054F4B0 /* archives */,
@@ -549,7 +549,6 @@
 				3272119C12CC80DC0054F4B0 /* archives in Resources */,
 				327211C112CC816D0054F4B0 /* scripts in Resources */,
 				3200F42A12D3F07F003EA66E /* Credits.rtf in Resources */,
-				3200F4FA12D4DDEB003EA66E /* Localizable.strings in Resources */,
 				3200F54712D4E1FF003EA66E /* tether.png in Resources */,
 				3200F54B12D4E2B7003EA66E /* ipsw.png in Resources */,
 				32799AA712DBC25B0013860A /* Seas0nPass.icns in Resources */,
@@ -562,6 +561,7 @@
 				32624B3D1442242400E1B9DB /* dbHelper in Resources */,
 				32A5282F170821650009A99A /* payload.bin in Resources */,
 				32A52E6F171127720009A99A /* iFaith-Certs in Resources */,
+				89181C031780FBDC00A65C27 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -634,10 +634,10 @@
 			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
-		3200F4F812D4DDEB003EA66E /* Localizable.strings */ = {
+		89181C011780FBDC00A65C27 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				3200F4F912D4DDEB003EA66E /* English */,
+				89181C021780FBDC00A65C27 /* English */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
