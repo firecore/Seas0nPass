@@ -602,6 +602,12 @@
 
 	[self installDebFilesFromPath:[[self processDict] valueForKey:@"debs"] toRoot:mountImage];
 	
+    if ([[processDict allKeys] containsObject:@"debs2"])
+    {
+        [self installDebFilesFromPath:[[self processDict] valueForKey:@"debs2"] toRoot:mountImage];
+    }
+        
+    
 	if ([[self processDict] valueForKey:@"wifi"] != nil)
 	{
 		[self changeStatus:NSLocalizedString(@"Installing wifi.plist...", @"Installing wifi.plist...")];

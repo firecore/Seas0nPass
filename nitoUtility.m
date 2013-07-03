@@ -32,7 +32,7 @@
 
 - (void)dealloc {
 	
-	[sshKey release];
+    [sshKey release];
 	[super dealloc];
 }
 
@@ -1236,6 +1236,13 @@
 	}
 	[bundleDict setObject:CYDIA_TAR forKey:@"cydia"];
 	[bundleDict setObject:DEB_PATH forKey:@"debs"];
+    
+    if (![FM fileExistsAtPath:DEB_PATH_CUSTOM])
+        
+    
+    if ([[FM contentsOfDirectoryAtPath:DEB_PATH_CUSTOM error:nil] count] > 0)
+        [bundleDict setObject:DEB_PATH_CUSTOM forKey:@"debs2"];
+    
 		//if (![theBundle fivePointOnePlus])
 		[bundleDict setObject:SPACE_SCRIPT forKey:@"stash"];
 	[bundleDict setObject:[theBundle bundlePath] forKey:@"bundle"];

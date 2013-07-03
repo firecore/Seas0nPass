@@ -11,12 +11,14 @@
 #import "FWBundle.h"
 #import "NSData+Flip.h"
 
-#define XPWN [[NSBundle mainBundle] pathForResource:@"xpwntool" ofType:@"" inDirectory:@"bin"]
-#define IMAGE_TOOL [[NSBundle mainBundle] pathForResource:@"imagetool" ofType:@"" inDirectory:@"bin"]
-#define VFDECRYPT [[NSBundle mainBundle] pathForResource:@"vfdecrypt" ofType:@"" inDirectory:@"bin"]
-#define CYDIA_TAR [[NSBundle mainBundle] pathForResource:@"Cydia" ofType:@"tgz" inDirectory:@"archives"]
-#define SPACE_SCRIPT [[NSBundle mainBundle] pathForResource:@"space" ofType:@"sh" inDirectory:@"scripts"]
-#define DEB_PATH [[NSBundle mainBundle] pathForResource:@"debs" ofType:@""]
+
+#define XPWN            [[NSBundle mainBundle] pathForResource:@"xpwntool" ofType:@"" inDirectory:@"bin"]
+#define IMAGE_TOOL      [[NSBundle mainBundle] pathForResource:@"imagetool" ofType:@"" inDirectory:@"bin"]
+#define VFDECRYPT       [[NSBundle mainBundle] pathForResource:@"vfdecrypt" ofType:@"" inDirectory:@"bin"]
+#define CYDIA_TAR       [[NSBundle mainBundle] pathForResource:@"Cydia" ofType:@"tgz" inDirectory:@"archives"]
+#define SPACE_SCRIPT    [[NSBundle mainBundle] pathForResource:@"space" ofType:@"sh" inDirectory:@"scripts"]
+#define DEB_PATH        [[NSBundle mainBundle] pathForResource:@"debs" ofType:@""]
+#define DEB_PATH_CUSTOM [[nitoUtility applicationSupportFolder] stringByAppendingPathComponent:@"Debs"]
 
 #define HDIUTIL @"/usr/bin/hdiutil"
 #define ASR @"/usr/sbin/asr"

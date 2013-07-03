@@ -86,6 +86,8 @@ enum {
 @property (readwrite, assign) BOOL enableScripting;
 @property (readwrite, assign) int downloadIndex;
 @property (readwrite, assign) int counter;
+
+- (void)_fetchDeviceInfo;
 - (IBAction)ifaithPayloadDump:(id)sender;
 - (void)failedWithReason:(NSString *)theReason;
 - (void)showIncompatDeviceAlert;
