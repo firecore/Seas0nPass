@@ -2002,9 +2002,10 @@ static NSString *HexToDec(NSString *hexValue)
 	
 	TSSManager *tss = [[TSSManager alloc] initWithECID:ecid device:currentDevice];
 	//TSSManager *tss = [[TSSManager alloc] initWithECID:ecid];
-	NSArray *cydiaBlobs = [tss _simpleSynchronousBlobCheck];
+	NSArray *cydiaBlobs = [tss _newSimpleSynchBlobCheck];
 	NSArray *ifaithBlobs = [tss _simpleiFaithSynchronousBlobCheck];
-		//NSLog(@"cydiaBlobs: %@", cydiaBlobs);
+	NSLog(@"cydiaBlobs: %@", cydiaBlobs);
+	NSLog(@"ifaithBlobs: %@", ifaithBlobs);
 	
 	[tss release];
 	tss = nil;
@@ -2049,8 +2050,9 @@ static NSString *HexToDec(NSString *hexValue)
 		
 		if (cydiaRescue == TRUE)
 		{
-			NSLog(@"replay attackin'");
-			return kRestoreCydiaRedirectMode;
+			NSLog(@"og replay attackin...now all stitched up.");
+			return kRestoreStitchMode;
+			
 		} else {
 			
 			NSLog(@"no blobs for %@! checking iFaith servers!", buildNumber);
@@ -2075,8 +2077,8 @@ static NSString *HexToDec(NSString *hexValue)
 			//see if saurik has us covered with this version to do replay attack we are below 4.3
 		if (cydiaRescue == TRUE)
 		{
-			NSLog(@"replay attackin'");
-			return kRestoreCydiaRedirectMode;
+			NSLog(@"og replay attackin...now all stitched up.");
+			return kRestoreStitchMode;
 		} else {
 			
 			NSLog(@"no blobs for %@! checking iFaith servers!", buildNumber);

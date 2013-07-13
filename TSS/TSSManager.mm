@@ -16,12 +16,13 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <sys/types.h>
-#import "TSSCommon.h"
+
 #import "TSSWorker.h"
 #import "nitoUtility.h"
 #import "../include/libpois0n.h"
 #import "NSString+Extensions.h"
 #import "tetherKitAppDelegate.h"
+
 
 static NSString *myChipID_ = nil;
 
@@ -635,6 +636,7 @@ static NSString *myChipID_ = nil;
 }
 
 
+
 - (void)_sendLocalBlobs
 {
 	
@@ -647,6 +649,38 @@ static NSString *myChipID_ = nil;
 {
 	NSArray *complexBlobArray = [self _synchronousiFaithBlobCheck];
 	return [TSSWorker buildsFromiFaithList:complexBlobArray];
+}
+
+- (NSArray *)extraChecks
+{
+	return [NSArray arrayWithObjects:@"10B329a", @"10A831", @"10B809", nil];
+}
+
+- (NSArray *)_newSimpleSynchBlobCheck
+{
+	NSArray *complexBlobArray = [self _synchronousBlobCheck];
+	NSMutableArray *newArray = [[NSMutableArray alloc] initWithArray:[TSSWorker buildsFromList:complexBlobArray]];
+	for (id fw in [self extraChecks])
+	{
+		NSLog(@"checking version: %@...\n", fw);
+		
+		NSString *theBlob = [self _synchronousCydiaReceiveVersion:fw];
+        
+        NSDictionary *theBlobDict = [theBlob dictionaryFromString];
+        
+        int keyCount = [[theBlobDict allKeys] count];
+        
+        if (keyCount >= 21)
+		{
+            NSLog(@"%@ is available\n", fw);
+			[newArray addObject:fw];
+            
+		} else {
+			
+			NSLog(@"%@ is not available!\n", fw);
+		}
+    }
+	return [newArray autorelease];
 }
 
 - (NSArray *)_simpleSynchronousBlobCheck
@@ -837,6 +871,11 @@ static NSString *myChipID_ = nil;
 	return [seperateStrings subarrayWithRange:NSMakeRange(0, sepCount)];
 	
 }
+
+
+
+
+
 
 - (NSArray *)_synchronousBlobCheck
 {

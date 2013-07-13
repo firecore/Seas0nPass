@@ -6,6 +6,8 @@
 //  Copyright 2012 nito, LLC. All rights reserved.
 //
 
+#import "TSSCategories.h"
+
 @interface TSSCommon : NSObject {
 
 }

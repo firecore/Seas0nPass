@@ -55,6 +55,8 @@ void WorkLog (NSString *format, ...)
 	
 }
 
+
+
 - (void)theWholeShebang
 {
 	/*
@@ -95,6 +97,8 @@ void WorkLog (NSString *format, ...)
 	
 }
 
+
+
 - (NSArray *)filteredList:(NSArray *)signedFW
 {
 	NSMutableArray *fetchList = [[NSMutableArray alloc] init];
@@ -127,7 +131,7 @@ void WorkLog (NSString *format, ...)
 		NSArray *newSplit = [theFw componentsSeparatedByString:@"("]; //@"4.1 ", @"8B117)"
 		NSString *buildPre = [newSplit lastObject];
 		NSString *buildClip = [buildPre substringToIndex:([buildPre length]-1)];
-		NSLog(@"buildClip %@", buildClip);
+			//NSLog(@"buildClip %@", buildClip);
 		[newArray addObject:buildClip];
 	}
 	
