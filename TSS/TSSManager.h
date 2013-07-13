@@ -71,6 +71,10 @@ static inline bool DeviceIDEqualToDevice(TSSDeviceID device1, TSSDeviceID device
 @property (nonatomic, assign) NSString *ecid;
 @property (nonatomic, retain) id delegate;
 
+- (NSArray *)_newSimpleSynchBlobCheck;
+- (NSArray *)_synchronousiFaithBlobCheck;
++ (NSArray *)ifaithBlobArrayFromString:(NSString *)inputString;
+- (NSArray *)_simpleiFaithSynchronousBlobCheck;
 - (int)openStitchFirmware:(FWBundle *)theBundle;
 - (NSString *)_synchronousiFaithReceiveVersion:(NSString *)theVersion;
 - (NSString *)_synchronousPushiFaithBlob:(NSString *)theBlob withiOSVersion:(NSString *)iosVersion;

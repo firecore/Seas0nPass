@@ -87,6 +87,7 @@ enum {
 @property (readwrite, assign) int downloadIndex;
 @property (readwrite, assign) int counter;
 
+- (void)customFW:(NSDictionary *)theDict; //called inside process one
 - (void)_fetchDeviceInfo;
 - (IBAction)ifaithPayloadDump:(id)sender;
 - (void)failedWithReason:(NSString *)theReason;
