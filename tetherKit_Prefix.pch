@@ -9,6 +9,6 @@
 #import "TSSManager.h"
 	#import "NSApplication+SystemVersion.h"
 	#import "NSData+Flip.h"
-	
+	#import "JSONKit.h"
 
 #endif

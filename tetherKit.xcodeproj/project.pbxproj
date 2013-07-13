@@ -69,6 +69,8 @@
 		89181C031780FBDC00A65C27 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 89181C011780FBDC00A65C27 /* Localizable.strings */; };
 		89E8FB6C17912ECC004F5426 /* TSSCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 89E8FB6B17912ECC004F5426 /* TSSCategories.m */; };
 		89E8FB6D17912EDC004F5426 /* TSSCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 89E8FB6B17912ECC004F5426 /* TSSCategories.m */; };
+		89E8FBDC1791532E004F5426 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 89E8FBDB1791532E004F5426 /* JSONKit.m */; };
+		89E8FBDD1791532E004F5426 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 89E8FBDB1791532E004F5426 /* JSONKit.m */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -204,6 +206,8 @@
 		89D83C5E13E88E310077FC29 /* tests.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tests.c; path = ../../../../../../Users/kbradley/Desktop/tests.c; sourceTree = "<group>"; };
 		89E8FB6A17912ECC004F5426 /* TSSCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSCategories.h; sourceTree = "<group>"; };
 		89E8FB6B17912ECC004F5426 /* TSSCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSCategories.m; sourceTree = "<group>"; };
+		89E8FBDA1791532E004F5426 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
+		89E8FBDB1791532E004F5426 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		89F0B1EB13D4C44E009C794C /* Seas0nPass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Seas0nPass.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D1107310486CEB800E47090 /* tetherKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "tetherKit-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -245,6 +249,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				89E8FBDA1791532E004F5426 /* JSONKit.h */,
+				89E8FBDB1791532E004F5426 /* JSONKit.m */,
 				32A52E011710D8440009A99A /* NSString+Extensions.h */,
 				32A52E021710D8440009A99A /* NSString+Extensions.m */,
 				327E65C714CF481B0058D651 /* TSS */,
@@ -588,6 +594,7 @@
 				3285ACA214E350EB00677CC3 /* TSSManager.mm in Sources */,
 				3285ACA314E350EC00677CC3 /* TSSWorker.m in Sources */,
 				89E8FB6D17912EDC004F5426 /* TSSCategories.m in Sources */,
+				89E8FBDD1791532E004F5426 /* JSONKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -612,6 +619,7 @@
 				327EB38914D5F0140058D651 /* SPFWButton.m in Sources */,
 				32A52E031710D8440009A99A /* NSString+Extensions.m in Sources */,
 				89E8FB6C17912ECC004F5426 /* TSSCategories.m in Sources */,
+				89E8FBDC1791532E004F5426 /* JSONKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

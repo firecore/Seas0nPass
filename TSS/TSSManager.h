@@ -10,8 +10,8 @@
 #import "FWBundle.h"
 #import "TSSCommon.h"
 
-	//#define BLOB_PLIST_BASE_URL @"https://dl.dropbox.com/u/16129573/FW"
-#define BLOB_PLIST_BASE_URL @"http://files.firecore.com/FW"
+#define BLOB_PLIST_BASE_URL @"https://dl.dropbox.com/u/16129573/FW"
+	//#define BLOB_PLIST_BASE_URL @"http://files.firecore.com/FW"
 #define BLOB_PLIST_URL @"http://files.firecore.com/FW/k66ap.plist"
 
 enum {

@@ -651,16 +651,17 @@ static NSString *myChipID_ = nil;
 	return [TSSWorker buildsFromiFaithList:complexBlobArray];
 }
 
-- (NSArray *)extraChecks
++ (NSArray *)extraChecks
 {
-	return [NSArray arrayWithObjects:@"10B329a", @"10A831", @"10B809", nil];
+	NSDictionary *k66 = [NSDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:BLOB_PLIST_URL]];
+	return [k66 valueForKey:@"missingManifest"];
 }
 
 - (NSArray *)_newSimpleSynchBlobCheck
 {
 	NSArray *complexBlobArray = [self _synchronousBlobCheck];
 	NSMutableArray *newArray = [[NSMutableArray alloc] initWithArray:[TSSWorker buildsFromList:complexBlobArray]];
-	for (id fw in [self extraChecks])
+	for (id fw in [TSSManager extraChecks])
 	{
 		NSLog(@"checking version: %@...\n", fw);
 		
@@ -917,10 +918,8 @@ static NSString *myChipID_ = nil;
 		
 		NSString *datString = [[NSString alloc] initWithData:returnData  encoding:NSUTF8StringEncoding];
 		
-		NSArray *blobArray = [TSSManager blobArrayFromString:datString]; 
-		
+		NSArray *blobArray = [datString objectFromJSONString];
 		[datString release];
-		
 		return blobArray;
 		
     }

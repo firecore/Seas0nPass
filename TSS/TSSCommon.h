@@ -7,6 +7,7 @@
 //
 
 #import "TSSCategories.h"
+#import "JSONKit.h"
 
 @interface TSSCommon : NSObject {
 
