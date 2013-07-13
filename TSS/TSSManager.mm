@@ -661,6 +661,7 @@ static NSString *myChipID_ = nil;
 {
 	NSArray *complexBlobArray = [self _synchronousBlobCheck];
 	NSMutableArray *newArray = [[NSMutableArray alloc] initWithArray:[TSSWorker buildsFromList:complexBlobArray]];
+	NSLog(@"[TSSManager extraChecks]: %@", [TSSManager extraChecks]);
 	for (id fw in [TSSManager extraChecks])
 	{
 		NSLog(@"checking version: %@...\n", fw);
