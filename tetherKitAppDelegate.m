@@ -1840,6 +1840,16 @@ static NSString *HexToDec(NSString *hexValue)
 	
 }
 
+- (NSString *)getAppleBlobVersion:(NSString *)theVersion //also not used, was probably here for initial testing on creating an apticket from a particular version.
+
+{
+	TSSWorker *worker = [[TSSWorker alloc] init];
+	[worker setEcid:ChipID_];
+	NSString *versionTicket = [worker getAppleVersionTicket:theVersion];
+	[worker autorelease];
+	return versionTicket;
+}
+
 - (NSString *)getBlobVersion:(NSString *)theVersion //also not used, was probably here for initial testing on creating an apticket from a particular version.
 
 {
@@ -2265,11 +2275,12 @@ static NSString *HexToDec(NSString *hexValue)
 	[pool release];
 }
 
+
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
 	
-	
-	
+
 		//	NSArray *testArray = [TSSManager ifaithBlobArrayFromString:[TSSManager testString]];
 		//NSLog(@"testArray: %@", testArray);
 		//unsigned long long ecid = 
@@ -2277,6 +2288,8 @@ static NSString *HexToDec(NSString *hexValue)
 	[self printEnvironment];
 	
 	[self _fetchDeviceInfo];
+	
+		//[self getAppleBlobVersion:@"11A502"];
 	
 	NSLog(@"ecid: %@ deviceClass: %@", self.theEcid, self.deviceClass);
 	
@@ -3005,7 +3018,30 @@ void tap_keyboard(void) {
 			return;
 		}
 		
+		NSString *progressString = [NSString stringWithFormat:NSLocalizedString(@"Restoring %@...", @"Restoring IPSW"), [ipswPath lastPathComponent]];
 		
+		[self setDownloadText:progressString];
+			//[self setDownloadText:NSLocalizedString(@"Restoring in iTunes, Please wait while script is running...",@"Restoring in iTunes, Please wait while script is running...") ];
+		[self setDownloadProgress:0];
+		
+		int restoreStatus = [nitoUtility restoreIPSW:ipswPath];
+		
+		if (restoreStatus == 0)
+		{
+			[self setDownloadText:NSLocalizedString(@"Firmware restore successful!", @"Firmware restore successful!")];
+			[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
+			[self hideProgress];
+			[cancelButton setTitle:NSLocalizedString(@"Done", @"Done")];
+		} else {
+			
+			[self setDownloadText:NSLocalizedString(@"Firmware restore failed?", @"Firmware restore successful!")];
+			[self hideProgress];
+			[cancelButton setTitle:NSLocalizedString(@"Done", @"Done")];
+			
+		}
+			
+		
+		/*
 		if ([self scriptingEnabled])
 		{
 			[self setDownloadText:NSLocalizedString(@"Restoring in iTunes. Please wait while script is running...",@"Restoring in iTunes. Please wait while script is running...") ];
@@ -3025,6 +3061,10 @@ void tap_keyboard(void) {
 			[[NSWorkspace sharedWorkspace] selectFile:ipswPath inFileViewerRootedAtPath:NSHomeDirectory()];
 			[cancelButton setTitle:NSLocalizedString(@"Done", @"Done")];
 		}
+		 */
+		
+		NSLog(@"here now? really?");
+		
 		[cancelButton setTitle:NSLocalizedString(@"Done", @"Done")];
 		[[NSUserDefaults standardUserDefaults] setObject:self.currentBundle.bundleName forKey:@"lastUsedBundle"];
 
@@ -3056,6 +3096,83 @@ void tap_keyboard(void) {
 	
 }
 
+	//log out and update progress for idevicerestore
+
+- (void)dataReadyFormat:(NSFileHandle *)theFile
+{
+	NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
+	while(1)
+    {
+		NSAutoreleasePool *wp = [[NSAutoreleasePool alloc] init];
+		NSData *data = [theFile availableData];
+		if([data length]) {
+				//NSLog(@"data length: %i", [data length]);
+			NSString *tempa = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+			
+			NSString *temp = [tempa  stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+			
+			NSArray *lineArray = [temp componentsSeparatedByString:@"\n"];
+		
+			NSArray *progressArray = [temp componentsSeparatedByString:@"]"];
+		
+			if ([[lineArray objectAtIndex:0] rangeOfString:@"%"].location == NSNotFound)
+				NSLog(@"%@", temp);
+			
+			if ([lineArray count] > 1)
+			{
+				
+				for (NSString *progressString in lineArray)
+				{
+					if ([progressString rangeOfString:@"%"].location == NSNotFound)
+					{
+							//	LogIt(progressString);
+							//NSLog(@"%@", progressString);
+						if ([progressString isEqualToString:@"Unknown operation (18)"])
+						{
+							[self setDownloadText:NSLocalizedString(@"Restoring device firmware (18)", @"Resotring device firmware")];
+						} else {
+							[self setDownloadText:progressString];
+						}
+						
+							//[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:progressString waitUntilDone:YES];
+						
+					}
+				
+				}
+				
+			}
+			
+			if ([progressArray count] == 2 && [lineArray count] == 1)
+			{
+				float progress = [[progressArray lastObject] floatValue];
+				if (progress == 100)
+				{
+					NSLog(@"at 100");
+					[self setDownloadText:NSLocalizedString(@"Verifying...", @"verifying")];
+					[self setDownloadProgress:0];
+					
+				} else {
+				
+					[self setDownloadProgress:[[progressArray lastObject] floatValue]];
+				}
+				
+					//NSLog(@"percantage: %.2f", [[progressArray lastObject] floatValue]);
+			}
+			
+			
+			[tempa release];
+			tempa = nil;
+			
+		} else {
+			[wp release];
+			[thePool release];
+			return;
+		}
+		[wp release];
+	}
+	[thePool release];
+}
+
 - (void)threadedDFURestore
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -3083,8 +3200,28 @@ void tap_keyboard(void) {
 		[self hideProgress];
 		return;
 	}
-	[self setDownloadText:NSLocalizedString(@"Restoring in iTunes, Please wait while script is running...",@"Restoring in iTunes, Please wait while script is running...") ];
+	NSString *progressString = [NSString stringWithFormat:NSLocalizedString(@"Restoring %@...", @"Restoring IPSW"), [ipswPath lastPathComponent]];
 	
+	[self setDownloadText:progressString];
+		//[self setDownloadText:NSLocalizedString(@"Restoring in iTunes, Please wait while script is running...",@"Restoring in iTunes, Please wait while script is running...") ];
+	[self setDownloadProgress:0];
+	
+	int restoreStatus = [nitoUtility restoreIPSW:ipswPath];
+	
+	if (restoreStatus == 0)
+	{
+		[self setDownloadText:NSLocalizedString(@"Firmware restore successful!", @"Firmware restore successful!")];
+		[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
+		
+	} else {
+		
+		[self setDownloadText:NSLocalizedString(@"Firmware restore failed?", @"Firmware restore successful!")];
+		
+	}
+	[self hideProgress];
+	[cancelButton setTitle:NSLocalizedString(@"Done", @"Done")];
+	
+    /*
 	if ([self loadItunesWithIPSW:ipswPath] == FALSE)
 	{
 		[self setDownloadText:NSLocalizedString(@"Failed to run iTunes script!!",@"Failed to run iTunes script!!") ];
@@ -3093,7 +3230,7 @@ void tap_keyboard(void) {
 		[cancelButton setTitle:NSLocalizedString(@"Done", @"Done")];
 		[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
 	}
-	
+	*/
 	
 	[pool release];
 }

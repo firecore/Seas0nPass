@@ -27,7 +27,6 @@
 		327205DE12C9B5110054F4B0 /* ripURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 327205DD12C9B5110054F4B0 /* ripURL.m */; };
 		327206AA12C9C32A0054F4B0 /* nitoUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 327206A912C9C32A0054F4B0 /* nitoUtility.m */; };
 		32720A0C12CAD3780054F4B0 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 32720A0B12CAD3780054F4B0 /* libstdc++.dylib */; };
-		32720C1B12CB3A6C0054F4B0 /* bin in Resources */ = {isa = PBXBuildFile; fileRef = 32720C1312CB3A6C0054F4B0 /* bin */; };
 		32720E8C12CC53E20054F4B0 /* pwnHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 32720E8912CC53E20054F4B0 /* pwnHelper.m */; };
 		32720E8D12CC53E20054F4B0 /* pwnHelperClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 32720E8B12CC53E20054F4B0 /* pwnHelperClass.m */; };
 		32720E8F12CC53F70054F4B0 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32720E8E12CC53F70054F4B0 /* Security.framework */; };
@@ -67,6 +66,7 @@
 		32DF825512E65280002916D5 /* SPButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DF825412E65280002916D5 /* SPButton.m */; };
 		32DF84CE12E6E426002916D5 /* SPMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DF84CD12E6E426002916D5 /* SPMenuItem.m */; };
 		89181C031780FBDC00A65C27 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 89181C011780FBDC00A65C27 /* Localizable.strings */; };
+		89D0FAD01800A61D00619453 /* bin in Resources */ = {isa = PBXBuildFile; fileRef = 89D0FAB51800A61D00619453 /* bin */; };
 		89E8FB6C17912ECC004F5426 /* TSSCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 89E8FB6B17912ECC004F5426 /* TSSCategories.m */; };
 		89E8FB6D17912EDC004F5426 /* TSSCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 89E8FB6B17912ECC004F5426 /* TSSCategories.m */; };
 		89E8FBDC1791532E004F5426 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 89E8FBDB1791532E004F5426 /* JSONKit.m */; };
@@ -158,7 +158,6 @@
 		327206A812C9C32A0054F4B0 /* nitoUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nitoUtility.h; sourceTree = "<group>"; };
 		327206A912C9C32A0054F4B0 /* nitoUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = nitoUtility.m; sourceTree = "<group>"; };
 		32720A0B12CAD3780054F4B0 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/gcc/i686-apple-darwin10/4.0.1/libstdc++.dylib"; sourceTree = SDKROOT; };
-		32720C1312CB3A6C0054F4B0 /* bin */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bin; sourceTree = "<group>"; };
 		32720E7512CC53770054F4B0 /* dbHelper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = dbHelper; sourceTree = BUILT_PRODUCTS_DIR; };
 		32720E8912CC53E20054F4B0 /* pwnHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pwnHelper.m; sourceTree = "<group>"; };
 		32720E8A12CC53E20054F4B0 /* pwnHelperClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pwnHelperClass.h; sourceTree = "<group>"; };
@@ -203,6 +202,7 @@
 		32DF84CC12E6E426002916D5 /* SPMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPMenuItem.h; sourceTree = "<group>"; };
 		32DF84CD12E6E426002916D5 /* SPMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPMenuItem.m; sourceTree = "<group>"; };
 		89181C021780FBDC00A65C27 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		89D0FAB51800A61D00619453 /* bin */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bin; sourceTree = "<group>"; };
 		89D83C5E13E88E310077FC29 /* tests.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tests.c; path = ../../../../../../Users/kbradley/Desktop/tests.c; sourceTree = "<group>"; };
 		89E8FB6A17912ECC004F5426 /* TSSCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSCategories.h; sourceTree = "<group>"; };
 		89E8FB6B17912ECC004F5426 /* TSSCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TSSCategories.m; sourceTree = "<group>"; };
@@ -338,6 +338,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				89D0FAB51800A61D00619453 /* bin */,
 				32A52E6B171127720009A99A /* iFaith-Certs */,
 				32A5282E170821650009A99A /* payload.bin */,
 				32D954D6131237CA007B5BE3 /* untethered.png */,
@@ -354,7 +355,6 @@
 				327211BE12CC816D0054F4B0 /* scripts */,
 				3272119912CC80DC0054F4B0 /* archives */,
 				327210E512CC7C2F0054F4B0 /* patches */,
-				32720C1312CB3A6C0054F4B0 /* bin */,
 				8D1107310486CEB800E47090 /* tetherKit-Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
@@ -556,7 +556,6 @@
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
-				32720C1B12CB3A6C0054F4B0 /* bin in Resources */,
 				327210EA12CC7C2F0054F4B0 /* patches in Resources */,
 				3272119C12CC80DC0054F4B0 /* archives in Resources */,
 				327211C112CC816D0054F4B0 /* scripts in Resources */,
@@ -574,6 +573,7 @@
 				32A5282F170821650009A99A /* payload.bin in Resources */,
 				32A52E6F171127720009A99A /* iFaith-Certs in Resources */,
 				89181C031780FBDC00A65C27 /* Localizable.strings in Resources */,
+				89D0FAD01800A61D00619453 /* bin in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -67,7 +67,6 @@ enum {
 	BOOL itunesFullScreen;
 	BOOL itunesShowingSideBar;
 	
-	
 }
 @property (nonatomic, retain) NSString *theEcid;
 @property (nonatomic, retain) NSString *deviceClass;
@@ -86,6 +85,9 @@ enum {
 @property (readwrite, assign) BOOL enableScripting;
 @property (readwrite, assign) int downloadIndex;
 @property (readwrite, assign) int counter;
+
+
+- (void)dataReadyFormat:(NSFileHandle *)theFile;
 
 - (void)customFW:(NSDictionary *)theDict; //called inside process one
 - (void)_fetchDeviceInfo;

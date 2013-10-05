@@ -76,6 +76,138 @@
 	return returnStatus;
 }
 
+- (int)sshCheck:(NSString *)ipAddress
+{
+	int finalInt = 1;
+	NSPipe *pipe = [[NSPipe alloc] init];
+	NSFileHandle *handle = [pipe fileHandleForReading];
+    
+	NSTask *sshTask = [[NSTask alloc] init];
+	NSData *outData;
+	
+    [sshTask setStandardOutput:pipe];
+    [sshTask setStandardError:pipe];
+	[sshTask setLaunchPath:@"/usr/bin/ssh"];
+	[sshTask setArguments:[NSArray arrayWithObjects:@"-v", ipAddress, nil]];
+	NSString *temp = @"";
+    NSMutableArray *lineArray = [[NSMutableArray alloc] init];
+	
+    [sshTask launch];
+    while((outData = [handle readDataToEndOfFile]) && [outData length])
+    {
+        temp = [[NSString alloc] initWithData:outData encoding:NSASCIIStringEncoding];
+        [lineArray addObjectsFromArray:[temp componentsSeparatedByString:@"\n"]];
+        [temp release];
+    }
+	
+    int a;
+    for(a = 0 ; a < [lineArray count] ; a++) {
+        temp = [[lineArray objectAtIndex:a] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+			//NSLog(temp);
+		if ([temp isEqualToString:@"debug1: SSH2_MSG_KEXINIT received"])
+		{
+			finalInt = 2;
+		}
+        
+    }
+    [lineArray release];   
+	
+	
+	
+	[sshTask release];
+	sshTask = nil;
+	[pipe release];
+	pipe = nil;
+	return finalInt;
+}
+
++ (int)restoreIPSW:(NSString *)theIPSW
+{
+		//NSLog(@"copyDocuments:%@ toPhone:%@ withVersion:%i", theFile, hostAddress, sshVersion);
+	NSPipe *pipe = [[NSPipe alloc] init];
+	
+	NSString *ideviceRestore = [[NSBundle mainBundle] pathForResource:@"idevicerestore" ofType:@"" inDirectory:@"bin/idr" ];
+	
+	NSTask *restoreTask = [[NSTask alloc] init];
+	
+	[restoreTask setStandardError:pipe];
+	[restoreTask setStandardOutput:pipe];
+	
+	[restoreTask setLaunchPath:ideviceRestore];
+	[restoreTask setArguments:[NSArray arrayWithObjects:@"-c", theIPSW, @"-C", @"/private/tmp", nil]];
+	
+	[NSThread detachNewThreadSelector:@selector(dataReadyFormat:) toTarget:[[NSApplication sharedApplication] delegate] withObject:[pipe fileHandleForReading]];
+	[restoreTask launch];
+	[restoreTask waitUntilExit];
+	int termStatus = [restoreTask terminationStatus];
+		//NSLog(@"ringtone copy ended with %i", termStatus);
+	if (termStatus == 0)
+		
+	{
+		NSLog(@"restored successfully!?");
+			//[[NSFileManager defaultManager] removeFileAtPath:theFile handler:nil];
+	} else {
+		
+		NSLog(@"restore failed with status: %i",termStatus);
+		
+	}
+	[restoreTask release];
+	restoreTask = nil;
+	return termStatus;
+	
+}
+
++ (int)oldrestoreIPSW:(NSString *)theIPSW
+{
+	int finalInt = 1;
+	NSPipe *pipe = [[NSPipe alloc] init];
+	NSFileHandle *handle = [pipe fileHandleForReading];
+    
+	NSTask *restoreTask = [[NSTask alloc] init];
+	NSData *outData;
+	
+    [restoreTask setStandardOutput:pipe];
+    [restoreTask setStandardError:pipe];
+	
+	NSString *ideviceRestore = [[NSBundle mainBundle] pathForResource:@"idevicerestore" ofType:@"" inDirectory:@"bin/idr" ];
+	
+	[restoreTask setLaunchPath:ideviceRestore];
+	[restoreTask setArguments:[NSArray arrayWithObjects:@"-c", theIPSW, @"-C" @"/private/tmp", nil]];
+	NSString *temp = @"";
+    NSMutableArray *lineArray = [[NSMutableArray alloc] init];
+	
+    [restoreTask launch];
+    while((outData = [handle readDataToEndOfFile]) && [outData length])
+    {
+        temp = [[NSString alloc] initWithData:outData encoding:NSASCIIStringEncoding];
+		NSLog(@"-%@-", temp);
+        [lineArray addObjectsFromArray:[temp componentsSeparatedByString:@"\n"]];
+        [temp release];
+    }
+
+	/*
+    int a;
+    for(a = 0 ; a < [lineArray count] ; a++) {
+        temp = [[lineArray objectAtIndex:a] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+			//NSLog(temp);
+		if ([temp isEqualToString:@"debug1: SSH2_MSG_KEXINIT received"])
+		{
+			finalInt = 2;
+		}
+        
+    }
+	 */
+    [lineArray release];   
+	
+	
+	
+	[restoreTask release];
+	restoreTask = nil;
+	[pipe release];
+	pipe = nil;
+	return finalInt;
+}
+
 + (NSString *)mountImageWithoutOwners:(NSString *)irString
 {
 	NSTask *irTask = [[NSTask alloc] init];

@@ -46,8 +46,25 @@ void WorkLog (NSString *format, ...)
 	NSString *tmpFile = @"/private/tmp/test.plist";
 	[theDict writeToFile:tmpFile atomically:YES];
 	return [TSSManager apTicketFileFromDictionary:theDict];
+
+}
+
+- (NSString *)getAppleVersionTicket:(NSString *)theVersion
+{
 	
-	
+	if (self.ecid == nil)
+	{
+		NSLog(@"no ecid found!, bail!");
+		return nil;
+	}
+	TSSManager *man = [[TSSManager alloc] initWithECID:self.ecid];
+	NSString *theBlob = [man _synchronousReceiveVersion:theVersion];
+	NSLog(@"theBlobl: %@", theBlob);
+	NSDictionary *theDict = [man dictionaryFromString:theBlob];
+	NSString *tmpFile = @"/private/tmp/test.plist";
+	[theDict writeToFile:tmpFile atomically:YES];
+	return [TSSManager apTicketFileFromDictionary:theDict];
+
 }
 
 - (void)sendLocalBlobs
