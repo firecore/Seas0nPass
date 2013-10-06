@@ -1,0 +1,10 @@
+
+
+git clone http://cgit.sukimashita.com/idevicerestore.git/
+git clone http://cgit.sukimashita.com/libirecovery.git/
+
+apply atvfix.diff
+
+libimobiledevice_CFLAGS=-I/usr/local/include libimobiledevice_LIBS=-L/usr/local/lib/ libplist_LIBS=-L/usr/local/lib/ libplist_CFLAGS=-I/opt/local/include libirecovery_CFLAGS=-I/usr/local/include libirecovery_LIBS=-L/usr/local/lib ./autogen.sh
+
+gcc -I/usr/local/include -I/usr/local/include -I/opt/local/include -I/opt/local/include -I/opt/local/lib/libzip/include -I/opt/local/include -I/opt/local/include /usr/local/lib/libimobiledevice.4.dylib -g -O2 -o idevicerestore idevicerestore-idevicerestore.o idevicerestore-common.o idevicerestore-tss.o idevicerestore-fls.o idevicerestore-mbn.o idevicerestore-img3.o idevicerestore-ipsw.o idevicerestore-normal.o idevicerestore-dfu.o idevicerestore-recovery.o idevicerestore-restore.o idevicerestore-asr.o idevicerestore-limera1n.o idevicerestore-download.o idevicerestore-locking.o /usr/local/lib/libplist.1.dylib  /usr/local/lib/libirecovery.1.dylib -L/usr/local/lib -L/usr/local/lib/ -L/opt/local/lib /opt/local/lib/libzip.dylib -lz -lssl -lcrypto /opt/local/lib/libcurl.dylib -lusb-1.0

@@ -1,0 +1,57 @@
+diff --git a/src/idevicerestore.c b/src/idevicerestore.c
+index 8a2786f..9033339 100644
+--- a/src/idevicerestore.c
++++ b/src/idevicerestore.c
+@@ -854,6 +854,7 @@ int idevicerestore_start(struct idevicerestore_client_t* client)
+ 				unlink(filesystem);
+ 			return -2;
+ 		}
++		recovery_client_free(client);
+ 	}
+ 	idevicerestore_progress(client, RESTORE_STEP_PREPARE, 0.9);
+ 
+@@ -873,6 +874,19 @@ int idevicerestore_start(struct idevicerestore_client_t* client)
+ 	if (delete_fs && filesystem)
+ 		unlink(filesystem);
+ 
++	/* special handling of AppleTVs */
++	if (strncmp(client->device->product_type, "AppleTV", 7) == 0) {
++		if (recovery_client_new(client) == 0) {
++			if (recovery_set_autoboot(client, 1) == 0) {
++				recovery_send_reset(client);
++			} else {
++				error("Setting auto-boot failed?!\n");
++			}
++		} else {
++			error("Could not connect to device in recovery mode.\n");
++		}
++	}
++
+ 	info("DONE\n");
+ 
+ 	if (result == 0) {
+diff --git a/src/recovery.c b/src/recovery.c
+index 5e3dc91..5026df4 100644
+--- a/src/recovery.c
++++ b/src/recovery.c
+@@ -124,7 +124,7 @@ int recovery_check_mode(struct idevicerestore_client_t* client) {
+ 	return 0;
+ }
+ 
+-static int recovery_set_autoboot(struct idevicerestore_client_t* client, int enable) {
++int recovery_set_autoboot(struct idevicerestore_client_t* client, int enable) {
+ 	irecv_error_t recovery_error = IRECV_E_SUCCESS;
+ 
+ 	recovery_error = irecv_send_command(client->recovery->client, (enable) ? "setenv auto-boot true" : "setenv auto-boot false");
+diff --git a/src/recovery.h b/src/recovery.h
+index 42fddad..afc4f25 100644
+--- a/src/recovery.h
++++ b/src/recovery.h
+@@ -51,6 +51,7 @@ int recovery_send_ramdisk(struct idevicerestore_client_t* client, plist_t build_
+ int recovery_send_kernelcache(struct idevicerestore_client_t* client, plist_t build_identity);
+ int recovery_send_reset(struct idevicerestore_client_t* client);
+ int recovery_send_ticket(struct idevicerestore_client_t* client);
++int recovery_set_autoboot(struct idevicerestore_client_t* client, int enable);
+ int recovery_get_ecid(struct idevicerestore_client_t* client, uint64_t* ecid);
+ int recovery_get_nonce(struct idevicerestore_client_t* client, unsigned char** nonce, int* nonce_size);
+ int recovery_get_cpid(struct idevicerestore_client_t* client, uint32_t* cpid);

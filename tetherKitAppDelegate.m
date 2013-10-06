@@ -2847,6 +2847,9 @@ void tap_keyboard(void) {
 	
 	[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:NSLocalizedString(@"Scanning image for restore...",@"Scanning image for restore..." ) waitUntilDone:NO];
 	
+	NSLog(@"rw path?: %@", outputPath);
+	[FM removeFileAtPath:outputPath handler:nil];
+	
 	[nitoUtility scanForRestore:finalPath];
 	
 	BOOL is44 = [[self currentBundle] is4point4];
@@ -3018,6 +3021,8 @@ void tap_keyboard(void) {
 			return;
 		}
 		
+		[cancelButton setEnabled:FALSE];
+		[cancelButton setTitle:NSLocalizedString(@"Cancel", @"Cancel")];
 		NSString *progressString = [NSString stringWithFormat:NSLocalizedString(@"Restoring %@...", @"Restoring IPSW"), [ipswPath lastPathComponent]];
 		
 		[self setDownloadText:progressString];
@@ -3063,7 +3068,6 @@ void tap_keyboard(void) {
 		}
 		 */
 		
-		NSLog(@"here now? really?");
 		
 		[cancelButton setTitle:NSLocalizedString(@"Done", @"Done")];
 		[[NSUserDefaults standardUserDefaults] setObject:self.currentBundle.bundleName forKey:@"lastUsedBundle"];
