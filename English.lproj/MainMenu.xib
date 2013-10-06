@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
-		<int key="IBDocument.SystemTarget">1070</int>
+		<int key="IBDocument.SystemTarget">1060</int>
 		<string key="IBDocument.SystemVersion">12E55</string>
 		<string key="IBDocument.InterfaceBuilderVersion">2844</string>
 		<string key="IBDocument.AppKitVersion">1187.39</string>
@@ -1340,7 +1340,7 @@
 								<object class="NSMenuItem" id="978743165">
 									<reference key="NSMenu" ref="992780483"/>
 									<bool key="NSIsAlternate">YES</bool>
-									<string key="NSTitle">Restore latest version in iTunes</string>
+									<string key="NSTitle">Restore latest firmware version</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="35465992"/>
@@ -1349,14 +1349,14 @@
 								</object>
 								<object class="NSMenuItem" id="938945597">
 									<reference key="NSMenu" ref="992780483"/>
-									<string key="NSTitle">Restore in iTunes...</string>
+									<string key="NSTitle">Restore Firmware...</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="35465992"/>
 									<reference key="NSMixedImage" ref="502551668"/>
 									<string key="NSAction">submenuAction:</string>
 									<object class="NSMenu" key="NSSubmenu" id="973429019">
-										<string key="NSTitle"/>
+										<string key="NSTitle">Restore Firmware...</string>
 										<object class="NSMutableArray" key="NSMenuItems">
 											<bool key="EncodedWithXMLCoder">YES</bool>
 											<object class="NSMenuItem" id="435983284">
@@ -1453,6 +1453,7 @@
 					<string key="NSFrameSize">{504, 287}</string>
 					<reference key="NSSuperview"/>
 					<reference key="NSWindow"/>
+					<reference key="NSNextKeyView"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
 				<string key="NSMinSize">{504, 309}</string>
@@ -1589,6 +1590,7 @@
 						<string key="NSFrame">{{30, 159}, {442, 28}}</string>
 						<reference key="NSSuperview" ref="867445732"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="129943487"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="848404017">
 							<int key="NSCellFlags">67108864</int>
@@ -1611,6 +1613,7 @@
 						<string key="NSFrame">{{203, 14}, {96, 25}}</string>
 						<reference key="NSSuperview" ref="867445732"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="998445079">
 							<int key="NSCellFlags">67108864</int>
@@ -1645,6 +1648,7 @@
 						<string key="NSFrame">{{163, 53}, {176, 103}}</string>
 						<reference key="NSSuperview" ref="867445732"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="609374519"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSImageCell" key="NSCell" id="943507556">
 							<int key="NSCellFlags">134217728</int>
@@ -1667,6 +1671,7 @@
 						<string key="NSFrame">{{66, 220}, {370, 28}}</string>
 						<reference key="NSSuperview" ref="867445732"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="888419925"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="569794790">
 							<int key="NSCellFlags">68157504</int>
@@ -1685,6 +1690,7 @@
 						<string key="NSFrame">{{30, 202}, {442, 20}}</string>
 						<reference key="NSSuperview" ref="867445732"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="983251311"/>
 						<bool key="NSViewCanDrawConcurrently">YES</bool>
 						<int key="NSpiFlags">24586</int>
 						<double key="NSMaxValue">100</double>
@@ -1693,6 +1699,7 @@
 				<string key="NSFrameSize">{502, 285}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
+				<reference key="NSNextKeyView" ref="329658088"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomObject" id="854158940">
@@ -4995,7 +5002,7 @@
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin.macosx</string>
-			<real value="1070" key="NS.object.0"/>
+			<real value="1060" key="NS.object.0"/>
 		</object>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDevelopmentDependencies">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin.InterfaceBuilder3</string>

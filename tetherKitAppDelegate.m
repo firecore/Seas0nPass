@@ -3181,12 +3181,14 @@ void tap_keyboard(void) {
 					{
 							//	LogIt(progressString);
 							//NSLog(@"%@", progressString);
-						if ([progressString isEqualToString:@"Unknown operation (18)"])
-						{
-							[self setDownloadText:NSLocalizedString(@"Restoring device firmware (18)", @"Resotring device firmware")];
-						} else {
-							[self setDownloadText:progressString];
-						}
+						
+						[self setDownloadText:[self replacementProgressForString:progressString]];
+						//if ([progressString isEqualToString:@"Unknown operation (18)"])
+//						{
+//							[self setDownloadText:NSLocalizedString(@"Restoring device firmware (18)", @"Resotring device firmware")];
+//						} else {
+//							[self setDownloadText:progressString];
+//						}
 						
 							//[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:progressString waitUntilDone:YES];
 						
@@ -3201,8 +3203,8 @@ void tap_keyboard(void) {
 				float progress = [[progressArray lastObject] floatValue];
 				if (progress == 100)
 				{
-					NSLog(@"at 100");
-					[self setDownloadText:NSLocalizedString(@"Verifying...", @"verifying")];
+						//NSLog(@"at 100");
+						//[self setDownloadText:NSLocalizedString(@"Verifying...", @"verifying")];
 					[self setDownloadProgress:0];
 					
 				} else {
@@ -3225,6 +3227,17 @@ void tap_keyboard(void) {
 		[wp release];
 	}
 	[thePool release];
+}
+
+- (NSString *)replacementProgressForString:(NSString *)inputString
+{
+	if ([inputString isEqualToString:@"Extracting filesystem from IPSW"]) return NSLocalizedString(@"Extracting software...", @"Extracting software...");
+	if ([inputString isEqualToString:@"Sending filesystem now..."]) return NSLocalizedString(@"Restoring Apple TV software...", @"Restoring Apple TV software...");
+	if ([inputString isEqualToString:@"Restoring image (14)"]) return NSLocalizedString(@"Verifying Appe TV software...", @"Verifying Appe TV software...");
+	if ([inputString isEqualToString:@"Checking filesystems (16)"]) return NSLocalizedString(@"Verifying Appe TV software...", @"Verifying Appe TV software...");
+	if ([inputString isEqualToString:@"Unknown operation (18)"]) return NSLocalizedString(@"Restoring Apple TV firmware...", @"Restoring Apple TV firmware...");
+	
+	return (inputString);
 }
 
 - (void)threadedDFURestore
@@ -3260,8 +3273,8 @@ void tap_keyboard(void) {
 		//[self setDownloadText:NSLocalizedString(@"Restoring in iTunes, Please wait while script is running...",@"Restoring in iTunes, Please wait while script is running...") ];
 	[self setDownloadProgress:0];
 	
-	[pool release];
-	return;
+		//[pool release];
+		//return;
 	
 	int restoreStatus = [nitoUtility restoreIPSW:ipswPath];
 	
@@ -3318,6 +3331,7 @@ void tap_keyboard(void) {
 
 - (void)killiTunes
 {
+	return;
 	NSString *killItunesString = @"tell application \"iTunes\" to quit";
 	NSAppleScript *theScript = [[NSAppleScript alloc] initWithSource:killItunesString];
 	[theScript executeAndReturnError:nil];
