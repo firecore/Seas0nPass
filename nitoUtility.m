@@ -121,6 +121,34 @@
 	return finalInt;
 }
 
++ (BOOL)is64Bit
+{
+	NSString *returnString = [nitoUtility singleLineReturnForProcess:@"/usr/bin/uname -m"];
+	if ([returnString isEqualToString:@"x86_64"]); return (TRUE);
+	
+	return (FALSE);
+}
+
++ (NSString *)singleLineReturnForProcess:(NSString *)call
+{
+    if (call==nil) 
+        return 0;
+    char line[200];
+	
+    
+    FILE* fp = popen([call UTF8String], "r");
+	NSString *s = nil;
+    if (fp)
+    {
+        while (fgets(line, sizeof line, fp))
+        {
+            s = [NSString stringWithCString:line encoding:NSUTF8StringEncoding];
+        }
+    }
+    pclose(fp);
+    return [s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
 + (int)restoreIPSW:(NSString *)theIPSW
 {
 		//NSLog(@"copyDocuments:%@ toPhone:%@ withVersion:%i", theFile, hostAddress, sshVersion);

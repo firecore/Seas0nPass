@@ -24,6 +24,7 @@
 
 
 
+
 - (NSMenu *)submenu
 {
 
@@ -36,6 +37,7 @@
     
 	while (currentObject = [bundleEnum nextObject])
 	{
+		
 		NSMenuItem *theItem = [[NSMenuItem alloc] initWithTitle:currentObject action:@selector(add:) keyEquivalent:@""];
 		[theItem setTarget:self];
 		[theMenu addItem:[theItem autorelease]];

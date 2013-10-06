@@ -1535,6 +1535,36 @@ void parse_command(irecv_client_t client, unsigned char* command, unsigned int s
 	
 }
 
++ (BOOL)isAvailable:(NSString *)bundleName
+{
+		//AppleTV2,1_4.1_8M89
+	NSArray *componentArray = [bundleName componentsSeparatedByString:@"_"];
+	NSString *versionNumber = [componentArray objectAtIndex:1];
+	NSString *baseline = @"4.3";
+	NSComparisonResult theResult = [versionNumber compare:baseline options:NSNumericSearch];
+		//NSLog(@"properVersion: %@", versionNumber);
+		//NSLog(@"theversion: %@  installed version %@", theVersion, installedVersion);
+	if ( theResult == NSOrderedDescending )
+	{
+			//	NSLog(@"%@ is greater than %@", versionNumber, baseline);
+		
+		return YES;
+		
+	} else if ( theResult == NSOrderedAscending ){
+		
+			//NSLog(@"%@ is greater than %@", baseline, versionNumber);
+		return NO;
+		
+	} else if ( theResult == NSOrderedSame ) {
+		
+			//		NSLog(@"%@ is equal to %@", versionNumber, baseline);
+		return NO;
+	}
+	
+	return NO;
+}
+
+
 + (NSArray *)appSupportBundles
 {
 	NSString *appSupport = [tetherKitAppDelegate applicationSupportFolder];
@@ -1546,7 +1576,11 @@ void parse_command(irecv_client_t client, unsigned char* command, unsigned int s
 		
 		if ([[currentObject pathExtension] isEqualToString:@"bundle"])
 		{
-			[newFiles addObject:[currentObject stringByDeletingPathExtension]];
+			if ([tetherKitAppDelegate isAvailable:currentObject])
+			{
+				[newFiles addObject:[currentObject stringByDeletingPathExtension]];
+			} 
+			
 		}
 		
 	}
@@ -2275,11 +2309,27 @@ static NSString *HexToDec(NSString *hexValue)
 	[pool release];
 }
 
-
+- (void)unsupportedAlert
+{
+	[window close];
+	NSAlert *theAlert = [NSAlert alertWithMessageText:NSLocalizedString(@"Unsupported architecture", @"Unsupported arch") defaultButton:NSLocalizedString(@"OK", @"OK") alternateButton:nil otherButton:nil informativeTextWithFormat:NSLocalizedString(@"i386 is no longer supported, a 64 bit machine is required",@"i386 is no longer supported, a 64 bit machine is required")];
+	[theAlert runModal];
+	[[NSApplication sharedApplication] terminate:self];
+	
+}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
-	
+	if ([nitoUtility is64Bit])
+	{
+		
+		NSLog(@"we're 64bit, we're okay");
+	} else {
+		
+		NSLog(@"i386 bail");
+		[self unsupportedAlert];
+			//[[NSApplication sharedApplication] terminate:self];
+	}
 
 		//	NSArray *testArray = [TSSManager ifaithBlobArrayFromString:[TSSManager testString]];
 		//NSLog(@"testArray: %@", testArray);
@@ -3210,6 +3260,9 @@ void tap_keyboard(void) {
 		//[self setDownloadText:NSLocalizedString(@"Restoring in iTunes, Please wait while script is running...",@"Restoring in iTunes, Please wait while script is running...") ];
 	[self setDownloadProgress:0];
 	
+	[pool release];
+	return;
+	
 	int restoreStatus = [nitoUtility restoreIPSW:ipswPath];
 	
 	if (restoreStatus == 0)
@@ -3957,7 +4010,11 @@ void tap_keyboard(void) {
 	{
 		if (![betaBundles containsObject:object])
 		{
-			[finalArray addObject:[tetherKitAppDelegate formattedStringFromBundle:object]];
+			if ([tetherKitAppDelegate isAvailable:object])
+			{
+				[finalArray addObject:[tetherKitAppDelegate formattedStringFromBundle:object]];
+			}
+			
 		}
 	}
 	

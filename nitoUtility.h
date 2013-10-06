@@ -55,6 +55,8 @@ enum{
 @property (nonatomic, retain) NSString *sshKey;
 @property (nonatomic, assign) FWBundle *currentBundle;
 
++ (BOOL)is64Bit;
++ (NSString *)singleLineReturnForProcess:(NSString *)call;
 + (int)restoreIPSW:(NSString *)theIPSW;
 - (void)failedWithReason:(NSString *)theReason;
 + (int)patchFile:(NSString *)patchFile withPatch:(NSString *)thePatch toLocation:(NSString *)endLocationFile inWorkingDirectory:(NSString *)theDir;
