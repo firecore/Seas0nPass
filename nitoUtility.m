@@ -151,6 +151,12 @@
 
 + (int)restoreIPSW:(NSString *)theIPSW
 {
+	[nitoUtility restoreIPSW:theIPSW force:FALSE];
+}
+
++ (int)restoreIPSW:(NSString *)theIPSW force:(BOOL)forced
+{
+	NSLog(@"forced: %i", forced);
 		//NSLog(@"copyDocuments:%@ toPhone:%@ withVersion:%i", theFile, hostAddress, sshVersion);
 	NSPipe *pipe = [[NSPipe alloc] init];
 	
@@ -162,7 +168,10 @@
 	[restoreTask setStandardOutput:pipe];
 	
 	[restoreTask setLaunchPath:ideviceRestore];
-	[restoreTask setArguments:[NSArray arrayWithObjects:@"-c", theIPSW, @"-C", @"/private/tmp", nil]];
+	if (forced == TRUE) 
+		[restoreTask setArguments:[NSArray arrayWithObjects:@"-cf", theIPSW, @"-C", @"/private/tmp", nil]];
+	else 
+		[restoreTask setArguments:[NSArray arrayWithObjects:@"-c", theIPSW, @"-C", @"/private/tmp", nil]];
 	
 	[NSThread detachNewThreadSelector:@selector(dataReadyFormat:) toTarget:[[NSApplication sharedApplication] delegate] withObject:[pipe fileHandleForReading]];
 	[restoreTask launch];

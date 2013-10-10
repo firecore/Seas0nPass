@@ -2318,8 +2318,18 @@ static NSString *HexToDec(NSString *hexValue)
 	
 }
 
++ (void)initialize
+{
+    NSDictionary *appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], SPQuitiTunesPreference, nil];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+    
+}
+
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
+		//quitItunes
+	[self rollLogFile];
 	if ([nitoUtility is64Bit])
 	{
 		
@@ -3276,7 +3286,13 @@ void tap_keyboard(void) {
 		//[pool release];
 		//return;
 	
-	int restoreStatus = [nitoUtility restoreIPSW:ipswPath];
+		int restoreStatus = 0;
+	
+	if ([[ipswPath lastPathComponent] isEqualToString:@"AppleTV2,1_6.0_11A502_SP_Restore.ipsw"])
+		restoreStatus = [nitoUtility restoreIPSW:ipswPath force:TRUE];
+	else
+		restoreStatus = [nitoUtility restoreIPSW:ipswPath];
+
 	
 	if (restoreStatus == 0)
 	{
@@ -3331,14 +3347,33 @@ void tap_keyboard(void) {
 
 - (void)killiTunes
 {
-	return;
-	NSString *killItunesString = @"tell application \"iTunes\" to quit";
-	NSAppleScript *theScript = [[NSAppleScript alloc] initWithSource:killItunesString];
-	[theScript executeAndReturnError:nil];
-	[theScript release];
-	theScript = nil;
+	if ([UD boolForKey:SPQuitiTunesPreference] == TRUE) {
+		NSString *killItunesString = @"tell application \"iTunes\" to quit";
+		NSAppleScript *theScript = [[NSAppleScript alloc] initWithSource:killItunesString];
+		[theScript executeAndReturnError:nil];
+		[theScript release];
+		theScript = nil;
+	}
+	
 }
 
+- (void)rollLogFile
+{
+	NSString *logFile = [NSHomeDirectory() stringByAppendingPathComponent:@"Library/Logs/SP_Debug.log"];
+	float fileSize = [[[FM attributesOfItemAtPath:logFile error:nil] objectForKey:NSFileSize] floatValue];
+	float bytes = fileSize/1024;
+	float mb = bytes/1024;
+	NSLog(@"log file size: %.02f MB", mb);
+		//	NSLog(@"attrs: %@",[FM attributesOfItemAtPath:theFile error:nil]);
+	if (mb > 10)
+	{
+		NSLog(@"log file is over 10 megs, clearing and creating a new one");
+		system("/bin/echo \"restarting log\" > ~/Library/Logs/SP_Debug.log");
+			//[FM removeItemAtPath:logFile error:nil];
+			//[FM createFileAtPath:logFile contents:[NSData data] attributes:nil];
+	}
+	
+}
 
 - (BOOL)scriptingEnabled
 {

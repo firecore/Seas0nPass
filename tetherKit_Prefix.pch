@@ -11,4 +11,10 @@
 	#import "NSData+Flip.h"
 	#import "JSONKit.h"
 
+
 #endif
+
+#define UD [NSUserDefaults standardUserDefaults]
+#define FM [NSFileManager defaultManager]
+
+static NSString *const SPQuitiTunesPreference = @"quitItunes";
