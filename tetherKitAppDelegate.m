@@ -3243,8 +3243,8 @@ void tap_keyboard(void) {
 {
 	if ([inputString isEqualToString:@"Extracting filesystem from IPSW"]) return NSLocalizedString(@"Extracting software...", @"Extracting software...");
 	if ([inputString isEqualToString:@"Sending filesystem now..."]) return NSLocalizedString(@"Restoring Apple TV software...", @"Restoring Apple TV software...");
-	if ([inputString isEqualToString:@"Restoring image (14)"]) return NSLocalizedString(@"Verifying Appe TV software...", @"Verifying Appe TV software...");
-	if ([inputString isEqualToString:@"Checking filesystems (16)"]) return NSLocalizedString(@"Verifying Appe TV software...", @"Verifying Appe TV software...");
+	if ([inputString isEqualToString:@"Restoring image (14)"]) return NSLocalizedString(@"Verifying Apple TV software...", @"Verifying Apple TV software...");
+	if ([inputString isEqualToString:@"Checking filesystems (16)"]) return NSLocalizedString(@"Verifying Apple TV software...", @"Verifying Apple TV software...");
 	if ([inputString isEqualToString:@"Unknown operation (18)"]) return NSLocalizedString(@"Restoring Apple TV firmware...", @"Restoring Apple TV firmware...");
 	
 	return (inputString);
