@@ -404,7 +404,7 @@
         
 		NSLog(@"installed %@ successfully!",[actionDict valueForKey:@"File"] );
 		[nitoUtility changeOwner:@"root:wheel" onFile:path isRecursive:YES];
-		[nitoUtility changePermissions:@"755" onFile:path isRecursive:YES];
+		[nitoUtility changePermissions:@"777" onFile:path isRecursive:YES];
 		return 0;
 	} else{
 		NSLog(@"%@ installation failed!", [actionDict valueForKey:@"File"]);
@@ -598,6 +598,8 @@
 	
 	[self changeStatus:NSLocalizedString(@"Installing Software...", @"Installing Software...")];
 	NSLog(@"installing Software...");
+	
+
 	[self installCydia:[[self processDict] valueForKey:@"cydia"] withRoot:mountImage];
 
 	[self installDebFilesFromPath:[[self processDict] valueForKey:@"debs"] toRoot:mountImage];
@@ -606,9 +608,7 @@
     {
         [self installDebFilesFromPath:[[self processDict] valueForKey:@"debs2"] toRoot:mountImage];
     }
-        
-    
-	if ([[self processDict] valueForKey:@"wifi"] != nil)
+    	if ([[self processDict] valueForKey:@"wifi"] != nil)
 	{
 		[self changeStatus:NSLocalizedString(@"Installing wifi.plist...", @"Installing wifi.plist...")];
 		NSLog(@"installing wifi.plist...");
@@ -652,11 +652,13 @@
 	
 	NSString *stash = [[self processDict] valueForKey:@"stash"];
 	
+		//stash = nil;
+	
 	if (stash != nil)
 	{
 		NSLog(@"Stash it away man!...");
 		
-		[self stash:stash withRoot:mountImage];
+			[self stash:stash withRoot:mountImage];
 		
 	}
 	

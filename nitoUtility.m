@@ -1413,7 +1413,14 @@
         [bundleDict setObject:DEB_PATH_CUSTOM forKey:@"debs2"];
     
 		//if (![theBundle fivePointOnePlus])
+	if (![theBundle versionEqualToOrGreaterThan:@"6.0"])
+	{
+		NSLog(@"version is less than 6.0, add stash script");
 		[bundleDict setObject:SPACE_SCRIPT forKey:@"stash"];
+		
+	}
+		
+	
 	[bundleDict setObject:[theBundle bundlePath] forKey:@"bundle"];
 		//TODO: custom bundles
 	NSString *cliPath = @"/tmp/031231";
@@ -1590,10 +1597,11 @@
 {
 	NSTask *patchTask = [[NSTask alloc] init];
 	[patchTask setLaunchPath:BSPATCH];
-	NSString *patchedFile = [TMP_ROOT stringByAppendingPathComponent:[patchFile lastPathComponent]];
+	NSString *patchedFile = [TMP_ROOT stringByAppendingPathComponent:[patchFile lastPathComponent]]; //kernel cache bug!! 
+	patchedFile = [patchedFile stringByAppendingPathExtension:@"patched"];
 		//NSString *patchedFile = [patchFile stringByAppendingPathExtension:@"patched"];
 	[patchTask setArguments:[NSArray arrayWithObjects:patchFile, patchedFile, thePatch, nil]];
-		//NSLog(@"patches: %@", [[patchTask arguments] componentsJoinedByString:@" "]);
+	NSLog(@"bspatch %@", [[patchTask arguments] componentsJoinedByString:@" "]);
 	[patchTask launch];
 	[patchTask waitUntilExit];
 	
@@ -2005,6 +2013,27 @@
 	
 }
 
++ (int)extractTar:(NSString *)inputTar toRoot:(NSString *)toLocation
+{
+	NSTask *tarTask = [[NSTask alloc] init];
+	NSFileHandle *nullOut = [NSFileHandle fileHandleWithNullDevice];
+	
+	[tarTask setLaunchPath:@"/usr/bin/tar"];
+	[tarTask setArguments:[NSArray arrayWithObjects:@"fxp", inputTar, @"-C", toLocation, nil]];
+	[tarTask setCurrentDirectoryPath:toLocation];
+	[tarTask setStandardError:nullOut];
+	[tarTask setStandardOutput:nullOut];
+	[tarTask launch];
+	[tarTask waitUntilExit];
+	
+	int theTerm = [tarTask terminationStatus];
+	
+	[tarTask release];
+	tarTask = nil;
+	return theTerm;
+	
+}
+
 + (int)gunzip:(NSString *)inputFile
 {
 	NSTask *gzTask = [[NSTask alloc] init];
@@ -2028,6 +2057,11 @@
 
 + (int)extractGZip:(NSString *)inputTar toRoot:(NSString *)toLocation
 {
+    if ([[[inputTar pathExtension] lowercaseString] isEqualToString:@"tar"])
+    {
+        return [nitoUtility extractTar:inputTar toRoot:toLocation];
+    }
+    
 	NSTask *tarTask = [[NSTask alloc] init];
 	NSFileHandle *nullOut = [NSFileHandle fileHandleWithNullDevice];
 	
@@ -2282,6 +2316,7 @@
 	if (![FM fileExistsAtPath:patch])
 	{
 		NSLog(@"patch %@ is missing!, bail!!!!", patch);
+		return -1;
 	}
 	
 	NSString *iv = [patchData valueForKey:@"IV"];

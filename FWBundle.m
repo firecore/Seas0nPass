@@ -165,6 +165,15 @@
 	return nil;
 }
 
+- (NSString *)localiBECBoot
+{
+	if ([self localManifest] != nil)
+	{
+		return [[self localBundlePath] stringByAppendingPathComponent:[[self localManifest] valueForKey:@"iBECBoot"]];
+	}
+	return nil;
+}
+
 - (NSString *)localiBEC
 {
 	if ([self localManifest] != nil)
@@ -304,6 +313,31 @@
 	} else {
 		return @"16541920";	
 	}
+}
+
+- (BOOL)versionEqualToOrGreaterThan:(NSString *)comparisonVersion
+{
+	NSString *myVersion = [self osVersion];
+	NSComparisonResult theResult = [myVersion compare:comparisonVersion options:NSNumericSearch];
+		//NSLog(@"theversion: %@  installed version %@", theVersion, installedVersion);
+	if ( theResult == NSOrderedDescending )
+	{
+			//	NSLog(@"%@ is greater than %@", myVersion, comparisonVersion);
+		
+		return YES;
+		
+	} else if ( theResult == NSOrderedAscending ){
+		
+			//	NSLog(@"%@ is greater than %@", comparisonVersion, myVersion);
+		return NO;
+		
+	} else if ( theResult == NSOrderedSame ) {
+		
+			//	NSLog(@"%@ is equal to %@", myVersion, comparisonVersion);
+		return YES;
+	}
+	
+	return NO;
 }
 
 - (BOOL)fivePointOnePlus //really 6.0 +, but the 4th beta was labeled 5.1 and not 6.0, STUPID APPLE ;-P

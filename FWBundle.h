@@ -59,6 +59,8 @@ enum {
 @property (nonatomic, retain) NSString *fwRoot;
 @property (readwrite, assign) int restoreMode;
 
+- (BOOL)versionEqualToOrGreaterThan:(NSString *)comparisonVersion;
+- (NSString *)localiBECBoot;
 - (NSString *)iFaithBuildVersion;
 - (BOOL)fivePointOnePlus;
 - (NSString *)fullDeviceType;

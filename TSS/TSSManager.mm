@@ -1532,7 +1532,7 @@ static NSString *myChipID_ = nil;
 	
 	NSDictionary *blobDict = [self dictionaryFromString:blob];
 	
-    //[blobDict writeToFile:[NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/test.plist"] atomically:YES];
+		// [blobDict writeToFile:[NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/test.plist"] atomically:YES];
     
   //  NSLog(@"blobDict: %@", blobDict);
 	
@@ -1549,6 +1549,8 @@ static NSString *myChipID_ = nil;
 	
     //start signin the files
 	
+		//NSLog(@"keyArray: %@", keyArray);
+	
 	for (id fwKey in keyArray)
 	{
         //first get the blob
@@ -1564,7 +1566,7 @@ static NSString *myChipID_ = nil;
 			
 			NSLog(@"sign file: %@ fail!", fwFile);
 			
-			return -1;
+				//	return -1;
 			
 		}
 		
@@ -1668,6 +1670,19 @@ static NSString *myChipID_ = nil;
 		//	NSLog(@"signing file: %@", inputFile);
 	
 		//thanks ih8sn0w for information on this!!
+	
+	BOOL isFolder = FALSE;
+	if (![FM fileExistsAtPath:inputFile isDirectory:&isFolder])
+	{
+		NSLog(@"%@ doesn't exist, skipping but not bailing!", inputFile);
+		return TRUE;
+	}
+	
+	if (isFolder == TRUE)
+	{
+		NSLog(@"%@ is a folder, skipping but not bailing!", inputFile);
+		return TRUE;
+	}
 	
 	NSString *newFile = [inputFile stringByAppendingString:@"_patched"];
 	NSMutableData *myData = [[NSMutableData alloc] initWithContentsOfMappedFile:inputFile];

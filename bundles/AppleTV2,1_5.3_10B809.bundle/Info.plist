@@ -10,8 +10,31 @@
 	<string>AppleTV2,1_5.3_10B809_Restore.ipsw</string>
 	<key>FilesystemPatches</key>
 	<dict>
+		<key>Core Files Installation</key>
+		<array>
+			<dict>
+				<key>Action</key>
+				<string>Extract</string>
+				<key>File</key>
+				<string>p0sixspwn.tgz</string>
+				<key>Name</key>
+				<string>p0sixspwn.tgz</string>
+				<key>Path</key>
+				<string>/</string>
+			</dict>
+		</array>
 		<key>Filesystem Jailbreak</key>
 		<array>
+			<dict>
+				<key>Action</key>
+				<string>Patch</string>
+				<key>File</key>
+				<string>System/Library/Lockdown/Services.plist</string>
+				<key>Name</key>
+				<string>Apple File Connection v2</string>
+				<key>Patch</key>
+				<string>Services.patch</string>
+			</dict>
 			<dict>
 				<key>Action</key>
 				<string>Patch</string>
@@ -21,6 +44,16 @@
 				<string>Filesystem Write Access</string>
 				<key>Patch</key>
 				<string>fstab.patch</string>
+			</dict>
+			<dict>
+				<key>Action</key>
+				<string>Patch</string>
+				<key>File</key>
+				<string>Applications/AppleTV.app/AppleTV</string>
+				<key>Name</key>
+				<string>Seatbelt</string>
+				<key>Patch</key>
+				<string>AppleTV.patch</string>
 			</dict>
 		</array>
 	</dict>
@@ -100,7 +133,7 @@
 	<key>SHA1</key>
 	<string>6208f0518f3529aa290e4cbf2ea585e891ed61d3</string>
 	<key>Untethered</key>
-	<false/>
+	<true/>
 	<key>platform</key>
 	<string>3</string>
 	<key>subplatform</key>

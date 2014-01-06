@@ -27,6 +27,8 @@
 #import <Foundation/Foundation.h>
 
 
+#define FORCE_APPLE_STITCH
+
 	//CURRENT_BUNDLE is the finally the only place that the bundle name needs to be replaced to change default version for future versions.
 
 //previous @"AppleTV2,1_5.0.2_9B830"
@@ -61,6 +63,7 @@ static NSString *ChipID_ = nil;
 
 @synthesize window, downloadIndex, processing, enableScripting, firstView, secondView, poisoning, currentBundle, bundleController, counter, otherWindow, commandTextField, tetherLabel, countdownField, runMode, theEcid;
 @synthesize deviceClass;
+@synthesize restoreStatus;
 /*
  
  
@@ -147,6 +150,19 @@ void print_progress(double progress, void* data) {
 - (BOOL) optionKeyIsDown
 {
 	return (GetCurrentKeyModifiers() & optionKey) != 0;
+}
+
+- (__strong const char *)iBECBoot
+{
+	NSString *iBEC = [[self currentBundle] localiBECBoot];
+	if (iBEC == nil)
+	{
+		NSLog(@"no separate iBec for booting!");
+		iBEC = [[self currentBundle] localiBEC];
+	}
+		//NSLog(@"self current bundle: %@", self.currentBundle);
+		//NSLog(@"iBEC: %@", iBEC);
+	return [iBEC UTF8String];
 }
 
 - (__strong const char *)iBEC
@@ -2029,6 +2045,12 @@ static NSString *HexToDec(NSString *hexValue)
 		
 	}
     
+	//if ([buildNumber isEqualToString:@"11B554a"]) //FIX_ME: eventually add restore_external patches!
+//	{
+//		NSLog(@"6.0.2, still let apple sign for now!! %@ kRestoreDefaultMode", buildNumber);
+//		return kRestoreDefaultMode;
+//	}
+	
     if ([signableVersions containsObject:buildNumber])
 	{
 		NSLog(@"apple is still signing %@ dont do anything special: kRestoreDefaultMode", buildNumber);
@@ -2328,6 +2350,7 @@ static NSString *HexToDec(NSString *hexValue)
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
+	restoreStatus = FALSE;
 		//quitItunes
 	[self rollLogFile];
 	if ([nitoUtility is64Bit])
@@ -3089,7 +3112,25 @@ void tap_keyboard(void) {
 			//[self setDownloadText:NSLocalizedString(@"Restoring in iTunes, Please wait while script is running...",@"Restoring in iTunes, Please wait while script is running...") ];
 		[self setDownloadProgress:0];
 		
-		int restoreStatus = [nitoUtility restoreIPSW:ipswPath];
+		int restoreStatus = 0;
+		
+		NSString *buildNumber = [[self currentBundle] buildVersion]; //ie 8C154
+		//if ([buildNumber isEqualToString:@"11B554a"])
+//		{
+//			NSLog(@"********* W00T: special restore consideration for 6.0.2! use the FORCE");
+//			restoreStatus = [nitoUtility restoreIPSW:ipswPath force:TRUE];
+//			
+//		} else {
+//			
+			restoreStatus = [nitoUtility restoreIPSW:ipswPath];
+				//}
+		
+		if(self.restoreStatus == TRUE)
+		{
+			NSLog(@"restore status true!");
+		} else {
+			NSLog(@"restore status false (could be false positive)!");
+		}
 		
 		if (restoreStatus == 0)
 		{
@@ -3097,9 +3138,10 @@ void tap_keyboard(void) {
 			[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
 			[self hideProgress];
 			[cancelButton setTitle:NSLocalizedString(@"Done", @"Done")];
-		} else {
+		} else { //always showing success because of false positives.
 			
-			[self setDownloadText:NSLocalizedString(@"Firmware restore failed?", @"Firmware restore successful!")];
+			[self setDownloadText:NSLocalizedString(@"Firmware restore successful!", @"Firmware restore successful!")];
+			[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
 			[self hideProgress];
 			[cancelButton setTitle:NSLocalizedString(@"Done", @"Done")];
 			
@@ -3189,7 +3231,7 @@ void tap_keyboard(void) {
 				{
 					if ([progressString rangeOfString:@"%"].location == NSNotFound)
 					{
-							//	LogIt(progressString);
+							LogIt(progressString);
 							//NSLog(@"%@", progressString);
 						
 						[self setDownloadText:[self replacementProgressForString:progressString]];
@@ -3203,6 +3245,27 @@ void tap_keyboard(void) {
 							//[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:progressString waitUntilDone:YES];
 						
 					}
+					
+					if ([progressString rangeOfString:@"Status:"].length > 0)
+					{
+							//found the status string, should only happen at the end!
+						NSString *statusSubstring = [progressString substringWithRange:NSMakeRange(8, [progressString length]-8)];
+						NSLog(@"statusSubstring: -%@-", statusSubstring);
+						if ([statusSubstring isEqualToString:@"Restore Finished"])
+						{
+							NSLog(@"restore was successful??");
+			
+								self.restoreStatus = TRUE;
+							
+							
+						} else {
+							
+								//NSLog(@"restore failed???");
+								
+								self.restoreStatus = FALSE;
+						}
+					}
+					
 				
 				}
 				
@@ -3246,7 +3309,8 @@ void tap_keyboard(void) {
 	if ([inputString isEqualToString:@"Restoring image (14)"]) return NSLocalizedString(@"Verifying Apple TV software...", @"Verifying Apple TV software...");
 	if ([inputString isEqualToString:@"Checking filesystems (16)"]) return NSLocalizedString(@"Verifying Apple TV software...", @"Verifying Apple TV software...");
 	if ([inputString isEqualToString:@"Unknown operation (18)"]) return NSLocalizedString(@"Restoring Apple TV firmware...", @"Restoring Apple TV firmware...");
-	
+	if ([inputString isEqualToString:@"Unknown operation (46)"]) return NSLocalizedString(@"Restoring Apple TV firmware...", @"Restoring Apple TV firmware...");
+	if ([inputString isEqualToString:@"Unknown operation (50)"]) return NSLocalizedString(@"Restoring Apple TV firmware...", @"Restoring Apple TV firmware...");
 	return (inputString);
 }
 
@@ -3288,11 +3352,18 @@ void tap_keyboard(void) {
 	
 		int restoreStatus = 0;
 	
-	if ([[ipswPath lastPathComponent] isEqualToString:@"AppleTV2,1_6.0_11A502_SP_Restore.ipsw"])
-		restoreStatus = [nitoUtility restoreIPSW:ipswPath force:TRUE];
-	else
+	NSString *buildNumber = [[self currentBundle] buildVersion]; //ie 8C154
+	//if ([buildNumber isEqualToString:@"11B554a"])
+//	{	
+//			//restoreStatus = [nitoUtility restoreIPSW:ipswPath force:TRUE];
+//			restoreStatus = 0;
+//	}
+//	else
+//	{
 		restoreStatus = [nitoUtility restoreIPSW:ipswPath];
-
+	
+		//}
+	
 	
 	if (restoreStatus == 0)
 	{

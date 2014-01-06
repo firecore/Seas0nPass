@@ -66,7 +66,7 @@ enum {
 	
 	BOOL itunesFullScreen;
 	BOOL itunesShowingSideBar;
-	
+	BOOL restoreStatus;
 }
 @property (nonatomic, retain) NSString *theEcid;
 @property (nonatomic, retain) NSString *deviceClass;
@@ -85,7 +85,7 @@ enum {
 @property (readwrite, assign) BOOL enableScripting;
 @property (readwrite, assign) int downloadIndex;
 @property (readwrite, assign) int counter;
-
+@property (readwrite, assign) BOOL restoreStatus;
 
 - (void)dataReadyFormat:(NSFileHandle *)theFile;
 
