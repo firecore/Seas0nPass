@@ -19,6 +19,34 @@
 
 %hook ATVMainMenuController
 
+- (id)_iconForAppliance:(id)appliance
+{
+	%log;
+	NSString *versionNumber = [%c(ATVVersionInfo) currentOSVersion];
+	NSComparisonResult theResult = [versionNumber compare:@"5.1" options:NSNumericSearch];
+	float currentVersion = [[%c(ATVVersionInfo) currentOSVersion] floatValue];
+	NSString *spFile = @"/var/mobile/Library/Preferences/spicon.png";
+	NSFileManager *man = [NSFileManager defaultManager];
+	if ( theResult == NSOrderedAscending ){ return %orig; }
+
+		if (![man fileExistsAtPath:spFile]){ return %orig; }
+
+		NSString *applianceName = [[appliance applianceInfo] key];
+		
+		//make it 7.x compat!
+		
+		Class imageClass = %c(BRImage);
+		if (imageClass == nil)
+			imageClass = %c(ATVImage);
+			
+		if ([applianceName isEqualToString:@"com.apple.frontrow.appliance.settings"])
+		{
+			return [imageClass imageWithPath:spFile];
+		}
+		
+		return %orig;
+	}
+
 //@class BRImage, BRMainMenuImageControl, ATVVersionInfo;
 		
 - (id)_imageForAppliance:(id)appliance

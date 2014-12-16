@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>RestoreOptions</key>
+	<dict>
+		<key>RestoreBootArgs</key>
+		<string>rd=md0 nand-enable-reformat=1 -progress</string>
+		<key>CreateFilesystemPartitions</key>
+		<true/>
+		<key>UpdateBaseband</key>
+		<false/>
+		<key>FlashNOR</key>
+		<true/>
+		<key>NORImageType</key>
+		<string>production</string>
+		<key>DFUFileType</key>
+		<string>RELEASE</string>
+		<key>KernelCacheType</key>
+		<string>Release</string>
+		<key>SystemImageType</key>
+		<string>User</string>
+		<key>BootImageType</key>
+		<string>User</string>
+		<key>IsLegacy</key>
+		<true/>
+		<key>RestoreBundlePath</key>
+		<string>/Users/djayb6/Desktop/ipsw/</string>
+		<key>DFUFile</key>
+		<string>/Users/djayb6/Desktop/ipsw/Firmware/dfu/iBSS.n90ap.RELEASE.dfu</string>
+	</dict>
+</dict>
+</plist>

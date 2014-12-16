@@ -17,6 +17,7 @@
 #define VFDECRYPT       [[NSBundle mainBundle] pathForResource:@"vfdecrypt" ofType:@"" inDirectory:@"bin"]
 #define CYDIA_TAR       [[NSBundle mainBundle] pathForResource:@"Cydia" ofType:@"tgz" inDirectory:@"archives"]
 #define SPACE_SCRIPT    [[NSBundle mainBundle] pathForResource:@"space" ofType:@"sh" inDirectory:@"scripts"]
+#define SPACE_SCRIPT60    [[NSBundle mainBundle] pathForResource:@"space60" ofType:@"sh" inDirectory:@"scripts"]
 #define DEB_PATH        [[NSBundle mainBundle] pathForResource:@"debs" ofType:@""]
 #define DEB_PATH_CUSTOM [[nitoUtility applicationSupportFolder] stringByAppendingPathComponent:@"Debs"]
 

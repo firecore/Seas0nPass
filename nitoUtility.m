@@ -1413,12 +1413,17 @@
         [bundleDict setObject:DEB_PATH_CUSTOM forKey:@"debs2"];
     
 		//if (![theBundle fivePointOnePlus])
-	if (![theBundle versionEqualToOrGreaterThan:@"6.0"])
+	if ([theBundle versionEqualToOrGreaterThan:@"6.0"])
 	{
-		NSLog(@"version is less than 6.0, add stash script");
+		NSLog(@"version is equal to or greater than 6.0, add custom stash script");
+		[bundleDict setObject:SPACE_SCRIPT60 forKey:@"stash"];
+        
+	} else {
+        
+        NSLog(@"version is less than 6.0, add standard stash script");
+        
 		[bundleDict setObject:SPACE_SCRIPT forKey:@"stash"];
-		
-	}
+    }
 		
 	
 	[bundleDict setObject:[theBundle bundlePath] forKey:@"bundle"];

@@ -71,6 +71,11 @@
 		89E8FB6D17912EDC004F5426 /* TSSCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 89E8FB6B17912ECC004F5426 /* TSSCategories.m */; };
 		89E8FBDC1791532E004F5426 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 89E8FBDB1791532E004F5426 /* JSONKit.m */; };
 		89E8FBDD1791532E004F5426 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 89E8FBDB1791532E004F5426 /* JSONKit.m */; };
+		89F0E6001A3D21E300D0BA42 /* restoreoptions.pr in Resources */ = {isa = PBXBuildFile; fileRef = 89F0E5F91A3D21E300D0BA42 /* restoreoptions.pr */; };
+		89F0E6711A3D63CD00D0BA42 /* MobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89F0E66F1A3D62D600D0BA42 /* MobileDevice.framework */; };
+		89F0E6741A3D6BD800D0BA42 /* libusbkit.c in Sources */ = {isa = PBXBuildFile; fileRef = 89F0E6021A3D247100D0BA42 /* libusbkit.c */; };
+		89F0E6751A3D6FEA00D0BA42 /* IPSW.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F0E5F11A3D21E300D0BA42 /* IPSW.m */; };
+		89F0E6771A3D7A0100D0BA42 /* IPSWRestore.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F0E5F31A3D21E300D0BA42 /* IPSWRestore.m */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -209,6 +214,22 @@
 		89E8FBDA1791532E004F5426 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		89E8FBDB1791532E004F5426 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		89F0B1EB13D4C44E009C794C /* Seas0nPass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Seas0nPass.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		89F0E5EF1A3D21E300D0BA42 /* AMRestore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMRestore.h; sourceTree = "<group>"; };
+		89F0E5F01A3D21E300D0BA42 /* IPSW.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPSW.h; sourceTree = "<group>"; };
+		89F0E5F11A3D21E300D0BA42 /* IPSW.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPSW.m; sourceTree = "<group>"; };
+		89F0E5F21A3D21E300D0BA42 /* IPSWRestore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPSWRestore.h; sourceTree = "<group>"; };
+		89F0E5F31A3D21E300D0BA42 /* IPSWRestore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPSWRestore.m; sourceTree = "<group>"; };
+		89F0E5F51A3D21E300D0BA42 /* IPhoneUSB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPhoneUSB.h; sourceTree = "<group>"; };
+		89F0E5F61A3D21E300D0BA42 /* IPhoneUSB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPhoneUSB.m; sourceTree = "<group>"; };
+		89F0E5F71A3D21E300D0BA42 /* libusb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libusb.h; sourceTree = "<group>"; };
+		89F0E5F81A3D21E300D0BA42 /* restorable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = restorable.h; sourceTree = "<group>"; };
+		89F0E5F91A3D21E300D0BA42 /* restoreoptions.pr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = restoreoptions.pr; sourceTree = "<group>"; };
+		89F0E6021A3D247100D0BA42 /* libusbkit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = libusbkit.c; sourceTree = "<group>"; };
+		89F0E6031A3D247100D0BA42 /* libusbkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libusbkit.h; sourceTree = "<group>"; };
+		89F0E6041A3D247100D0BA42 /* libusbkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = libusbkit.m; sourceTree = "<group>"; };
+		89F0E6051A3D247100D0BA42 /* limerain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = limerain.h; sourceTree = "<group>"; };
+		89F0E6061A3D247100D0BA42 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		89F0E66F1A3D62D600D0BA42 /* MobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileDevice.framework; path = ../../../../System/Library/PrivateFrameworks/MobileDevice.framework; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* tetherKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "tetherKit-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -230,6 +251,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89F0E6711A3D63CD00D0BA42 /* MobileDevice.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				3272047F12C9AD320054F4B0 /* libsyringe.a in Frameworks */,
 				32720A0C12CAD3780054F4B0 /* libstdc++.dylib in Frameworks */,
@@ -249,33 +271,13 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				89E8FBDA1791532E004F5426 /* JSONKit.h */,
-				89E8FBDB1791532E004F5426 /* JSONKit.m */,
-				32A52E011710D8440009A99A /* NSString+Extensions.h */,
-				32A52E021710D8440009A99A /* NSString+Extensions.m */,
+				89F0E5E71A3D21E300D0BA42 /* NativeStuffs */,
+				89F0E67A1A3E265400D0BA42 /* UI */,
+				89F0E6781A3E263500D0BA42 /* Categories */,
 				327E65C714CF481B0058D651 /* TSS */,
-				324FF2EA12F8CC690039310E /* NSApplication+SystemVersion.h */,
-				324FF2EB12F8CC690039310E /* NSApplication+SystemVersion.m */,
-				32720F0F12CC66E10054F4B0 /* PatchedFile.h */,
-				32720F1012CC66E10054F4B0 /* PatchedFile.m */,
-				32720EF012CC63F80054F4B0 /* FWManager.h */,
-				32720EF112CC63F80054F4B0 /* FWManager.m */,
-				327206A812C9C32A0054F4B0 /* nitoUtility.h */,
-				327206A912C9C32A0054F4B0 /* nitoUtility.m */,
+				89F0E6791A3E264500D0BA42 /* Utilities */,
 				256AC3D80F4B6AC300CF3369 /* tetherKitAppDelegate.h */,
 				256AC3D90F4B6AC300CF3369 /* tetherKitAppDelegate.m */,
-				327205DC12C9B5110054F4B0 /* ripURL.h */,
-				327205DD12C9B5110054F4B0 /* ripURL.m */,
-				32DF741712E17498002916D5 /* FWBundle.h */,
-				32DF741812E17498002916D5 /* FWBundle.m */,
-				32DF825312E65280002916D5 /* SPButton.h */,
-				32DF825412E65280002916D5 /* SPButton.m */,
-				327EB38714D5F0140058D651 /* SPFWButton.h */,
-				327EB38814D5F0140058D651 /* SPFWButton.m */,
-				32DF84CC12E6E426002916D5 /* SPMenuItem.h */,
-				32DF84CD12E6E426002916D5 /* SPMenuItem.m */,
-				327E916F14D1E1040058D651 /* NSData+Flip.h */,
-				327E917014D1E1040058D651 /* NSData+Flip.mm */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -365,6 +367,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				89F0E66F1A3D62D600D0BA42 /* MobileDevice.framework */,
 				32DF57BC12DD6E74002916D5 /* Sparkle.framework */,
 				32720E9212CC53F70054F4B0 /* SecurityInterface.framework */,
 				32720E9012CC53F70054F4B0 /* SecurityFoundation.framework */,
@@ -482,6 +485,97 @@
 			path = TSS;
 			sourceTree = "<group>";
 		};
+		89F0E5E71A3D21E300D0BA42 /* NativeStuffs */ = {
+			isa = PBXGroup;
+			children = (
+				89F0E6011A3D247100D0BA42 /* libusbkit */,
+				89F0E5EE1A3D21E300D0BA42 /* Restore */,
+			);
+			path = NativeStuffs;
+			sourceTree = "<group>";
+		};
+		89F0E5EE1A3D21E300D0BA42 /* Restore */ = {
+			isa = PBXGroup;
+			children = (
+				89F0E5EF1A3D21E300D0BA42 /* AMRestore.h */,
+				89F0E5F01A3D21E300D0BA42 /* IPSW.h */,
+				89F0E5F11A3D21E300D0BA42 /* IPSW.m */,
+				89F0E5F21A3D21E300D0BA42 /* IPSWRestore.h */,
+				89F0E5F31A3D21E300D0BA42 /* IPSWRestore.m */,
+				89F0E5F41A3D21E300D0BA42 /* iUSBKit */,
+				89F0E5F81A3D21E300D0BA42 /* restorable.h */,
+				89F0E5F91A3D21E300D0BA42 /* restoreoptions.pr */,
+			);
+			path = Restore;
+			sourceTree = "<group>";
+		};
+		89F0E5F41A3D21E300D0BA42 /* iUSBKit */ = {
+			isa = PBXGroup;
+			children = (
+				89F0E5F51A3D21E300D0BA42 /* IPhoneUSB.h */,
+				89F0E5F61A3D21E300D0BA42 /* IPhoneUSB.m */,
+				89F0E5F71A3D21E300D0BA42 /* libusb.h */,
+			);
+			path = iUSBKit;
+			sourceTree = "<group>";
+		};
+		89F0E6011A3D247100D0BA42 /* libusbkit */ = {
+			isa = PBXGroup;
+			children = (
+				89F0E6021A3D247100D0BA42 /* libusbkit.c */,
+				89F0E6031A3D247100D0BA42 /* libusbkit.h */,
+				89F0E6041A3D247100D0BA42 /* libusbkit.m */,
+				89F0E6051A3D247100D0BA42 /* limerain.h */,
+				89F0E6061A3D247100D0BA42 /* main.c */,
+			);
+			path = libusbkit;
+			sourceTree = "<group>";
+		};
+		89F0E6781A3E263500D0BA42 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				327E916F14D1E1040058D651 /* NSData+Flip.h */,
+				327E917014D1E1040058D651 /* NSData+Flip.mm */,
+				32A52E011710D8440009A99A /* NSString+Extensions.h */,
+				32A52E021710D8440009A99A /* NSString+Extensions.m */,
+				324FF2EA12F8CC690039310E /* NSApplication+SystemVersion.h */,
+				324FF2EB12F8CC690039310E /* NSApplication+SystemVersion.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		89F0E6791A3E264500D0BA42 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				89E8FBDA1791532E004F5426 /* JSONKit.h */,
+				89E8FBDB1791532E004F5426 /* JSONKit.m */,
+				32DF741712E17498002916D5 /* FWBundle.h */,
+				32DF741812E17498002916D5 /* FWBundle.m */,
+				32720F0F12CC66E10054F4B0 /* PatchedFile.h */,
+				32720F1012CC66E10054F4B0 /* PatchedFile.m */,
+				32720EF012CC63F80054F4B0 /* FWManager.h */,
+				32720EF112CC63F80054F4B0 /* FWManager.m */,
+				327206A812C9C32A0054F4B0 /* nitoUtility.h */,
+				327206A912C9C32A0054F4B0 /* nitoUtility.m */,
+				327205DC12C9B5110054F4B0 /* ripURL.h */,
+				327205DD12C9B5110054F4B0 /* ripURL.m */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
+		89F0E67A1A3E265400D0BA42 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				32DF825312E65280002916D5 /* SPButton.h */,
+				32DF825412E65280002916D5 /* SPButton.m */,
+				327EB38714D5F0140058D651 /* SPFWButton.h */,
+				327EB38814D5F0140058D651 /* SPFWButton.m */,
+				32DF84CC12E6E426002916D5 /* SPMenuItem.h */,
+				32DF84CD12E6E426002916D5 /* SPMenuItem.m */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -564,6 +658,7 @@
 				3200F54B12D4E2B7003EA66E /* ipsw.png in Resources */,
 				32799AA712DBC25B0013860A /* Seas0nPass.icns in Resources */,
 				32799B3C12DBE3490013860A /* restore.png in Resources */,
+				89F0E6001A3D21E300D0BA42 /* restoreoptions.pr in Resources */,
 				32799B3E12DBE35F0013860A /* success.png in Resources */,
 				32DF4A3A12DC2905002916D5 /* tetheredRemote.png in Resources */,
 				32DF734A12E0578A002916D5 /* bundles in Resources */,
@@ -603,6 +698,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
+				89F0E6751A3D6FEA00D0BA42 /* IPSW.m in Sources */,
 				256AC3DA0F4B6AC300CF3369 /* tetherKitAppDelegate.m in Sources */,
 				327205DE12C9B5110054F4B0 /* ripURL.m in Sources */,
 				327206AA12C9C32A0054F4B0 /* nitoUtility.m in Sources */,
@@ -611,6 +707,7 @@
 				32DF741912E17498002916D5 /* FWBundle.m in Sources */,
 				32DF825512E65280002916D5 /* SPButton.m in Sources */,
 				32DF84CE12E6E426002916D5 /* SPMenuItem.m in Sources */,
+				89F0E6771A3D7A0100D0BA42 /* IPSWRestore.m in Sources */,
 				324FF2EC12F8CC690039310E /* NSApplication+SystemVersion.m in Sources */,
 				327E65CF14CF481B0058D651 /* TSSCommon.m in Sources */,
 				327E65D114CF481B0058D651 /* TSSManager.mm in Sources */,
@@ -618,6 +715,7 @@
 				327E917114D1E1040058D651 /* NSData+Flip.mm in Sources */,
 				327EB38914D5F0140058D651 /* SPFWButton.m in Sources */,
 				32A52E031710D8440009A99A /* NSString+Extensions.m in Sources */,
+				89F0E6741A3D6BD800D0BA42 /* libusbkit.c in Sources */,
 				89E8FB6C17912ECC004F5426 /* TSSCategories.m in Sources */,
 				89E8FBDC1791532E004F5426 /* JSONKit.m in Sources */,
 			);
@@ -677,6 +775,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
@@ -685,7 +784,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = dbHelper;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.8;
 			};
 			name = Debug;
 		};
@@ -705,6 +804,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
@@ -713,7 +813,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = dbHelper;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.8;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -722,10 +822,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"$(SRCROOT)",
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -741,10 +843,17 @@
 					"\"$(SRCROOT)/../xpwn/idevice/QuicktimeSDK/Libraries\"",
 					"\"$(SRCROOT)/debs\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-lcurl";
+				OTHER_LDFLAGS = (
+					"-lcurl",
+					"-lstdc++",
+					"-lz",
+					"-undefined",
+					dynamic_lookup,
+				);
 				PRODUCT_NAME = Seas0nPass;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.8;
 				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Debug;
@@ -758,7 +867,8 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"$(SRCROOT)",
+					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",
 				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -772,6 +882,7 @@
 					"\"$(SRCROOT)/../xpwn/idevice/QuicktimeSDK/Libraries\"",
 					"\"$(SRCROOT)/debs\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-lcurl",
@@ -781,7 +892,7 @@
 					dynamic_lookup,
 				);
 				PRODUCT_NAME = Seas0nPass;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.8;
 				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Release;

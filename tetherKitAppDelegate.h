@@ -14,6 +14,10 @@
 #import "SPMenuItem.h"
 #import "nitoUtility.h"
 #import "TSSWorker.h"
+#import "IPSWRestore.h"
+#import "IPSW.h"
+
+#import "libusbkit.h"
 
 enum  {
 	kSPATVRestoreImage,
@@ -67,7 +71,11 @@ enum {
 	BOOL itunesFullScreen;
 	BOOL itunesShowingSideBar;
 	BOOL restoreStatus;
+    IPSWRestore *restoreInstance;
+    UKDevice *Device;
 }
+
+
 @property (nonatomic, retain) NSString *theEcid;
 @property (nonatomic, retain) NSString *deviceClass;
 @property (assign) IBOutlet NSTextField *commandTextField;

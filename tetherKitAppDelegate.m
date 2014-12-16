@@ -25,7 +25,13 @@
 #import "include/libpois0n.h"
 #import "include/libpartial.h"
 #import <Foundation/Foundation.h>
+//#import "IPhoneUSB.h"
+#include <assert.h>
+#include <pthread.h>
+//#import "libusb.h"
 
+
+//#import "IPhoneUSB.h"
 
 #define FORCE_APPLE_STITCH
 
@@ -57,7 +63,8 @@
 int progress_cb(irecv_client_t client, const irecv_event_t* event);
 
 static NSString *ChipID_ = nil;
-
+static tetherKitAppDelegate *me = nil;
+BOOL limera1ned = FALSE;
 
 @implementation tetherKitAppDelegate
 
@@ -683,19 +690,19 @@ return @"unknown error";
 	[instructionImage setImage:[self imageForMode:kSPATVRestoreImage]];
 		//[theImage release];
 	while(pois0n_is_ready()) {
-		if (self.deviceClass == nil)
-		{
-			[self _fetchDeviceInfo];
-			sleep(5);
-		}
-		if ([self isAppleTV3])
-		{
-			[self hideProgress];
-				//pois0n_exit();
-			self.poisoning = FALSE;
-			[pool release];
-			return -1;
-		}
+	//	if (self.deviceClass == nil)
+//		{
+//			[self _fetchDeviceInfo];
+//			sleep(5);
+//		}
+//		if ([self isAppleTV3])
+//		{
+//			[self hideProgress];
+//				//pois0n_exit();
+//			self.poisoning = FALSE;
+//			[pool release];
+//			return -1;
+//		}
 		sleep(1);
 	}
 	
@@ -2347,9 +2354,536 @@ static NSString *HexToDec(NSString *hexValue)
     
 }
 
+- (void)dfuScience:(NSNotification *)n
+{
+    LOG_SELF;
+    limera1ned = true;
+    NSLog(@"ecide: %@", self.theEcid);
+    if (self.theEcid == nil);
+    {
+        self.theEcid = [NSString stringWithFormat:@"%lld", Device->ecid];
+        NSLog(@"new ecid: %@", self.theEcid);
+    }
+}
+
+void *otherThread(void* object);
+void *otherThread(void* object) {
+    
+    printf("OTHAR THREAD\n");
+    
+    UKDevice* Device = (UKDevice*)object;
+    
+    
+    while (Device->pid != 0x1227) {
+        
+        printf("Waiting for DFU to appear in thread\n");
+        sleep(1);
+    }
+    
+    
+    
+    int lr =  limerain(Device, false);
+    
+    printf("limera1n status: %i\n", lr);
+    
+    if (lr == 0)
+    {
+    
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"limera1ned" object:nil];
+        limera1ned = TRUE;
+        //[me restoreIPSW];
+    }
+    //CFRunLoopStop(CFRunLoopGetCurrent());
+    
+    
+    return NULL;
+}
+
+- (NSString *)restoreStatusForOperation:(int)opValue
+{
+    NSString *theRestoreStatus = nil;
+    
+    switch (opValue) {
+        
+        case -1:
+            theRestoreStatus = @"Restore completed";
+            break;
+        case 0:
+        case 1:
+        case 2:
+            theRestoreStatus = @"Sending DFU File";
+            break;
+        
+        case 3:
+            theRestoreStatus = @"Connecting to device";
+            break;
+            
+        case 4:
+            theRestoreStatus = @"sending APTicket";
+            break;
+            
+        case 5:
+            theRestoreStatus = @"Sending Ramdisk";
+            break;
+            
+        case 6:
+            theRestoreStatus = @"Sending DeviceTree";
+            break;
+            
+        case 7:
+            theRestoreStatus = @"Sending Kernelcache";
+            break;
+        
+        case 8:
+            theRestoreStatus = @"Setting Restore boot-args";
+            break;
+            
+        case 9:
+            theRestoreStatus = @"Booting Ramdisk";
+            break;
+            
+        case 10:
+            theRestoreStatus = @"Flashing SYSCFG";
+            break;
+            
+        case 11:
+            theRestoreStatus = @"Creating RootFS partition";
+            break;
+            
+        case 12:
+            theRestoreStatus = @"Creating User Partition";
+            break;
+            
+        case 13:
+            theRestoreStatus = @"Restoring iDevice";
+            break;
+            
+        case 14:
+            theRestoreStatus = @"Verifying Restore";
+            break;
+            
+        case 15:
+            theRestoreStatus = @"Checking Filesystem";
+            break;
+            
+        case 16:
+            theRestoreStatus = @"Mounting Filesystem";
+            break;
+            
+        case 17:
+            theRestoreStatus = @"Fixing up /var";
+            break;
+            
+        case 18:
+            theRestoreStatus = @"Flashing NOR";
+            break;
+            
+        case 19:
+            theRestoreStatus = @"Flashing baseband";
+            break;
+            
+        case 20:
+            theRestoreStatus = @"Setting boot stage";
+            break;
+            
+        case 21:
+            theRestoreStatus = @"Rebooting iDevice";
+            break;
+            
+        case 22:
+            theRestoreStatus = @"Shutting down iDevice";
+            break;
+            
+        case 23:
+            theRestoreStatus = @"Turning on Acessory Power";
+            break;
+            
+        case 24:
+            theRestoreStatus = @"Clearing Persistent boot-args";
+            break;
+            
+        case 25:
+            theRestoreStatus = @"Modifying Persistent boot-args";
+            break;
+            
+        case 26:
+            theRestoreStatus = @"Installing root";
+            break;
+            
+        case 27:
+            theRestoreStatus = @"Installing Kernelcache";
+            break;
+            
+        case 28:
+            theRestoreStatus = @"Waiting for NAND";
+            break;
+            
+        case 29:
+            theRestoreStatus = @"Unmounting Filesystems";
+            break;
+            
+        case 30:
+            theRestoreStatus = @"Setting Date and Time";
+            break;
+            
+        case 31:
+            theRestoreStatus = @"Executing iBEC to bootstrap update";
+            break;
+            
+        case 32:
+            theRestoreStatus = @"Finalizing NAND epoch update";
+            break;
+            
+        case 33:
+            theRestoreStatus = @"Checking for inappropriate bootable partitions";
+            break;
+            
+        case 34:
+            theRestoreStatus = @"Creating factory restore marker";
+            break;
+            
+        case 35:
+            theRestoreStatus = @"Loading firmware data to flash";
+            break;
+            
+        case 36:
+            theRestoreStatus = @"i dont know";
+            break;
+            
+        case 37:
+            theRestoreStatus = @"Checking battery voltage";
+            break;
+        
+        case 38:
+            theRestoreStatus = @"Waiting for battery to charge";
+            break;
+            
+        case 39:
+            theRestoreStatus = @"Closing modem tickets";
+            break;
+            
+        case 40:
+            theRestoreStatus = @"Migrating data";
+            break;
+            
+        case 41:
+            theRestoreStatus = @"Wiping storage device";
+            break;
+            
+        case 42:
+            theRestoreStatus = @"Sending Apple logo";
+            break;
+            
+        case 43:
+            theRestoreStatus = @"Checking for uncollected logs";
+            break;
+            
+        case 44:
+            theRestoreStatus = @"Personalizing restore bundle";
+            break;
+            
+        case 45:
+            theRestoreStatus = @"Clearing NVRAM";
+            break;
+            
+        case 46:
+            theRestoreStatus = @"Updating gas gauge software";
+            break;
+            
+        case 47:
+            theRestoreStatus = @"Preparing for baseband update";
+            break;
+            
+        case 48:
+            theRestoreStatus = @"Booting the baseband";
+            break;
+            
+        case 49:
+            theRestoreStatus = @"Creating system key bag";
+            break;
+            
+        case 50:
+            theRestoreStatus = @"Updating IR MCU firmware";
+            break;
+            
+        case 51:
+            theRestoreStatus = @"Resizing system partition";
+            
+            
+    }
+    
+    return theRestoreStatus;
+    
+}
+
+- (void)newRestoreIPSW:(NSString *)ipswPath
+{
+    
+//    if (self.theEcid == nil)
+//    {
+//        [self _fetchDeviceInfo];
+//        sleep(5);
+//    }
+    
+    
+    LOG_SELF;
+    NSLog(@"ipswPath: %@", ipswPath);
+    
+    //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    
+    int a[2][2] = { {0x5AC, 0x1227}, {0x5AC, 0x1281} };
+    
+    //UKDevice * Device = init_libusbkit();
+    
+    Device = init_libusbkit();
+    
+    add_devices(Device, a);
+    
+    register_for_usb_notifications(Device);
+    
+   // sleep(5);
+    
+    NSLog(@"device pid: %i", Device->pid);
+    
+    if (Device->pid != 0x1227)
+    {
+        pthread_attr_t  attr;
+        pthread_t       posixThreadID;
+        int             returnVal;
+        
+        returnVal = pthread_attr_init(&attr);
+        assert(!returnVal);
+        returnVal = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+        assert(!returnVal);
+        
+        int threadError = pthread_create(&posixThreadID, &attr, &otherThread, Device);
+        
+        returnVal = pthread_attr_destroy(&attr);
+        assert(!returnVal);
+        if (threadError != 0)
+        {
+            // Report an error.
+        }
+        
+    } else {
+        
+        limerain(Device, false);
+        limera1ned = true;
+        
+    }
+    
+    [self showProgressViewWithText:NSLocalizedString(@"Waiting for device to enter DFU mode...", @"Waiting for device to enter DFU mode...")];
+    [self setInstructionText:NSLocalizedString(@"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.", @"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.")];
+    
+    [instructionImage setImage:[self imageForMode:kSPATVRestoreImage]];
+
+    while (limera1ned == false)
+    {
+        printf("Waiting for it to ra1n\n");
+        sleep(1);
+    }
+    
+//    while (!Device->opened)
+//    {
+//    
+//        printf("waiting for device\n");
+//        NSLog(@"waiting for device");
+//        sleep(1);
+//    }
+//    
+//    while (Device->pid != 0x1227) {
+//        
+//        printf("Waiting for DFU to appear: %i\n", Device->pid);
+//        
+//        sleep(1);
+//    }
+    
+    [self setInstructionText:@""];
+    
+    if(self.theEcid == nil)
+    {
+        self.theEcid = [NSString stringWithFormat:@"%lld", Device->ecid];
+        NSLog(@"updated ecid: %@", self.theEcid);
+    }
+    
+    [self showProgressViewWithText:NSLocalizedString(@"Found device in DFU mode", @"Found device in DFU mode")];
+    
+    //int lr =  limerain(Device, false);
+    
+  //  NSLog(@"limera1n status: %i", lr);
+    
+   
+    if (self.theEcid != nil)
+    {
+       // NSString *ipswPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/AppleTV2,1_5.3_10B809_SP_Restore"];
+        
+        //its a zip file, need to extract it first!!
+        
+        //should be able to prune this out
+        
+        
+        if ([ipswPath.pathExtension isEqualToString:@"ipsw"])
+        {
+            NSLog(@"need to unzip!");
+            NSString *extractedPath = [ipswPath stringByDeletingPathExtension];
+            
+            [self setDownloadText:NSLocalizedString(@"Unzipping IPSW...",@"Unzipping IPSW..." )];
+            if ([nitoUtility unzipFile:ipswPath toPath:extractedPath])
+            {
+                ipswPath = extractedPath;
+                
+            } else {
+              
+                [self setDownloadText:NSLocalizedString(@"Firmware restore failed", @"Firmware restore failed")];
+                
+                // [instructionImage setImage:[self imageForMode:kSPSuccessImage]];
+                [self hideProgress];
+                
+                self.restoreStatus = FALSE;
+                close_libusbkit(Device);
+                return;
+                
+                
+            }
+            
+        }
+        
+        IPSW *theFw = [[IPSW alloc] initWithPath:ipswPath];
+        
+        NSError *theError = nil;
+        
+        BOOL processIPSW =  [theFw processIPSWwithError:&theError];
+        
+        if (processIPSW == FALSE)
+        {
+            NSLog(@"processing IPSW failed!");
+        }
+        
+        if (theError != nil)
+        {
+            NSLog(@"theerror: %@", theError);
+            return;
+        }
+        
+        
+        IPSWRestore *theRestore = [[IPSWRestore alloc] initWithIPSW:theFw andECID:self.theEcid];
+        [theRestore startListening];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(restoreProgress:) name:@"RestoreProgress" object:nil];
+        
+    }
+    //[pool release];
+}
+
+
+- (void)restoreTest
+{
+    LOG_SELF;
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    
+    int a[2][2] = { {0x5AC, 0x1227}, {0x5AC, 0x1281} };
+    
+    //UKDevice * Device = init_libusbkit();
+    
+    Device = init_libusbkit();
+    
+    add_devices(Device, a);
+    
+    register_for_usb_notifications(Device);
+    
+    sleep(10);
+    
+    while (!Device->opened && Device->pid != 0x1227) {
+      
+        [self showProgressViewWithText:NSLocalizedString(@"Waiting for device to enter DFU mode...", @"Waiting for device to enter DFU mode...")];
+        
+        printf("Waiting for DFU to appear\n");
+        sleep(1);
+    }
+    [self showProgressViewWithText:NSLocalizedString(@"Found device in DFU mode", @"Found device in DFU mode")];
+    
+    int lr =  limerain(Device, false);
+    
+    NSLog(@"limera1n status: %i", lr);
+    
+    if (self.theEcid != nil)
+    {
+        NSString *ipswPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/AppleTV2,1_5.3_10B809_SP_Restore"];
+        
+        IPSW *theFw = [[IPSW alloc] initWithPath:ipswPath];
+        
+        NSError *theError = nil;
+        
+        BOOL processIPSW =  [theFw processIPSWwithError:&theError];
+        
+        if (processIPSW == FALSE)
+        {
+            NSLog(@"processing IPSW failed!");
+        }
+        
+        if (theError != nil)
+        {
+            NSLog(@"theerror: %@", theError);
+            return;
+        }
+        
+        
+        IPSWRestore *theRestore = [[IPSWRestore alloc] initWithIPSW:theFw andECID:self.theEcid];
+        [theRestore startListening];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(restoreProgress:) name:@"RestoreProgress" object:nil];
+        
+    }
+    [pool release];
+}
+
+
+
+int doScience()
+{
+    printf("DO SCIENCE\n");
+    int a[2][2] = { {0x5AC, 0x1227}, {0x5AC, 0x1281} };
+    
+    UKDevice * Device = init_libusbkit();
+    
+    add_devices(Device, a);
+    
+    register_for_usb_notifications(Device);
+    
+    pthread_attr_t  attr;
+    pthread_t       posixThreadID;
+    int             returnVal;
+    
+    returnVal = pthread_attr_init(&attr);
+    assert(!returnVal);
+    returnVal = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+    assert(!returnVal);
+    
+    int threadError = pthread_create(&posixThreadID, &attr, &otherThread, Device);
+    
+    returnVal = pthread_attr_destroy(&attr);
+    assert(!returnVal);
+    if (threadError != 0)
+    {
+        // Report an error.
+    }
+    
+    
+    CFRunLoopRun();
+    return 0;
+}
+
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
+    //me = self;
+    
+  
+    
+    //IPhoneUSB *usbDevice = [IPhoneUSB sharedInstance];
+    //[usbDevice start];
+	
+    
+    NSLog(@"%@", [@"301584044102" stringToPaddedHex]);
+	
 	restoreStatus = FALSE;
 		//quitItunes
 	[self rollLogFile];
@@ -2433,7 +2967,7 @@ static NSString *HexToDec(NSString *hexValue)
 	{
 		[[NSApplication sharedApplication] terminate:self];
 	}
-	[self checkScripting]; //make sure UI scripting is enabled for the iTunes chicanery
+//	[self checkScripting]; //make sure UI scripting is enabled for the iTunes chicanery
     
 	NSString *lastUsedbundle = LAST_BUNDLE;
 
@@ -2486,6 +3020,81 @@ static NSString *HexToDec(NSString *hexValue)
 
 		//	[NSThread detachNewThreadSelector:@selector(getiFaithBlobArrayTest) toTarget:self withObject:nil];
 		//[self ifaithPayloadDump];
+    
+    //return;
+    
+   // printf("###### SCIANCE!\n");
+   // doScience();
+   // [self restoreIPSW];
+
+    
+	[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dfuScience:) name:@"limera1ned" object:nil];
+    
+  //  [NSThread detachNewThreadSelector:@selector(restoreTest) toTarget:self withObject:nil];
+    
+}
+
+/*
+ 
+ 2014-12-14 15:51:45.911 Seas0nPass[966:303] restoreProgress: {
+ Operation = "-1";
+ Progress = "-1";
+ Status = Successful;
+ }
+ 
+ */
+
+- (void)restoreProgress:(NSNotification *)n
+{
+    NSDictionary *progressDict = [n userInfo];
+    //NSLog(@"ProgressDict: %@", progressDict);
+    int operation = [[progressDict valueForKey:@"Operation"] intValue];
+    int progress = [[progressDict valueForKey:@"Progress"] intValue];
+    NSString *status = [progressDict valueForKey:@"Status"];
+    
+    
+    
+    if (progress == -1)
+    {
+        [self setDownloadProgress:0];
+    } else {
+        [self setDownloadProgress:progress];
+    }
+    
+    if (operation == -1) //we're finished, check the status!
+    {
+        NSLog(@"finished with status: %@", status);
+        if ([status isEqualToString:@"Successful"])
+        {
+            
+            [self setDownloadText:NSLocalizedString(@"Firmware restore successful!", @"Firmware restore successful!")];
+            [instructionImage setImage:[self imageForMode:kSPSuccessImage]];
+			[self hideProgress];
+            self.restoreStatus = TRUE;
+            [cancelButton setTitle:NSLocalizedString(@"Done", @"Done")];
+            [[NSUserDefaults standardUserDefaults] setObject:self.currentBundle.bundleName forKey:@"lastUsedBundle"];
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:@"RestoreProgress" object:nil];
+            close_libusbkit(Device);
+        } else {
+            
+            [self setDownloadText:NSLocalizedString(@"Firmware restore failed", @"Firmware restore failed")];
+            
+           // [instructionImage setImage:[self imageForMode:kSPSuccessImage]];
+			[self hideProgress];
+            
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:@"RestoreProgress" object:nil];
+            self.restoreStatus = FALSE;
+             close_libusbkit(Device);
+        }
+    } else {
+        
+        [self setDownloadText:[self restoreStatusForOperation:operation]];
+        
+    }
+    
+    
+    //NSLog(@"restoreProgress: %@", [n userInfo]);
+    
 }
 
 - (void)failedWithReason:(NSString *)theReason
@@ -3041,14 +3650,29 @@ void tap_keyboard(void) {
 	
 	NSString *ipswPath = [self ipswOutputPath];
 	
+    int ipswStatus = 0;
+    
+    //dont need to zip the folder anymore, just migrate it to proper location
+    
+    NSString *newPath = [ipswPath stringByDeletingPathExtension];
+    
+    NSLog(@"moving: %@ to %@", IPSW_TMP, newPath);
+    
+    [FM moveItemAtPath:IPSW_TMP toPath:newPath error:nil];
+    
+    
+    
+    /*
+    
 	[self performSelectorOnMainThread:@selector(setDownloadText:) withObject:NSLocalizedString(@"Creating IPSW...", @"Creating IPSW...") waitUntilDone:NO];
 	
 	int ipswStatus = [nitoUtility createIPSWToFile:ipswPath];
 	
 	NSLog(@"ipsw creation status: %i", ipswStatus);
 
-   
-    [FM removeItemAtPath:TMP_ROOT error:nil];
+*/
+    
+    //[FM removeItemAtPath:TMP_ROOT error:nil];
 	
 	
 		// if we failed, say so
@@ -3072,7 +3696,12 @@ void tap_keyboard(void) {
 			
 			return;
 		}
-		int dfuStatus = 0;
+		
+        //old DFU code
+        
+        /*
+        
+        int dfuStatus = 0;
 		
 		if (is44 == TRUE)
 		{
@@ -3103,7 +3732,8 @@ void tap_keyboard(void) {
 			
 			return;
 		}
-		
+		*/
+        
 		[cancelButton setEnabled:FALSE];
 		[cancelButton setTitle:NSLocalizedString(@"Cancel", @"Cancel")];
 		NSString *progressString = [NSString stringWithFormat:NSLocalizedString(@"Restoring %@...", @"Restoring IPSW"), [ipswPath lastPathComponent]];
@@ -3115,6 +3745,14 @@ void tap_keyboard(void) {
 		int restoreStatus = 0;
 		
 		NSString *buildNumber = [[self currentBundle] buildVersion]; //ie 8C154
+
+        //old restore code below, not needed
+        
+        [self newRestoreIPSW:newPath];
+        
+        [pool release];
+        return;
+        
 		//if ([buildNumber isEqualToString:@"11B554a"])
 //		{
 //			NSLog(@"********* W00T: special restore consideration for 6.0.2! use the FORCE");
@@ -3319,6 +3957,8 @@ void tap_keyboard(void) {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	[self killiTunes];
 	
+    /*
+    
 	BOOL is44 = [[self currentBundle] is4point4];
 	if (is44 == TRUE)
 	{
@@ -3332,15 +3972,45 @@ void tap_keyboard(void) {
 		[self enterDFU];
 	}
 	
-	
+	*/
 		//NSString *ipswPath = [NSHomeDirectory() stringByAppendingPathComponent:CUSTOM_RESTORE];
 	NSString *ipswPath = [self ipswOutputPath];
-	if(![FM fileExistsAtPath:ipswPath])
+    
+    NSString *extractedPath = [ipswPath stringByDeletingPathExtension];
+    
+	if(![FM fileExistsAtPath:extractedPath])
 	{
-		[self setDownloadText:NSLocalizedString(@"No IPSW to restore!", @"No IPSW to restore!")];
-		[self hideProgress];
-		return;
-	}
+		//[self setDownloadText:NSLocalizedString(@"No IPSW to restore!", @"No IPSW to restore!")];
+		//[self hideProgress];
+		//return;
+	
+        if (![FM fileExistsAtPath:ipswPath])
+        {
+            [self setDownloadText:NSLocalizedString(@"No IPSW to restore!", @"No IPSW to restore!")];
+            [self hideProgress];
+            return;
+        } else {
+            
+            NSString *extractedPath = [ipswPath stringByDeletingPathExtension];
+            
+            [self setDownloadText:NSLocalizedString(@"Unzipping IPSW...",@"Unzipping IPSW..." )];
+            if ([nitoUtility unzipFile:ipswPath toPath:extractedPath])
+            {
+                ipswPath = extractedPath;
+            }
+            
+        }
+    
+    } else {
+        
+        
+        //file DOES exist at extracted path for new restore code!
+        
+        ipswPath = extractedPath;
+        
+        NSLog(@"extracted path exists: %@", ipswPath);
+        
+    }
 	NSString *progressString = [NSString stringWithFormat:NSLocalizedString(@"Restoring %@...", @"Restoring IPSW"), [ipswPath lastPathComponent]];
 	
 	[self setDownloadText:progressString];
@@ -3350,6 +4020,13 @@ void tap_keyboard(void) {
 		//[pool release];
 		//return;
 	
+    
+    [self newRestoreIPSW:ipswPath];
+    
+    [pool release];
+    
+    return;
+    
 		int restoreStatus = 0;
 	
 	NSString *buildNumber = [[self currentBundle] buildVersion]; //ie 8C154
