@@ -2618,14 +2618,6 @@ void *otherThread(void* object) {
 
 - (void)newRestoreIPSW:(NSString *)ipswPath
 {
-    
-//    if (self.theEcid == nil)
-//    {
-//        [self _fetchDeviceInfo];
-//        sleep(5);
-//    }
-    
-    
     LOG_SELF;
     NSLog(@"ipswPath: %@", ipswPath);
     
@@ -2662,6 +2654,7 @@ void *otherThread(void* object) {
         assert(!returnVal);
         if (threadError != 0)
         {
+            NSLog(@"theres an error!");
             // Report an error.
         }
         
@@ -2717,36 +2710,7 @@ void *otherThread(void* object) {
     {
        // NSString *ipswPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/AppleTV2,1_5.3_10B809_SP_Restore"];
         
-        //its a zip file, need to extract it first!!
         
-        //should be able to prune this out
-        
-        
-        if ([ipswPath.pathExtension isEqualToString:@"ipsw"])
-        {
-            NSLog(@"need to unzip!");
-            NSString *extractedPath = [ipswPath stringByDeletingPathExtension];
-            
-            [self setDownloadText:NSLocalizedString(@"Unzipping IPSW...",@"Unzipping IPSW..." )];
-            if ([nitoUtility unzipFile:ipswPath toPath:extractedPath])
-            {
-                ipswPath = extractedPath;
-                
-            } else {
-              
-                [self setDownloadText:NSLocalizedString(@"Firmware restore failed", @"Firmware restore failed")];
-                
-                // [instructionImage setImage:[self imageForMode:kSPSuccessImage]];
-                [self hideProgress];
-                
-                self.restoreStatus = FALSE;
-                close_libusbkit(Device);
-                return;
-                
-                
-            }
-            
-        }
         
         IPSW *theFw = [[IPSW alloc] initWithPath:ipswPath];
         
@@ -2771,7 +2735,6 @@ void *otherThread(void* object) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(restoreProgress:) name:@"RestoreProgress" object:nil];
         
     }
-    //[pool release];
 }
 
 

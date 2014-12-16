@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#define LOG_SELF NSLog(@"%@ %s", self, _cmd)
+#define LOG_SELF  NSLog(@"%@ %@", self, NSStringFromSelector(_cmd))
 #ifndef LocationLog
 #define LocationLog(format,...) \
 { \

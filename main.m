@@ -18,11 +18,10 @@
 
 int main(int argc, char *argv[])
 {
-	
-	
-	 
 	//FIXME: COMMENT BACK IN BEFORE RELEASE!!!!
 	
+    /*
+    
 	 id pool = [NSAutoreleasePool new];
 
 	
@@ -31,7 +30,7 @@ int main(int argc, char *argv[])
 
 	 [pool release];
 
-	
+	*/
 	return NSApplicationMain(argc,  (const char **) argv);
 }
 
