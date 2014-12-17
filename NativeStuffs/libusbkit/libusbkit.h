@@ -54,6 +54,7 @@ typedef struct UKDevice {
 UKDevice * init_libusbkit();
 void close_libusbkit(UKDevice* Device);
 
+void stop_notification_monitoring(UKDevice *Device);
 void register_for_usb_notifications(UKDevice * Device);
 void add_devices(UKDevice * Device, int devices_array[2][2]);
 void release_device(UKDevice * Device);

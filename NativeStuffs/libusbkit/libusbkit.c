@@ -11,6 +11,17 @@
 #include "limerain.h"
 //#include "IPhoneUSB.h"
 
+/*
+ 
+ changes by kevin: these probably could just be part of the struct for UKDevice, but whatever
+ these static global variables are added so we can unregister for notifications easily
+ 
+ */
+
+static io_iterator_t			gAddedIter; //need different io iterators to keep track of devices getting attached and removed
+static io_iterator_t            gRemovedIter;
+static IONotificationPortRef	gNotifyPort; //our notification port keeping track of removing and adding devices.
+
 void ioAsyncCallback(void *refcon, IOReturn result, void *arg0);
 void ioAsyncCallback(void *refcon, IOReturn result, void *arg0) {
     
@@ -54,6 +65,23 @@ UKDevice * init_libusbkit() {
     return toReturn;
 }
 
+
+//kind of a hack, doesn't care about any variables from UKDevice, just releases globals that UKDevice uses
+
+void stop_notification_monitoring(UKDevice *Device) {
+    
+    IONotificationPortDestroy(gNotifyPort);
+    
+    if (gAddedIter)
+    {
+        IOObjectRelease(gAddedIter);
+        gAddedIter = 0;
+        IOObjectRelease(gRemovedIter);
+        gRemovedIter = 0;
+    }
+    
+}
+
 void close_libusbkit(UKDevice* Device) {
     
     free(Device);
@@ -79,44 +107,44 @@ void register_for_usb_notifications(UKDevice * Device) {
     CFRunLoopSourceRef      _notificationRunLoopSource;
     
 
-    _notificationObject = IONotificationPortCreate(kIOMasterPortDefault);
+    gNotifyPort = IONotificationPortCreate(kIOMasterPortDefault);
     
-    _notificationRunLoopSource = IONotificationPortGetRunLoopSource(_notificationObject);
+    _notificationRunLoopSource = IONotificationPortGetRunLoopSource(gNotifyPort);
     
     CFRunLoopAddSource(CFRunLoopGetCurrent(),
                        _notificationRunLoopSource,
                        kCFRunLoopDefaultMode);
     
-    Device->ioKitNotificationPort = _notificationObject;
+    Device->ioKitNotificationPort = gNotifyPort;
     Device->notificationRunLoopSource = _notificationRunLoopSource;
     
-    ret = IOServiceAddMatchingNotification(_notificationObject,
+    ret = IOServiceAddMatchingNotification(gNotifyPort,
                                            kIOTerminatedNotification,
                                            IOServiceMatching(kIOUSBDeviceClassName),
                                            device_detached,
                                            (void *)Device,
-                                           &detachIterator);
+                                           &gRemovedIter);
     
     if (ret != 0) {
         
         _error("IOServiceAddMatchingNotification:kIOTerminatedNotification", ret);
     }
     
-    else device_detached((void *)Device, detachIterator);
+    else device_detached((void *)Device, gRemovedIter);
     
-    ret = IOServiceAddMatchingNotification(_notificationObject,
+    ret = IOServiceAddMatchingNotification(gNotifyPort,
                                            kIOMatchedNotification,
                                            IOServiceMatching(kIOUSBDeviceClassName),
                                            device_attached,
                                            (void *)Device,
-                                           &attachIterator);
+                                           &gAddedIter);
     
     if (ret != 0) {
         
         _error("IOServiceAddMatchingNotification:kIOMatchedNotification", ret);
     }
     
-    else device_attached((void*)Device, attachIterator);
+    else device_attached((void*)Device, gAddedIter);
                                            
     
 }

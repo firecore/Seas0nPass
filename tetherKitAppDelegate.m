@@ -63,7 +63,6 @@
 int progress_cb(irecv_client_t client, const irecv_event_t* event);
 
 static NSString *ChipID_ = nil;
-static tetherKitAppDelegate *me = nil;
 BOOL limera1ned = FALSE;
 
 @implementation tetherKitAppDelegate
@@ -2354,25 +2353,17 @@ static NSString *HexToDec(NSString *hexValue)
     
 }
 
-- (void)dfuScience:(NSNotification *)n
-{
-    LOG_SELF;
-    limera1ned = true;
-    NSLog(@"ecide: %@", self.theEcid);
-    if (self.theEcid == nil);
-    {
-        self.theEcid = [NSString stringWithFormat:@"%lld", Device->ecid];
-        NSLog(@"new ecid: %@", self.theEcid);
-    }
-}
-
 void *otherThread(void* object);
 void *otherThread(void* object) {
     
-    printf("OTHAR THREAD\n");
-    
     UKDevice* Device = (UKDevice*)object;
     
+    if (ChipID_ == nil)
+    {
+        printf("nil chip id %s\n", [ChipID_ UTF8String]);
+        ChipID_ = [NSString stringWithFormat:@"%lld", Device->ecid];
+        printf("updated chip id %s\n", [ChipID_ UTF8String]);
+    }
     
     while (Device->pid != 0x1227) {
         
@@ -2380,7 +2371,7 @@ void *otherThread(void* object) {
         sleep(1);
     }
     
-    
+    stop_notification_monitoring(Device);
     
     int lr =  limerain(Device, false);
     
@@ -2388,16 +2379,52 @@ void *otherThread(void* object) {
     
     if (lr == 0)
     {
-    
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"limera1ned" object:nil];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"limera1ned" object:ChipID_];
         limera1ned = TRUE;
-        //[me restoreIPSW];
     }
     //CFRunLoopStop(CFRunLoopGetCurrent());
     
     
     return NULL;
 }
+
+/*
+ 
+ AppleTV restore order
+ 
+ 28
+ 11
+ 12
+ 12
+ 15
+ 16
+ 15
+ 16
+ 51
+ 29
+ 29
+ 13 (determinate)
+ 14 (determinate)
+ 15
+ 16
+ 15
+ 16
+ 27
+ 27
+ 17
+ 25
+ 35
+ 18 (determintate)
+ 46
+ 46
+ 50 (determinate)
+ 49
+ 51
+ 29
+ 29
+ 
+ */
 
 - (NSString *)restoreStatusForOperation:(int)opValue
 {
@@ -2455,7 +2482,7 @@ void *otherThread(void* object) {
             break;
             
         case 13:
-            theRestoreStatus = @"Restoring iDevice";
+            theRestoreStatus = @"Restoring AppleTV";
             break;
             
         case 14:
@@ -2472,10 +2499,12 @@ void *otherThread(void* object) {
             
         case 17:
             theRestoreStatus = @"Fixing up /var";
+            //theRestoreStatus = NSLocalizedString(@"Restoring Apple TV firmware...", @"Restoring Apple TV firmware...");
             break;
             
         case 18:
             theRestoreStatus = @"Flashing NOR";
+            //theRestoreStatus = NSLocalizedString(@"Restoring Apple TV firmware...", @"Restoring Apple TV firmware...");
             break;
             
         case 19:
@@ -2491,7 +2520,7 @@ void *otherThread(void* object) {
             break;
             
         case 22:
-            theRestoreStatus = @"Shutting down iDevice";
+            theRestoreStatus = @"Shutting down AppleTV";
             break;
             
         case 23:
@@ -2504,7 +2533,8 @@ void *otherThread(void* object) {
             
         case 25:
             theRestoreStatus = @"Modifying Persistent boot-args";
-            break;
+             //theRestoreStatus = NSLocalizedString(@"Restoring Apple TV firmware...", @"Restoring Apple TV firmware...");
+            //break;
             
         case 26:
             theRestoreStatus = @"Installing root";
@@ -2512,6 +2542,7 @@ void *otherThread(void* object) {
             
         case 27:
             theRestoreStatus = @"Installing Kernelcache";
+           //theRestoreStatus = NSLocalizedString(@"Restoring Apple TV firmware...", @"Restoring Apple TV firmware...");
             break;
             
         case 28:
@@ -2544,6 +2575,7 @@ void *otherThread(void* object) {
             
         case 35:
             theRestoreStatus = @"Loading firmware data to flash";
+             //theRestoreStatus = NSLocalizedString(@"Restoring Apple TV firmware...", @"Restoring Apple TV firmware...");
             break;
             
         case 36:
@@ -2587,7 +2619,8 @@ void *otherThread(void* object) {
             break;
             
         case 46:
-            theRestoreStatus = @"Updating gas gauge software";
+         //   theRestoreStatus = @"Updating gas gauge software";
+            theRestoreStatus = @"Restoring AppleTV firmware...";
             break;
             
         case 47:
@@ -2604,11 +2637,13 @@ void *otherThread(void* object) {
             
         case 50:
             theRestoreStatus = @"Updating IR MCU firmware";
+           //theRestoreStatus = NSLocalizedString(@"Restoring Apple TV firmware...", @"Restoring Apple TV firmware...");
             break;
             
         case 51:
             theRestoreStatus = @"Resizing system partition";
-            
+             //theRestoreStatus = NSLocalizedString(@"Restoring Apple TV firmware...", @"Restoring Apple TV firmware...");
+            break;
             
     }
     
@@ -2616,53 +2651,77 @@ void *otherThread(void* object) {
     
 }
 
+/**
+ 
+ this is the new restore code added from ih8sn0ws awesome wrapper for apple native classes.
+ there is no need to use idevicerestore external binaries anymore, and this gives 
+ the heave-ho to the unreliable dreck that is libusb :)
+ 
+ */
+
 - (void)newRestoreIPSW:(NSString *)ipswPath
 {
     LOG_SELF;
     NSLog(@"ipswPath: %@", ipswPath);
     
     //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    
+  
     int a[2][2] = { {0x5AC, 0x1227}, {0x5AC, 0x1281} };
     
-    //UKDevice * Device = init_libusbkit();
-    
+    /* 
+     
+     hopefully we're already in DFU mode, under those cirumstance
+     this instantiation of Device will be used below, if not there are some tricky
+     threading issues for when the notifications are monitored for the device
+     detaching and reattaching back in DFU mode. (explained more below)
+     
+     */
     Device = init_libusbkit();
     
     add_devices(Device, a);
     
     register_for_usb_notifications(Device);
-    
+   
    // sleep(5);
     
     NSLog(@"device pid: %i", Device->pid);
     
     if (Device->pid != 0x1227)
     {
-        pthread_attr_t  attr;
-        pthread_t       posixThreadID;
-        int             returnVal;
+        //we're not in DFU mode, so we are tearing down the device declared above
+        //in favor of creating it in the main thread so we can properly monitor
+        //notifications for when it is attached / detached.
         
-        returnVal = pthread_attr_init(&attr);
-        assert(!returnVal);
-        returnVal = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-        assert(!returnVal);
+        stop_notification_monitoring(Device);
+        release_device(Device);
         
-        int threadError = pthread_create(&posixThreadID, &attr, &otherThread, Device);
+        sleep(1);
         
-        returnVal = pthread_attr_destroy(&attr);
-        assert(!returnVal);
-        if (threadError != 0)
-        {
-            NSLog(@"theres an error!");
-            // Report an error.
-        }
+        //not only does it need to be called in the main thread, it has to be called from C code
+        //and not obj-c code. so DFUWrapper literally just calls C code in this class
+        //that adds the device and spawns a pthread to monitor when DFU is entered.
+        [self performSelectorOnMainThread:@selector(DFUWrapper) withObject:nil waitUntilDone:false];
         
     } else {
         
+        //if the device was not attached the minute the app launched we don't have the ecid assigned.
+        
+         NSLog(@"ecid: %@ length: %lu", self.theEcid, (unsigned long)self.theEcid.length);
+         if (self.theEcid.length == 0);
+         {
+             NSLog(@"ecid length supposedly zero??: %lu", (unsigned long)self.theEcid.length);
+             self.theEcid = [NSString stringWithFormat:@"%lld", Device->ecid];
+             NSLog(@"new ecid: %@", ChipID_);
+         }
+        
+        //if we don't stop monitoring notifications after limera1n is run
+        //when the device detaches and re-attaches libusbkit will grab exclusive access
+        //thats no bueno and will saddle us with a 2001 error from AMRestore.
+        stop_notification_monitoring(Device);
         limerain(Device, false);
         limera1ned = true;
         
+        //release_device(Device);
     }
     
     [self showProgressViewWithText:NSLocalizedString(@"Waiting for device to enter DFU mode...", @"Waiting for device to enter DFU mode...")];
@@ -2672,106 +2731,33 @@ void *otherThread(void* object) {
 
     while (limera1ned == false)
     {
-        printf("Waiting for it to ra1n\n");
+        //printf("Waiting for it to ra1n\n");
         sleep(1);
     }
     
-//    while (!Device->opened)
-//    {
-//    
-//        printf("waiting for device\n");
-//        NSLog(@"waiting for device");
-//        sleep(1);
-//    }
-//    
-//    while (Device->pid != 0x1227) {
-//        
-//        printf("Waiting for DFU to appear: %i\n", Device->pid);
-//        
-//        sleep(1);
-//    }
+    //once we get this far we are home free! the restore below should always work!
     
     [self setInstructionText:@""];
     
+    //if we get this far and theEcid is still nil, theres a chance we fetched it before applying
+    //limera1n in otherThread.
+    
     if(self.theEcid == nil)
     {
-        self.theEcid = [NSString stringWithFormat:@"%lld", Device->ecid];
-        NSLog(@"updated ecid: %@", self.theEcid);
-    }
-    
-    [self showProgressViewWithText:NSLocalizedString(@"Found device in DFU mode", @"Found device in DFU mode")];
-    
-    //int lr =  limerain(Device, false);
-    
-  //  NSLog(@"limera1n status: %i", lr);
-    
+        if(ChipID_ != nil)
+        {
+            self.theEcid = ChipID_;
+            NSLog(@"updated ecid to: %@", self.theEcid);
+        }
    
-    if (self.theEcid != nil)
-    {
-       // NSString *ipswPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/AppleTV2,1_5.3_10B809_SP_Restore"];
-        
-        
-        
-        IPSW *theFw = [[IPSW alloc] initWithPath:ipswPath];
-        
-        NSError *theError = nil;
-        
-        BOOL processIPSW =  [theFw processIPSWwithError:&theError];
-        
-        if (processIPSW == FALSE)
-        {
-            NSLog(@"processing IPSW failed!");
-        }
-        
-        if (theError != nil)
-        {
-            NSLog(@"theerror: %@", theError);
-            return;
-        }
-        
-        
-        IPSWRestore *theRestore = [[IPSWRestore alloc] initWithIPSW:theFw andECID:self.theEcid];
-        [theRestore startListening];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(restoreProgress:) name:@"RestoreProgress" object:nil];
-        
     }
-}
-
-
-- (void)restoreTest
-{
-    LOG_SELF;
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
-    int a[2][2] = { {0x5AC, 0x1227}, {0x5AC, 0x1281} };
-    
-    //UKDevice * Device = init_libusbkit();
-    
-    Device = init_libusbkit();
-    
-    add_devices(Device, a);
-    
-    register_for_usb_notifications(Device);
-    
-    sleep(10);
-    
-    while (!Device->opened && Device->pid != 0x1227) {
-      
-        [self showProgressViewWithText:NSLocalizedString(@"Waiting for device to enter DFU mode...", @"Waiting for device to enter DFU mode...")];
-        
-        printf("Waiting for DFU to appear\n");
-        sleep(1);
-    }
     [self showProgressViewWithText:NSLocalizedString(@"Found device in DFU mode", @"Found device in DFU mode")];
     
-    int lr =  limerain(Device, false);
-    
-    NSLog(@"limera1n status: %i", lr);
-    
+
     if (self.theEcid != nil)
     {
-        NSString *ipswPath = [NSHomeDirectory() stringByAppendingPathComponent:@"Desktop/AppleTV2,1_5.3_10B809_SP_Restore"];
-        
+     
         IPSW *theFw = [[IPSW alloc] initWithPath:ipswPath];
         
         NSError *theError = nil;
@@ -2790,22 +2776,31 @@ void *otherThread(void* object) {
         }
         
         
-        IPSWRestore *theRestore = [[IPSWRestore alloc] initWithIPSW:theFw andECID:self.theEcid];
-        [theRestore startListening];
+        restoreInstance = [[IPSWRestore alloc] initWithIPSW:theFw andECID:self.theEcid];
+        [restoreInstance startListening];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(restoreProgress:) name:@"RestoreProgress" object:nil];
         
+    } else {
+        
+        NSLog(@"missing device ecid!!! how'd this happen??");
+        [self failedWithReason:@"Device ECID is missing, please try again!"];
+        
     }
-    [pool release];
 }
 
+//for some reason if the code is called straight from this method rather
+//than a C method, the thread doesn't detach properly or somethin?
 
-
-int doScience()
+- (void)DFUWrapper
 {
-    printf("DO SCIENCE\n");
+    monitorForDeviceAndDetachThread();
+}
+
+int monitorForDeviceAndDetachThread()
+{
     int a[2][2] = { {0x5AC, 0x1227}, {0x5AC, 0x1281} };
     
-    UKDevice * Device = init_libusbkit();
+    UKDevice *Device = init_libusbkit();
     
     add_devices(Device, a);
     
@@ -2837,15 +2832,6 @@ int doScience()
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
-    //me = self;
-    
-  
-    
-    //IPhoneUSB *usbDevice = [IPhoneUSB sharedInstance];
-    //[usbDevice start];
-	
-    
-    NSLog(@"%@", [@"301584044102" stringToPaddedHex]);
 	
 	restoreStatus = FALSE;
 		//quitItunes
@@ -2985,16 +2971,28 @@ int doScience()
 		//[self ifaithPayloadDump];
     
     //return;
-    
-   // printf("###### SCIANCE!\n");
-   // doScience();
-   // [self restoreIPSW];
+
 
     
-	[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dfuScience:) name:@"limera1ned" object:nil];
-    
-  //  [NSThread detachNewThreadSelector:@selector(restoreTest) toTarget:self withObject:nil];
-    
+	[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(limerainApplied:) name:@"limera1ned" object:nil];
+}
+
+/*
+ 
+ this gets called if the appletv isn't in DFU mode and ready for limera1n from the initial restore.
+ newRestoreIPSW waits on limera1ned to be true before it will proceed with restoring.
+ 
+ */
+
+- (void)limerainApplied:(NSNotification *)n
+{
+    LOG_SELF;
+    limera1ned = true;
+    NSLog(@"object: %@", [n object]);
+    //theres a chance we already have self.theEcid set, a nil check fails here
+    //so just always set it.. don't really like this but it appears to work..
+    self.theEcid = [n object];
+    release_device(Device);
 }
 
 /*
@@ -3030,28 +3028,34 @@ int doScience()
         if ([status isEqualToString:@"Successful"])
         {
             
-            [self setDownloadText:NSLocalizedString(@"Firmware restore successful!", @"Firmware restore successful!")];
+            [self performSelectorOnMainThread:@selector(setDownloadText:) withObject:NSLocalizedString(@"Firmware restore successful!", @"Firmware restore successful!") waitUntilDone:NO];
+            NSLog(@"Firmware restore successful!");
+           // [self setDownloadText:];
             [instructionImage setImage:[self imageForMode:kSPSuccessImage]];
 			[self hideProgress];
             self.restoreStatus = TRUE;
             [cancelButton setTitle:NSLocalizedString(@"Done", @"Done")];
             [[NSUserDefaults standardUserDefaults] setObject:self.currentBundle.bundleName forKey:@"lastUsedBundle"];
             [[NSNotificationCenter defaultCenter] removeObserver:self name:@"RestoreProgress" object:nil];
-            close_libusbkit(Device);
+             [restoreInstance stopListening];
+          //  close_libusbkit(Device);
         } else {
             
-            [self setDownloadText:NSLocalizedString(@"Firmware restore failed", @"Firmware restore failed")];
-            
+            [self performSelectorOnMainThread:@selector(setDownloadText:) withObject:NSLocalizedString(@"Firmware restore failed", @"Firmware restore failed") waitUntilDone:NO];
+             NSLog(@"Firmware restore failed");
            // [instructionImage setImage:[self imageForMode:kSPSuccessImage]];
 			[self hideProgress];
             
             [[NSNotificationCenter defaultCenter] removeObserver:self name:@"RestoreProgress" object:nil];
             self.restoreStatus = FALSE;
-             close_libusbkit(Device);
+            [restoreInstance stopListening];
+           //  close_libusbkit(Device);
         }
     } else {
         
-        [self setDownloadText:[self restoreStatusForOperation:operation]];
+        [self performSelectorOnMainThread:@selector(setDownloadText:) withObject:[self restoreStatusForOperation:operation] waitUntilDone:NO];
+        NSLog(@"%@", [self restoreStatusForOperation:operation]);
+      //  [self setDownloadText:[self restoreStatusForOperation:operation]];
         
     }
     
@@ -4051,6 +4055,7 @@ void tap_keyboard(void) {
 	self.currentBundle = [FWBundle bundleWithName:lastUsedbundle];
 	[window setContentView:self.secondView];
 	[window display];
+
     [self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
 [	NSThread detachNewThreadSelector:@selector(threadedDFURestore) toTarget:self withObject:nil];
 		//[self enterDFU];

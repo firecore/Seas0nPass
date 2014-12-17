@@ -10,6 +10,7 @@
 #import "IPhoneUSB.h"
 
 #define LIBUSBRESTORE_DOMAIN @"com.ifaith.libusbrestore"
+#define VERBOSE_LOG
 
 void *functionIniTunes11Only = NULL;
 
@@ -130,11 +131,12 @@ currentState;
     
     CFErrorRef error;
    
+#ifdef VERBOSE_LOG
     AMDSetLogLevel(INT_MAX);
     AMDAddLogFileDescriptor(1);
     AMRestoreSetLogLevel(INT_MAX);
     AMRestoreEnableFileLogging("/dev/stderr");
-    
+#endif
      self.clientID = AMRestorableDeviceRegisterForNotifications(eventHandler, (__bridge void *)self, &error);
     
     if (self.clientID > 0)
