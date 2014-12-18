@@ -64,6 +64,8 @@ int progress_cb(irecv_client_t client, const irecv_event_t* event);
 
 static NSString *ChipID_ = nil;
 BOOL limera1ned = FALSE;
+BOOL tetheredBoot = FALSE;
+static UKDevice *staticDevice = nil;
 
 @implementation tetherKitAppDelegate
 
@@ -1271,6 +1273,283 @@ void parse_command(irecv_client_t client, unsigned char* command, unsigned int s
 	[NSThread detachNewThreadSelector:@selector(inject) toTarget:self withObject:nil];
 }
 
+- (int)sn0wyTetheredBoot
+{
+    LOG_SELF;
+    
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    tetheredBoot = true;
+	[self killiTunes];
+    [self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+	const char
+	*ibssFile = [self iBSS],
+	*kernelcacheFile = [self kernelcache],
+	*ibecFile = [self iBEC];
+   [self performSelectorOnMainThread:@selector(tetheredDFUWrapper) withObject:nil waitUntilDone:false];
+    
+    [self showProgressViewWithText:NSLocalizedString(@"Waiting for device to enter DFU mode...", @"Waiting for device to enter DFU mode...")];
+    [self setInstructionText:NSLocalizedString(@"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.", @"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.")];
+    
+    [instructionImage setImage:[self imageForMode:kSPATVRestoreImage]];
+    
+    while (limera1ned == false)
+    {
+        //printf("Waiting for it to ra1n\n");
+        sleep(1);
+    }
+    
+    //once we get this far we are home free! the restore below should always work!
+    
+    [self setInstructionText:@""];
+    
+    [self showProgressViewWithText:NSLocalizedString(@"Found device in DFU mode", @"Found device in DFU mode")];
+    
+    sleep(5);
+    
+    if (ibssFile != NULL) {
+		[self setDownloadText:[NSString stringWithFormat:NSLocalizedString(@"Uploading %@ to device...",@"Uploading %@ to device..."), iBSSDFU]];
+		int sendError = send_file(staticDevice, ibssFile);
+          NSLog(@"ibss send return: %i", sendError);
+        //ir_error = irecv_send_file(client, ibssFile, 1);
+		if(sendError != 0) {
+			[self setDownloadText:NSLocalizedString(@"Unable to upload iBSS!", @"Unable to upload iBSS!")];
+			[self hideProgress];
+            stop_notification_monitoring(staticDevice);
+            release_device(staticDevice);
+		//	pois0n_exit();
+			self.poisoning = FALSE;
+			[pool release];
+			return -1;
+		}
+	} else {
+		return 0;
+	}
+	
+	NSLog(@"iBSS upload successful! Reconnecting in 10 seconds...");
+    
+	[self setDownloadText:NSLocalizedString(@"iBSS upload successful! Reconnecting in 10 seconds...", @"iBSS upload successful! Reconnecting in 10 seconds...")];
+	
+    sleep(10);
+	
+	//client = irecv_reconnect(client, 10);
+	
+	if (ibecFile != NULL) {
+		[self setDownloadText:[NSString stringWithFormat:NSLocalizedString(@"Uploading %@ to device...",@"Uploading %@ to device..."), iBECDFU]];
+		int sendError = send_file(staticDevice, ibecFile);
+        NSLog(@"ibec send return: %i", sendError);
+		if(sendError != 0) {
+			[self setDownloadText:NSLocalizedString(@"Unable to upload iBEC!", @"Unable to upload iBEC!")];
+			[self hideProgress];
+			//pois0n_exit();
+            stop_notification_monitoring(staticDevice);
+            release_device(staticDevice);
+            self.poisoning = FALSE;
+			[pool release];
+			return -1;
+		}
+	} else {
+		return 0;
+	}
+	[self setDownloadText:NSLocalizedString(@"iBEC upload successful! Reconnecting in 10 seconds...", @"iBEC upload successful! Reconnecting in 10 seconds...")];
+	
+	NSLog(@"iBEC upload successful! Reconnecting in 10 seconds...");
+	
+    sleep(10);
+    
+	NSLog(@"resetting device");
+    reset_device(staticDevice);
+    //irecv_reset(client);
+    //irecv_reset_counters(client);
+	sleep(10);
+	//client = irecv_reconnect(client, 10);
+	//NSLog(@"changing interface");
+    open_interface(staticDevice, 0, 0);
+    open_interface(staticDevice, 1, 1);
+    //irecv_set_interface(client, 0, 0);
+    //irecv_set_interface(client, 1, 1);
+	
+	NSLog(@"sending kernelcache");
+    
+	if (kernelcacheFile != NULL) {
+		[self setDownloadText:[NSString stringWithFormat:NSLocalizedString(@"Uploading %@ to device...", @"Uploading %@ to device..."), KCACHE]];
+		//ir_error = irecv_send_file(client, kernelcacheFile, 1);
+		int sendError = send_file(staticDevice, kernelcacheFile);
+        NSLog(@"send error: %i", sendError);
+        if(sendError != 0) {
+			error("Unable to upload kernelcache\n");
+			[self hideProgress];
+            stop_notification_monitoring(staticDevice);
+            release_device(staticDevice);
+			//pois0n_exit();
+			self.poisoning = FALSE;
+			[pool release];
+			return -1;
+		}
+		
+        sleep(5);
+		NSLog(@"bootx");
+		
+        int commandError = send_command(staticDevice, "bootx");
+		//ir_error = irecv_send_command(client, "bootx");
+		if(commandError != 0) {
+            [self setDownloadText:NSLocalizedString(@"Tethered boot failed!.",@"Tethered boot failed!." )];
+			error("Unable to send the bootx command\n");
+            [self hideProgress];
+            stop_notification_monitoring(staticDevice);
+            release_device(staticDevice);
+			//pois0n_exit();
+			self.poisoning = FALSE;
+			[pool release];
+			return -1;
+		}
+	}
+	[self setDownloadText:NSLocalizedString(@"Tethered boot complete! It is now safe to disconnect USB.",@"Tethered boot complete! It is now safe to disconnect USB." )];
+	[self hideProgress];
+	//pois0n_exit();
+    stop_notification_monitoring(staticDevice);
+    release_device(staticDevice);
+	self.poisoning = FALSE;
+	[cancelButton setTitle:@"Done"];
+	[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
+	[pool release];
+	
+	return 0;
+    
+    
+}
+
+- (int)sn0wTetheredBoot
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	[self killiTunes];
+	self.poisoning = TRUE;
+	[self performSelectorOnMainThread:@selector(showProgress) withObject:nil waitUntilDone:YES];
+	int result = 0;
+	irecv_error_t ir_error = IRECV_E_SUCCESS;
+	
+    //int index;
+	const char
+	*ibssFile = [self iBSS],
+	*kernelcacheFile = [self kernelcache],
+	*ibecFile = [self iBEC];
+//	pois0n_init();
+//	pois0n_set_callback(&print_progress, self);
+//    //printf("Waiting for device to enter DFU mode\n");
+	[self setDownloadText:NSLocalizedString(@"Waiting for device to enter DFU mode...", @"Waiting for device to enter DFU mode...")];
+	[self setInstructionText:NSLocalizedString(@"Connect USB, POWER then press and hold MENU and PLAY/PAUSE for 7 seconds", @"Connect USB, POWER then press and hold MENU and PLAY/PAUSE for 7 seconds")];
+	[instructionImage setImage:[self imageForMode:kSPATVTetheredRemoteImage]];
+	while(pois0n_is_ready()) {
+		sleep(1);
+	}
+    //irecv_set_debug_level(3);
+	[self setDownloadText:NSLocalizedString(@"Found device in DFU mode", @"Found device in DFU mode")];
+	[self setInstructionText:@""];
+	result = pois0n_is_compatible();
+	if (result < 0) {
+		[self setDownloadText:NSLocalizedString(@"Your device is not compatible with this exploit!", @"Your device is not compatible with this exploit!")];
+		[self hideProgress];
+		pois0n_exit();
+		self.poisoning = FALSE;
+		[pool release];
+		return result;
+	}
+    //irecv_send_command(client, "go kernel bootargs -v");
+	result = pois0n_injectonly();
+	if (result < 0) {
+		[self setDownloadText:NSLocalizedString(@"Exploit injection failed!",@"Exploit injection failed!" )];
+		[self hideProgress];
+		pois0n_exit();
+		self.poisoning = FALSE;
+		[pool release];
+		return result;
+	}
+	
+	if (ibssFile != NULL) {
+		[self setDownloadText:[NSString stringWithFormat:NSLocalizedString(@"Uploading %@ to device...",@"Uploading %@ to device..."), iBSSDFU]];
+		ir_error = irecv_send_file(client, ibssFile, 1);
+		if(ir_error != IRECV_E_SUCCESS) {
+			[self setDownloadText:NSLocalizedString(@"Unable to upload iBSS!", @"Unable to upload iBSS!")];
+			debug("%s\n", irecv_strerror(ir_error));
+			[self hideProgress];
+			pois0n_exit();
+			self.poisoning = FALSE;
+			[pool release];
+			return -1;
+		}
+	} else {
+		return 0;
+	}
+	
+	NSLog(@"iBSS upload successful! Reconnecting in 10 seconds...");
+    
+	[self setDownloadText:NSLocalizedString(@"iBSS upload successful! Reconnecting in 10 seconds...", @"iBSS upload successful! Reconnecting in 10 seconds...")];
+	
+    sleep(10);
+	
+	client = irecv_reconnect(client, 10);
+	
+	if (ibecFile != NULL) {
+		[self setDownloadText:[NSString stringWithFormat:NSLocalizedString(@"Uploading %@ to device...",@"Uploading %@ to device..."), iBECDFU]];
+		ir_error = irecv_send_file(client, ibecFile, 1);
+		if(ir_error != IRECV_E_SUCCESS) {
+			[self setDownloadText:NSLocalizedString(@"Unable to upload iBEC!", @"Unable to upload iBEC!")];
+			debug("%s\n", irecv_strerror(ir_error));
+			[self hideProgress];
+			pois0n_exit();
+			self.poisoning = FALSE;
+			[pool release];
+			return -1;
+		}
+	} else {
+		return 0;
+	}
+	[self setDownloadText:NSLocalizedString(@"iBEC upload successful! Reconnecting in 10 seconds...", @"iBEC upload successful! Reconnecting in 10 seconds...")];
+	
+	NSLog(@"iBEC upload successful! Reconnecting in 10 seconds...");
+	
+	NSLog(@"resetting irecovery device");
+	irecv_reset(client);
+    //irecv_reset_counters(client);
+	sleep(10);
+	client = irecv_reconnect(client, 10);
+	NSLog(@"changing interface");
+    irecv_set_interface(client, 0, 0);
+    irecv_set_interface(client, 1, 1);
+	
+	NSLog(@"sending kernelcache");
+    
+	if (kernelcacheFile != NULL) {
+		[self setDownloadText:[NSString stringWithFormat:NSLocalizedString(@"Uploading %@ to device...", @"Uploading %@ to device..."), KCACHE]];
+		ir_error = irecv_send_file(client, kernelcacheFile, 1);
+		if(ir_error != IRECV_E_SUCCESS) {
+			error("Unable to upload kernelcache\n");
+			debug("%s\n", irecv_strerror(ir_error));
+			[self hideProgress];
+			pois0n_exit();
+			self.poisoning = FALSE;
+			[pool release];
+			return -1;
+		}
+		
+		NSLog(@"bootx");
+		
+		ir_error = irecv_send_command(client, "bootx");
+		if(ir_error != IRECV_E_SUCCESS) {
+			error("Unable send the bootx command\n");
+			return -1;
+		}
+	}
+	[self setDownloadText:NSLocalizedString(@"Tethered boot complete! It is now safe to disconnect USB.",@"Tethered boot complete! It is now safe to disconnect USB." )];
+	[self hideProgress];
+	pois0n_exit();
+	self.poisoning = FALSE;
+	[cancelButton setTitle:@"Done"];
+	[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
+	[pool release];
+	
+	return 0;
+	
+}
 
 - (int)tetheredBootNew
 {
@@ -2353,6 +2632,33 @@ static NSString *HexToDec(NSString *hexValue)
     
 }
 
+void *tetheredThread(void *object);
+void *tetheredThread(void* object) {
+    
+    UKDevice* Device = (UKDevice*)object;
+    
+    while (Device->pid != 0x1227) {
+        
+        printf("Waiting for DFU to appear in thread\n");
+        sleep(1);
+    }
+    
+    int lr =  limerain(Device, false);
+    
+    printf("limera1n status: %i\n", lr);
+    
+    if (lr == 0)
+    {
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"tbr" object:nil];
+        limera1ned = TRUE;
+    }
+    //CFRunLoopStop(CFRunLoopGetCurrent());
+    
+    
+    return NULL;
+}
+
 void *otherThread(void* object);
 void *otherThread(void* object) {
     
@@ -2371,7 +2677,8 @@ void *otherThread(void* object) {
         sleep(1);
     }
     
-    stop_notification_monitoring(Device);
+    if (tetheredBoot == false)
+        stop_notification_monitoring(Device);
     
     int lr =  limerain(Device, false);
     
@@ -2663,7 +2970,7 @@ void *otherThread(void* object) {
 {
     LOG_SELF;
     NSLog(@"ipswPath: %@", ipswPath);
-    
+    tetheredBoot = false;
     //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   
     int a[2][2] = { {0x5AC, 0x1227}, {0x5AC, 0x1281} };
@@ -2711,7 +3018,7 @@ void *otherThread(void* object) {
          {
              NSLog(@"ecid length supposedly zero??: %lu", (unsigned long)self.theEcid.length);
              self.theEcid = [NSString stringWithFormat:@"%lld", Device->ecid];
-             NSLog(@"new ecid: %@", ChipID_);
+             NSLog(@"new ecid: %@",  self.theEcid);
          }
         
         //if we don't stop monitoring notifications after limera1n is run
@@ -2795,6 +3102,45 @@ void *otherThread(void* object) {
 {
     monitorForDeviceAndDetachThread();
 }
+
+- (void)tetheredDFUWrapper
+{
+    monitorForDeviceAndDetachThreadForTether();
+}
+
+int monitorForDeviceAndDetachThreadForTether()
+{
+    int a[2][2] = { {0x5AC, 0x1227}, {0x5AC, 0x1281} };
+    
+    staticDevice = init_libusbkit();
+    
+    add_devices(staticDevice, a);
+    
+    register_for_usb_notifications(staticDevice);
+    
+    pthread_attr_t  attr;
+    pthread_t       posixThreadID;
+    int             returnVal;
+    
+    returnVal = pthread_attr_init(&attr);
+    assert(!returnVal);
+    returnVal = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+    assert(!returnVal);
+    
+    int threadError = pthread_create(&posixThreadID, &attr, &tetheredThread, staticDevice);
+    
+    returnVal = pthread_attr_destroy(&attr);
+    assert(!returnVal);
+    if (threadError != 0)
+    {
+        // Report an error.
+    }
+    
+    
+    CFRunLoopRun();
+    return 0;
+}
+
 
 int monitorForDeviceAndDetachThread()
 {
@@ -2984,6 +3330,14 @@ int monitorForDeviceAndDetachThread()
  
  */
 
+- (void)tetheredBootReady:(NSNotification *)n
+{
+    LOG_SELF;
+    limera1ned = true;
+//    NSLog(@"object: %@", [n object]);
+    //Device = (UKDevice *)[n object];
+}
+
 - (void)limerainApplied:(NSNotification *)n
 {
     LOG_SELF;
@@ -2992,7 +3346,8 @@ int monitorForDeviceAndDetachThread()
     //theres a chance we already have self.theEcid set, a nil check fails here
     //so just always set it.. don't really like this but it appears to work..
     self.theEcid = [n object];
-    release_device(Device);
+   if (tetheredBoot == false)
+       release_device(Device);
 }
 
 /*
@@ -3037,7 +3392,9 @@ int monitorForDeviceAndDetachThread()
             [cancelButton setTitle:NSLocalizedString(@"Done", @"Done")];
             [[NSUserDefaults standardUserDefaults] setObject:self.currentBundle.bundleName forKey:@"lastUsedBundle"];
             [[NSNotificationCenter defaultCenter] removeObserver:self name:@"RestoreProgress" object:nil];
-             [restoreInstance stopListening];
+            [restoreInstance stopListening];
+            [restoreInstance release];
+             restoreInstance = nil;
           //  close_libusbkit(Device);
         } else {
             
@@ -3049,6 +3406,8 @@ int monitorForDeviceAndDetachThread()
             [[NSNotificationCenter defaultCenter] removeObserver:self name:@"RestoreProgress" object:nil];
             self.restoreStatus = FALSE;
             [restoreInstance stopListening];
+            [restoreInstance release];
+            restoreInstance = nil;
            //  close_libusbkit(Device);
         }
     } else {
@@ -3639,7 +3998,7 @@ void tap_keyboard(void) {
 
 */
     
-    //[FM removeItemAtPath:TMP_ROOT error:nil];
+    [FM removeItemAtPath:TMP_ROOT error:nil];
 	
 	
 		// if we failed, say so
@@ -4865,8 +5224,10 @@ void tap_keyboard(void) {
 	if (is44 == TRUE)
 	{
 		NSLog(@"new tethered boot!");
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(tetheredBootReady:) name:@"tbr" object:nil];
 		[NSThread detachNewThreadSelector:@selector(tetheredBootNew) toTarget:self withObject:nil];
-	} else {
+       // [NSThread detachNewThreadSelector:@selector(sn0wyTetheredBoot) toTarget:self withObject:nil];
+    } else {
 	
 		NSLog(@"old tethered boot!");
 		[NSThread detachNewThreadSelector:@selector(tetheredBoot) toTarget:self withObject:nil];
