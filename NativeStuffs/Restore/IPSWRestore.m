@@ -152,6 +152,8 @@ currentState;
 
 - (void)stopListening
 {
+    [bootOptions release];
+    bootOptions = nil;
     AMRestorableDeviceUnregisterForNotifications(self.clientID);
     self.clientID = 0;
     self.isListening = NO;
@@ -405,6 +407,7 @@ void iFaithStateMachineHandleRestoreComplete(AMRestorableDeviceRef device)
 
 void handleNewDevice(AMRestorableDeviceRef device)
 {
+    NSLog(@"handleNewDevice");
     if (currentState != IDLE_STATE)
     {
         NSLog(@"Device is already being restored");
@@ -418,6 +421,9 @@ void handleNewDevice(AMRestorableDeviceRef device)
 
 void handleKnownDevice(AMRestorableDeviceRef device)
 {
+    NSLog(@"handleKnownDevice");
+    
+    
     if (currentState == TRANSITIONING_STATE)
     {
         cancelTimer();
@@ -434,6 +440,10 @@ void handleKnownDevice(AMRestorableDeviceRef device)
 
 void handleDisconnectedDevice(AMRestorableDeviceRef device)
 {
+    
+    NSLog(@"handleDisconnectedDevice");
+    
+
     if (currentState == RESTORING_STATE)
     {
         iFaithStateMachineSetState(device, TRANSITIONING_STATE);
@@ -444,6 +454,8 @@ void handleDisconnectedDevice(AMRestorableDeviceRef device)
 
 void eventHandler(AMRestorableDeviceRef device, int event, void *refCon)
 {
+    NSLog(@"eventHandler");
+    
     if (event == RESTORABLE_CONNECTED)
     {
         if (deviceIsTheOne(device)) {
@@ -469,7 +481,7 @@ void eventHandler(AMRestorableDeviceRef device, int event, void *refCon)
 
 void progress_callback(void *device, int operation, int progress, void *user_info)
 {
-    
+       NSLog(@"progress_callback");
     CFTypeID deviceTypeID = CFGetTypeID(device);
     
     NSMutableDictionary *info = [@{@"Status" : @"Restoring", @"Operation" : @(operation), @"Progress" : @(progress)} mutableCopy];

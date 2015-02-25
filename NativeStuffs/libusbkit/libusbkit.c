@@ -151,6 +151,7 @@ void register_for_usb_notifications(UKDevice * Device) {
 
 void device_attached(void * refCon, io_iterator_t iterator) {
     
+    fprintf(stderr, "device attached!\n");
     io_service_t            usbDevice;
     IOReturn 				ret;
     IOCFPlugInInterface 	**pluginInterface = NULL;
@@ -224,6 +225,7 @@ void device_attached(void * refCon, io_iterator_t iterator) {
 }
 
 void device_detached(void *refCon, io_iterator_t iterator) {
+    fprintf(stderr, "device_detached!\n");
     
     io_service_t            service;
     SInt32                  locationID;

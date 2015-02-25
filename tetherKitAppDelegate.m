@@ -1838,6 +1838,7 @@ void parse_command(irecv_client_t client, unsigned char* command, unsigned int s
 
 + (BOOL)isAvailable:(NSString *)bundleName
 {
+    return YES;
 		//AppleTV2,1_4.1_8M89
 	NSArray *componentArray = [bundleName componentsSeparatedByString:@"_"];
 	NSString *versionNumber = [componentArray objectAtIndex:1];
@@ -3362,6 +3363,7 @@ int monitorForDeviceAndDetachThread()
 
 - (void)restoreProgress:(NSNotification *)n
 {
+  //  LOG_SELF;
     NSDictionary *progressDict = [n userInfo];
     //NSLog(@"ProgressDict: %@", progressDict);
     int operation = [[progressDict valueForKey:@"Operation"] intValue];
@@ -3980,7 +3982,18 @@ void tap_keyboard(void) {
     
     //dont need to zip the folder anymore, just migrate it to proper location
     
+    //what if the folders already there?? BUGGGGG.
+    
     NSString *newPath = [ipswPath stringByDeletingPathExtension];
+    
+    //append ECID
+    
+    newPath = [newPath stringByAppendingFormat:@"_%@", ChipID_];
+    
+    if ([FM fileExistsAtPath:newPath])
+    {
+        [FM removeItemAtPath:newPath error:nil];
+    }
     
     NSLog(@"moving: %@ to %@", IPSW_TMP, newPath);
     
@@ -4303,6 +4316,7 @@ void tap_keyboard(void) {
 	NSString *ipswPath = [self ipswOutputPath];
     
     NSString *extractedPath = [ipswPath stringByDeletingPathExtension];
+    NSString *newExtractedPath = [extractedPath stringByAppendingFormat:@"_%@", ChipID_];
     
 	if(![FM fileExistsAtPath:extractedPath])
 	{
@@ -4310,7 +4324,7 @@ void tap_keyboard(void) {
 		//[self hideProgress];
 		//return;
 	
-        if (![FM fileExistsAtPath:ipswPath])
+        if (![FM fileExistsAtPath:ipswPath] && ![FM fileExistsAtPath:newExtractedPath])
         {
             [self setDownloadText:NSLocalizedString(@"No IPSW to restore!", @"No IPSW to restore!")];
             [self hideProgress];
@@ -4332,9 +4346,21 @@ void tap_keyboard(void) {
         
         //file DOES exist at extracted path for new restore code!
         
+      
+        
         ipswPath = extractedPath;
         
         NSLog(@"extracted path exists: %@", ipswPath);
+        
+        
+        if ([FM fileExistsAtPath:newExtractedPath])
+        {
+            ipswPath = newExtractedPath;
+            NSLog(@"chip id specific ipsw exists, use that instead: %@", ipswPath);
+        }
+        
+        
+        
         
     }
 	NSString *progressString = [NSString stringWithFormat:NSLocalizedString(@"Restoring %@...", @"Restoring IPSW"), [ipswPath lastPathComponent]];

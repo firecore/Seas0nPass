@@ -16,6 +16,27 @@
 
 @implementation NSString (Additions)
 
+/*
+ 
+ char -[NSString(Additions) containsString:](void * self, void * _cmd, void * arg2) {
+ var_C = self;
+ var_10 = _cmd;
+ var_14 = arg_8;
+ eax = [var_C rangeOfString:arg_8];
+ var_1C = var_C;
+ var_20 = eax;
+ if (var_20 == 0x7fffffff) {
+ var_5 = 0x0;
+ }
+ else {
+ var_5 = 0x1;
+ }
+ eax = sign_extend_32(var_5);
+ return eax;
+ }
+ 
+ */
+
 - (BOOL)containsString:(NSString *)theString
 {
     if ([self rangeOfString:theString].location == NSNotFound)
