@@ -10,11 +10,13 @@
 #import "FWBundle.h"
 #import "TSSCommon.h"
 
-#define BLOB_PLIST_BASE_URL @"http://nitosoft.com/ATV2/FW/"
-#define BLOB_PLIST_URL @"http://nitosoft.com/ATV2/FW/k66ap.plist"
+//#define BLOB_PLIST_BASE_URL @"http://nitosoft.com/ATV2/FW/"
+//#define BLOB_PLIST_URL @"http://nitosoft.com/ATV2/FW/k66ap.plist"
 
-	//#define BLOB_PLIST_BASE_URL @"http://files.firecore.com/FW"
-	//#define BLOB_PLIST_URL @"http://files.firecore.com/FW/k66ap.plist"
+//New URL: http://files.firecore.com/SP/firmware/k66ap.plist
+
+#define BLOB_PLIST_BASE_URL @"http://files.firecore.com/SP/firmware"
+#define BLOB_PLIST_URL @"http://files.firecore.com/SP/firmware/k66ap.plist"
 
 enum {
 	
