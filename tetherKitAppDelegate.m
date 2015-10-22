@@ -2642,7 +2642,7 @@ void *tetheredThread(void* object) {
     
     while (Device->pid != 0x1227) {
         
-        printf("Waiting for DFU to appear in thread\n");
+        //printf("Waiting for DFU to appear in thread\n");
         sleep(1);
     }
     

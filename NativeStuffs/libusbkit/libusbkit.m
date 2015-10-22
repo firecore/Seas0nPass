@@ -1202,7 +1202,7 @@ int SHAtter(UKDevice *Device) {
         [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Exploiting with SHAtter..."];
         NSLog(@"[.] _PASS_1_\n");
         [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"PASS_1"];
-        NSLog(@"[.] preparing oversize...\n");
+        NSLog(@"[.] Preparing Oversize...\n");
         [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Preparing oversize..."];
         
         memset(SHAtter_user.buf, 0, sizeof(SHAtter_user.buf));
@@ -1210,7 +1210,7 @@ int SHAtter(UKDevice *Device) {
         ret = reset_counters(Device);
         if (ret < 0) {
             NSLog(@"[X] failed to reset USB counters.\n");
-            [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"failed to reset USB counters."];
+            [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Failed to reset USB counters."];
             
             memset(&SHAtter_user, 0, sizeof(SHAtter_user));
             return 0;
@@ -1221,7 +1221,7 @@ int SHAtter(UKDevice *Device) {
         ret = send_control_request_to(Device, 0xA1, 2, 0, 0, shift, data, 1000);
         if (ret < 0) {
             NSLog(@"[X] failed to shift DFU_UPLOAD counter.\n");
-            [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"failed to shift DFU_UPLOAD counter."];
+            [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Failed to shift DFU_UPLOAD counter."];
             
             memset(&SHAtter_user, 0, sizeof(SHAtter_user));
             return 0;
@@ -1233,7 +1233,7 @@ int SHAtter(UKDevice *Device) {
         reset_device(Device);
         //usleep(10000000);
         sleep(1);
-        [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Resetting DFU."];
+        [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Resetting DFU..."];
         
         //sleep(5);
         ret = finish_transfer(Device);
@@ -1292,12 +1292,12 @@ int SHAtter(UKDevice *Device) {
         [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"PASS_2."];
         
         NSLog(@"[.] preparing oversize...\n");
-        [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"preparing oversize..."];
+        [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Preparing oversize..."];
         
         ret = reset_counters(Device);
         if (ret < 0) {
             NSLog(@"[X] failed to reset USB counters.\n");
-            [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"failed to reset USB counters."];
+            [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Failed to reset USB counters."];
             memset(&SHAtter_user, 0, sizeof(SHAtter_user));
             return 0;
         }
@@ -1318,7 +1318,7 @@ int SHAtter(UKDevice *Device) {
         //release_device(Device);
         
         NSLog(@"[.] resetting DFU.\n");
-        [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Resetting DFU."];
+        [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Resetting DFU..."];
         
         [(tetherKitAppDelegate*)tetherClass updateStatus:SHAtter_user.status];
         
