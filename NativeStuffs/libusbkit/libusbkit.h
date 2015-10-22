@@ -17,6 +17,18 @@
 #include "IPhoneUSB.h"
 #endif
 
+typedef struct UKDevice_INFO {
+    long long ecid;
+    int bdid, cpid, status;
+    unsigned int addr;
+    unsigned int dwn_addr;
+    unsigned int addr_final;
+    unsigned char data[0x800];
+    char buf[0x2C000];
+} UKDevice_SHAtter;
+
+UKDevice_SHAtter SHAtter_user;
+
 
 typedef struct UKDevice {
     
@@ -45,13 +57,15 @@ typedef struct UKDevice {
     long long ecid;
     int locationID;
     bool opened;
+    bool shattered;
     int eligibleDevices[2][2]; // 0 => vendorID, 1=> productID
     
     
 } UKDevice ;
 
 
-UKDevice * init_libusbkit();
+
+UKDevice * init_libusbkit(int mode, const char *path, void*theClass, int status);
 void close_libusbkit(UKDevice* Device);
 
 void stop_notification_monitoring(UKDevice *Device);
@@ -62,7 +76,7 @@ void device_attached(void * refCon, io_iterator_t iterator);
 void device_detached(void * refCon, io_iterator_t iterator);
 void open_device(UKDevice * Device);
 void open_interface(UKDevice * Device, int interface, int alt_interface);
-void get_ids(UKDevice * Device);
+int get_ids(UKDevice * Device);
 int normal_device_detected(UKDevice* Device, UInt16 vendorID, UInt16 productID);
 
 int send_control_request(UKDevice * Device,
@@ -107,6 +121,8 @@ int get_status(UKDevice* Device, unsigned int * status);
 int reset_counters(UKDevice * Device);
 int reenumerate_device(UKDevice *Device);
 
+int SHAtter(UKDevice *Device);
+int shatter(UKDevice *Device);
 int limerain(UKDevice *Device, bool ifaith_mode);
 int send_data(UKDevice *Device, unsigned char* data, unsigned long length);
 int send_file(UKDevice * Device, const char * filename);

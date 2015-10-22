@@ -23,7 +23,10 @@ void *otherThread(void* object) {
         sleep(1);
     }
     
-    limerain(Device, false);
+    
+    int ret = shatter(Device);
+    printf("SHAtter status: %i\n", ret);
+  //  limerain(Device, false);
     
     //CFRunLoopStop(CFRunLoopGetCurrent());
         

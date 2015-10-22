@@ -73,6 +73,7 @@ enum {
 	BOOL restoreStatus;
     IPSWRestore *restoreInstance;
     UKDevice *Device;
+    NSString *currentIPSWPath;
 }
 
 
@@ -94,7 +95,10 @@ enum {
 @property (readwrite, assign) int downloadIndex;
 @property (readwrite, assign) int counter;
 @property (readwrite, assign) BOOL restoreStatus;
+@property (nonatomic, strong) NSString *currentIPSWPath;
 
+- (void)shatterFinished:(int)mode;
+- (void)updateStatus:(int)status;
 - (void)dataReadyFormat:(NSFileHandle *)theFile;
 
 - (void)customFW:(NSDictionary *)theDict; //called inside process one

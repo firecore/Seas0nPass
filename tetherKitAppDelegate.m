@@ -66,12 +66,14 @@ static NSString *ChipID_ = nil;
 BOOL limera1ned = FALSE;
 BOOL tetheredBoot = FALSE;
 static UKDevice *staticDevice = nil;
+int shatterStatus = 0;
 
 @implementation tetherKitAppDelegate
 
 @synthesize window, downloadIndex, processing, enableScripting, firstView, secondView, poisoning, currentBundle, bundleController, counter, otherWindow, commandTextField, tetherLabel, countdownField, runMode, theEcid;
 @synthesize deviceClass;
 @synthesize restoreStatus;
+@synthesize currentIPSWPath;
 /*
  
  
@@ -2644,9 +2646,13 @@ void *tetheredThread(void* object) {
         sleep(1);
     }
     
-    int lr =  limerain(Device, false);
+    int lr = SHAtter(Device);
     
-    printf("limera1n status: %i\n", lr);
+    printf("SHAtter status: %i\n", lr);
+    
+    //int lr =  limerain(Device, false);
+    
+    //printf("limera1n status: %i\n", lr);
     
     if (lr == 0)
     {
@@ -2663,6 +2669,7 @@ void *tetheredThread(void* object) {
 void *otherThread(void* object);
 void *otherThread(void* object) {
     
+    printf("otherThread\n");
     UKDevice* Device = (UKDevice*)object;
     
     if (ChipID_ == nil)
@@ -2672,24 +2679,30 @@ void *otherThread(void* object) {
         printf("updated chip id %s\n", [ChipID_ UTF8String]);
     }
     
-    while (Device->pid != 0x1227) {
+    while (!Device->opened) {
         
-        printf("Waiting for DFU to appear in thread\n");
+        printf("waiting for teh device to be opened\n");
         sleep(1);
     }
     
-    if (tetheredBoot == false)
-        stop_notification_monitoring(Device);
+//    while (Device->pid != 0x1227) {
+//        
+//        printf("Waiting for DFU to appear in thread\n");
+//        sleep(1);
+//    }
     
-    int lr =  limerain(Device, false);
+    //if (tetheredBoot == false)
+      //  stop_notification_monitoring(Device);
     
-    printf("limera1n status: %i\n", lr);
+    //int lr =  limerain(Device, false);
+    int lr = SHAtter(Device);
+    //printf("limerain status: %i\n", lr);
     
     if (lr == 0)
     {
         
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"limera1ned" object:ChipID_];
-        limera1ned = TRUE;
+      //  [[NSNotificationCenter defaultCenter] postNotificationName:@"limera1ned" object:ChipID_];
+        //limera1ned = TRUE;
     }
     //CFRunLoopStop(CFRunLoopGetCurrent());
     
@@ -2959,6 +2972,285 @@ void *otherThread(void* object) {
     
 }
 
+- (int)shatteredTB
+{
+    //NSLog(@"copyDocuments:%@ toPhone:%@ withVersion:%i", theFile, hostAddress, sshVersion);
+    NSPipe *pipe = [[NSPipe alloc] init];
+    
+    NSTask *usbTask = [[NSTask alloc] init];
+    
+    [usbTask setStandardError:pipe];
+    [usbTask setStandardOutput:pipe];
+    
+    [usbTask setLaunchPath:[[NSBundle mainBundle] pathForResource:@"usbkit" ofType:@"" inDirectory:@"bin"]];
+    [usbTask setArguments:@[@"1", [self.currentBundle localBundlePath]]];
+    
+    [NSThread detachNewThreadSelector:@selector(processUSBData:) toTarget:self withObject:[pipe fileHandleForReading]];
+    [usbTask launch];
+    [usbTask waitUntilExit];
+    int termStatus = [usbTask terminationStatus];
+    //NSLog(@"ringtone copy ended with %i", termStatus);
+    if (termStatus == 1)
+        
+    {
+        NSLog(@"tethered booted successfully!?");
+        //[[NSFileManager defaultManager] removeFileAtPath:theFile handler:nil];
+    } else {
+        
+        NSLog(@"tethered boot failed: %i",termStatus);
+        
+    }
+    [usbTask release];
+    usbTask = nil;
+    return termStatus;
+    
+}
+
+- (int)anotherNewTetheredBoot
+{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc]init];
+    LOG_SELF;
+    tetheredBoot = true;
+   
+    [self showProgressViewWithText:NSLocalizedString(@"Waiting for device to enter DFU mode...", @"Waiting for device to enter DFU mode...")];
+    [self setInstructionText:NSLocalizedString(@"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.", @"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.")];
+    
+    [instructionImage setImage:[self imageForMode:kSPATVRestoreImage]];
+    /*
+    NSTask *usbTask = [NSTask launchedTaskWithLaunchPath:[[NSBundle mainBundle] pathForResource:@"usbkit" ofType:@"" inDirectory:@"bin"] arguments:@[@"1", [self.currentBundle localBundlePath]]];
+    [usbTask waitUntilExit];
+     */
+    [self setInstructionText:@""];
+    
+    [self shatteredTB];
+   // [self showProgressViewWithText:NSLocalizedString(@"Found device in DFU mode", @"Found device in DFU mode")];
+    [self hideProgress];
+
+    [self setDownloadText:NSLocalizedString(@"Tethered boot complete! It is now safe to disconnect USB.",@"Tethered boot complete! It is now safe to disconnect USB." )];
+    [self hideProgress];
+    [self performSelectorOnMainThread:@selector(hideProgress) withObject:nil waitUntilDone:true];
+    self.poisoning = FALSE;
+
+    [cancelButton setTitle:@"Done"];
+    [cancelButton setEnabled:true];
+    [instructionImage setImage:[self imageForMode:kSPSuccessImage]];
+    
+    [pool release];
+    pool = nil;
+    return 0;
+    
+}
+
+- (void)processUSBData:(NSFileHandle *)theFile
+{
+    LOG_SELF;
+    NSAutoreleasePool *thePool = [[NSAutoreleasePool alloc] init];
+    while(1)
+    {
+        NSAutoreleasePool *wp = [[NSAutoreleasePool alloc] init];
+        NSData *data = [theFile availableData];
+        if([data length]) {
+            //NSLog(@"data length: %i", [data length]);
+            NSString *tempa = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+            
+            NSString *temp = [tempa  stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+            if ([temp rangeOfString:@"Waiting for DFU mode..."].location == NSNotFound)
+            {
+                [self setInstructionText:@""];
+            }
+            NSArray *lineArray = [temp componentsSeparatedByString:@"\n"];
+            
+            NSArray *progressArray = [temp componentsSeparatedByString:@"/"];
+            
+            NSLog(temp);
+            if ([[lineArray lastObject] floatValue] > 0)
+            {
+                [self setDownloadProgress:[[lineArray lastObject] floatValue]];
+            } else {
+                [self showProgressViewWithText:[lineArray lastObject]];
+                
+            }
+
+            //[self showProgressViewWithText:temp];
+            
+
+            
+            
+            [tempa release];
+            tempa = nil;
+            
+        } else {
+            [wp release];
+            [thePool release];
+            return;
+        }
+        [wp release];
+    }
+    NSLog(@"ending processUSBData");
+    [thePool release];
+}
+
+- (int)aprocessUSBData:(NSFileHandle *)theFile
+{
+    NSPipe *pipe = [[NSPipe alloc] init];
+    NSFileHandle *handle = [pipe fileHandleForReading];
+    
+    NSTask *usbTask = [[NSTask alloc] init];
+    NSData *outData;
+    
+    [usbTask setStandardOutput:pipe];
+    [usbTask setStandardError:pipe];
+    [usbTask setLaunchPath:[[NSBundle mainBundle] pathForResource:@"usbkit" ofType:@"" inDirectory:@"bin"]];
+    [usbTask setArguments:@[@"1", [self.currentBundle localBundlePath]]];
+    NSString *temp = @"";
+    NSMutableArray *lineArray = [[NSMutableArray alloc] init];
+    
+    [usbTask launch];
+    while((outData = [handle readDataToEndOfFile]) && [outData length])
+    {
+        temp = [[NSString alloc] initWithData:outData encoding:NSASCIIStringEncoding];
+        [lineArray addObjectsFromArray:[temp componentsSeparatedByString:@"\n"]];
+        [temp release];
+    }
+    
+    int a;
+    for(a = 0 ; a < [lineArray count] ; a++) {
+        temp = [[lineArray objectAtIndex:a] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        NSLog(temp);
+        if ([temp componentsSeparatedByString:@"/"].count == 2)
+        {
+            NSArray *comps = [temp componentsSeparatedByString:@"/"];
+            NSInteger currentValue = [[comps[0] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] integerValue];
+            NSInteger totalValue = [[comps[1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] integerValue];
+           if (currentValue && totalValue != 0)
+           {
+               CGFloat percentComplete = currentValue / totalValue;
+               if (percentComplete >= 100) {
+                   [self setDownloadProgress:0];
+               } else {
+                   [self setDownloadProgress:percentComplete];
+               }
+           }
+           
+            //  [self setDownloadProgress:0];
+            //[self setDownloadProgress:[[progressArray lastObject] floatValue]];
+        } else {
+            [self showProgressViewWithText:temp];
+            
+        }
+        
+    }
+    [lineArray release];
+    
+    int returnStatus = [usbTask terminationStatus];
+    
+    [usbTask release];
+    usbTask = nil;
+    [pipe release];
+    pipe = nil;
+    return returnStatus;
+    // return finalInt;
+}
+
+- (int)shatterDFU
+{
+    NSPipe *pipe = [[NSPipe alloc] init];
+    NSFileHandle *handle = [pipe fileHandleForReading];
+    
+    NSTask *usbTask = [[NSTask alloc] init];
+    //NSData *outData;
+    
+    [usbTask setStandardOutput:pipe];
+    [usbTask setStandardError:pipe];
+    [usbTask setLaunchPath:[[NSBundle mainBundle] pathForResource:@"usbkit" ofType:@"" inDirectory:@"bin"]];
+    [usbTask setArguments:@[@"0", [self.currentBundle localBundlePath]]];
+   // NSString *temp = @"";
+    //NSMutableArray *lineArray = [[NSMutableArray alloc] init];
+    
+    [NSThread detachNewThreadSelector:@selector(processUSBData:) toTarget:self withObject:handle];
+    [usbTask launch];
+    
+    [usbTask waitUntilExit];
+    //    while((outData = [handle readDataToEndOfFile]) && [outData length])
+//    {
+//        temp = [[NSString alloc] initWithData:outData encoding:NSASCIIStringEncoding];
+//        [lineArray addObjectsFromArray:[temp componentsSeparatedByString:@"\n"]];
+//        [temp release];
+//    }
+//    
+//    int a;
+//    for(a = 0 ; a < [lineArray count] ; a++) {
+//        temp = [[lineArray objectAtIndex:a] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+//        NSLog(temp);
+//        [self showProgressViewWithText:temp];
+//        
+//    }
+//    [lineArray release];
+//    
+    int returnStatus = [usbTask terminationStatus];
+    
+    [usbTask release];
+    usbTask = nil;
+    [pipe release];
+    pipe = nil;
+    return returnStatus;
+   // return finalInt;
+}
+
+- (void)anotherNewRestoreIPSW:(NSString *)ipswPath
+{
+    LOG_SELF;
+    NSLog(@"ipswPath: %@", ipswPath);
+    tetheredBoot = false;
+    [self showProgressViewWithText:NSLocalizedString(@"Waiting for device to enter DFU mode...", @"Waiting for device to enter DFU mode...")];
+    [self setInstructionText:NSLocalizedString(@"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.", @"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.")];
+    
+    [instructionImage setImage:[self imageForMode:kSPATVRestoreImage]];
+
+    [self shatterDFU];
+    
+    //NSTask *usbTask = [NSTask launchedTaskWithLaunchPath:[[NSBundle mainBundle] pathForResource:@"usbkit" ofType:@"" inDirectory:@"bin"] arguments:@[@"0", [self.currentBundle localBundlePath]]];
+    //[usbTask waitUntilExit];
+    [self showProgressViewWithText:NSLocalizedString(@"Found device in DFU mode", @"Found device in DFU mode")];
+    [self setInstructionText:@""];
+    
+    
+    if (self.theEcid != nil)
+    {
+        
+        IPSW *theFw = [[IPSW alloc] initWithPath:ipswPath];
+        
+        NSError *theError = nil;
+        
+        BOOL processIPSW =  [theFw processIPSWwithError:&theError];
+        
+        if (processIPSW == FALSE)
+        {
+            NSLog(@"processing IPSW failed!");
+        }
+        
+        if (theError != nil)
+        {
+            NSLog(@"theerror: %@", theError);
+            return;
+        }
+        
+        
+        restoreInstance = [[IPSWRestore alloc] initWithIPSW:theFw andECID:self.theEcid];
+        [restoreInstance startListening];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(restoreProgress:) name:@"RestoreProgress" object:nil];
+        
+    } else {
+        
+        NSLog(@"missing device ecid!!! how'd this happen??");
+        [self failedWithReason:@"Device ECID is missing, please try again!"];
+        
+    }
+    
+    
+}
+
 /**
  
  this is the new restore code added from ih8sn0ws awesome wrapper for apple native classes.
@@ -2971,6 +3263,7 @@ void *otherThread(void* object) {
 {
     LOG_SELF;
     NSLog(@"ipswPath: %@", ipswPath);
+    currentIPSWPath = ipswPath;
     tetheredBoot = false;
     //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   
@@ -2984,7 +3277,7 @@ void *otherThread(void* object) {
      detaching and reattaching back in DFU mode. (explained more below)
      
      */
-    Device = init_libusbkit();
+    Device = init_libusbkit(0, [[self.currentBundle localBundlePath] UTF8String], self, shatterStatus);
     
     add_devices(Device, a);
     
@@ -3025,9 +3318,13 @@ void *otherThread(void* object) {
         //if we don't stop monitoring notifications after limera1n is run
         //when the device detaches and re-attaches libusbkit will grab exclusive access
         //thats no bueno and will saddle us with a 2001 error from AMRestore.
-        stop_notification_monitoring(Device);
-        limerain(Device, false);
-        limera1ned = true;
+        //stop_notification_monitoring(Device);
+        //limerain(Device, false);
+        //printf("newREstoreIpws\n");
+        SHAtter(Device);
+       // stop_notification_monitoring(Device);
+        
+       // limera1ned = true;
         
         //release_device(Device);
     }
@@ -3039,10 +3336,11 @@ void *otherThread(void* object) {
 
     while (limera1ned == false)
     {
-        //printf("Waiting for it to ra1n\n");
+       // fprintf(stderr, "Waiting for it to ra1n\n");
         sleep(1);
     }
     
+    NSLog(@"outside of limera1ned finished");
     //once we get this far we are home free! the restore below should always work!
     
     [self setInstructionText:@""];
@@ -3096,24 +3394,91 @@ void *otherThread(void* object) {
     }
 }
 
+- (void)newTetheredBoot
+{
+    LOG_SELF;
+    tetheredBoot = true;
+    //NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    
+    int a[2][2] = { {0x5AC, 0x1227}, {0x5AC, 0x1281} };
+    
+    /*
+     
+     hopefully we're already in DFU mode, under those cirumstance
+     this instantiation of Device will be used below, if not there are some tricky
+     threading issues for when the notifications are monitored for the device
+     detaching and reattaching back in DFU mode. (explained more below)
+     
+     */
+    Device = init_libusbkit(1, [[self.currentBundle localBundlePath] UTF8String], self, shatterStatus);
+    
+    add_devices(Device, a);
+    
+    register_for_usb_notifications(Device);
+    
+    // sleep(5);
+    
+    NSLog(@"device pid: %i", Device->pid);
+    
+    if (Device->pid != 0x1227)
+    {
+        //we're not in DFU mode, so we are tearing down the device declared above
+        //in favor of creating it in the main thread so we can properly monitor
+        //notifications for when it is attached / detached.
+        
+        stop_notification_monitoring(Device);
+        release_device(Device);
+        
+        sleep(1);
+        
+        //not only does it need to be called in the main thread, it has to be called from C code
+        //and not obj-c code. so DFUWrapper literally just calls C code in this class
+        //that adds the device and spawns a pthread to monitor when DFU is entered.
+        [self performSelectorOnMainThread:@selector(tetheredDFUWrapper) withObject:nil waitUntilDone:false];
+        
+    } else {
+        
+        //if the device was not attached the minute the app launched we don't have the ecid assigned.
+        
+        NSLog(@"ecid: %@ length: %lu", self.theEcid, (unsigned long)self.theEcid.length);
+        if (self.theEcid.length == 0);
+        {
+            NSLog(@"ecid length supposedly zero??: %lu", (unsigned long)self.theEcid.length);
+            self.theEcid = [NSString stringWithFormat:@"%lld", Device->ecid];
+            NSLog(@"new ecid: %@",  self.theEcid);
+        }
+        
+        printf("new tetheredboot\n");
+        SHAtter(Device);
+    }
+    
+    [self showProgressViewWithText:NSLocalizedString(@"Waiting for device to enter DFU mode...", @"Waiting for device to enter DFU mode...")];
+    [self setInstructionText:NSLocalizedString(@"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.", @"Connect USB then press and hold MENU and PLAY/PAUSE for 7 seconds.")];
+    
+    [instructionImage setImage:[self imageForMode:kSPATVTetheredRemoteImage]];
+    
+   
+}
+
 //for some reason if the code is called straight from this method rather
 //than a C method, the thread doesn't detach properly or somethin?
 
 - (void)DFUWrapper
 {
-    monitorForDeviceAndDetachThread();
+    LOG_SELF;
+    monitorForDeviceAndDetachThread([[self.currentBundle localBundlePath] UTF8String], self);
 }
 
 - (void)tetheredDFUWrapper
 {
-    monitorForDeviceAndDetachThreadForTether();
+    monitorForDeviceAndDetachThreadForTether([[self.currentBundle localBundlePath] UTF8String], self);
 }
 
-int monitorForDeviceAndDetachThreadForTether()
+int monitorForDeviceAndDetachThreadForTether(const char* path, void* class)
 {
     int a[2][2] = { {0x5AC, 0x1227}, {0x5AC, 0x1281} };
     
-    staticDevice = init_libusbkit();
+    staticDevice = init_libusbkit(1, path, class, shatterStatus);
     
     add_devices(staticDevice, a);
     
@@ -3143,11 +3508,12 @@ int monitorForDeviceAndDetachThreadForTether()
 }
 
 
-int monitorForDeviceAndDetachThread()
+int monitorForDeviceAndDetachThread(const char* path, void* class)
 {
+    printf("monitorForDeviceAndDetach\n");
     int a[2][2] = { {0x5AC, 0x1227}, {0x5AC, 0x1281} };
     
-    UKDevice *Device = init_libusbkit();
+    UKDevice *Device = init_libusbkit(0, path, class, shatterStatus);
     
     add_devices(Device, a);
     
@@ -3174,6 +3540,99 @@ int monitorForDeviceAndDetachThread()
     
     CFRunLoopRun();
     return 0;
+}
+
+- (void)shatterFinished:(int)mode {
+    
+    LOG_SELF;
+    
+    stop_notification_monitoring(Device);
+    //release_device(Device);
+    //NSLog(@"chipID: %@", ChipID_);
+  //  [[NSNotificationCenter defaultCenter] postNotificationName:@"limera1ned" object:ChipID_];
+    limera1ned = true;
+    
+    if (mode == 0) //restore
+    {
+        [self finishRestore];
+    }
+}
+
+- (void)finishRestore
+{
+    [self setInstructionText:@""];
+    
+    //if we get this far and theEcid is still nil, theres a chance we fetched it before applying
+    //limera1n in otherThread.
+    
+    if(self.theEcid == nil)
+    {
+        if(ChipID_ != nil)
+        {
+            self.theEcid = ChipID_;
+            NSLog(@"updated ecid to: %@", self.theEcid);
+        }
+        
+    }
+    
+    [self showProgressViewWithText:NSLocalizedString(@"Found device in DFU mode", @"Found device in DFU mode")];
+    
+    
+    if (self.theEcid != nil)
+    {
+        
+        IPSW *theFw = [[IPSW alloc] initWithPath:currentIPSWPath];
+        
+        NSError *theError = nil;
+        
+        BOOL processIPSW =  [theFw processIPSWwithError:&theError];
+        
+        if (processIPSW == FALSE)
+        {
+            NSLog(@"processing IPSW failed!");
+        }
+        
+        if (theError != nil)
+        {
+            NSLog(@"theerror: %@", theError);
+            return;
+        }
+        
+        
+        restoreInstance = [[IPSWRestore alloc] initWithIPSW:theFw andECID:self.theEcid];
+        [restoreInstance startListening];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(restoreProgress:) name:@"RestoreProgress" object:nil];
+        
+    } else {
+        
+        NSLog(@"missing device ecid!!! how'd this happen??");
+        [self failedWithReason:@"Device ECID is missing, please try again!"];
+        
+    }
+}
+
+- (void)updateStatus:(int)status
+{
+    printf("\nupdateStatus: %i\n", status);
+    //NSLog(@"status updated: %i", status);
+    shatterStatus = status;
+    //return;
+    stop_notification_monitoring(Device);
+    //release_device(Device);
+   // close_libusbkit(Device);
+    sleep(5);
+    
+    //not only does it need to be called in the main thread, it has to be called from C code
+    //and not obj-c code. so DFUWrapper literally just calls C code in this class
+    //that adds the device and spawns a pthread to monitor when DFU is entered.
+    if (tetheredBoot == true)
+    {
+        [self tetheredDFUWrapper];
+    } else {
+        [self DFUWrapper];
+       //[self performSelectorOnMainThread:@selector(DFUWrapper) withObject:nil waitUntilDone:false];
+    }
+    //[self performSelectorOnMainThread:@selector(DFUWrapper) withObject:nil waitUntilDone:false];
 }
 
 
@@ -4374,6 +4833,7 @@ void tap_keyboard(void) {
 	
     
     [self newRestoreIPSW:ipswPath];
+    //[self anotherNewRestoreIPSW:ipswPath];
     
     [pool release];
     
@@ -5251,7 +5711,7 @@ void tap_keyboard(void) {
 	{
 		NSLog(@"new tethered boot!");
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(tetheredBootReady:) name:@"tbr" object:nil];
-		[NSThread detachNewThreadSelector:@selector(tetheredBootNew) toTarget:self withObject:nil];
+		[NSThread detachNewThreadSelector:@selector(newTetheredBoot) toTarget:self withObject:nil];
        // [NSThread detachNewThreadSelector:@selector(sn0wyTetheredBoot) toTarget:self withObject:nil];
     } else {
 	

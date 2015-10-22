@@ -71,7 +71,7 @@
 		89E8FBDD1791532E004F5426 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 89E8FBDB1791532E004F5426 /* JSONKit.m */; };
 		89F0E6001A3D21E300D0BA42 /* restoreoptions.pr in Resources */ = {isa = PBXBuildFile; fileRef = 89F0E5F91A3D21E300D0BA42 /* restoreoptions.pr */; };
 		89F0E6711A3D63CD00D0BA42 /* MobileDevice.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89F0E66F1A3D62D600D0BA42 /* MobileDevice.framework */; };
-		89F0E6741A3D6BD800D0BA42 /* libusbkit.c in Sources */ = {isa = PBXBuildFile; fileRef = 89F0E6021A3D247100D0BA42 /* libusbkit.c */; };
+		89F0E6741A3D6BD800D0BA42 /* libusbkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F0E6021A3D247100D0BA42 /* libusbkit.m */; };
 		89F0E6751A3D6FEA00D0BA42 /* IPSW.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F0E5F11A3D21E300D0BA42 /* IPSW.m */; };
 		89F0E6771A3D7A0100D0BA42 /* IPSWRestore.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F0E5F31A3D21E300D0BA42 /* IPSWRestore.m */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
@@ -202,6 +202,7 @@
 		32DF84CC12E6E426002916D5 /* SPMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPMenuItem.h; sourceTree = "<group>"; };
 		32DF84CD12E6E426002916D5 /* SPMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SPMenuItem.m; sourceTree = "<group>"; };
 		89181C021780FBDC00A65C27 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; lineEnding = 0; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		89C29ABF1BD60568005B7529 /* SHAtter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHAtter.h; sourceTree = "<group>"; };
 		89D0FAB51800A61D00619453 /* bin */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bin; sourceTree = "<group>"; };
 		89D83C5E13E88E310077FC29 /* tests.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tests.c; path = ../../../../../../Users/kbradley/Desktop/tests.c; sourceTree = "<group>"; };
 		89E8FB6A17912ECC004F5426 /* TSSCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TSSCategories.h; sourceTree = "<group>"; };
@@ -219,9 +220,9 @@
 		89F0E5F71A3D21E300D0BA42 /* libusb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libusb.h; sourceTree = "<group>"; };
 		89F0E5F81A3D21E300D0BA42 /* restorable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = restorable.h; sourceTree = "<group>"; };
 		89F0E5F91A3D21E300D0BA42 /* restoreoptions.pr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = restoreoptions.pr; sourceTree = "<group>"; };
-		89F0E6021A3D247100D0BA42 /* libusbkit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = libusbkit.c; sourceTree = "<group>"; };
+		89F0E6021A3D247100D0BA42 /* libusbkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = libusbkit.m; sourceTree = "<group>"; };
 		89F0E6031A3D247100D0BA42 /* libusbkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libusbkit.h; sourceTree = "<group>"; };
-		89F0E6041A3D247100D0BA42 /* libusbkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = libusbkit.m; sourceTree = "<group>"; };
+		89F0E6041A3D247100D0BA42 /* libusbkit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = libusbkit.mm; sourceTree = "<group>"; };
 		89F0E6051A3D247100D0BA42 /* limerain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = limerain.h; sourceTree = "<group>"; };
 		89F0E6061A3D247100D0BA42 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		89F0E66F1A3D62D600D0BA42 /* MobileDevice.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileDevice.framework; path = ../../../../System/Library/PrivateFrameworks/MobileDevice.framework; sourceTree = "<group>"; };
@@ -514,9 +515,10 @@
 		89F0E6011A3D247100D0BA42 /* libusbkit */ = {
 			isa = PBXGroup;
 			children = (
-				89F0E6021A3D247100D0BA42 /* libusbkit.c */,
+				89C29ABF1BD60568005B7529 /* SHAtter.h */,
+				89F0E6021A3D247100D0BA42 /* libusbkit.m */,
 				89F0E6031A3D247100D0BA42 /* libusbkit.h */,
-				89F0E6041A3D247100D0BA42 /* libusbkit.m */,
+				89F0E6041A3D247100D0BA42 /* libusbkit.mm */,
 				89F0E6051A3D247100D0BA42 /* limerain.h */,
 				89F0E6061A3D247100D0BA42 /* main.c */,
 			);
@@ -614,6 +616,11 @@
 			isa = PBXProject;
 			attributes = {
 				ORGANIZATIONNAME = "FireCore, LLC";
+				TargetAttributes = {
+					8D1107260486CEB800E47090 = {
+						DevelopmentTeam = 9EUFEA5U7G;
+					};
+				};
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "tetherKit" */;
 			compatibilityVersion = "Xcode 3.1";
@@ -707,7 +714,7 @@
 				327E917114D1E1040058D651 /* NSData+Flip.mm in Sources */,
 				327EB38914D5F0140058D651 /* SPFWButton.m in Sources */,
 				32A52E031710D8440009A99A /* NSString+Extensions.m in Sources */,
-				89F0E6741A3D6BD800D0BA42 /* libusbkit.c in Sources */,
+				89F0E6741A3D6BD800D0BA42 /* libusbkit.m in Sources */,
 				89E8FB6C17912ECC004F5426 /* TSSCategories.m in Sources */,
 				89E8FBDC1791532E004F5426 /* JSONKit.m in Sources */,
 			);
@@ -755,7 +762,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -777,7 +784,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = dbHelper;
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -786,7 +793,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
@@ -807,7 +814,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = dbHelper;
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -817,7 +824,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -848,7 +855,7 @@
 					dynamic_lookup,
 				);
 				PRODUCT_NAME = Seas0nPass;
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx;
 				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Debug;
@@ -858,7 +865,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -888,7 +895,7 @@
 					dynamic_lookup,
 				);
 				PRODUCT_NAME = Seas0nPass;
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx;
 				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Release;
@@ -904,7 +911,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -918,7 +925,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx;
 				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Release;

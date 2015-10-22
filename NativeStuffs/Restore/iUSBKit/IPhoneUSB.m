@@ -7,12 +7,12 @@
 //
 
 #import "IPhoneUSB.h"
-#import "ToolBox.h"
+//#import "ToolBox.h"
 #import "NSString+Extensions.h"
 
 static BOOL isListening = NO;
 
-void progressCallback(UKDevice *device, double progress)
+void progressCallback(SPDevice *device, double progress)
 {
 
     IPhoneUSB *theSelf = (IPhoneUSB *)(device->user_arg);
@@ -21,7 +21,7 @@ void progressCallback(UKDevice *device, double progress)
     
 }
 
-void usbEventHandler(UKDevice *device, int event, void *refCon){
+void usbEventHandler(SPDevice *device, int event, void *refCon){
     
     IPhoneUSB *theSelf = (IPhoneUSB *)refCon;
     

@@ -107,7 +107,7 @@ void device_attached(void * refCon, io_iterator_t iterator);
 void device_detached(void * refCon, io_iterator_t iterator);
 void open_device(UKDevice * Device);
 void open_interface(UKDevice * Device, int interface, int alt_interface);
-void get_ids(UKDevice * Device);
+int get_ids(UKDevice * Device);
 
 int send_control_request(UKDevice * Device,
                          UInt8 bm_request_type,
