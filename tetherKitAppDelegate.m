@@ -2679,17 +2679,17 @@ void *otherThread(void* object) {
         printf("updated chip id %s\n", [ChipID_ UTF8String]);
     }
     
-    while (!Device->opened) {
-        
-        printf("waiting for teh device to be opened\n");
-        sleep(1);
-    }
-    
-//    while (Device->pid != 0x1227) {
+//    while (!Device->opened) {
 //        
-//        printf("Waiting for DFU to appear in thread\n");
+//        printf("waiting for teh device to be opened\n");
 //        sleep(1);
 //    }
+    
+    while (Device->pid != 0x1227) {
+        
+        printf("Waiting for DFU to appear\n");
+        sleep(1);
+    }
     
     //if (tetheredBoot == false)
       //  stop_notification_monitoring(Device);
@@ -3341,6 +3341,8 @@ void *otherThread(void* object) {
     }
     
     NSLog(@"outside of limera1ned finished");
+    
+    return;
     //once we get this far we are home free! the restore below should always work!
     
     [self setInstructionText:@""];
@@ -3471,11 +3473,13 @@ void *otherThread(void* object) {
 
 - (void)tetheredDFUWrapper
 {
+    LOG_SELF;
     monitorForDeviceAndDetachThreadForTether([[self.currentBundle localBundlePath] UTF8String], self);
 }
 
 int monitorForDeviceAndDetachThreadForTether(const char* path, void* class)
 {
+    printf("monitorForDeviceAndDetachThreadForTether\n");
     int a[2][2] = { {0x5AC, 0x1227}, {0x5AC, 0x1281} };
     
     staticDevice = init_libusbkit(1, path, class, shatterStatus);
@@ -3555,6 +3559,13 @@ int monitorForDeviceAndDetachThread(const char* path, void* class)
     if (mode == 0) //restore
     {
         [self finishRestore];
+        shatterStatus = 0;
+    } else {
+        [self hideProgress];
+        [cancelButton setTitle:@"Done"];
+        [instructionImage setImage:[self imageForMode:kSPSuccessImage]];
+        shatterStatus = 0;
+
     }
 }
 
@@ -3575,7 +3586,7 @@ int monitorForDeviceAndDetachThread(const char* path, void* class)
         
     }
     
-    [self showProgressViewWithText:NSLocalizedString(@"Found device in DFU mode", @"Found device in DFU mode")];
+    [self showProgressViewWithText:[NSString stringWithFormat:NSLocalizedString(@"Restoring %@...", @"Restoring %@"), [currentIPSWPath lastPathComponent]]];
     
     
     if (self.theEcid != nil)
@@ -3819,6 +3830,11 @@ int monitorForDeviceAndDetachThread(const char* path, void* class)
  }
  
  */
+
+- (void)threadedDownloadProgress:(NSNumber *)progress
+{
+    [self setDownloadProgress:[progress doubleValue]];
+}
 
 - (void)restoreProgress:(NSNotification *)n
 {
@@ -4534,7 +4550,7 @@ void tap_keyboard(void) {
         
 		[cancelButton setEnabled:FALSE];
 		[cancelButton setTitle:NSLocalizedString(@"Cancel", @"Cancel")];
-		NSString *progressString = [NSString stringWithFormat:NSLocalizedString(@"Restoring %@...", @"Restoring IPSW"), [ipswPath lastPathComponent]];
+		NSString *progressString = [NSString stringWithFormat:NSLocalizedString(@"Restoring %@...", @"Restoring %@"), [ipswPath lastPathComponent]];
 		
 		[self setDownloadText:progressString];
 			//[self setDownloadText:NSLocalizedString(@"Restoring in iTunes, Please wait while script is running...",@"Restoring in iTunes, Please wait while script is running...") ];

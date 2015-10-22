@@ -73,7 +73,7 @@ void _error(const char* string, IOReturn code) {
 UKDevice * init_libusbkit(int mode, const char *path, void*theClass, int status) {
     
     SHAtter_user.status = status;
-
+    
     UKDevice * toReturn;
     
     // NSLog(@"mode: %i path: %s\n", mode, path);
@@ -113,14 +113,14 @@ UKDevice * init_libusbkit(int mode, const char *path, void*theClass, int status)
 //kind of a hack, doesn't care about any variables from UKDevice, just releases globals that UKDevice uses
 
 void stop_notification_monitoring(UKDevice *Device) {
-
-   NSLog(@"%s\n", __FUNCTION__);
+    
+    NSLog(@"%s\n", __FUNCTION__);
     close_libusbkit(Device);
-//    if (Device->ioKitNotificationPort)
-//    {
-//        IONotificationPortDestroy(Device->ioKitNotificationPort);
-//        
-//    }
+    //    if (Device->ioKitNotificationPort)
+    //    {
+    //        IONotificationPortDestroy(Device->ioKitNotificationPort);
+    //
+    //    }
     if (gNotifyPort != NULL) {
         IONotificationPortDestroy(gNotifyPort);
         gNotifyPort = NULL;
@@ -138,14 +138,14 @@ void stop_notification_monitoring(UKDevice *Device) {
 void close_libusbkit(UKDevice* Device) {
     
     if (Device->notificationRunLoopSource != NULL)
-
-        CFRunLoopSourceInvalidate(Device->notificationRunLoopSource);
-//        if (CFRunLoopContainsSource(CFRunLoopGetCurrent(), Device->notificationRunLoopSource, kCFRunLoopDefaultMode))
-//        {
-//            CFRunLoopRemoveSource(CFRunLoopGetCurrent(), Device->notificationRunLoopSource, kCFRunLoopDefaultMode);
-//            
-//        }
         
+        CFRunLoopSourceInvalidate(Device->notificationRunLoopSource);
+    //        if (CFRunLoopContainsSource(CFRunLoopGetCurrent(), Device->notificationRunLoopSource, kCFRunLoopDefaultMode))
+    //        {
+    //            CFRunLoopRemoveSource(CFRunLoopGetCurrent(), Device->notificationRunLoopSource, kCFRunLoopDefaultMode);
+    //
+    //        }
+    
     release_device(Device);
     
     Device->ioKitNotificationPort = NULL;
@@ -161,18 +161,18 @@ void add_devices(UKDevice * Device, int devices_array[2][2]) {
         Device->eligibleDevices[i][0] = devices_array[i][0];
         Device->eligibleDevices[i][1] = devices_array[i][1];
     }
-
+    
     
 }
 
 void register_for_usb_notifications(UKDevice * Device) {
     
     IOReturn 				ret;
-	io_iterator_t           detachIterator, attachIterator;
+    io_iterator_t           detachIterator, attachIterator;
     IONotificationPortRef   _notificationObject;
     CFRunLoopSourceRef      _notificationRunLoopSource;
     
-
+    
     gNotifyPort = IONotificationPortCreate(kIOMasterPortDefault);
     
     _notificationRunLoopSource = IONotificationPortGetRunLoopSource(gNotifyPort);
@@ -211,7 +211,7 @@ void register_for_usb_notifications(UKDevice * Device) {
     }
     
     else device_attached((void*)Device, gAddedIter);
-                                           
+    
     
 }
 
@@ -220,7 +220,7 @@ void device_attached(void * refCon, io_iterator_t iterator) {
         sleep(1);
     }
     
-   NSLog(@"device attached!\n");
+    NSLog(@"device attached!\n");
     io_service_t            usbDevice;
     IOReturn 				ret;
     IOCFPlugInInterface 	**pluginInterface = NULL;
@@ -230,7 +230,7 @@ void device_attached(void * refCon, io_iterator_t iterator) {
     SInt32                  score;
     UInt32                  locationID;
     HRESULT result;
-   
+    
     
     
     
@@ -238,11 +238,11 @@ void device_attached(void * refCon, io_iterator_t iterator) {
     
     while ((usbDevice = IOIteratorNext(iterator))) {
         
-   //    NSLog(@"in attached iterator\n");
+        //    NSLog(@"in attached iterator\n");
         
         ret = IOCreatePlugInInterfaceForService(usbDevice,
-                                               kIOUSBDeviceUserClientTypeID, kIOCFPlugInInterfaceID,
-                                               &pluginInterface, &score);
+                                                kIOUSBDeviceUserClientTypeID, kIOCFPlugInInterfaceID,
+                                                &pluginInterface, &score);
         IOObjectRelease(usbDevice);
         
         if (ret != 0) {
@@ -250,10 +250,10 @@ void device_attached(void * refCon, io_iterator_t iterator) {
             _error("IOCreatePlugInInterfaceForService", ret);
             return;
         }
-       
+        
         result = (*pluginInterface)->QueryInterface(pluginInterface,
-                                           CFUUIDGetUUIDBytes(kIOUSBDeviceInterfaceID),
-                                           (LPVOID *)&_dev);
+                                                    CFUUIDGetUUIDBytes(kIOUSBDeviceInterfaceID),
+                                                    (LPVOID *)&_dev);
         
         (*pluginInterface)->Release(pluginInterface);
         
@@ -287,12 +287,12 @@ void device_attached(void * refCon, io_iterator_t iterator) {
                 open_interface(Device, 0, 0);
                 if (ret != 0)
                 {
-                   NSLog(@"try to get ids again!\n");
+                    NSLog(@"try to get ids again!\n");
                     get_ids(Device);
                 }
-              //  if (Device->pid == 0x1227) open_interface(Device, 0, 0);
+                //  if (Device->pid == 0x1227) open_interface(Device, 0, 0);
                 //else open_interface(Device, 1, 1);
-               NSLog(@"status: %i\n", SHAtter_user.status);
+                NSLog(@"status: %i\n", SHAtter_user.status);
                 if(SHAtter_user.status != 0) {
                     SHAtter(Device);
                     sleep(1);
@@ -306,7 +306,7 @@ void device_attached(void * refCon, io_iterator_t iterator) {
 }
 
 void device_detached(void *refCon, io_iterator_t iterator) {
-   NSLog(@"device_detached!\n");
+    NSLog(@"device_detached!\n");
     
     io_service_t            service;
     SInt32                  locationID;
@@ -315,20 +315,20 @@ void device_detached(void *refCon, io_iterator_t iterator) {
     
     while ((service = IOIteratorNext(iterator))) {
         
-       NSLog(@"in detach iterator\n");
+        NSLog(@"in detach iterator\n");
         CFMutableDictionaryRef properties;
         IORegistryEntryCreateCFProperties(service, &properties, kCFAllocatorDefault, 0);
         CFNumberRef _locationID = CFDictionaryGetValue((CFDictionaryRef)properties, CFSTR("locationID"));
         CFNumberGetValue(_locationID, kCFNumberSInt32Type, &locationID);
         CFRelease(properties);
         
-       NSLog(@"device with location id: %i detached\n", Device->locationID);
+        NSLog(@"device with location id: %i detached\n", Device->locationID);
         
         if (locationID == Device->locationID) {
             
             release_device(Device);
             
-           NSLog(@"[DISCONNECTED]\n");
+            NSLog(@"[DISCONNECTED]\n");
             
         }
         
@@ -339,16 +339,16 @@ void device_detached(void *refCon, io_iterator_t iterator) {
 
 void release_device(UKDevice * Device) {
     
-
+    
     if (Device->intf) {
         
-       NSLog(@"closing interface\n");
+        NSLog(@"closing interface\n");
         (*Device->intf)->USBInterfaceClose(Device->intf);
         (*Device->intf)->Release(Device->intf);
     }
     
     if (Device->dev) {
-       NSLog(@"USBDeviceClose\n");
+        NSLog(@"USBDeviceClose\n");
         (*Device->dev)->USBDeviceClose(Device->dev);
         (*Device->dev)->Release(Device->dev);
     }
@@ -375,28 +375,28 @@ void release_device(UKDevice * Device) {
     Device->locationID = -1;
     Device->opened =
     Device->enabled = false;
-  //  kIOReturnSuccess
+    //  kIOReturnSuccess
 }
 
 void open_device(UKDevice * Device) {
     
     IOReturn 							ret;
-	IOUSBConfigurationDescriptorPtr 	desc = NULL;
-	CFRunLoopSourceRef 					source = NULL;
+    IOUSBConfigurationDescriptorPtr 	desc = NULL;
+    CFRunLoopSourceRef 					source = NULL;
     io_iterator_t 						iterator;
-	IOUSBFindInterfaceRequest			interfaceRequest;
-	UInt8								configIndex;
+    IOUSBFindInterfaceRequest			interfaceRequest;
+    UInt8								configIndex;
     
     NSLog(@"open_device");
     if (!Device->enabled) {
         
-       NSLog(@"Device->enabled == false\n");
+        NSLog(@"Device->enabled == false\n");
         return;
     }
     
     if (Device->dev == NULL) {
         
-       NSLog(@"Device->dev == NULL\n");
+        NSLog(@"Device->dev == NULL\n");
         return;
         
     }
@@ -409,11 +409,11 @@ void open_device(UKDevice * Device) {
         
         if (ret == kIOReturnExclusiveAccess)
         {
-           ret =  (*Device->dev)->USBDeviceClose(Device->dev);
-           if (ret != 0)
-           {
-               _error("USBDeviceClose", ret);
-           }
+            ret =  (*Device->dev)->USBDeviceClose(Device->dev);
+            if (ret != 0)
+            {
+                _error("USBDeviceClose", ret);
+            }
         }
         _error("USBDeviceOpenSeize", ret);
         return;
@@ -432,8 +432,8 @@ void open_device(UKDevice * Device) {
                        kCFRunLoopDefaultMode);
     
     ret = (*Device->dev)->GetConfigurationDescriptorPtr(Device->dev,
-                                                  configIndex,
-                                                  &desc);
+                                                        configIndex,
+                                                        &desc);
     
     if (ret != 0) {
         
@@ -450,12 +450,12 @@ void open_device(UKDevice * Device) {
     }
     
     interfaceRequest.bAlternateSetting
-	= interfaceRequest.bInterfaceClass
-	= interfaceRequest.bInterfaceProtocol
-	= interfaceRequest.bInterfaceSubClass
-	= kIOUSBFindInterfaceDontCare;
-	
-	ret = (*Device->dev)->CreateInterfaceIterator(Device->dev, &interfaceRequest, &iterator);
+    = interfaceRequest.bInterfaceClass
+    = interfaceRequest.bInterfaceProtocol
+    = interfaceRequest.bInterfaceSubClass
+    = kIOUSBFindInterfaceDontCare;
+    
+    ret = (*Device->dev)->CreateInterfaceIterator(Device->dev, &interfaceRequest, &iterator);
     
     if (ret != 0) {
         
@@ -478,13 +478,13 @@ void open_interface(UKDevice * Device, int interface, int alt_interface) {
     
     if (!Device->enabled) {
         
-       NSLog(@"Device->enabled == false\n");
+        NSLog(@"Device->enabled == false\n");
         return;
     }
     
     if (Device->dev == NULL) {
         
-       NSLog(@"Device->dev == NULL\n");
+        NSLog(@"Device->dev == NULL\n");
         return;
         
     }
@@ -498,10 +498,10 @@ void open_interface(UKDevice * Device, int interface, int alt_interface) {
         }
         
         ret = IOCreatePlugInInterfaceForService(service,
-                                                      kIOUSBInterfaceUserClientTypeID,
-                                                      kIOCFPlugInInterfaceID,
-                                                      &iodev,
-                                                      &score);
+                                                kIOUSBInterfaceUserClientTypeID,
+                                                kIOCFPlugInInterfaceID,
+                                                &iodev,
+                                                &score);
         IOObjectRelease(service);
         
         if (ret != 0)
@@ -556,16 +556,16 @@ void open_interface(UKDevice * Device, int interface, int alt_interface) {
         Device->intf = _intf;
         Device->opened = true;
         
-       NSLog(@"[CONNECTED] VID: 0x%04x / PID: 0x%04x\n", Device->vid, Device->pid);
+        NSLog(@"[CONNECTED] VID: 0x%04x / PID: 0x%04x\n", Device->vid, Device->pid);
         /*
-        if (Device->pid == 0x1227) [[IPhoneUSB sharedInstance] notifyDFUConnected];
-        if (Device->pid == 0x1281) [[IPhoneUSB sharedInstance] notifyRecoveryConnected];
-        */
+         if (Device->pid == 0x1227) [[IPhoneUSB sharedInstance] notifyDFUConnected];
+         if (Device->pid == 0x1281) [[IPhoneUSB sharedInstance] notifyRecoveryConnected];
+         */
         break;
         
     }
     
-
+    
 }
 
 int normal_device_detected(UKDevice* Device, UInt16 vendorID, UInt16 productID) {
@@ -584,7 +584,7 @@ int normal_device_detected(UKDevice* Device, UInt16 vendorID, UInt16 productID) 
 int get_ids(UKDevice* Device) {
     
     IOReturn ret;
-	UInt8 index;
+    UInt8 index;
     size_t response_buffer_length = 0xFF;
     
     char * response_buffer = malloc(0xFF);
@@ -601,17 +601,17 @@ int get_ids(UKDevice* Device) {
         free(response_buffer);
         return ret;
     }
-	
+    
     size_t response_size = ((response_buffer[0] & 0xFF)-2)/2+1;
-	char *serial = malloc(response_size);
-	memset(serial, '\0', response_size);
-	
-	for (int i = 0; i < response_size-1; i++)
+    char *serial = malloc(response_size);
+    memset(serial, '\0', response_size);
+    
+    for (int i = 0; i < response_size-1; i++)
     {
         serial[i] = (unsigned char)response_buffer[2*i+2];
-	}
+    }
     
-   NSLog(@"get_ids buffer: '%s'\n", serial);
+    NSLog(@"get_ids buffer: '%s'\n", serial);
     
     char* cpid_string = strstr(serial, "CPID:");
     char* bdid_string = strstr(serial, "BDID:");
@@ -633,25 +633,25 @@ int get_ids(UKDevice* Device) {
 }
 
 int send_control_request(UKDevice * Device,
-                             UInt8 bm_request_type,
-                             UInt8 b_request,
-                             UInt16 w_value,
-                             UInt16 w_index,
-                             UInt16 w_length,
-                             void * p_data) {
+                         UInt8 bm_request_type,
+                         UInt8 b_request,
+                         UInt16 w_value,
+                         UInt16 w_index,
+                         UInt16 w_length,
+                         void * p_data) {
     
     IOReturn ret;
     IOUSBDevRequest request;
     
     if (!Device->enabled) {
         
-       NSLog(@"Device->enabled == false\n");
+        NSLog(@"Device->enabled == false\n");
         return -1;
     }
     
     if (Device->dev == NULL) {
         
-       NSLog(@"Device->dev == NULL\n");
+        NSLog(@"Device->dev == NULL\n");
         return -1;
         
     }
@@ -690,17 +690,17 @@ int send_control_request_to(UKDevice * Device,
     IOReturn ret;
     IOUSBDevRequestTO request;
     
-  //  printf(__FUNCTION__);
+    //  printf(__FUNCTION__);
     //printf("\n");
     if (!Device->enabled) {
         
-       NSLog(@"Device->enabled == false\n");
+        NSLog(@"Device->enabled == false\n");
         return -1;
     }
     
     if (Device->dev == NULL) {
         
-       NSLog(@"Device->dev == NULL\n");
+        NSLog(@"Device->dev == NULL\n");
         return -1;
         
     }
@@ -738,16 +738,16 @@ int send_control_request_async(UKDevice * Device,
     
     IOReturn ret;
     IOUSBDevRequest request;
-        
+    
     if (!Device->enabled) {
         
-       NSLog(@"Device->enabled == false\n");
+        NSLog(@"Device->enabled == false\n");
         return -1;
     }
     
     if (Device->dev == NULL) {
         
-       NSLog(@"Device->dev == NULL\n");
+        NSLog(@"Device->dev == NULL\n");
         return -1;
         
     }
@@ -788,13 +788,13 @@ int send_control_request_async_to(UKDevice * Device,
     
     if (!Device->enabled) {
         
-       NSLog(@"Device->enabled == false\n");
+        NSLog(@"Device->enabled == false\n");
         return -1;
     }
     
     if (Device->dev == NULL) {
         
-       NSLog(@"Device->dev == NULL\n");
+        NSLog(@"Device->dev == NULL\n");
         return -1;
         
     }
@@ -828,20 +828,20 @@ int write_serial(UKDevice * Device, void* buffer, UInt32 size) {
     
     if (!Device->enabled) {
         
-       NSLog(@"Device->enabled == false\n");
+        NSLog(@"Device->enabled == false\n");
         return -1;
     }
     
     if (Device->dev == NULL) {
         
-       NSLog(@"Device->dev == NULL\n");
+        NSLog(@"Device->dev == NULL\n");
         return -1;
         
     }
     
     if (Device->intf == NULL) {
         
-       NSLog(@"Device->intf == NULL\n");
+        NSLog(@"Device->intf == NULL\n");
         return -1;
         
     }
@@ -860,15 +860,15 @@ int send_command(UKDevice * Device, const char* command) {
     
     unsigned long length = strlen(command);
     int ret = -1;
-	
-    if (length >= 0x100) length = 0xFF;
-	
     
-	if (length > 0) {
+    if (length >= 0x100) length = 0xFF;
+    
+    
+    if (length > 0) {
         
-		ret = send_control_request_to(Device, 0x40, 0, 0, 0, length+1, (unsigned char*)command, 1000);
-	}
-
+        ret = send_control_request_to(Device, 0x40, 0, 0, 0, length+1, (unsigned char*)command, 1000);
+    }
+    
     
     return ret;
 }
@@ -876,10 +876,10 @@ int send_command(UKDevice * Device, const char* command) {
 int get_env(UKDevice* Device, const char * variable) {
     
     int ret = -1;
-
+    
     char command[256];
     memset(command, '\0', sizeof(command));
-	snprintf(command, sizeof(command)-1, "getenv %s", variable);
+    snprintf(command, sizeof(command)-1, "getenv %s", variable);
     
     //ret
     send_command(Device, command);
@@ -897,7 +897,7 @@ int get_env(UKDevice* Device, const char * variable) {
         return ret;
     }
     
-   NSLog(@"get_env: %s\n", response);
+    NSLog(@"get_env: %s\n", response);
     
     free(response);
     
@@ -938,7 +938,7 @@ char* dump_ifaith(UKDevice * Device, const char* filename) {
         if (ret != 0) end = true;
         
         if (strstr("pending", response)) continue;
-    
+        
         if (strstr("ready", response)) {
             
             stringToReturn = response;
@@ -953,7 +953,7 @@ char* dump_ifaith(UKDevice * Device, const char* filename) {
         
         
         for (int i = 0; i < strlen(response); i+=2) {
-        
+            
             int *hex = calloc(3, 1);
             char tmpByte[3] = {'\0', '\0', '\0'};
             tmpByte[0] = response[i];
@@ -961,7 +961,7 @@ char* dump_ifaith(UKDevice * Device, const char* filename) {
             sscanf(tmpByte, "%x", hex);
             fwrite(hex, 2, 1, fp);
             free(hex);
-        
+            
         }
         
         free(response);
@@ -977,20 +977,20 @@ char* dump_ifaith(UKDevice * Device, const char* filename) {
 
 int get_status(UKDevice * Device, unsigned int * status) {
     
-   NSLog(@"get_status\n");
+    NSLog(@"get_status\n");
     int ret = -1;
     unsigned char buffer[6];
     memset(buffer, '\0', 6);
     
     if (!Device->enabled) {
         
-       NSLog(@"Device->enabled == false\n");
+        NSLog(@"Device->enabled == false\n");
         return ret;
     }
     
     if (Device->dev == NULL) {
         
-       NSLog(@"Device->dev == NULL\n");
+        NSLog(@"Device->dev == NULL\n");
         return ret;
     }
     
@@ -1011,13 +1011,13 @@ int reset_counters(UKDevice * Device) {
     
     if (!Device->enabled) {
         
-       NSLog(@"Device->enabled == false\n");
+        NSLog(@"Device->enabled == false\n");
         return -1;
     }
     
     if (Device->dev == NULL) {
         
-       NSLog(@"Device->dev == NULL\n");
+        NSLog(@"Device->dev == NULL\n");
         return -1;
     }
     
@@ -1036,28 +1036,28 @@ int finish_transfer(UKDevice * Device) {
     
     if (!Device->enabled) {
         
-       NSLog(@"Device->enabled == false\n");
+        NSLog(@"Device->enabled == false\n");
         return -1;
     }
     
     if (!Device->opened) {
         
-       NSLog(@"Device->opened == false\n");
+        NSLog(@"Device->opened == false\n");
         return -1;
     }
     
     if (Device->dev == NULL) {
         
-       NSLog(@"Device->dev == NULL\n");
+        NSLog(@"Device->dev == NULL\n");
         return -1;
     }
     
     int i = 0;
-	unsigned int status = 0;
+    unsigned int status = 0;
     int ret;
     
     ret = send_control_request_to(Device, 0x21, 1, 0, 0, 0, 0, 1000);
-  //  if (ret) return ret;
+    //  if (ret) return ret;
     
     for (i= 0; i < 3; i++) {
         
@@ -1075,13 +1075,13 @@ int abort_pipe_zero(UKDevice* Device) {
     
     if (!Device->enabled) {
         
-       NSLog(@"Device->enabled == false\n");
+        NSLog(@"Device->enabled == false\n");
         return -1;
     }
     
     if (Device->dev == NULL) {
         
-       NSLog(@"Device->dev == NULL\n");
+        NSLog(@"Device->dev == NULL\n");
         return -1;
     }
     
@@ -1099,17 +1099,17 @@ int abort_pipe_zero(UKDevice* Device) {
 
 int reset_device(UKDevice * Device) {
     
-   NSLog(@"reset_device\n");
+    NSLog(@"reset_device\n");
     
     if (!Device->enabled) {
         
-       NSLog(@"Device->enabled == false\n");
+        NSLog(@"Device->enabled == false\n");
         return -1;
     }
     
     if (Device->dev == NULL) {
         
-       NSLog(@"Device->dev == NULL\n");
+        NSLog(@"Device->dev == NULL\n");
         return -1;
     }
     
@@ -1130,16 +1130,16 @@ int reset_device(UKDevice * Device) {
 // should always be used in DFU mode
 int reenumerate_device(UKDevice *Device) {
     
-   NSLog(@"reenumerate_device\n");
+    NSLog(@"reenumerate_device\n");
     if (!Device->enabled) {
         
-       NSLog(@"Device->enabled == false\n");
+        NSLog(@"Device->enabled == false\n");
         return -1;
     }
     
     if (Device->dev == NULL) {
         
-       NSLog(@"Device->dev == NULL\n");
+        NSLog(@"Device->dev == NULL\n");
         return -1;
     }
     
@@ -1157,7 +1157,7 @@ int reenumerate_device(UKDevice *Device) {
 
 UKDevice* usb_wait_device_connection(UKDevice* previousDevice) {
     _pending = previousDevice;
-   NSLog(@"Waiting for %016llx...\n", previousDevice->ecid);
+    NSLog(@"Waiting for %016llx...\n", previousDevice->ecid);
     if(SEARCHING_FOR_NEW_SHATTER_DEVICE) {
         while(1) {
             if(!SEARCHING_FOR_NEW_SHATTER_DEVICE) {
@@ -1166,7 +1166,7 @@ UKDevice* usb_wait_device_connection(UKDevice* previousDevice) {
             sleep(1);
         }
     }
-   NSLog(@"Found %016llx!\n", _pending->ecid);
+    NSLog(@"Found %016llx!\n", _pending->ecid);
     return _pending;
 }
 
@@ -1209,18 +1209,18 @@ int SHAtter(UKDevice *Device) {
         NSLog(@"[.] resetting counters...\n");
         ret = reset_counters(Device);
         if (ret < 0) {
-           NSLog(@"[X] failed to reset USB counters.\n");
+            NSLog(@"[X] failed to reset USB counters.\n");
             [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"failed to reset USB counters."];
             
             memset(&SHAtter_user, 0, sizeof(SHAtter_user));
             return 0;
         }
-       NSLog(@"[.] shifting DFU_UPLOAD count...\n");
+        NSLog(@"[.] shifting DFU_UPLOAD count...\n");
         //usleep(1000000);
         unsigned char data[0x800];
         ret = send_control_request_to(Device, 0xA1, 2, 0, 0, shift, data, 1000);
         if (ret < 0) {
-           NSLog(@"[X] failed to shift DFU_UPLOAD counter.\n");
+            NSLog(@"[X] failed to shift DFU_UPLOAD counter.\n");
             [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"failed to shift DFU_UPLOAD counter."];
             
             memset(&SHAtter_user, 0, sizeof(SHAtter_user));
@@ -1229,7 +1229,7 @@ int SHAtter(UKDevice *Device) {
         SHAtter_user.addr += shift;
         //usleep(10000000);
         sleep(1);
-       NSLog(@"[.] resetting DFU.\n");
+        NSLog(@"[.] resetting DFU.\n");
         reset_device(Device);
         //usleep(10000000);
         sleep(1);
@@ -1239,12 +1239,12 @@ int SHAtter(UKDevice *Device) {
         ret = finish_transfer(Device);
         NSLog(@"finished transfer with status: %i\n", ret);
         //device_detached(Device, gRemovedIter);
-    //    release_device(Device);
+        //    release_device(Device);
         //sleep(5);
         [(tetherKitAppDelegate*)tetherClass updateStatus:SHAtter_user.status];
         
-    //    usb_wait_device_connection(Device);
-   //     SHAtter(Device);
+        //    usb_wait_device_connection(Device);
+        //     SHAtter(Device);
     } else if(SHAtter_user.status == 2) {
         SHAtter_user.addr = 0x84000000;
         SHAtter_user.dwn_addr = 0x84000000;
@@ -1258,14 +1258,14 @@ int SHAtter(UKDevice *Device) {
         }
         
         if (ret < 0) {
-           NSLog(@"[X] failed to upload exploit data.\n");
+            NSLog(@"[X] failed to upload exploit data.\n");
             [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Failed to upload exploit data."];
             
             memset(&SHAtter_user, 0, sizeof(SHAtter_user));
             return 0;
         }
         
-       NSLog(@"[.] Exploit data successfully sent!\n");
+        NSLog(@"[.] Exploit data successfully sent!\n");
         [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Exploit data successfully sent!"];
         
         SHAtter_user.addr_final = SHAtter_user.addr + sizeof(SHAtter_user.buf);
@@ -1274,12 +1274,12 @@ int SHAtter(UKDevice *Device) {
             SHAtter_user.addr += usb_packet_size;
         }
         if (ret < 0) {
-           NSLog(@"[X] failed to shift DFU_UPLOAD counter.\n");
-               [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Failed to shift DFU_UPLOAD counter."];
+            NSLog(@"[X] failed to shift DFU_UPLOAD counter.\n");
+            [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Failed to shift DFU_UPLOAD counter."];
             memset(&SHAtter_user, 0, sizeof(SHAtter_user));
             return 0;
         }
-       NSLog(@"[.] SHA1 registers pointed to 0x0.\n");
+        NSLog(@"[.] SHA1 registers pointed to 0x0.\n");
         [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"SHA1 registers pointed to 0x0."];
         
         //        sleep(1);
@@ -1288,22 +1288,22 @@ int SHAtter(UKDevice *Device) {
         SHAtter_user.dwn_addr = 0x84000000;
         shift = 0x140;
         
-       NSLog(@"[.] _PASS_2_\n");
+        NSLog(@"[.] _PASS_2_\n");
         [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"PASS_2."];
         
-       NSLog(@"[.] preparing oversize...\n");
+        NSLog(@"[.] preparing oversize...\n");
         [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"preparing oversize..."];
         
         ret = reset_counters(Device);
         if (ret < 0) {
-           NSLog(@"[X] failed to reset USB counters.\n");
+            NSLog(@"[X] failed to reset USB counters.\n");
             [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"failed to reset USB counters."];
             memset(&SHAtter_user, 0, sizeof(SHAtter_user));
             return 0;
         }
         ret = send_control_request_to(Device, 0xA1, 2, 0, 0, shift, (unsigned char*) SHAtter_user.data, 1000);
         if (ret < 0) {
-           NSLog(@"[X] failed to shift DFU_UPLOAD counter.\n");
+            NSLog(@"[X] failed to shift DFU_UPLOAD counter.\n");
             [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Failed to shift DFU_UPLOAD counter."];
             
             memset(&SHAtter_user, 0, sizeof(SHAtter_user));
@@ -1317,13 +1317,13 @@ int SHAtter(UKDevice *Device) {
         //sleep(5);
         //release_device(Device);
         
-       NSLog(@"[.] resetting DFU.\n");
+        NSLog(@"[.] resetting DFU.\n");
         [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Resetting DFU."];
         
         [(tetherKitAppDelegate*)tetherClass updateStatus:SHAtter_user.status];
         
     } else if(SHAtter_user.status == 4) {
-       NSLog(@"[.] now uploading exploit.\n");
+        NSLog(@"[.] now uploading exploit.\n");
         [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Uploading exploit payload..."];
         
         memcpy(SHAtter_user.buf, &shatter_payload_bin, sizeof(shatter_payload_bin));
@@ -1334,7 +1334,7 @@ int SHAtter(UKDevice *Device) {
             pbuf += usb_packet_size;
         }
         if(ret < 0) {
-           NSLog(@"[X] failed to upload exploit data.\n");
+            NSLog(@"[X] failed to upload exploit data.\n");
             [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"failed to upload exploit payload!"];
             
             memset(&SHAtter_user, 0, sizeof(SHAtter_user));
@@ -1348,29 +1348,29 @@ int SHAtter(UKDevice *Device) {
             SHAtter_user.addr += usb_packet_size;
         }
         if (ret < 0) {
-           NSLog(@"[X] failed to shift DFU_UPLOAD counter.");
+            NSLog(@"[X] failed to shift DFU_UPLOAD counter.");
             [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Failed to shift DFU_UPLOAD counter."];
             
             memset(&SHAtter_user, 0, sizeof(SHAtter_user));
             return 0;
         }
         sleep(1);
-       NSLog(@"[.] Resetting the device...\n");
+        NSLog(@"[.] Resetting the device...\n");
         [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Resetting the device..."];
         
         reset_device(Device);
-       // release_device(Device);
+        // release_device(Device);
         [(tetherKitAppDelegate*)tetherClass updateStatus:SHAtter_user.status];
         
         //   exit(1);
     } else if(SHAtter_user.status == 5){
         
-//        if (usbMode == 0)
-//        {
-//            stop_notification_monitoring(Device);
-//        }
+        //        if (usbMode == 0)
+        //        {
+        //            stop_notification_monitoring(Device);
+        //        }
         
-       NSLog(@"[.] exploit sent.\n");
+        NSLog(@"[.] exploit sent.\n");
         [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"exploit sent successfully"];
         
         //	memset(&SHAtter_user, 0, sizeof(SHAtter_user));
@@ -1439,17 +1439,17 @@ int SHAtter(UKDevice *Device) {
             [(tetherKitAppDelegate*)tetherClass shatterFinished:0];
             usbMode = 0;
             return 1;
-      //      exit(1);
+            //      exit(1);
         } else {
             NSLog(@"[.] Tethered mode, Continue...\n");
         }
         
         [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Sleeping for 10..."];
         
-       NSLog(@"sleeping 10, keep el cap happy\n");
+        NSLog(@"sleeping 10, keep el cap happy\n");
         sleep(10);
     } else if(SHAtter_user.status == 7) {
-           // stop_notification_monitoring(Device);
+        // stop_notification_monitoring(Device);
         //        FILE* kernel = fopen("/private/var/tmp/kern.ENC", "rb");
         //        if(!kernel) {
         //          NSLog(@"PANIC!\n");
@@ -1467,11 +1467,11 @@ int SHAtter(UKDevice *Device) {
         }
         [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Uploading kernelcache.release.k66..."];
         
-       NSLog(@"Uploading kernelcache...\n");
+        NSLog(@"Uploading kernelcache...\n");
         fflush(stdout);
         char kernelPath[255];
         sprintf(kernelPath, "%s/kernelcache.release.k66", filePath);
-       NSLog(@"sending file: kernelcache.release.k66\n");
+        NSLog(@"sending file: kernelcache.release.k66\n");
         
         //  FILE* ibec = fopen(kernelPath, "rb");
         int sentStatus = send_file(Device, kernelPath);
@@ -1479,13 +1479,13 @@ int SHAtter(UKDevice *Device) {
         //int finishStatus = finish_transfer(Device);
         // free(kernel_buf);
         
-       NSLog(@"[.] kernelcache sent successfully! status: %i\n", sentStatus);
+        NSLog(@"[.] kernelcache sent successfully! status: %i\n", sentStatus);
         
         sleep(5);
         int commandError = send_command(Device, "bootx");
         //NSLog(@"commanderror: %i\n", commandError);
-       NSLog(@"DONE!\n");
-       [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Tethered boot complete! It is now safe to disconnect USB."];
+        NSLog(@"DONE!\n");
+        [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Tethered boot complete! It is now safe to disconnect USB."];
         [(tetherKitAppDelegate*)tetherClass shatterFinished:1];
         fflush(stdout);
         //  exit(1);
@@ -1506,7 +1506,7 @@ int SHAtter(UKDevice *Device) {
      memset(&SHAtter_user, 0, sizeof(SHAtter_user));
      FILE* ibec = fopen("/private/var/tmp/iBEC.ENC", "rb");
      if(!ibec) {
-    NSLog(@"PANIC!\n");
+     NSLog(@"PANIC!\n");
      return -1;
      }
      fseek(ibec, 0, SEEK_END);
@@ -1516,23 +1516,23 @@ int SHAtter(UKDevice *Device) {
      fread(ibec_buf, 1, len, ibec);
      fflush(ibec);
      fclose(ibec);
-    NSLog(@"Uploading iBEC...");
+     NSLog(@"Uploading iBEC...");
      fflush(stdout);
      int sendStatus = send_data(Device, ibec_buf, len);
-    NSLog(@"sendData finished with: %i\n", sendStatus);
+     NSLog(@"sendData finished with: %i\n", sendStatus);
      sendStatus = finish_transfer(Device);
-    NSLog(@"finish_transfer with: %i\n", sendStatus);
+     NSLog(@"finish_transfer with: %i\n", sendStatus);
      free(ibec_buf);
      
-    NSLog(@"[.] iBEC sent.\n");
-    NSLog(@"[.] Sleep 10 then re-enumerate\n");
+     NSLog(@"[.] iBEC sent.\n");
+     NSLog(@"[.] Sleep 10 then re-enumerate\n");
      sleep(10);
      // reenumerate_device(Device);
      
      memset(&SHAtter_user, 0, sizeof(SHAtter_user));
      FILE* kernel = fopen("/private/var/tmp/kern.ENC", "rb");
      if(!kernel) {
-    NSLog(@"PANIC!\n");
+     NSLog(@"PANIC!\n");
      return -1;
      }
      fseek(kernel, 0, SEEK_END);
@@ -1542,22 +1542,22 @@ int SHAtter(UKDevice *Device) {
      fread(kernel_buf, 1, len, kernel);
      fflush(kernel);
      fclose(kernel);
-    NSLog(@"Uploading kernelcache...");
+     NSLog(@"Uploading kernelcache...");
      fflush(stdout);
      send_data(Device, kernel_buf, len);
      int finishStatus = finish_transfer(Device);
      free(kernel_buf);
      
-    NSLog(@"[.] kernelcache sent successfully! status: %i\n", finishStatus);
+     NSLog(@"[.] kernelcache sent successfully! status: %i\n", finishStatus);
      // sleep(10);
      //reenumerate_device(Device);
      // sleep(1);
      int commandError = send_command(Device, "bootx");
-    NSLog(@"commanderror: %i\n", commandError);
+     NSLog(@"commanderror: %i\n", commandError);
      if (commandError != 0) {
      print("failed to send bootx command!\n");
      } else {
-    NSLog(@"DONE!\n");
+     NSLog(@"DONE!\n");
      
      }
      */
@@ -1572,12 +1572,12 @@ int SHAtter(UKDevice *Device) {
 int limerain(UKDevice *Device, bool ifaith_mode) {
     
     unsigned int i = 0;
-	unsigned char buf[0x800];
-	unsigned char shellcode[0x800];
-	unsigned int max_size = 0x24000;
-	unsigned int stack_address = 0x84033F98;
-	unsigned int shellcode_address = 0x84023001;
-	unsigned int shellcode_length = 0;
+    unsigned char buf[0x800];
+    unsigned char shellcode[0x800];
+    unsigned int max_size = 0x24000;
+    unsigned int stack_address = 0x84033F98;
+    unsigned int shellcode_address = 0x84023001;
+    unsigned int shellcode_length = 0;
     int ret;
     
     double progress= 0.0;
@@ -1586,34 +1586,34 @@ int limerain(UKDevice *Device, bool ifaith_mode) {
     
     if (!Device->enabled) {
         
-       NSLog(@"Device->enabled == false\n");
+        NSLog(@"Device->enabled == false\n");
         return -1;
     }
     
     if (Device->dev == NULL) {
         
-       NSLog(@"Device->dev == NULL\n");
+        NSLog(@"Device->dev == NULL\n");
         return -1;
     }
     
-	if (Device->cpid == 0x8930) {
-		max_size = 0x2C000;
-		stack_address = 0x8403BF9C;
-		shellcode_address = 0x8402B001;
-	}
-	if (Device->cpid == 0x8920) {
-		max_size = 0x24000;
-		stack_address = 0x84033FA4;
-		shellcode_address = 0x84023001;
-	}
+    if (Device->cpid == 0x8930) {
+        max_size = 0x2C000;
+        stack_address = 0x8403BF9C;
+        shellcode_address = 0x8402B001;
+    }
+    if (Device->cpid == 0x8920) {
+        max_size = 0x24000;
+        stack_address = 0x84033FA4;
+        shellcode_address = 0x84023001;
+    }
     
-	memset(shellcode, 0x0, 0x800);
+    memset(shellcode, 0x0, 0x800);
     
     if (ifaith_mode) {
-    
+        
         shellcode_length = sizeof(limera1n_payload_ifaith);
         memcpy(shellcode, limera1n_payload_ifaith, shellcode_length);
-    
+        
     } else {
         
         shellcode_length = sizeof(limera1n_payload_dfu);
@@ -1621,22 +1621,22 @@ int limerain(UKDevice *Device, bool ifaith_mode) {
         
     }
     
-   NSLog(@"Resetting device counters\n");
+    NSLog(@"Resetting device counters\n");
     
     ret = reset_counters(Device);
     
     if (ret) return ret;
     
     memset(buf, 0xCC, 0x800);
-	for(i = 0; i < 0x800; i += 0x40) {
-		unsigned int* heap = (unsigned int*)(buf+i);
-		heap[0] = 0x405;
-		heap[1] = 0x101;
-		heap[2] = shellcode_address;
-		heap[3] = stack_address;
-	}
+    for(i = 0; i < 0x800; i += 0x40) {
+        unsigned int* heap = (unsigned int*)(buf+i);
+        heap[0] = 0x405;
+        heap[1] = 0x101;
+        heap[2] = shellcode_address;
+        heap[3] = stack_address;
+    }
     
-   NSLog(@"Sending chunk headers\n");
+    NSLog(@"Sending chunk headers\n");
     
     //[[IPhoneUSB sharedInstance] notifyUploadInProgress:progress];
     
@@ -1644,23 +1644,23 @@ int limerain(UKDevice *Device, bool ifaith_mode) {
     //if (ret) return ret;
     
     progress += (double)((0x800*100)/max_size);
-   // [[IPhoneUSB sharedInstance] notifyUploadInProgress:progress];
+    // [[IPhoneUSB sharedInstance] notifyUploadInProgress:progress];
     
     memset(buf, 0xCC, 0x800); // 0x22800
-	for(i = 0; i < (max_size - (0x800 * 3)); i += 0x800) {
-		
+    for(i = 0; i < (max_size - (0x800 * 3)); i += 0x800) {
+        
         ret = send_control_request_to(Device, 0x21, 1, 0, 0, 0x800, buf, 1000);
         if (ret) return ret;
         progress += (double)((0x800*100)/max_size);
-       // [[IPhoneUSB sharedInstance] notifyUploadInProgress:progress];
-	}
+        // [[IPhoneUSB sharedInstance] notifyUploadInProgress:progress];
+    }
     
-   NSLog(@"Sending exploit payload\n");
+    NSLog(@"Sending exploit payload\n");
     
     ret = send_control_request_to(Device, 0x21, 1, 0, 0, 0x800, shellcode, 1000); // 0x800
     //if (ret) return ret;
     
-   NSLog(@"Sending fake data\n");
+    NSLog(@"Sending fake data\n");
     
     memset(buf, 0xBB, 0x800);
     
@@ -1696,8 +1696,8 @@ int send_data(UKDevice* Device, unsigned char* data, unsigned long length) {
     
     int         ret = -1;
     UInt32      data_size;
-	UInt32      current_length = 0;
-	UInt32      default_packet_size = 0x800;
+    UInt32      current_length = 0;
+    UInt32      default_packet_size = 0x800;
     unsigned int status = 0;
     double progress = 0.0;
     
@@ -1705,9 +1705,9 @@ int send_data(UKDevice* Device, unsigned char* data, unsigned long length) {
     
     if (Device->pid == 0x1227) {
         
-       ret = get_status(Device, &status);
+        ret = get_status(Device, &status);
         if (ret) return ret;
-    
+        
     } else if (Device->pid == 0x1281) {
         default_packet_size = 0x8000;
         ret = send_control_request_to(Device, 0x41, 0, 0, 0, 0, NULL, 1000);
@@ -1724,7 +1724,7 @@ int send_data(UKDevice* Device, unsigned char* data, unsigned long length) {
         if (Device->pid == 0x1227) {
             
             //ret
-           ret = send_control_request_to(Device, 0x21, 1, Device->transaction, 0, data_size, data+current_length, 1000);
+            ret = send_control_request_to(Device, 0x21, 1, Device->transaction, 0, data_size, data+current_length, 1000);
             //if (ret) return ret;
             
             Device->transaction++;
@@ -1735,11 +1735,13 @@ int send_data(UKDevice* Device, unsigned char* data, unsigned long length) {
             ret = write_serial(Device, data+current_length, data_size);
             //if (ret) return ret;
         }
-    
+        
         current_length += data_size;
-        
-       NSLog(@"%f\n", ((double)current_length/length)*100);
-        
+        double percentComplete = ((double)current_length/length)*100;
+        NSLog(@"%f\n", percentComplete);
+        NSNumber *progressNumber = [NSNumber numberWithDouble:percentComplete];
+        [(tetherKitAppDelegate *)tetherClass performSelectorOnMainThread:@selector(threadedDownloadProgress:) withObject:progressNumber waitUntilDone:false];
+        //[(tetherKitAppDelegate *)tetherClass setDownloadProgress:percentComplete];
         //printf("%u / %lu\n", (unsigned int)current_length, length);
     }
     
@@ -1761,19 +1763,19 @@ int send_file(UKDevice * Device, const char * filename) {
     
     if (!Device->opened) {
         
-       NSLog(@"Device->opened == false\n");
+        NSLog(@"Device->opened == false\n");
         return ret;
     }
     
     if (!Device->enabled) {
         
-       NSLog(@"Device->enabled == false\n");
+        NSLog(@"Device->enabled == false\n");
         return ret;
     }
     
     if (Device->dev == NULL) {
         
-       NSLog(@"Device->dev == NULL\n");
+        NSLog(@"Device->dev == NULL\n");
         return ret;
     }
     

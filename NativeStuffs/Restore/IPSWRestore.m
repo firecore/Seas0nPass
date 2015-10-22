@@ -481,7 +481,7 @@ void eventHandler(AMRestorableDeviceRef device, int event, void *refCon)
 
 void progress_callback(void *device, int operation, int progress, void *user_info)
 {
-       NSLog(@"progress_callback");
+   //    NSLog(@"progress_callback");
     CFTypeID deviceTypeID = CFGetTypeID(device);
     
     NSMutableDictionary *info = [@{@"Status" : @"Restoring", @"Operation" : @(operation), @"Progress" : @(progress)} mutableCopy];
