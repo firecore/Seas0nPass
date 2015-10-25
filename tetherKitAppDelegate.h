@@ -97,6 +97,7 @@ enum {
 @property (readwrite, assign) BOOL restoreStatus;
 @property (nonatomic, strong) NSString *currentIPSWPath;
 
+- (IBAction)exitRecoveryMode:(id)sender;
 - (void)shatterFinished:(int)mode;
 - (void)updateStatus:(int)status;
 - (void)dataReadyFormat:(NSFileHandle *)theFile;

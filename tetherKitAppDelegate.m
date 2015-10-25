@@ -3649,6 +3649,8 @@ int monitorForDeviceAndDetachThread(const char* path, void* class)
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
+    
+    
 	
 	restoreStatus = FALSE;
 		//quitItunes
@@ -4907,6 +4909,32 @@ void tap_keyboard(void) {
 		NSString *kcache = [documents stringByAppendingPathComponent:KCACHE];
 		[self createSupportBundleWithCache:kcache iBSS:iBSS];
 	}
+}
+
+- (IBAction)exitRecoveryMode:(id)sender
+{
+    UKDevice *device = firstAvailableDevice();
+    if (device != NULL)
+    {
+        NSLog(@"device location: %i", device->locationID);
+        char *autoboot = get_env(device, "auto-boot");
+        NSString *ab = [[NSString alloc] initWithUTF8String:autoboot];
+        BOOL autob = [ab boolValue];
+        if (autob == true)
+        {
+            NSLog(@"autoboot is already true!!");
+        }
+        int commandError = send_command(device, "setenv auto-boot true");
+        commandError = send_command(device, "saveenv");
+        release_device(device);
+        NSAlert *successAlert = [NSAlert alertWithMessageText:@"Exited recovery mode successfully!" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"You have exited recovery mode successfully, It is now safe to unplug your AppleTV."];
+        
+        [successAlert runModal];
+        //close_libusbkit(device);
+        // setenv auto-boot true
+    }
+    
+  //  NSLog(@"device: %@", device);
 }
 
 - (IBAction)itunesRestore:(id)sender

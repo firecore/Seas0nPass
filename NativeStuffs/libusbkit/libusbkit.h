@@ -64,10 +64,10 @@ typedef struct UKDevice {
 } UKDevice ;
 
 
-
+UKDevice* firstAvailableDevice();
 UKDevice * init_libusbkit(int mode, const char *path, void*theClass, int status);
 void close_libusbkit(UKDevice* Device);
-
+BOOL manually_open_device(UKDevice *Device, io_object_t deviceService);
 void stop_notification_monitoring(UKDevice *Device);
 void register_for_usb_notifications(UKDevice * Device);
 void add_devices(UKDevice * Device, int devices_array[2][2]);
@@ -127,7 +127,8 @@ int limerain(UKDevice *Device, bool ifaith_mode);
 int send_data(UKDevice *Device, unsigned char* data, unsigned long length);
 int send_file(UKDevice * Device, const char * filename);
 int send_command(UKDevice * Device, const char * command);
-int get_env(UKDevice* Device, const char * variable);
+int print_env(UKDevice* Device, const char * variable);
+char* get_env(UKDevice* Device, const char * variable);
 char* dump_ifaith(UKDevice * Device, const char* filename);
 
 #endif

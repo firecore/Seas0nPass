@@ -156,7 +156,7 @@ int limerain(UKDevice *Device, bool ifaith_mode);
 int send_data(UKDevice *Device, unsigned char* data, unsigned long length);
 int send_file(UKDevice * Device, const char * filename);
 int send_command(UKDevice * Device, const char * command);
-int get_env(UKDevice* Device, const char * variable);
+char* get_env(UKDevice* Device, const char * variable);
 //void dump_ifaith(UKDevice * Device, const char* filename);
 
 void fire_event(UKDevice *Device, int event);
