@@ -153,8 +153,7 @@
 		[self changeOwner:@"root:wheel" onFile:sshFolder isRecursive:YES];
 		NSLog(@"authorized key installed successfully!");
 	}
-	
-	
+    
 }
 
 - (int)runBundleCommands:(NSArray *)commands onFiles:(NSString *)thePath
