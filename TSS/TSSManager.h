@@ -15,8 +15,8 @@
 
 //New URL: http://files.firecore.com/SP/firmware/k66ap.plist
 
-#define BLOB_PLIST_BASE_URL @"http://files.firecore.com/SP/firmware"
-#define BLOB_PLIST_URL @"http://files.firecore.com/SP/firmware/k66ap.plist"
+#define BLOB_PLIST_BASE_URL @"https://files.firecore.com/SP/firmware"
+#define BLOB_PLIST_URL @"https://files.firecore.com/SP/firmware/k66ap.plist"
 
 enum {
 	
