@@ -29,7 +29,7 @@
 #include <assert.h>
 #include <pthread.h>
 //#import "libusb.h"
-
+#import <mach/mach_time.h>
 
 //#import "IPhoneUSB.h"
 
@@ -3649,6 +3649,21 @@ int monitorForDeviceAndDetachThread(const char* path, void* class)
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 
+    
+    uint64_t abTime = mach_absolute_time();
+    AbsoluteTime timeStamp;
+    timeStamp.hi = (UInt32)(abTime >> 32);
+    timeStamp.lo = (UInt32)(abTime);
+    NSLog(@"timeStamp: lo: %u hi: %u", (unsigned int)timeStamp.lo, (unsigned int)timeStamp.hi);
+    /*
+     
+     [<ATVScreenSaverManager: 0x14df78c0> _updateActivity:NSConcreteNotification 0x14f45350 {name = BRUserActionNotification; userInfo = {
+	    BRUserActionEventKey = "Value : 1/0x1 (kBREventValueButtonDown) \taction : 1/0x1 (kBRRemoteMenuButton) \tDictionary : (null) \tOriginator : 1 \tTStmp = 3816.519921";
+     }}]
+
+    
+    */
+    
     
     
 	
