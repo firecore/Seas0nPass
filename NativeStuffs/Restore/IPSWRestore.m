@@ -133,7 +133,7 @@ currentState;
    
 #ifdef VERBOSE_LOG
     AMDSetLogLevel(INT_MAX);
-    AMDAddLogFileDescriptor(1);
+//    AMDAddLogFileDescriptor(1);
     AMRestoreSetLogLevel(INT_MAX);
     AMRestoreEnableFileLogging("/dev/stderr");
 #endif

@@ -2494,7 +2494,7 @@ static NSString *HexToDec(NSString *hexValue)
 		[self hideProgress];
 		[self setDownloadText:@"SHSH extraction Failed"];
 		[cancelButton setTitle:@"Done"];
-        NSAlert *errorAlert = [NSAlert alertWithMessageText:@"SHSH extraction failed" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:[ifaithBlob objectForKey:@"error"]];
+        NSAlert *errorAlert = [NSAlert alertWithMessageText:@"SHSH extraction failed" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"%@",[ifaithBlob objectForKey:@"error"]];
         [errorAlert runModal];
 		 //[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
 		return;
@@ -3061,9 +3061,9 @@ void *otherThread(void* object) {
             }
             NSArray *lineArray = [temp componentsSeparatedByString:@"\n"];
             
-            NSArray *progressArray = [temp componentsSeparatedByString:@"/"];
+//            NSArray *progressArray = [temp componentsSeparatedByString:@"/"];
             
-            NSLog(temp);
+            NSLog(@"%@",temp);
             if ([[lineArray lastObject] floatValue] > 0)
             {
                 [self setDownloadProgress:[[lineArray lastObject] floatValue]];
@@ -3117,7 +3117,7 @@ void *otherThread(void* object) {
     int a;
     for(a = 0 ; a < [lineArray count] ; a++) {
         temp = [[lineArray objectAtIndex:a] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        NSLog(temp);
+        NSLog(@"%@",temp);
         if ([temp componentsSeparatedByString:@"/"].count == 2)
         {
             NSArray *comps = [temp componentsSeparatedByString:@"/"];
@@ -4573,9 +4573,9 @@ void tap_keyboard(void) {
 			//[self setDownloadText:NSLocalizedString(@"Restoring in iTunes, Please wait while script is running...",@"Restoring in iTunes, Please wait while script is running...") ];
 		[self setDownloadProgress:0];
 		
-		int restoreStatus = 0;
+		int localRestoreStatus = 0;
 		
-		NSString *buildNumber = [[self currentBundle] buildVersion]; //ie 8C154
+//		NSString *buildNumber = [[self currentBundle] buildVersion]; //ie 8C154
 
         //old restore code below, not needed
         
@@ -4591,7 +4591,7 @@ void tap_keyboard(void) {
 //			
 //		} else {
 //			
-			restoreStatus = [nitoUtility restoreIPSW:ipswPath];
+			localRestoreStatus = [nitoUtility restoreIPSW:ipswPath];
 				//}
 		
 		if(self.restoreStatus == TRUE)
@@ -4601,7 +4601,7 @@ void tap_keyboard(void) {
 			NSLog(@"restore status false (could be false positive)!");
 		}
 		
-		if (restoreStatus == 0)
+		if (localRestoreStatus == 0)
 		{
 			[self setDownloadText:NSLocalizedString(@"Firmware restore successful!", @"Firmware restore successful!")];
 			[instructionImage setImage:[self imageForMode:kSPSuccessImage]];
@@ -4872,9 +4872,9 @@ void tap_keyboard(void) {
     
     return;
     
-		int restoreStatus = 0;
+		int localRestoreStatus = 0;
 	
-	NSString *buildNumber = [[self currentBundle] buildVersion]; //ie 8C154
+//	NSString *buildNumber = [[self currentBundle] buildVersion]; //ie 8C154
 	//if ([buildNumber isEqualToString:@"11B554a"])
 //	{	
 //			//restoreStatus = [nitoUtility restoreIPSW:ipswPath force:TRUE];
@@ -4882,12 +4882,12 @@ void tap_keyboard(void) {
 //	}
 //	else
 //	{
-		restoreStatus = [nitoUtility restoreIPSW:ipswPath];
+		localRestoreStatus = [nitoUtility restoreIPSW:ipswPath];
 	
 		//}
 	
 	
-	if (restoreStatus == 0)
+	if (localRestoreStatus == 0)
 	{
 		[self setDownloadText:NSLocalizedString(@"Firmware restore successful!", @"Firmware restore successful!")];
 		[instructionImage setImage:[self imageForMode:kSPSuccessImage]];

@@ -151,7 +151,7 @@
 
 + (int)restoreIPSW:(NSString *)theIPSW
 {
-	[nitoUtility restoreIPSW:theIPSW force:FALSE];
+	return [nitoUtility restoreIPSW:theIPSW force:FALSE];
 }
 
 + (int)restoreIPSW:(NSString *)theIPSW force:(BOOL)forced

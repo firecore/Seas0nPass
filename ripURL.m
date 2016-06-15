@@ -33,8 +33,8 @@
 
 - (void)cancel
 {
-	
-	[self download:urlDownload didFailWithError:nil];
+    NSError *error = [NSError new];
+	[self download:urlDownload didFailWithError:error];
 	[urlDownload cancel];
 }
 
