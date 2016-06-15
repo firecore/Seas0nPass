@@ -214,7 +214,7 @@ void register_for_usb_notifications(UKDevice * Device) {
 
 UKDevice* firstAvailableDevice()
 {
-    IOCFPlugInInterface 	**pluginInterface = NULL;
+//    IOCFPlugInInterface 	**pluginInterface = NULL;
     //IOUSBDeviceInterface187 **_dev = NULL;
     //SInt32                  score;
     int status = -1;
@@ -284,7 +284,7 @@ UKDevice* firstAvailableDevice()
         {
             if (([productID integerValue] == 0x1281 || [productID integerValue] == 0x1227) && [vendorID integerValue] == 0x5ac )
             {
-                NSLog(@"location id: 0x%04x", [locationID integerValue]);
+                NSLog(@"location id: 0x%04lx", (long)[locationID integerValue]);
                // [deviceArray addObject:[NSNumber numberWithInteger:locationId]];
                 
                 deviceFound = TRUE;
@@ -720,14 +720,11 @@ void open_interface(UKDevice * Device, int interface, int alt_interface) {
 
 int normal_device_detected(UKDevice* Device, UInt16 vendorID, UInt16 productID) {
     
-    int product_ids[] = {};
+//    int product_ids[] = {};
     
     if (vendorID == 0x5AC) {
         
-        
-        
     }
-    
     return 1;
 }
 
@@ -1552,7 +1549,7 @@ int SHAtter(UKDevice *Device) {
         fclose(ibss);
         NSLog(@"Uploading iBSS...\n");
         fflush(stdout);
-        int sentStatus = send_data(Device, ibss_buf, len);
+        int sentStatus = send_data(Device, (unichar)ibss_buf, len);
         NSLog(@"iBSS sent status: %i\n", sentStatus);
         reset_device(Device);
         sentStatus = finish_transfer(Device);
@@ -1582,7 +1579,7 @@ int SHAtter(UKDevice *Device) {
         fclose(ibec);
         NSLog(@"Uploading iBEC...");
         fflush(stdout);
-        int sendStatus = send_data(Device, ibec_buf, len);
+        int sendStatus = send_data(Device, (unichar)ibec_buf, len);
         NSLog(@"sendData finished with: %i\n", sendStatus);
         sendStatus = finish_transfer(Device);
         NSLog(@"finish_transfer with: %i\n", sendStatus);
@@ -1620,7 +1617,7 @@ int SHAtter(UKDevice *Device) {
         
         sleep(5);
         int commandError = send_command(Device, "bootx");
-        //NSLog(@"commanderror: %i\n", commandError);
+        NSLog(@"commanderror: %i\n", commandError);
         NSLog(@"DONE!\n");
         [(tetherKitAppDelegate*)tetherClass showProgressViewWithText:@"Tethered boot complete! It is now safe to disconnect USB."];
         [(tetherKitAppDelegate*)tetherClass shatterFinished:1];

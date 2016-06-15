@@ -1,0 +1,32 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "1D800706696D5C3B08AD0F9180B48EAFA11F9311",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "caa9a463-b487-4ceb-abff-6809e25550c1++32" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "1D800706696D5C3B08AD0F9180B48EAFA11F9311" : 0,
+    "caa9a463-b487-4ceb-abff-6809e25550c1++32" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "026389F7-76C9-4DEA-8693-045014E0B84D",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "1D800706696D5C3B08AD0F9180B48EAFA11F9311" : "Seas0nPass\/",
+    "caa9a463-b487-4ceb-abff-6809e25550c1++32" : "Seas0nPass\/TSS\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "tetherKit",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "tetherKit.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/jsilarow\/Seas0nPass",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "1D800706696D5C3B08AD0F9180B48EAFA11F9311"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/pl3.projectlocker.com\/abathingchris\/nito\/svn",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "caa9a463-b487-4ceb-abff-6809e25550c1++32"
+    }
+  ]
+}
