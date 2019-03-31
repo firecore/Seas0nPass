@@ -1,5 +1,5 @@
 //
-//  libusbkit.c
+//  libusbkit.m
 //  libusbkit
 //
 //  Created by Steven De Franco on 2/7/13.
@@ -25,6 +25,7 @@ static io_iterator_t			gAddedIter; //need different io iterators to keep track o
 static io_iterator_t            gRemovedIter;
 static IONotificationPortRef	gNotifyPort; //our notification port keeping track of removing and adding devices.
 
+UKDevice_SHAtter SHAtter_user;
 
 UKDevice* _pending = NULL;
 int SEARCHING_FOR_NEW_SHATTER_DEVICE = 0;
