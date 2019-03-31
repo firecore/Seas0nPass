@@ -27,7 +27,7 @@ typedef struct UKDevice_INFO {
     char buf[0x2C000];
 } UKDevice_SHAtter;
 
-UKDevice_SHAtter SHAtter_user;
+extern UKDevice_SHAtter SHAtter_user;
 
 
 typedef struct UKDevice {
