@@ -402,7 +402,7 @@ void device_attached(void * refCon, io_iterator_t iterator) {
         if (ret != 0) {
             
             _error("IOCreatePlugInInterfaceForService", ret);
-            return;
+            continue;
         }
         
         result = (*pluginInterface)->QueryInterface(pluginInterface,
@@ -414,7 +414,7 @@ void device_attached(void * refCon, io_iterator_t iterator) {
         if (result != 0) {
             
             _error("QueryInterface", ret);
-            return;
+            continue;
         }
         
         (*_dev)->GetDeviceVendor(_dev, &vendorID);
